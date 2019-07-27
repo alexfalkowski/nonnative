@@ -1,0 +1,20 @@
+PATH
+  remote: .
+  specs:
+    nonnative (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rake (12.3.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler
+  nonnative!
+  rake
+
+BUNDLED WITH
+   1.17.2
