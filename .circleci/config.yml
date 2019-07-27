@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.6
+        environment:
+          BUNDLE_JOBS: "3"
+          BUNDLE_PATH: vendor/bundle
+          BUNDLE_RETRY: "3"
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - nonnative-gem-cache-{{ checksum "Gemfile.lock" }}
+            - nonnative-gem-cache-
+      - run: make dependencies
+      - save_cache:
+          key: nonnative-gem-cache-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run: make features
+      - run: make analysis
