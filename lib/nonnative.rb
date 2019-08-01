@@ -9,6 +9,7 @@ require 'nonnative/version'
 require 'nonnative/error'
 require 'nonnative/configuration'
 require 'nonnative/cucumber'
+require 'nonnative/process'
 
 module Nonnative
   class << self
@@ -21,29 +22,12 @@ module Nonnative
     end
 
     def start
-      @child_pid = spawn(configuration.process)
-      return if port_open?
-
-      stop
-      raise Nonnative::Error, 'Could not start the process'
+      @process ||= Nonnative::Process.new(configuration)
+      @process.start
     end
 
     def stop
-      Process.kill('SIGHUP', @child_pid)
-    end
-
-    private
-
-    def port_open?
-      Timeout.timeout(configuration.timeout) do
-        TCPSocket.new('127.0.0.1', configuration.port).close
-        true
-      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-        sleep 0.01
-        retry
-      end
-    rescue Timeout::Error
-      false
+      @process.stop
     end
   end
 end
