@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/alexfalkowski/nonnative.svg?style=svg)](https://circleci.com/gh/alexfalkowski/nonnative)
+
 # Nonnative
 
 Do you love building microservices using different languages?
