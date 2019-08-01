@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-Before('@nonnative') do
+Before do
   Nonnative.start
 end
 
-After('@nonnative') do
+After do
   Nonnative.stop
 end

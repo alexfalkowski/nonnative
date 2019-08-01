@@ -3,6 +3,7 @@
 module Nonnative
   class Configuration
     attr_accessor :process
-    attr_accessor :wait
+    attr_accessor :timeout
+    attr_accessor :port
   end
 end

@@ -30,21 +30,21 @@ Or install it yourself as:
 
 ## Usage
 
-Configure nonnative with the process that you want to start and how long to wait till it starts (this for now is an easy way, we will improve this)
+Configure nonnative with the process that you want to start, a timeout value and a port to verify it's working.
 
 ```ruby
 require 'nonnative'
 
 Nonnative.configure do |config|
   config.process = 'features/support/bin/start'
-  config.wait = 0.5
+  config.timeout = 0.5
+  config.port = 12_321
 end
 ```
 
 Tag your cucumber scenarios with @nonnative
 
 ```cucumber
-@nonnative
 Scenario: Successful Response
   When we send "test" with the echo client
   Then we should receive a "test" response

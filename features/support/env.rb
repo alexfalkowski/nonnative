@@ -4,5 +4,6 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.process = 'features/support/bin/start'
-  config.wait = 0.5
+  config.timeout = 0.5
+  config.port = 12_321
 end

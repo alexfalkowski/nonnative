@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
+require 'socket'
+require 'timeout'
+
 require 'cucumber'
 
 require 'nonnative/version'
 require 'nonnative/error'
 require 'nonnative/configuration'
 require 'nonnative/cucumber'
+require 'nonnative/process'
 
 module Nonnative
   class << self
@@ -18,12 +22,12 @@ module Nonnative
     end
 
     def start
-      @child_pid = spawn(configuration.process)
-      sleep configuration.wait
+      @process ||= Nonnative::Process.new(configuration)
+      @process.start
     end
 
     def stop
-      Process.kill('SIGHUP', @child_pid)
+      @process.stop
     end
   end
 end
