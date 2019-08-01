@@ -1,6 +1,14 @@
 # Nonnative
 
-Allows you to keep using the power of ruby to test other systems
+Do you love building microservices using different languages?
+
+Do you love testing applications using [cucumber](https://cucumber.io/) with [ruby](https://www.ruby-lang.org/en/)?
+
+Well so do I. The issue is that most languages the cucumber implementation is not always complete or you have to write a lot of code to get it working.
+
+So why not test the way you want and build the microservice how you want. These kind of tests will make sure your application is tested properly by going end-to-end.
+
+The way it works is it spawns the process you configure and waits for it to start. Then you communicate with your microservice however you like (TCP, HTTP, gRPC, etc)
 
 ## Installation
 
@@ -20,7 +28,7 @@ Or install it yourself as:
 
 ## Usage
 
-Configure the system withh the process and how long we give to wait until it's ready
+Configure nonnative with the process that you want to start and how long to wait till it starts (this for now is an easy way, we will improve this)
 
 ```ruby
 require 'nonnative'
@@ -39,11 +47,3 @@ Scenario: Successful Response
   When we send "test" with the echo client
   Then we should receive a "test" response
 ```
-
-## Development
-
-Look at the Makefile
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/nonnative.
