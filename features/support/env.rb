@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter '/features/'
+end
+
 require 'nonnative'
 
 Nonnative.configure do |config|

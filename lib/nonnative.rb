@@ -27,12 +27,18 @@ module Nonnative
     end
 
     def start
-      @process ||= Nonnative::Process.new(configuration, logger)
-      @process.start
+      @process ||= Nonnative::Process.new(configuration)
+      result, pid = @process.start
+      return if result
+
+      logger.error('Process has started though did respond in time', pid: pid)
     end
 
     def stop
-      @process.stop
+      result, pid = @process.stop
+      return if result
+
+      logger.error('Process has started though did respond in time', pid: pid)
     end
   end
 end
