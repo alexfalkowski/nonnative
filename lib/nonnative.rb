@@ -10,9 +10,14 @@ require 'nonnative/error'
 require 'nonnative/configuration'
 require 'nonnative/cucumber'
 require 'nonnative/process'
+require 'nonnative/logger'
 
 module Nonnative
   class << self
+    def logger
+      @logger ||= Nonnative::Logger.create
+    end
+
     def configuration
       @configuration ||= Nonnative::Configuration.new
     end
@@ -22,7 +27,7 @@ module Nonnative
     end
 
     def start
-      @process ||= Nonnative::Process.new(configuration)
+      @process ||= Nonnative::Process.new(configuration, logger)
       @process.start
     end
 

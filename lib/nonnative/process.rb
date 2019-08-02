@@ -2,25 +2,28 @@
 
 module Nonnative
   class Process
-    def initialize(configuration)
+    def initialize(configuration, logger)
       @configuration = configuration
+      @logger = logger
     end
 
     def start
       @child_pid = spawn(configuration.process)
       return if port_open?
 
-      stop
-      raise Nonnative::Error, 'Could not start the process'
+      logger.error('Process has started though did respond in time', pid: child_pid)
     end
 
     def stop
       ::Process.kill('SIGHUP', child_pid)
+      return unless port_open?
+
+      logger.error('Process has stopped though did respond in time', pid: child_pid)
     end
 
     private
 
-    attr_reader :configuration, :child_pid
+    attr_reader :configuration, :logger, :child_pid
 
     def port_open?
       Timeout.timeout(configuration.timeout) do
