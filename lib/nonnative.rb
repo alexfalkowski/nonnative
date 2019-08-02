@@ -38,7 +38,7 @@ module Nonnative
       result, pid = @process.stop
       return if result
 
-      logger.error('Process has started though did respond in time', pid: pid)
+      logger.error('Process has stopped though did respond in time', pid: pid)
     end
   end
 end
