@@ -41,11 +41,3 @@ Nonnative.configure do |config|
   config.port = 12_321
 end
 ```
-
-Tag your cucumber scenarios with @nonnative
-
-```cucumber
-Scenario: Successful Response
-  When we send "test" with the echo client
-  Then we should receive a "test" response
-```

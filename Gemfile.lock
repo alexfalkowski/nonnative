@@ -1,9 +1,10 @@
 PATH
   remote: .
   specs:
-    nonnative (0.2.0)
+    nonnative (0.2.1)
       cucumber
       rspec-expectations
+      semantic_logger
 
 GEM
   remote: https://rubygems.org/
@@ -12,6 +13,7 @@ GEM
     backport (1.1.1)
     backports (3.15.0)
     builder (3.2.3)
+    concurrent-ruby (1.1.5)
     cucumber (3.1.2)
       builder (>= 2.1.2)
       cucumber-core (~> 3.2.0)
@@ -57,6 +59,8 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.10.1)
+    semantic_logger (4.5.0)
+      concurrent-ruby (~> 1.0)
     solargraph (0.35.1)
       backport (~> 1.1)
       bundler (>= 1.17.2)
