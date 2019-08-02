@@ -16,7 +16,7 @@ module Nonnative
 
     def stop
       ::Process.kill('SIGHUP', child_pid)
-      return unless port_open?
+      return if port_closed?
 
       logger.error('Process has stopped though did respond in time', pid: child_pid)
     end
@@ -26,15 +26,41 @@ module Nonnative
     attr_reader :configuration, :logger, :child_pid
 
     def port_open?
-      Timeout.timeout(configuration.timeout) do
-        TCPSocket.new('127.0.0.1', configuration.port).close
+      timeout do
+        open_socket
         true
       rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-        sleep 0.01
+        sleep_interval
         retry
+      end
+    end
+
+    def port_closed?
+      timeout do
+        open_socket
+        raise Nonnative::Error
+      rescue Nonnative::Error
+        sleep_interval
+        retry
+      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+        true
+      end
+    end
+
+    def timeout
+      Timeout.timeout(configuration.timeout) do
+        yield
       end
     rescue Timeout::Error
       false
+    end
+
+    def open_socket
+      TCPSocket.new('127.0.0.1', configuration.port).close
+    end
+
+    def sleep_interval
+      sleep 0.01
     end
   end
 end
