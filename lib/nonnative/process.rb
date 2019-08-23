@@ -7,12 +7,12 @@ module Nonnative
     end
 
     def start
-      @pid = spawn(configuration.process)
+      @pid = spawn(configuration.process, %i[out err] => [configuration.file, 'w'])
       [port_open?, pid]
     end
 
     def stop
-      ::Process.kill('SIGHUP', pid)
+      ::Process.kill('SIGINT', pid)
       [port_closed?, pid]
     end
 
