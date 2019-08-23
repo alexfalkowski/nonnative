@@ -7,7 +7,7 @@ module Nonnative
     end
 
     def start
-      @pid = spawn(configuration.process)
+      @pid = spawn(configuration.process, %i[out err] => [configuration.file, 'w'])
       [port_open?, pid]
     end
 
