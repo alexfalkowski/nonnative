@@ -6,8 +6,11 @@ require 'socket'
 Socket.tcp_server_loop(12_321) do |conn, _addr|
   Thread.new do
     loop do
-      line = conn.readline
+      line = conn.readline.strip
+      puts "Received line: '#{line}'"
+
       conn.puts(line)
+      puts "Sent line: '#{line}'"
     end
   rescue EOFError
     conn.close
