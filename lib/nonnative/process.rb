@@ -12,7 +12,7 @@ module Nonnative
     end
 
     def stop
-      ::Process.kill('SIGHUP', pid)
+      ::Process.kill('SIGINT', pid)
       [port_closed?, pid]
     end
 
