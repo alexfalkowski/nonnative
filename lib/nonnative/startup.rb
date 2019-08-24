@@ -3,5 +3,5 @@
 Nonnative.start
 
 at_exit do
-  Nonnative.start
+  Nonnative.stop
 end
