@@ -3,12 +3,9 @@
 require 'socket'
 require 'timeout'
 
-require 'cucumber'
-
 require 'nonnative/version'
 require 'nonnative/error'
 require 'nonnative/configuration'
-require 'nonnative/cucumber'
 require 'nonnative/process'
 require 'nonnative/logger'
 
@@ -24,6 +21,8 @@ module Nonnative
 
     def configure
       yield configuration if block_given?
+
+      require "nonnative/#{configuration.strategy}"
     end
 
     def start

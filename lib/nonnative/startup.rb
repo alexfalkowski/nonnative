@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-Before do
-  Nonnative.start
-end
+Nonnative.start
 
-After do
+at_exit do
   Nonnative.stop
 end

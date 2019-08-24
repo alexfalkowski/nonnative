@@ -13,4 +13,5 @@ Nonnative.configure do |config|
   config.timeout = 0.5
   config.port = 12_321
   config.file = 'logs'
+  config.strategy = :startup
 end

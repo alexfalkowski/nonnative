@@ -30,7 +30,13 @@ Or install it yourself as:
 
 ## Usage
 
-Configure nonnative with the process that you want to start, a timeout value and a port to verify it's working.
+Configure nonnative with the following:
+
+- Process that you want to start.
+- A timeout value.
+- Port to verify.
+- The file you want STDOUT to be logged to.
+- The strategy (Startup will start the process once and before will hook into cucumbers Before and After).
 
 ```ruby
 require 'nonnative'
@@ -40,5 +46,6 @@ Nonnative.configure do |config|
   config.timeout = 0.5
   config.port = 12_321
   config.file = 'logs/output'
+  config.strategy = :startup or :before
 end
 ```
