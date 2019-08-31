@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (0.7.0)
+    nonnative (0.8.0)
       cucumber
       rspec-expectations
       semantic_logger
@@ -42,7 +42,7 @@ GEM
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     parallel (1.17.0)
-    parser (2.6.3.0)
+    parser (2.6.4.0)
       ast (~> 2.4.0)
     rainbow (3.0.0)
     rake (12.3.3)
@@ -67,7 +67,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    solargraph (0.37.1)
+    solargraph (0.37.2)
       backport (~> 1.1)
       bundler (>= 1.17.2)
       htmlentities (~> 4.3, >= 4.3.4)
