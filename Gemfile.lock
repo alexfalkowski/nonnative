@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (0.7.0)
+    nonnative (0.8.0)
       cucumber
       rspec-expectations
       semantic_logger
