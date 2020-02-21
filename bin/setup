@@ -4,5 +4,6 @@ IFS=$'\n\t'
 set -vx
 
 gem install bundler
-bundle check --path vendor/bundle || bundle install --path vendor/bundle
-bundle clean
+bundle config set path 'vendor/bundle'
+bundle check || bundle install
+bundle clean --force
