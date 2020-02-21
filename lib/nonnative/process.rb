@@ -2,15 +2,15 @@
 
 module Nonnative
   class Process
-    def initialize(configuration)
-      @configuration = configuration
+    def initialize(definition)
+      @definition = definition
     end
 
     def start
-      @pid = if configuration.file
-               spawn(configuration.process, %i[out err] => [configuration.file, 'a'])
+      @pid = if definition.file
+               spawn(definition.process, %i[out err] => [definition.file, 'a'])
              else
-               spawn(configuration.process)
+               spawn(definition.process)
              end
 
       [port_open?, pid]
@@ -23,7 +23,7 @@ module Nonnative
 
     private
 
-    attr_reader :configuration, :pid
+    attr_reader :definition, :pid
 
     def port_open?
       timeout do
@@ -48,7 +48,7 @@ module Nonnative
     end
 
     def timeout
-      Timeout.timeout(configuration.timeout) do
+      Timeout.timeout(definition.timeout) do
         yield
       end
     rescue Timeout::Error
@@ -56,7 +56,7 @@ module Nonnative
     end
 
     def open_socket
-      TCPSocket.new('127.0.0.1', configuration.port).close
+      TCPSocket.new('127.0.0.1', definition.port).close
     end
 
     def sleep_interval

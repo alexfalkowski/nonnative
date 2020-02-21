@@ -10,7 +10,7 @@ Well so do I. The issue is that most languages the cucumber implementation is no
 
 So why not test the way you want and build the microservice how you want. These kind of tests will make sure your application is tested properly by going end-to-end.
 
-The way it works is it spawns the process you configure and waits for it to start. Then you communicate with your microservice however you like (TCP, HTTP, gRPC, etc)
+The way it works is it spawns the processes you configure and waits for it to start. Then you communicate with your microservice however you like (TCP, HTTP, gRPC, etc)
 
 ## Installation
 
@@ -42,10 +42,20 @@ Configure nonnative with the following:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.process = 'features/support/bin/start'
-  config.timeout = 0.5
-  config.port = 12_321
-  config.file = 'logs/output'
   config.strategy = :startup or :before
+
+  config.definition do |d|
+    d.process = 'features/support/bin/start 12_321'
+    d.timeout = 0.5
+    d.port = 12_321
+    d.file = 'logs_12_321'
+  end
+
+  config.definition do |d|
+    d.process = 'features/support/bin/start 12_322'
+    d.timeout = 0.5
+    d.port = 12_322
+    d.file = 'logs_12_322'
+  end
 end
 ```
