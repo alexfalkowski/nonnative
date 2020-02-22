@@ -2,6 +2,7 @@
 
 require 'socket'
 require 'timeout'
+require 'thwait'
 require 'yaml'
 
 require 'nonnative/version'
