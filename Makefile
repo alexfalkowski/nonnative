@@ -11,3 +11,6 @@ analysis:
 
 cleanup-analysis:
 	bundle exec rubocop -a
+
+cleanup-logs:
+	rm -f logs_*
