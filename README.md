@@ -42,7 +42,7 @@ Configure nonnative with the following:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup or :before
+  config.strategy = :startup or :before or :manual
 
   config.definition do |d|
     d.process = 'features/support/bin/start 12_321'
