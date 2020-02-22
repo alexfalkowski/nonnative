@@ -9,6 +9,7 @@ require 'nonnative/configuration'
 require 'nonnative/definition'
 require 'nonnative/process'
 require 'nonnative/process_pool'
+require 'nonnative/port'
 require 'nonnative/logger'
 
 module Nonnative
@@ -30,13 +31,13 @@ module Nonnative
     def start
       @process_pool ||= Nonnative::ProcessPool.new(configuration)
 
-      @process_pool.start do |result, pid|
+      @process_pool.start do |pid, result|
         logger.error('Process has started though did respond in time', pid: pid) unless result
       end
     end
 
     def stop
-      @process_pool.stop do |result, pid|
+      @process_pool.stop do |pid, result|
         logger.error('Process has stopped though did respond in time', pid: pid) unless result
       end
     end

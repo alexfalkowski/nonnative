@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 Then('starting nonnative should happen with an adequate time') do
-  expect { Nonnative.start }.to perform_under(2).sec
+  expect { Nonnative.start }.to perform_under(2, warmup: 0).sec
+ensure
   Nonnative.stop
 end
 

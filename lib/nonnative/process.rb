@@ -13,56 +13,20 @@ module Nonnative
         @started = true
       end
 
-      [port_open?, pid]
+      pid
     end
 
     def stop
       raise Nonnative::Error, "Can't stop a process that has not started" unless started
 
       ::Process.kill('SIGINT', pid)
-      [port_closed?, pid].tap { @started = false }
+      @started = false
+
+      pid
     end
 
     private
 
     attr_reader :definition, :pid, :started
-
-    def port_open?
-      timeout do
-        open_socket
-        true
-      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-        sleep_interval
-        retry
-      end
-    end
-
-    def port_closed?
-      timeout do
-        open_socket
-        raise Nonnative::Error
-      rescue Nonnative::Error
-        sleep_interval
-        retry
-      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-        true
-      end
-    end
-
-    def timeout
-      Timeout.timeout(definition.timeout) do
-        yield
-      end
-    rescue Timeout::Error
-      false
-    end
-
-    def open_socket
-      TCPSocket.new('127.0.0.1', definition.port).close
-    end
-
-    def sleep_interval
-      sleep 0.01
-    end
   end
 end

@@ -6,20 +6,18 @@ module Nonnative
       @configuration = configuration
     end
 
-    def start
-      processes.each do |p|
-        result, pid = p.start
+    def start(&block)
+      prs = processes.map { |p, _| p.start }
+      pos = processes.map { |_, p| Thread.new { p.open? } }.map(&:value)
 
-        yield result, pid
-      end
+      yield_results(prs, pos, &block)
     end
 
-    def stop
-      processes.each do |p|
-        result, pid = p.stop
+    def stop(&block)
+      prs = processes.map { |p, _| p.stop }
+      pos = processes.map { |_, p| Thread.new { p.closed? } }.map(&:value)
 
-        yield result, pid
-      end
+      yield_results(prs, pos, &block)
     end
 
     private
@@ -27,7 +25,13 @@ module Nonnative
     attr_reader :configuration
 
     def processes
-      @processes ||= configuration.definitions.map { |d| Nonnative::Process.new(d) }
+      @processes ||= configuration.definitions.map { |d| [Nonnative::Process.new(d), Nonnative::Port.new(d)] }
+    end
+
+    def yield_results(prs, pos)
+      prs.zip(pos).each do |pid, result|
+        yield pid, result
+      end
     end
   end
 end

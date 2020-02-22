@@ -3,6 +3,8 @@
 
 require 'socket'
 
+sleep 1
+
 Socket.tcp_server_loop(ARGV[0].to_i) do |conn, _addr|
   Thread.new do
     loop do
