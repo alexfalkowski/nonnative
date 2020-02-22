@@ -4,15 +4,15 @@ Given('we configure nonnative programatically') do
   Nonnative.configure do |config|
     config.strategy = :manual
 
-    config.definition do |d|
-      d.process = 'features/support/bin/start 12_321'
+    config.process do |d|
+      d.command = 'features/support/bin/start 12_321'
       d.timeout = 5
       d.port = 12_321
       d.file = 'features/logs/12_321.log'
     end
 
-    config.definition do |d|
-      d.process = 'features/support/bin/start 12_322'
+    config.process do |d|
+      d.command = 'features/support/bin/start 12_322'
       d.timeout = 5
       d.port = 12_322
       d.file = 'features/logs/12_322.log'
