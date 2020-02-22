@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given('we configure nonnative to manual') do
+Given('we configure nonnative programatically') do
   Nonnative.configure do |config|
     config.strategy = :manual
 

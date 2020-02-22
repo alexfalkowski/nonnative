@@ -38,6 +38,8 @@ Configure nonnative with the following:
 - The file you want STDOUT to be logged to.
 - The strategy (Startup will start the process once and before will hook into cucumbers Before and After).
 
+### Ruby
+
 ```ruby
 require 'nonnative'
 
@@ -58,4 +60,30 @@ Nonnative.configure do |config|
     d.file = 'features/logs/12_322.log'
   end
 end
+```
+
+### YAML
+
+```yaml
+version: 1.0
+strategy: manual
+definitions:
+  -
+    process: features/support/bin/start 12_321
+    timeout: 5
+    port: 12321
+    file: features/logs/12_321.log
+  -
+    process: features/support/bin/start 12_322
+    timeout: 5
+    port: 12322
+    file: features/logs/12_322.log
+```
+
+Then load the file with
+
+```ruby
+require 'nonnative'
+
+Nonnative.load_configuration('configuration.yml')
 ```

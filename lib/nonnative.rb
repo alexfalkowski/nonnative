@@ -18,6 +18,10 @@ module Nonnative
       @logger ||= Nonnative::Logger.create
     end
 
+    def load_configuration(path)
+      @configuration ||= Nonnative::Configuration.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
+    end
+
     def configuration
       @configuration ||= Nonnative::Configuration.new
     end
