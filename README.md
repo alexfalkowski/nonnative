@@ -48,14 +48,14 @@ Nonnative.configure do |config|
     d.process = 'features/support/bin/start 12_321'
     d.timeout = 0.5
     d.port = 12_321
-    d.file = 'logs_12_321'
+    d.file = 'features/logs/12_321.log'
   end
 
   config.definition do |d|
     d.process = 'features/support/bin/start 12_322'
     d.timeout = 0.5
     d.port = 12_322
-    d.file = 'logs_12_322'
+    d.file = 'features/logs/12_322.log'
   end
 end
 ```
