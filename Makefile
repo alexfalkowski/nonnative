@@ -3,6 +3,9 @@
 dependencies:
 	bin/setup
 
+outdated-dependencies:
+	bundle outdated --only-explicit
+
 features:
 	bundle exec cucumber $(feature)
 
