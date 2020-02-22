@@ -8,17 +8,11 @@ module Nonnative
       end
 
       def start(&block)
-        prs = processes.map { |p, _| p.start }
-        pos = processes.map { |_, p| Thread.new { p.open? } }.map(&:value)
-
-        yield_results(prs, pos, &block)
+        process_all(:start, :open?, &block)
       end
 
       def stop(&block)
-        prs = processes.map { |p, _| p.stop }
-        pos = processes.map { |_, p| Thread.new { p.closed? } }.map(&:value)
-
-        yield_results(prs, pos, &block)
+        process_all(:stop, :closed?, &block)
       end
 
       private
@@ -29,6 +23,22 @@ module Nonnative
         @processes ||= configuration.processes.map do |d|
           [Nonnative::Process::System.new(d), Nonnative::Process::Port.new(d)]
         end
+      end
+
+      def process_all(pr_method, po_method, &block)
+        prs = []
+        ths = []
+
+        processes.each do |pr, po|
+          prs << pr.send(pr_method)
+          ths << Thread.new { po.send(po_method) }
+        end
+
+        ThreadsWait.all_waits(*ths)
+
+        pos = ths.map(&:value)
+
+        yield_results(prs, pos, &block)
       end
 
       def yield_results(prs, pos)
