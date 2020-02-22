@@ -9,12 +9,7 @@ module Nonnative
 
     def start
       unless started
-        @pid = if definition.file
-                 spawn(definition.process, %i[out err] => [definition.file, 'a'])
-               else
-                 spawn(definition.process)
-               end
-
+        @pid = spawn(definition.process, %i[out err] => [definition.file, 'a'])
         @started = true
       end
 
