@@ -2,14 +2,15 @@
 
 require 'socket'
 require 'timeout'
+require 'yaml'
 
 require 'nonnative/version'
 require 'nonnative/error'
-require 'nonnative/configuration'
-require 'nonnative/definition'
-require 'nonnative/process'
-require 'nonnative/process_pool'
-require 'nonnative/port'
+require 'nonnative/configuration/object'
+require 'nonnative/configuration/process'
+require 'nonnative/process/system'
+require 'nonnative/process/pool'
+require 'nonnative/process/port'
 require 'nonnative/logger'
 
 module Nonnative
@@ -19,11 +20,11 @@ module Nonnative
     end
 
     def load_configuration(path)
-      @configuration ||= Nonnative::Configuration.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
+      @configuration ||= Nonnative::Configuration::Object.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
     end
 
     def configuration
-      @configuration ||= Nonnative::Configuration.new
+      @configuration ||= NNonnative::Configuration::Object.new
     end
 
     def configure
@@ -33,7 +34,7 @@ module Nonnative
     end
 
     def start
-      @process_pool ||= Nonnative::ProcessPool.new(configuration)
+      @process_pool ||= Nonnative::Process::Pool.new(configuration)
 
       @process_pool.start do |pid, result|
         logger.error('Process has started though did respond in time', pid: pid) unless result

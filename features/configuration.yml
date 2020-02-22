@@ -1,13 +1,13 @@
 version: 1.0
 strategy: manual
-definitions:
+processes:
   -
-    process: features/support/bin/start 12_321
+    command: features/support/bin/start 12_321
     timeout: 5
     port: 12321
     file: features/logs/12_321.log
   -
-    process: features/support/bin/start 12_322
+    command: features/support/bin/start 12_322
     timeout: 5
     port: 12322
     file: features/logs/12_322.log

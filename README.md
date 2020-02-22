@@ -46,15 +46,15 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.strategy = :startup or :before or :manual
 
-  config.definition do |d|
-    d.process = 'features/support/bin/start 12_321'
+  config.process do |d|
+    d.command = 'features/support/bin/start 12_321'
     d.timeout = 0.5
     d.port = 12_321
     d.file = 'features/logs/12_321.log'
   end
 
-  config.definition do |d|
-    d.process = 'features/support/bin/start 12_322'
+  config.process do |d|
+    d.command = 'features/support/bin/start 12_322'
     d.timeout = 0.5
     d.port = 12_322
     d.file = 'features/logs/12_322.log'
@@ -67,14 +67,14 @@ end
 ```yaml
 version: 1.0
 strategy: manual
-definitions:
+processes:
   -
-    process: features/support/bin/start 12_321
+    command: features/support/bin/start 12_321
     timeout: 5
     port: 12321
     file: features/logs/12_321.log
   -
-    process: features/support/bin/start 12_322
+    command: features/support/bin/start 12_322
     timeout: 5
     port: 12322
     file: features/logs/12_322.log
