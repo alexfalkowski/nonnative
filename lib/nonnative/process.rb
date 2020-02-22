@@ -2,65 +2,31 @@
 
 module Nonnative
   class Process
-    def initialize(configuration)
-      @configuration = configuration
+    def initialize(definition)
+      @definition = definition
+      @started = false
     end
 
     def start
-      @pid = if configuration.file
-               spawn(configuration.process, %i[out err] => [configuration.file, 'a'])
-             else
-               spawn(configuration.process)
-             end
+      unless started
+        @pid = spawn(definition.process, %i[out err] => [definition.file, 'a'])
+        @started = true
+      end
 
-      [port_open?, pid]
+      pid
     end
 
     def stop
+      raise Nonnative::Error, "Can't stop a process that has not started" unless started
+
       ::Process.kill('SIGINT', pid)
-      [port_closed?, pid]
+      @started = false
+
+      pid
     end
 
     private
 
-    attr_reader :configuration, :pid
-
-    def port_open?
-      timeout do
-        open_socket
-        true
-      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-        sleep_interval
-        retry
-      end
-    end
-
-    def port_closed?
-      timeout do
-        open_socket
-        raise Nonnative::Error
-      rescue Nonnative::Error
-        sleep_interval
-        retry
-      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-        true
-      end
-    end
-
-    def timeout
-      Timeout.timeout(configuration.timeout) do
-        yield
-      end
-    rescue Timeout::Error
-      false
-    end
-
-    def open_socket
-      TCPSocket.new('127.0.0.1', configuration.port).close
-    end
-
-    def sleep_interval
-      sleep 0.01
-    end
+    attr_reader :definition, :pid, :started
   end
 end

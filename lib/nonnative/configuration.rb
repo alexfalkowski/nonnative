@@ -2,14 +2,44 @@
 
 module Nonnative
   class Configuration
-    def initialize
-      self.strategy = :before
+    class << self
+      def load_file(path)
+        file = YAML.load_file(path)
+
+        new.tap do |c|
+          c.strategy = file['strategy']
+
+          definitions(file, c)
+        end
+      end
+
+      private
+
+      def definitions(file, config)
+        file['definitions'].each do |fd|
+          config.definition do |d|
+            d.process = fd['process']
+            d.timeout = fd['timeout']
+            d.port = fd['port']
+            d.file = fd['file']
+          end
+        end
+      end
     end
 
-    attr_accessor :process
-    attr_accessor :timeout
-    attr_accessor :port
-    attr_accessor :file
+    def initialize
+      self.strategy = :before
+      self.definitions = []
+    end
+
     attr_accessor :strategy
+    attr_accessor :definitions
+
+    def definition
+      definition = Nonnative::Definition.new
+      yield definition
+
+      definitions << definition
+    end
   end
 end

@@ -6,13 +6,20 @@ require 'timeout'
 require 'nonnative/version'
 require 'nonnative/error'
 require 'nonnative/configuration'
+require 'nonnative/definition'
 require 'nonnative/process'
+require 'nonnative/process_pool'
+require 'nonnative/port'
 require 'nonnative/logger'
 
 module Nonnative
   class << self
     def logger
       @logger ||= Nonnative::Logger.create
+    end
+
+    def load_configuration(path)
+      @configuration ||= Nonnative::Configuration.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
     end
 
     def configuration
@@ -26,18 +33,17 @@ module Nonnative
     end
 
     def start
-      @process ||= Nonnative::Process.new(configuration)
-      result, pid = @process.start
-      return if result
+      @process_pool ||= Nonnative::ProcessPool.new(configuration)
 
-      logger.error('Process has started though did respond in time', pid: pid)
+      @process_pool.start do |pid, result|
+        logger.error('Process has started though did respond in time', pid: pid) unless result
+      end
     end
 
     def stop
-      result, pid = @process.stop
-      return if result
-
-      logger.error('Process has stopped though did respond in time', pid: pid)
+      @process_pool.stop do |pid, result|
+        logger.error('Process has stopped though did respond in time', pid: pid) unless result
+      end
     end
   end
 end

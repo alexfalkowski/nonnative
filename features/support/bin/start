@@ -3,7 +3,9 @@
 
 require 'socket'
 
-Socket.tcp_server_loop(12_321) do |conn, _addr|
+sleep 1
+
+Socket.tcp_server_loop(ARGV[0].to_i) do |conn, _addr|
   Thread.new do
     loop do
       line = conn.readline.strip

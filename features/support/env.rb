@@ -7,11 +7,6 @@ SimpleCov.start do
 end
 
 require 'nonnative'
+require 'rspec-benchmark'
 
-Nonnative.configure do |config|
-  config.process = 'features/support/bin/start'
-  config.timeout = 0.5
-  config.port = 12_321
-  config.file = 'logs'
-  config.strategy = :startup
-end
+World(RSpec::Benchmark::Matchers)
