@@ -4,7 +4,7 @@ dependencies:
 	bin/setup
 
 features:
-	bundle exec cucumber
+	bundle exec cucumber $(feature)
 
 analysis:
 	bundle exec rubocop

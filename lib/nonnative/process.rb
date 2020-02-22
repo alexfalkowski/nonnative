@@ -4,26 +4,33 @@ module Nonnative
   class Process
     def initialize(definition)
       @definition = definition
+      @started = false
     end
 
     def start
-      @pid = if definition.file
-               spawn(definition.process, %i[out err] => [definition.file, 'a'])
-             else
-               spawn(definition.process)
-             end
+      unless started
+        @pid = if definition.file
+                 spawn(definition.process, %i[out err] => [definition.file, 'a'])
+               else
+                 spawn(definition.process)
+               end
+
+        @started = true
+      end
 
       [port_open?, pid]
     end
 
     def stop
+      raise Nonnative::Error, "Can't stop a process that has not started" unless started
+
       ::Process.kill('SIGINT', pid)
-      [port_closed?, pid]
+      [port_closed?, pid].tap { @started = false }
     end
 
     private
 
-    attr_reader :definition, :pid
+    attr_reader :definition, :pid, :started
 
     def port_open?
       timeout do
