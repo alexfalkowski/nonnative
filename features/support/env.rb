@@ -10,3 +10,7 @@ require 'nonnative'
 require 'rspec-benchmark'
 
 World(RSpec::Benchmark::Matchers)
+
+Before do
+  Nonnative.clear
+end
