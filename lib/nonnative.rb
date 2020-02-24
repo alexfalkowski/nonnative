@@ -25,7 +25,7 @@ module Nonnative
     end
 
     def configuration
-      @configuration ||= NNonnative::Configuration::Object.new
+      @configuration ||= Nonnative::Configuration::Object.new
     end
 
     def configure
@@ -46,6 +46,12 @@ module Nonnative
       @process_pool.stop do |pid, result|
         logger.error('Process has stopped though did respond in time', pid: pid) unless result
       end
+    end
+
+    def clear
+      @logger = nil
+      @configuration = nil
+      @process_pool = nil
     end
   end
 end
