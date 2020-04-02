@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class ProcessPool
+  class Pool
     def initialize(configuration)
       @configuration = configuration
     end
 
     def start(&block)
-      process_all(:start, :open?, &block)
+      all = processes + servers
+      process_all(all, :start, :open?, &block)
     end
 
     def stop(&block)
-      process_all(:stop, :closed?, &block)
+      all = processes + servers
+      process_all(all, :stop, :closed?, &block)
     end
 
     private
@@ -24,11 +26,17 @@ module Nonnative
       end
     end
 
-    def process_all(pr_method, po_method, &block)
+    def servers
+      @servers ||= configuration.servers.map do |d|
+        [d.klass.new(d.port), Nonnative::Port.new(d)]
+      end
+    end
+
+    def process_all(all, pr_method, po_method, &block)
       prs = []
       ths = []
 
-      processes.each do |pr, po|
+      all.each do |pr, po|
         prs << pr.send(pr_method)
         ths << Thread.new { po.send(po_method) }
       end
@@ -41,8 +49,8 @@ module Nonnative
     end
 
     def yield_results(prs, pos)
-      prs.zip(pos).each do |pid, result|
-        yield pid, result
+      prs.zip(pos).each do |id, result|
+        yield id, result
       end
     end
   end

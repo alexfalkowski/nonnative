@@ -10,13 +10,15 @@ module Nonnative
           c.strategy = file['strategy']
 
           processes(file, c)
+          servers(file, c)
         end
       end
 
       private
 
       def processes(file, config)
-        file['processes'].each do |fd|
+        processes = file['processes'] || []
+        processes.each do |fd|
           config.process do |d|
             d.command = fd['command']
             d.timeout = fd['timeout']
@@ -25,21 +27,41 @@ module Nonnative
           end
         end
       end
+
+      def servers(file, config)
+        servers = file['servers'] || []
+        servers.each do |fd|
+          config.server do |s|
+            s.klass = Object.const_get(fd['klass'])
+            s.timeout = fd['timeout']
+            s.port = fd['port']
+          end
+        end
+      end
     end
 
     def initialize
       self.strategy = :before
       self.processes = []
+      self.servers = []
     end
 
     attr_accessor :strategy
     attr_accessor :processes
+    attr_accessor :servers
 
     def process
       process = Nonnative::ConfigurationProcess.new
       yield process
 
       processes << process
+    end
+
+    def server
+      server = Nonnative::ConfigurationServer.new
+      yield server
+
+      servers << server
     end
   end
 end
