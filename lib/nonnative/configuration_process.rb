@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class Process
+  class ConfigurationProcess
     attr_accessor :command
     attr_accessor :timeout
     attr_accessor :port

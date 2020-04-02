@@ -36,7 +36,7 @@ module Nonnative
     attr_accessor :processes
 
     def process
-      process = Nonnative::Process.new
+      process = Nonnative::ConfigurationProcess.new
       yield process
 
       processes << process
