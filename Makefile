@@ -12,10 +12,6 @@ features:
 analysis:
 	bundle exec rubocop
 
-audit:
-	bundle exec bundle-audit update
-	bundle exec bundle-audit
-
 cleanup-analysis:
 	bundle exec rubocop -a
 
