@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class Pool
+  class ProcessPool
     def initialize(configuration)
       @configuration = configuration
     end
