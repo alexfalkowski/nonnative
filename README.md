@@ -10,7 +10,7 @@ Well so do I. The issue is that most languages the cucumber implementation is no
 
 So why not test the way you want and build the microservice how you want. These kind of tests will make sure your application is tested properly by going end-to-end.
 
-The way it works is it spawns the processes you configure and waits for it to start. Then you communicate with your microservice however you like (TCP, HTTP, gRPC, etc)
+The way it works is it spawns processes or servers you configure and waits for it to start. Then you communicate with your microservice however you like (TCP, HTTP, gRPC, etc)
 
 ## Installation
 
@@ -40,6 +40,12 @@ Configure nonnative with the following:
 
 ### Ruby
 
+We can start a process, server or both.
+
+#### Processes
+
+Setup it up programmatically:
+
 ```ruby
 require 'nonnative'
 
@@ -62,6 +68,8 @@ Nonnative.configure do |config|
 end
 ```
 
+Setup it up through configuration:
+
 ### YAML
 
 ```yaml
@@ -81,6 +89,79 @@ processes:
 ```
 
 Then load the file with
+
+```ruby
+require 'nonnative'
+
+Nonnative.load_configuration('configuration.yml')
+```
+
+#### Servers
+
+Define your server:
+
+```ruby
+module Nonnative
+  class EchoServer < Nonnative::Server
+    def perform_start
+      @socket_server = TCPServer.new('127.0.0.1', port)
+
+      loop do
+        client_socket = @socket_server.accept
+        client_socket.puts 'Hello World!'
+        client_socket.close
+      end
+    rescue StandardError
+    end
+
+    def perform_stop
+      @socket_server.close
+    end
+  end
+end
+```
+
+Setup it up programmatically:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.strategy = :manual
+
+  config.server do |d|
+    d.klass = Nonnative::EchoServer
+    d.timeout = 1
+    d.port = 12_323
+  end
+
+  config.server do |d|
+    d.klass = Nonnative::EchoServer
+    d.timeout = 1
+    d.port = 12_324
+  end
+end
+```
+
+Setup it up through configuration:
+
+### YAML
+
+```yaml
+version: 1.0
+strategy: manual
+servers:
+  -
+    klass: Nonnative::EchoServer
+    timeout: 1
+    port: 12323
+  -
+    klass: Nonnative::EchoServer
+    timeout: 1
+    port: 12324
+```
+
+Then load the file with:
 
 ```ruby
 require 'nonnative'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given('we configure nonnative programatically') do
+Given('I configure nonnative programatically with processes') do
   Nonnative.configure do |config|
     config.strategy = :manual
 
@@ -20,18 +20,16 @@ Given('we configure nonnative programatically') do
   end
 end
 
-Given('we start nonnative') do
+Given('I start nonnative') do
   Nonnative.start
 end
 
-When('we send {string} with the echo client') do |message|
+When('I send {string} with the echo client to the processes') do |message|
   @responses = []
   @responses << Nonnative::EchoClient.new(12_321).request(message)
   @responses << Nonnative::EchoClient.new(12_322).request(message)
 end
 
-Then('we should receive a {string} response') do |response|
+Then('I should receive a {string} response') do |response|
   @responses.each { |r| expect(r).to eq(response) }
-ensure
-  Nonnative.stop
 end
