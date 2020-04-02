@@ -7,6 +7,7 @@ require 'yaml'
 
 require 'nonnative/version'
 require 'nonnative/error'
+require 'nonnative/timeout'
 require 'nonnative/configuration/object'
 require 'nonnative/configuration/process'
 require 'nonnative/process/system'

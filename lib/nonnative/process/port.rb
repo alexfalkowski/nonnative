@@ -5,10 +5,11 @@ module Nonnative
     class Port
       def initialize(process)
         @process = process
+        @timeout = Nonnative::Timeout.new(process.timeout)
       end
 
       def open?
-        timeout do
+        timeout.perform do
           open_socket
           true
         rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
@@ -18,7 +19,7 @@ module Nonnative
       end
 
       def closed?
-        timeout do
+        timeout.perform do
           open_socket
           raise Nonnative::Error
         rescue Nonnative::Error
@@ -31,15 +32,7 @@ module Nonnative
 
       private
 
-      attr_reader :process
-
-      def timeout
-        Timeout.timeout(process.timeout) do
-          yield
-        end
-      rescue Timeout::Error
-        false
-      end
+      attr_reader :process, :timeout
 
       def open_socket
         TCPSocket.new('127.0.0.1', process.port).close
