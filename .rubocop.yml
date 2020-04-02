@@ -7,3 +7,18 @@ Layout/LineLength:
 
 Style/Documentation:
   Enabled: false
+
+Lint/RaiseException:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
