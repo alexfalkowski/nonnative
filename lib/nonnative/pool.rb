@@ -22,7 +22,7 @@ module Nonnative
 
     def processes
       @processes ||= configuration.processes.map do |d|
-        [Nonnative::System.new(d), Nonnative::Port.new(d)]
+        [Nonnative::Command.new(d), Nonnative::Port.new(d)]
       end
     end
 
@@ -32,25 +32,27 @@ module Nonnative
       end
     end
 
-    def process_all(all, pr_method, po_method, &block)
-      prs = []
-      ths = []
+    def process_all(all, type_method, port_method, &block)
+      types = []
+      pids = []
+      threads = []
 
-      all.each do |pr, po|
-        prs << pr.send(pr_method)
-        ths << Thread.new { po.send(po_method) }
+      all.each do |type, port|
+        types << type
+        pids << type.send(type_method)
+        threads << Thread.new { port.send(port_method) }
       end
 
-      ThreadsWait.all_waits(*ths)
+      ThreadsWait.all_waits(*threads)
 
-      pos = ths.map(&:value)
+      ports = threads.map(&:value)
 
-      yield_results(prs, pos, &block)
+      yield_results(types, pids, ports, &block)
     end
 
-    def yield_results(prs, pos)
-      prs.zip(pos).each do |id, result|
-        yield id, result
+    def yield_results(all, pids, ports)
+      all.zip(pids, ports).each do |type, id, result|
+        yield type.name, id, result
       end
     end
   end

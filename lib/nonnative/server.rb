@@ -11,6 +11,10 @@ module Nonnative
       end
     end
 
+    def name
+      self.class.to_s
+    end
+
     def start
       object_id
     end
