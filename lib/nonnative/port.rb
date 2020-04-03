@@ -34,7 +34,7 @@ module Nonnative
     attr_reader :process, :timeout
 
     def open_socket
-      TCPSocket.new('127.0.0.1', process.port).close
+      TCPSocket.new('0.0.0.0', process.port).close
     end
 
     def sleep_interval
