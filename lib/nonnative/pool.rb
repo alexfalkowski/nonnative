@@ -34,10 +34,12 @@ module Nonnative
 
     def process_all(all, type_method, port_method, &block)
       types = []
+      pids = []
       threads = []
 
       all.each do |type, port|
-        types << type.send(type_method)
+        types << type
+        pids << type.send(type_method)
         threads << Thread.new { port.send(port_method) }
       end
 
@@ -45,12 +47,12 @@ module Nonnative
 
       ports = threads.map(&:value)
 
-      yield_results(types, ports, &block)
+      yield_results(types, pids, ports, &block)
     end
 
-    def yield_results(types, ports)
-      types.zip(ports).each do |id, result|
-        yield id, result
+    def yield_results(all, pids, ports)
+      all.zip(pids, ports).each do |type, id, result|
+        yield type.name, id, result
       end
     end
   end

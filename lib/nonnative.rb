@@ -40,16 +40,16 @@ module Nonnative
     def start
       @pool ||= Nonnative::Pool.new(configuration)
 
-      @pool.start do |id, result|
-        logger.error('Process has started though did respond in time', id: id) unless result
+      @pool.start do |name, id, result|
+        logger.error('Started though did respond in time', id: id, name: name) unless result
       end
     end
 
     def stop
       return if @pool.nil?
 
-      @pool.stop do |id, result|
-        logger.error('Process has stopped though did respond in time', id: id) unless result
+      @pool.stop do |name, id, result|
+        logger.error('Stopped though did respond in time', id: id, name: name) unless result
       end
     end
 

@@ -7,6 +7,10 @@ module Nonnative
       @started = false
     end
 
+    def name
+      process.command
+    end
+
     def start
       unless started
         @pid = spawn(process.command, %i[out err] => [process.file, 'a'])
