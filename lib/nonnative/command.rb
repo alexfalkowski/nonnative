@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class System
+  class Command
     def initialize(process)
       @process = process
       @started = false
