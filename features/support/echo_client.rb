@@ -7,7 +7,7 @@ module Nonnative
     end
 
     def request(msg)
-      s = TCPSocket.open('127.0.0.1', @port)
+      s = TCPSocket.open('0.0.0.0', @port)
       s.puts msg
       response = s.gets.chomp
       s.close
