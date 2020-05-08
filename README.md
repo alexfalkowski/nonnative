@@ -32,11 +32,12 @@ Or install it yourself as:
 
 Configure nonnative with the following:
 
-- Process that you want to start.
+- Process/Server that you want to start.
 - A timeout value.
 - Port to verify.
-- The file you want STDOUT to be logged to.
-- The strategy (Startup will start the process once and before will hook into cucumbers Before and After).
+- The class for servers.
+- The file you want STDOUT to be logged to for processes.
+- The strategy (Startup will start the process once and before will hook into cucumbers Before and After) for processes.
 
 ### Ruby
 
