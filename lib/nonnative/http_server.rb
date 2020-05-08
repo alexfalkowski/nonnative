@@ -2,19 +2,14 @@
 
 module Nonnative
   class HTTPServer < Nonnative::Server
-    class << self
-      def configure
-        yield Application if block_given?
-      end
-    end
-
     def initialize(port)
-      self.class.configure do |app|
-        app.set :port, port
-      end
+      Application.set :port, port
+      configure Application
 
       super port
     end
+
+    def configure(http); end
 
     def perform_start
       Application.start!

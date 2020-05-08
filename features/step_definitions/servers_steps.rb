@@ -19,7 +19,13 @@ Given('I configure nonnative programatically with servers') do
     config.server do |d|
       d.klass = Nonnative::Features::HTTPServer
       d.timeout = 1
-      d.port = 9494
+      d.port = 4567
+    end
+
+    config.server do |d|
+      d.klass = Nonnative::Features::GRPCServer
+      d.timeout = 1
+      d.port = 9002
     end
   end
 end
@@ -35,10 +41,19 @@ When('I send a message with the tcp client to the servers') do
 end
 
 When('I send a message with the http client to the servers') do
-  @response = Nonnative::Features::HTTPClient.new('http://localhost:9494').request
+  @response = Nonnative::Features::HTTPClient.new('http://localhost:4567').request
+end
+
+When('I send a message with the grpc client to the servers') do
+  stub = Nonnative::Features::Greeter::Stub.new('localhost:9002', :this_channel_is_insecure)
+  @response = stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!'))
 end
 
 Then('I should receive a http {string} response') do |response|
   expect(@response.code).to eq(200)
   expect(@response.body).to eq(response)
+end
+
+Then('I should receive a grpc {string} response') do |response|
+  expect(@response.message).to eq(response)
 end

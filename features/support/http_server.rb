@@ -13,8 +13,8 @@ module Nonnative
     end
 
     class HTTPServer < Nonnative::HTTPServer
-      configure do |app|
-        app.register(Hello)
+      def configure(http)
+        http.register(Hello)
       end
     end
   end
