@@ -5,13 +5,14 @@ PATH
       cucumber
       rspec-expectations
       semantic_logger
+      sinatra (~> 2.0, >= 2.0.8.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
     backport (1.1.2)
-    backports (3.17.0)
+    backports (3.17.1)
     benchmark (0.1.0)
     benchmark-malloc (0.2.0)
     benchmark-perf (0.6.0)
@@ -43,11 +44,16 @@ GEM
     mini_portile2 (2.4.0)
     multi_json (1.14.1)
     multi_test (0.1.2)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     parallel (1.19.1)
     parser (2.7.1.2)
       ast (~> 2.4.0)
+    rack (2.2.2)
+    rack-protection (2.0.8.1)
+      rack
     rainbow (3.0.0)
     rake (13.0.1)
     reverse_markdown (1.4.0)
@@ -80,12 +86,18 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
     ruby-progressbar (1.10.1)
+    ruby2_keywords (0.0.2)
     semantic_logger (4.6.1)
       concurrent-ruby (~> 1.0)
     simplecov (0.18.5)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.2)
+    sinatra (2.0.8.1)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.8.1)
+      tilt (~> 2.0)
     solargraph (0.39.7)
       backport (~> 1.1)
       benchmark

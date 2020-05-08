@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'cucumber'
   spec.add_dependency 'rspec-expectations'
   spec.add_dependency 'semantic_logger'
+  spec.add_dependency 'sinatra', '~> 2.0', '>= 2.0.8.1'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
