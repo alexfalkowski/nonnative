@@ -121,13 +121,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler
+  bundler (~> 2.1, >= 2.1.4)
   nonnative!
-  rake
+  rake (~> 13.0, >= 13.0.1)
   rspec-benchmark (~> 0.6.0)
-  rubocop
-  simplecov
-  solargraph
+  rubocop (~> 0.82.0)
+  simplecov (~> 0.18.5)
+  solargraph (~> 0.39.7)
 
 BUNDLED WITH
    2.1.4
