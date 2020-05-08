@@ -24,14 +24,18 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'cucumber'
-  spec.add_dependency 'rspec-expectations'
-  spec.add_dependency 'semantic_logger'
+  spec.add_dependency 'cucumber', '~> 3.1', '>= 3.1.2'
+  spec.add_dependency 'grpc', '~> 1.28'
+  spec.add_dependency 'rest-client', '~> 2.1'
+  spec.add_dependency 'rspec-expectations', '~> 3.9', '>= 3.9.2'
+  spec.add_dependency 'semantic_logger', '~> 4.6', '>= 4.6.1'
+  spec.add_dependency 'sinatra', '~> 2.0', '>= 2.0.8.1'
 
-  spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec-benchmark'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'solargraph'
+  spec.add_development_dependency 'bundler', '~> 2.1', '>= 2.1.4'
+  spec.add_development_dependency 'grpc-tools', '~> 1.28'
+  spec.add_development_dependency 'rake', '~> 13.0', '>= 13.0.1'
+  spec.add_development_dependency 'rspec-benchmark', '~> 0.6.0'
+  spec.add_development_dependency 'rubocop', '~> 0.82.0'
+  spec.add_development_dependency 'simplecov', '~> 0.18.5'
+  spec.add_development_dependency 'solargraph', '~> 0.39.7'
 end
