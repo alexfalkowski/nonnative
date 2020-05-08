@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'cucumber', '~> 3.1', '>= 3.1.2'
   spec.add_dependency 'grpc', '~> 1.28'
+  spec.add_dependency 'rest-client', '~> 2.1'
   spec.add_dependency 'rspec-expectations', '~> 3.9', '>= 3.9.2'
   spec.add_dependency 'semantic_logger', '~> 4.6', '>= 4.6.1'
   spec.add_dependency 'sinatra', '~> 2.0', '>= 2.0.8.1'

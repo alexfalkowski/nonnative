@@ -5,6 +5,9 @@ require 'timeout'
 require 'thwait'
 require 'yaml'
 
+require 'sinatra'
+require 'rest-client'
+
 require 'nonnative/version'
 require 'nonnative/error'
 require 'nonnative/timeout'
@@ -16,6 +19,8 @@ require 'nonnative/command'
 require 'nonnative/pool'
 require 'nonnative/server'
 require 'nonnative/logger'
+require 'nonnative/http_client'
+require 'nonnative/http_server'
 
 module Nonnative
   class << self

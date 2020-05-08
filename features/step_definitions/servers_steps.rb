@@ -5,15 +5,21 @@ Given('I configure nonnative programatically with servers') do
     config.strategy = :manual
 
     config.server do |d|
-      d.klass = Nonnative::TCPServer
+      d.klass = Nonnative::Features::TCPServer
       d.timeout = 1
       d.port = 12_323
     end
 
     config.server do |d|
-      d.klass = Nonnative::TCPServer
+      d.klass = Nonnative::Features::TCPServer
       d.timeout = 1
       d.port = 12_324
+    end
+
+    config.server do |d|
+      d.klass = Nonnative::Features::HTTPServer
+      d.timeout = 1
+      d.port = 9494
     end
   end
 end
@@ -24,6 +30,15 @@ end
 
 When('I send a message with the tcp client to the servers') do
   @responses = []
-  @responses << Nonnative::TCPClient.new(12_323).request('')
-  @responses << Nonnative::TCPClient.new(12_324).request('')
+  @responses << Nonnative::Features::TCPClient.new(12_323).request('')
+  @responses << Nonnative::Features::TCPClient.new(12_324).request('')
+end
+
+When('I send a message with the http client to the servers') do
+  @response = Nonnative::Features::HTTPClient.new('http://localhost:9494').request
+end
+
+Then('I should receive a http {string} response') do |response|
+  expect(@response.code).to eq(200)
+  expect(@response.body).to eq(response)
 end

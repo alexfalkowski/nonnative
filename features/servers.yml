@@ -2,10 +2,10 @@ version: 1.0
 strategy: manual
 servers:
   -
-    klass: Nonnative::TCPServer
+    klass: Nonnative::Features::TCPServer
     timeout: 1
     port: 12323
   -
-    klass: Nonnative::TCPServer
+    klass: Nonnative::Features::TCPServer
     timeout: 1
     port: 12324

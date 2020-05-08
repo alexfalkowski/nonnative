@@ -7,4 +7,4 @@ Feature: Processes
     Given I configure nonnative programatically with processes
     And I start nonnative
     When I send "test" with the tcp client to the processes
-    Then I should receive a "test" response
+    Then I should receive a tcp "test" response

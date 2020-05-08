@@ -25,9 +25,5 @@ module Nonnative
     end
 
     attr_reader :port
-
-    def perform_start; end
-
-    def perform_stop; end
   end
 end
