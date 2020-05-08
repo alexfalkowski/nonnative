@@ -25,13 +25,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'cucumber', '~> 3.1', '>= 3.1.2'
-  spec.add_dependency 'rspec-expectations'
+  spec.add_dependency 'rspec-expectations', '~> 3.9', '>= 3.9.1'
   spec.add_dependency 'semantic_logger'
   spec.add_dependency 'sinatra', '~> 2.0', '>= 2.0.8.1'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec-benchmark'
+  spec.add_development_dependency 'rspec-benchmark', '~> 0.6.0'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'solargraph'
