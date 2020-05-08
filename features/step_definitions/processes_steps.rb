@@ -24,10 +24,10 @@ Given('I start nonnative') do
   Nonnative.start
 end
 
-When('I send {string} with the echo client to the processes') do |message|
+When('I send {string} with the tcp client to the processes') do |message|
   @responses = []
-  @responses << Nonnative::EchoClient.new(12_321).request(message)
-  @responses << Nonnative::EchoClient.new(12_322).request(message)
+  @responses << Nonnative::TCPClient.new(12_321).request(message)
+  @responses << Nonnative::TCPClient.new(12_322).request(message)
 end
 
 Then('I should receive a {string} response') do |response|

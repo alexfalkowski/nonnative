@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class EchoServer < Nonnative::Server
+  class TCPServer < Nonnative::Server
     def perform_start
-      @socket_server = TCPServer.new('0.0.0.0', port)
+      @socket_server = ::TCPServer.new('0.0.0.0', port)
 
       loop do
         client_socket = @socket_server.accept

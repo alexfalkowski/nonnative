@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class EchoClient
+  class TCPClient
     def initialize(port)
       @port = port
     end
