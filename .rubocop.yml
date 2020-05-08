@@ -25,3 +25,9 @@ Style/HashTransformValues:
 
 Lint/StructNewOverride:
   Enabled: true
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Style/ExponentialNotation:
+  Enabled: true
