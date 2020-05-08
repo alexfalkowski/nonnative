@@ -46,6 +46,7 @@ GEM
     grpc (1.28.0)
       google-protobuf (~> 3.11)
       googleapis-common-protos-types (~> 1.0)
+    grpc-tools (1.28.0)
     jaro_winkler (1.5.4)
     maruku (0.7.3)
     mini_portile2 (2.4.0)
@@ -129,6 +130,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 2.1, >= 2.1.4)
+  grpc-tools (~> 1.28)
   nonnative!
   rake (~> 13.0, >= 13.0.1)
   rspec-benchmark (~> 0.6.0)
