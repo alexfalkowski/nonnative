@@ -49,6 +49,10 @@ When('I send a message with the grpc client to the servers') do
   @response = stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!'))
 end
 
+When("I send a message a health request") do
+  @response = Nonnative::Observability.new('http://localhost:4567').health
+end
+
 Then('I should receive a http {string} response') do |response|
   expect(@response.code).to eq(200)
   expect(@response.body).to eq(response)
@@ -56,4 +60,8 @@ end
 
 Then('I should receive a grpc {string} response') do |response|
   expect(@response.message).to eq(response)
+end
+
+Then("I should receive a successful health response") do
+  expect(@response.code).to eq(200)
 end
