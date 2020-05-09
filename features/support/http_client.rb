@@ -10,6 +10,10 @@ module Nonnative
       def hello_post
         post('hello', { content_type: :json, accept: :json })
       end
+
+      def not_found
+        get('notfound', { content_type: :json, accept: :json })
+      end
     end
   end
 end
