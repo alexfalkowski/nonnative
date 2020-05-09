@@ -41,7 +41,10 @@ When('I send a message with the tcp client to the servers') do
 end
 
 When('I send a message with the http client to the servers') do
-  @response = Nonnative::Features::HTTPClient.new('http://localhost:4567').request
+  client = Nonnative::Features::HTTPClient.new('http://localhost:4567')
+  @responses = []
+  @responses << client.hello_get
+  @responses << client.hello_post
 end
 
 When('I send a message with the grpc client to the servers') do
@@ -57,9 +60,15 @@ When('I send a metrics request') do
   @response = Nonnative::Observability.new('http://localhost:4567').metrics
 end
 
+When('I send a not found message with the http client to the servers') do
+  @response = Nonnative::Features::HTTPClient.new('http://localhost:4567').not_found
+end
+
 Then('I should receive a http {string} response') do |response|
-  expect(@response.code).to eq(200)
-  expect(@response.body).to eq(response)
+  @responses.each do |r|
+    expect(r.code).to eq(200)
+    expect(r.body).to eq(response)
+  end
 end
 
 Then('I should receive a grpc {string} response') do |response|
@@ -72,4 +81,8 @@ end
 
 Then('I should receive a successful metrics response') do
   expect(@response.code).to eq(200)
+end
+
+Then('I should receive a http not found response') do
+  expect(@response.code).to eq(404)
 end

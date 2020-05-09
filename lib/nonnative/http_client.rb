@@ -28,7 +28,7 @@ module Nonnative
 
     def with_exception
       yield
-    rescue RestClient::Exception => e
+    rescue RestClient::ExceptionWithResponse => e
       e.response
     end
   end

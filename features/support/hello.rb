@@ -8,6 +8,10 @@ module Nonnative
           app.get '/hello' do
             'Hello World!'
           end
+
+          app.post '/hello' do
+            'Hello World!'
+          end
         end
       end
     end

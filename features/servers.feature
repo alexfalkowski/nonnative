@@ -21,6 +21,12 @@ Feature: Servers
     When I send a message with the http client to the servers
     Then I should receive a http "Hello World!" response
 
+  Scenario: Successfully starting of HTTP servers programatically with not found message
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I send a not found message with the http client to the servers
+    Then I should receive a http not found response
+
   Scenario: Successfully starting of gRPC servers programatically
     Given I configure nonnative programatically with servers
     And I start nonnative
