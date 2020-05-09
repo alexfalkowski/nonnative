@@ -21,4 +21,6 @@ jobs:
       - run: make features
       - run: make analysis
       - store_artifacts:
+          path: coverage
+      - store_artifacts:
           path: features/logs
