@@ -10,14 +10,14 @@ module Nonnative
 
     def get(pathname, headers = {})
       uri = URI.join(host, pathname)
-      RestClient.get(uri.to_s, headers(headers))
+      RestClient.get(uri.to_s, headers)
     rescue RestClient::Exception => e
       e.response
     end
 
     def post(pathname, payload, headers = {})
       uri = URI.join(host, pathname)
-      RestClient.post(uri.to_s, payload.to_json, headers(headers))
+      RestClient.post(uri.to_s, payload.to_json, headers)
     rescue RestClient::Exception => e
       e.response
     end
@@ -25,10 +25,5 @@ module Nonnative
     private
 
     attr_reader :host
-
-    def headers(headers)
-      default_headers = { content_type: :json, accept: :json }
-      default_headers.merge(headers)
-    end
   end
 end

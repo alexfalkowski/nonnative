@@ -2,19 +2,11 @@
 
 module Nonnative
   module Features
-    module Hello
-      class << self
-        def registered(app)
-          app.get '/hello' do
-            'Hello World!'
-          end
-        end
-      end
-    end
-
     class HTTPServer < Nonnative::HTTPServer
       def configure(http)
         http.register(Hello)
+        http.register(Health)
+        http.register(Metrics)
       end
     end
   end

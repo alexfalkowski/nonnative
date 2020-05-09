@@ -23,6 +23,8 @@ require 'nonnative/logger'
 require 'nonnative/http_client'
 require 'nonnative/http_server'
 require 'nonnative/grpc_server'
+require 'nonnative/grpc_server'
+require 'nonnative/observability'
 
 module Nonnative
   class << self

@@ -26,3 +26,15 @@ Feature: Servers
     And I start nonnative
     When I send a message with the grpc client to the servers
     Then I should receive a grpc "Hello World!" response
+
+  Scenario: Successfully starting of HTTP servers programatically and getting health
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I send a health request
+    Then I should receive a successful health response
+
+  Scenario: Successfully starting of HTTP servers programatically and getting metrics
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I send a metrics request
+    Then I should receive a successful metrics response
