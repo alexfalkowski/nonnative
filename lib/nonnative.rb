@@ -60,9 +60,7 @@ module Nonnative
     end
 
     def clear
-      @logger = nil
       @configuration = nil
-      @process_pool = nil
       @pool = nil
     end
   end
