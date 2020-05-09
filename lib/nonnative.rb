@@ -12,6 +12,7 @@ require 'rest-client'
 require 'nonnative/version'
 require 'nonnative/error'
 require 'nonnative/start_error'
+require 'nonnative/stop_error'
 require 'nonnative/timeout'
 require 'nonnative/port'
 require 'nonnative/configuration'
@@ -59,7 +60,7 @@ module Nonnative
       return if @pool.nil?
 
       @pool.stop do |name, id, result|
-        logger.error('Stopped though did respond in time', id: id, name: name) unless result
+        raise Nonnative::StopError, "Stopped #{name} with id #{id}, though did respond in time" unless result
       end
     end
 

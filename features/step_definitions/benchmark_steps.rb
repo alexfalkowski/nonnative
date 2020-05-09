@@ -16,6 +16,18 @@ When('I configure nonnative programatially with a slow starting server') do
   end
 end
 
+When('I configure nonnative programatially with a slow stopping server') do
+  Nonnative.configure do |config|
+    config.strategy = :manual
+
+    config.server do |d|
+      d.klass = Nonnative::Features::SlowStopServer
+      d.timeout = 1
+      d.port = 14_001
+    end
+  end
+end
+
 Then('starting nonnative should happen within an adequate time') do
   expect { Nonnative.start }.to perform_under(2, warmup: 0).sec
 end
@@ -26,4 +38,8 @@ end
 
 Then('starting nonnative should raise an error') do
   expect { Nonnative.start }.to raise_error(Nonnative::StartError)
+end
+
+Then('stopping nonnative should raise an error') do
+  expect { Nonnative.stop }.to raise_error(Nonnative::StopError)
 end
