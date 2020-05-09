@@ -4,24 +4,24 @@ When('I configure nonnative through configuration with processes') do
   Nonnative.load_configuration('features/processes.yml')
 end
 
-When('I configure nonnative programatially with a slow starting server') do
+When('I configure nonnative programatially with a no op server') do
   Nonnative.configure do |config|
     config.strategy = :manual
 
     config.server do |d|
-      d.klass = Nonnative::Features::SlowStartServer
+      d.klass = Nonnative::Features::NoOpServer
       d.timeout = 1
       d.port = 14_000
     end
   end
 end
 
-When('I configure nonnative programatially with a slow stopping server') do
+When('I configure nonnative programatially with a no stop server') do
   Nonnative.configure do |config|
     config.strategy = :manual
 
     config.server do |d|
-      d.klass = Nonnative::Features::SlowStopServer
+      d.klass = Nonnative::Features::NoStopServer
       d.timeout = 1
       d.port = 14_001
     end
