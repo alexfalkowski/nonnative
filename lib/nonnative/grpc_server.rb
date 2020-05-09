@@ -11,7 +11,9 @@ module Nonnative
       super port
     end
 
-    def configure(grpc); end
+    def configure(grpc)
+      # Classes will add configuration
+    end
 
     def perform_start
       server.run_till_terminated
