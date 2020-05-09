@@ -6,7 +6,7 @@ dependencies:
 outdated-dependencies:
 	bundle outdated --only-explicit
 
-features: cleanup-logs
+features: clean
 	bundle exec cucumber --profile report $(feature)
 
 analysis:
@@ -18,3 +18,11 @@ cleanup-analysis:
 
 cleanup-logs:
 	rm -rf features/logs/*.log
+
+cleanup-reports:
+	rm -rf reports
+
+cleanup-coverage:
+	rm -rf coverage
+
+clean: cleanup-logs cleanup-reports cleanup-coverage
