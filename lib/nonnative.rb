@@ -21,7 +21,6 @@ require 'nonnative/configuration_server'
 require 'nonnative/command'
 require 'nonnative/pool'
 require 'nonnative/server'
-require 'nonnative/logger'
 require 'nonnative/http_client'
 require 'nonnative/http_server'
 require 'nonnative/grpc_server'
@@ -30,10 +29,6 @@ require 'nonnative/observability'
 
 module Nonnative
   class << self
-    def logger
-      @logger ||= Nonnative::Logger.create
-    end
-
     def load_configuration(path)
       @configuration ||= Nonnative::Configuration.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
     end
