@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sinatra', '~> 2.0', '>= 2.0.8.1'
 
   spec.add_development_dependency 'bundler', '~> 2.1', '>= 2.1.4'
+  spec.add_development_dependency 'chutney', '~> 2.0', '>= 2.0.3.1'
   spec.add_development_dependency 'grpc-tools', '~> 1.28'
   spec.add_development_dependency 'rake', '~> 13.0', '>= 13.0.1'
   spec.add_development_dependency 'rubocop', '~> 0.82.0'

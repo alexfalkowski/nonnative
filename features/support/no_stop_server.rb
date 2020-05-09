@@ -2,9 +2,9 @@
 
 module Nonnative
   module Features
-    class SlowStartServer < Nonnative::Server
+    class NoStopServer < Nonnative::Server
       def perform_start
-        sleep 2
+        @socket_server = ::TCPServer.new('0.0.0.0', port)
       end
 
       def perform_stop
