@@ -11,6 +11,7 @@ require 'rest-client'
 
 require 'nonnative/version'
 require 'nonnative/error'
+require 'nonnative/start_error'
 require 'nonnative/timeout'
 require 'nonnative/port'
 require 'nonnative/configuration'
@@ -50,7 +51,7 @@ module Nonnative
       @pool ||= Nonnative::Pool.new(configuration)
 
       @pool.start do |name, id, result|
-        logger.error('Started though did respond in time', id: id, name: name) unless result
+        raise Nonnative::StartError, "Started #{name} with id #{id}, though did respond in time" unless result
       end
     end
 

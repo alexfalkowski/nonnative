@@ -11,3 +11,8 @@ Feature: Benchmark nonnative
     Given I configure nonnative through configuration with processes
     When I start nonnative
     Then stoping nonnative should happen within an adequate time
+
+  @manual
+  Scenario: Start nonnative with a long start up time server will error
+    When I configure nonnative programatially with a slow starting server
+    Then starting nonnative should raise an error
