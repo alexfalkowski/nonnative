@@ -1,4 +1,7 @@
-version: 2
+version: 2.1
+orbs:
+  sonarcloud: sonarsource/sonarcloud@1.0.1
+
 jobs:
   build:
     docker:
@@ -26,3 +29,10 @@ jobs:
           path: coverage
       - store_artifacts:
           path: features/logs
+      - sonarcloud/scan
+
+workflows:
+  nonnative:
+    jobs:
+      - build:
+          context: SonarCloud
