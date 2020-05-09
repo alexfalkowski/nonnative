@@ -19,6 +19,8 @@ jobs:
           paths:
             - vendor/bundle
       - run: make features
+      - store_test_results:
+          path: reports
       - run: make analysis
       - store_artifacts:
           path: coverage
