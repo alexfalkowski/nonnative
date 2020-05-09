@@ -30,5 +30,11 @@ Feature: Servers
   Scenario: Successfully starting of HTTP servers programatically and getting health
     Given I configure nonnative programatically with servers
     And I start nonnative
-    When I send a message a health request
+    When I send a health request
     Then I should receive a successful health response
+
+  Scenario: Successfully starting of HTTP servers programatically and getting metrics
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I send a metrics request
+    Then I should receive a successful metrics response
