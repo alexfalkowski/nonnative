@@ -11,6 +11,7 @@ features: cleanup-logs
 
 analysis:
 	bundle exec rubocop
+	bundle exec chutney
 
 cleanup-analysis:
 	bundle exec rubocop -a
