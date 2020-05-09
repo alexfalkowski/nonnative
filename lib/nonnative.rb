@@ -11,6 +11,8 @@ require 'rest-client'
 
 require 'nonnative/version'
 require 'nonnative/error'
+require 'nonnative/start_error'
+require 'nonnative/stop_error'
 require 'nonnative/timeout'
 require 'nonnative/port'
 require 'nonnative/configuration'
@@ -19,7 +21,6 @@ require 'nonnative/configuration_server'
 require 'nonnative/command'
 require 'nonnative/pool'
 require 'nonnative/server'
-require 'nonnative/logger'
 require 'nonnative/http_client'
 require 'nonnative/http_server'
 require 'nonnative/grpc_server'
@@ -28,10 +29,6 @@ require 'nonnative/observability'
 
 module Nonnative
   class << self
-    def logger
-      @logger ||= Nonnative::Logger.create
-    end
-
     def load_configuration(path)
       @configuration ||= Nonnative::Configuration.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
     end
@@ -50,7 +47,7 @@ module Nonnative
       @pool ||= Nonnative::Pool.new(configuration)
 
       @pool.start do |name, id, result|
-        logger.error('Started though did respond in time', id: id, name: name) unless result
+        raise Nonnative::StartError, "Started #{name} with id #{id}, though did respond in time" unless result
       end
     end
 
@@ -58,7 +55,7 @@ module Nonnative
       return if @pool.nil?
 
       @pool.stop do |name, id, result|
-        logger.error('Stopped though did respond in time', id: id, name: name) unless result
+        raise Nonnative::StopError, "Stopped #{name} with id #{id}, though did respond in time" unless result
       end
     end
 

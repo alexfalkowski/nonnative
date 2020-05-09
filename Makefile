@@ -6,7 +6,7 @@ dependencies:
 outdated-dependencies:
 	bundle outdated --only-explicit
 
-features:
+features: cleanup-logs
 	bundle exec cucumber $(feature)
 
 analysis:

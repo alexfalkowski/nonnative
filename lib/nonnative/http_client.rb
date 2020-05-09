@@ -9,21 +9,27 @@ module Nonnative
     protected
 
     def get(pathname, headers = {})
-      uri = URI.join(host, pathname)
-      RestClient.get(uri.to_s, headers)
-    rescue RestClient::Exception => e
-      e.response
+      with_exception do
+        uri = URI.join(host, pathname)
+        RestClient.get(uri.to_s, headers)
+      end
     end
 
     def post(pathname, payload, headers = {})
-      uri = URI.join(host, pathname)
-      RestClient.post(uri.to_s, payload.to_json, headers)
-    rescue RestClient::Exception => e
-      e.response
+      with_exception do
+        uri = URI.join(host, pathname)
+        RestClient.post(uri.to_s, payload.to_json, headers)
+      end
     end
 
     private
 
     attr_reader :host
+
+    def with_exception
+      yield
+    rescue RestClient::Exception => e
+      e.response
+    end
   end
 end
