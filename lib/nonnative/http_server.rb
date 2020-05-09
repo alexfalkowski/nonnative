@@ -9,7 +9,9 @@ module Nonnative
       super port
     end
 
-    def configure(http); end
+    def configure(http)
+      # Classes will add configuration
+    end
 
     def perform_start
       Application.start!
