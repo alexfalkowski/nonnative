@@ -16,11 +16,16 @@ module Nonnative
     end
 
     def start
+      sleep 0.1 # Servers take time to start
+
       object_id
     end
 
     def stop
       perform_stop
+
+      sleep 0.1 # Servers take time to stop
+
       object_id
     end
 
