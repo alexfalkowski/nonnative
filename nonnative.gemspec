@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'chutney', '~> 2.0', '>= 2.0.3.1'
   spec.add_development_dependency 'grpc-tools', '~> 1.28'
   spec.add_development_dependency 'rake', '~> 13.0', '>= 13.0.1'
-  spec.add_development_dependency 'rubocop', '~> 0.82.0'
+  spec.add_development_dependency 'rubocop', '~> 0.83.0'
   spec.add_development_dependency 'simplecov', '~> 0.17.1'
   spec.add_development_dependency 'solargraph', '~> 0.39.7'
 end

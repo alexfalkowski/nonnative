@@ -16,7 +16,7 @@ module Nonnative
     end
 
     def perform_start
-      server.run_till_terminated
+      server.run
     end
 
     def perform_stop
