@@ -15,6 +15,8 @@ module Nonnative
       unless started
         @pid = spawn(process.command, %i[out err] => [process.file, 'a'])
         @started = true
+
+        sleep 0.1 # Processes take time to start
       end
 
       pid
@@ -25,6 +27,8 @@ module Nonnative
 
       ::Process.kill('SIGINT', pid)
       @started = false
+
+      sleep 0.1 # Processes take time to stop
 
       pid
     end
