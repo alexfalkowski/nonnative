@@ -28,7 +28,7 @@ module Nonnative
 
     def servers
       @servers ||= configuration.servers.map do |d|
-        [d.klass.new(d.port), Nonnative::Port.new(d)]
+        [d.klass.new(d.port, d.timeout), Nonnative::Port.new(d)]
       end
     end
 

@@ -2,11 +2,11 @@
 
 module Nonnative
   class HTTPServer < Nonnative::Server
-    def initialize(port)
+    def initialize(port, timeout)
       Application.set :port, port
       configure Application
 
-      super port
+      super port, timeout
     end
 
     def configure(http)

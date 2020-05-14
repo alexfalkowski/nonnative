@@ -9,3 +9,4 @@
 vendor
 coverage
 features/logs/*.log
+/.idea/

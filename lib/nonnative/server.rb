@@ -2,8 +2,9 @@
 
 module Nonnative
   class Server < Thread
-    def initialize(port)
+    def initialize(port, timeout)
       @port = port
+      @timeout = timeout
       self.abort_on_exception = true
 
       super do
@@ -25,5 +26,6 @@ module Nonnative
     end
 
     attr_reader :port
+    attr_reader :timeout
   end
 end

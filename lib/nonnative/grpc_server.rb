@@ -2,13 +2,14 @@
 
 module Nonnative
   class GRPCServer < Nonnative::Server
-    def initialize(port)
+    def initialize(port, timeout)
       @server = GRPC::RpcServer.new
 
       server.add_http2_port("0.0.0.0:#{port}", :this_port_is_insecure)
+      server.wait_till_running(timeout)
       configure server
 
-      super port
+      super port, timeout
     end
 
     def configure(grpc)
