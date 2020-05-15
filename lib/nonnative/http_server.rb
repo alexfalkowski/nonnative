@@ -38,11 +38,4 @@ module Nonnative
 
     attr_reader :timeout, :queue
   end
-
-  class Application < Sinatra::Application
-    set :bind, '0.0.0.0'
-    set :server, :puma
-    set :logging, false
-    set :quiet, true
-  end
 end
