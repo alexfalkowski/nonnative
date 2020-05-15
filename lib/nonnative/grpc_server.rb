@@ -26,7 +26,7 @@ module Nonnative
     protected
 
     def wait_start
-      server.wait_till_running(1)
+      server.wait_till_running(service.timeout)
     end
 
     private
