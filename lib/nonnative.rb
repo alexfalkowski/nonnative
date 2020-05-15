@@ -46,18 +46,25 @@ module Nonnative
 
     def start
       @pool ||= Nonnative::Pool.new(configuration)
+      errors = []
 
       @pool.start do |name, id, result|
-        raise Nonnative::StartError, "Started #{name} with id #{id}, though did respond in time" unless result
+        errors << "Started #{name} with id #{id}, though did respond in time" unless result
       end
+
+      raise Nonnative::StartError, errors.join("\n") unless errors.empty?
     end
 
     def stop
       return if @pool.nil?
 
+      errors = []
+
       @pool.stop do |name, id, result|
-        raise Nonnative::StopError, "Stopped #{name} with id #{id}, though did respond in time" unless result
+        errors << "Stopped #{name} with id #{id}, though did respond in time" unless result
       end
+
+      raise Nonnative::StopError, errors.join("\n") unless errors.empty?
     end
 
     def clear
