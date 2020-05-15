@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class Command
+  class Command < Nonnative::Service
     def initialize(process)
       @process = process
     end
@@ -13,7 +13,7 @@ module Nonnative
     def start
       unless command_exists?
         @pid = command_spawn
-        sleep 0.1 # Processes take time to start
+        wait_start
       end
 
       pid
@@ -22,7 +22,7 @@ module Nonnative
     def stop
       if command_exists?
         command_kill
-        sleep 0.1 # Processes take time to stop
+        wait_stop
       end
 
       pid
