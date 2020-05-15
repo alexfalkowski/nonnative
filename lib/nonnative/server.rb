@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class Server < Thread
-    def initialize(port)
-      @port = port
-      self.abort_on_exception = true
-
-      super do
-        perform_start
-      end
+  class Server < Nonnative::Service
+    def initialize(service)
+      @service = service
+      @id = SecureRandom.hex(5)
     end
 
     def name
@@ -16,19 +12,25 @@ module Nonnative
     end
 
     def start
-      sleep 0.1 # Servers take time to start
+      unless thread
+        @thread = Thread.new { perform_start }
+        wait_start
+      end
 
-      object_id
+      id
     end
 
     def stop
-      perform_stop
+      if thread
+        perform_stop
+        thread.terminate
+        @thread = nil
+        wait_stop
+      end
 
-      sleep 0.1 # Servers take time to stop
-
-      object_id
+      id
     end
 
-    attr_reader :port
+    attr_reader :service, :id, :thread
   end
 end

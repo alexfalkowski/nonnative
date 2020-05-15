@@ -2,13 +2,13 @@
 
 module Nonnative
   class GRPCServer < Nonnative::Server
-    def initialize(port)
+    def initialize(service)
       @server = GRPC::RpcServer.new
 
-      server.add_http2_port("0.0.0.0:#{port}", :this_port_is_insecure)
+      server.add_http2_port("0.0.0.0:#{service.port}", :this_port_is_insecure)
       configure server
 
-      super port
+      super service
     end
 
     def configure(grpc)
@@ -21,6 +21,12 @@ module Nonnative
 
     def perform_stop
       server.stop
+    end
+
+    protected
+
+    def wait_start
+      server.wait_till_running(1)
     end
 
     private
