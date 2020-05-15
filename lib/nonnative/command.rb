@@ -2,13 +2,13 @@
 
 module Nonnative
   class Command < Nonnative::Service
-    def initialize(process)
-      @process = process
-      @timeout = Nonnative::Timeout.new(process.timeout)
+    def initialize(service)
+      @service = service
+      @timeout = Nonnative::Timeout.new(service.timeout)
     end
 
     def name
-      process.command
+      service.command
     end
 
     def start
@@ -39,14 +39,14 @@ module Nonnative
 
     private
 
-    attr_reader :process, :timeout, :pid
+    attr_reader :service, :timeout, :pid
 
     def command_kill
       Process.kill('SIGINT', pid)
     end
 
     def command_spawn
-      spawn(process.command, %i[out err] => [process.file, 'a'])
+      spawn(service.command, %i[out err] => [service.file, 'a'])
     end
 
     def command_exists?

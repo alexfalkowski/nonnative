@@ -2,8 +2,8 @@
 
 module Nonnative
   class Server < Nonnative::Service
-    def initialize(port)
-      @port = port
+    def initialize(service)
+      @service = service
       @id = SecureRandom.hex(5)
     end
 
@@ -31,6 +31,6 @@ module Nonnative
       id
     end
 
-    attr_reader :port, :id, :thread
+    attr_reader :service, :id, :thread
   end
 end

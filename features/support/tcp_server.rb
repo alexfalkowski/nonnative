@@ -4,7 +4,7 @@ module Nonnative
   module Features
     class TCPServer < Nonnative::Server
       def perform_start
-        @socket_server = ::TCPServer.new('0.0.0.0', port)
+        @socket_server = ::TCPServer.new('0.0.0.0', service.port)
 
         loop do
           client_socket = @socket_server.accept
