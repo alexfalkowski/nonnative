@@ -23,6 +23,12 @@ module Nonnative
       server.stop
     end
 
+    protected
+
+    def wait_start
+      server.wait_till_running(1)
+    end
+
     private
 
     attr_reader :server
