@@ -4,7 +4,6 @@ module Nonnative
   class Command
     def initialize(process)
       @process = process
-      @started = false
     end
 
     def name
@@ -12,10 +11,8 @@ module Nonnative
     end
 
     def start
-      unless started
-        @pid = spawn(process.command, %i[out err] => [process.file, 'a'])
-        @started = true
-
+      unless command_exists?
+        @pid = command_spawn
         sleep 0.1 # Processes take time to start
       end
 
@@ -23,12 +20,10 @@ module Nonnative
     end
 
     def stop
-      raise Nonnative::Error, "Can't stop a process that has not started" unless started
-
-      ::Process.kill('SIGINT', pid)
-      @started = false
-
-      sleep 0.1 # Processes take time to stop
+      if command_exists?
+        command_kill
+        sleep 0.1 # Processes take time to stop
+      end
 
       pid
     end
@@ -36,5 +31,22 @@ module Nonnative
     private
 
     attr_reader :process, :pid, :started
+
+    def command_kill
+      ::Process.kill('SIGINT', pid)
+    end
+
+    def command_spawn
+      spawn(process.command, %i[out err] => [process.file, 'a'])
+    end
+
+    def command_exists?
+      return false if pid.nil?
+
+      Process.kill(0, pid)
+      true
+    rescue Errno::ESRCH
+      false
+    end
   end
 end
