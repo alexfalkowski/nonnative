@@ -3,6 +3,9 @@
 module Nonnative
   class HTTPServer < Nonnative::Server
     def initialize(service)
+      @timeout = Nonnative::Timeout.new(service.timeout)
+      @queue = Queue.new
+
       Application.set :port, service.port
       configure Application
 
@@ -14,18 +17,32 @@ module Nonnative
     end
 
     def perform_start
-      Application.start!
+      Application.start! do |server|
+        queue << server
+      end
     end
 
     def perform_stop
       Application.stop!
     end
 
-    class Application < Sinatra::Application
-      set :bind, '0.0.0.0'
-      set :server, :puma
-      set :logging, false
-      set :quiet, true
+    protected
+
+    def wait_start
+      timeout.perform do
+        queue.pop
+      end
     end
+
+    private
+
+    attr_reader :timeout, :queue
+  end
+
+  class Application < Sinatra::Application
+    set :bind, '0.0.0.0'
+    set :server, :puma
+    set :logging, false
+    set :quiet, true
   end
 end
