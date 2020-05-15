@@ -4,6 +4,7 @@ module Nonnative
   class Command < Nonnative::Service
     def initialize(process)
       @process = process
+      @timeout = Nonnative::Timeout.new(process.timeout)
     end
 
     def name
@@ -28,12 +29,20 @@ module Nonnative
       pid
     end
 
+    protected
+
+    def wait_stop
+      timeout.perform do
+        Process.waitpid2(pid)
+      end
+    end
+
     private
 
-    attr_reader :process, :pid, :started
+    attr_reader :process, :timeout, :pid
 
     def command_kill
-      ::Process.kill('SIGINT', pid)
+      Process.kill('SIGINT', pid)
     end
 
     def command_spawn
