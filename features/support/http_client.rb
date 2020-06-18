@@ -8,7 +8,15 @@ module Nonnative
       end
 
       def hello_post
-        post('hello', { content_type: :json, accept: :json })
+        post('hello',  'Hello World!', { content_type: :json, accept: :json })
+      end
+
+      def hello_put
+        put('hello', 'Hello World!', { content_type: :json, accept: :json })
+      end
+
+      def hello_delete
+        delete('hello', { content_type: :json, accept: :json })
       end
 
       def not_found

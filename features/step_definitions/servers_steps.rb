@@ -45,6 +45,8 @@ When('I send a message with the http client to the servers') do
   @responses = []
   @responses << client.hello_get
   @responses << client.hello_post
+  @responses << client.hello_put
+  @responses << client.hello_delete
 end
 
 When('I send a message with the grpc client to the servers') do
@@ -67,7 +69,7 @@ end
 Then('I should receive a http {string} response') do |response|
   @responses.each do |r|
     expect(r.code).to eq(200)
-    expect(r.body).to eq(response)
+    expect(r.body).to eq(response.to_json)
   end
 end
 

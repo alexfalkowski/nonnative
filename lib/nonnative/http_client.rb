@@ -22,6 +22,20 @@ module Nonnative
       end
     end
 
+    def delete(pathname, headers = {})
+      with_exception do
+        uri = URI.join(host, pathname)
+        RestClient.delete(uri.to_s, headers)
+      end
+    end
+
+    def put(pathname, payload, headers = {})
+      with_exception do
+        uri = URI.join(host, pathname)
+        RestClient.put(uri.to_s, payload.to_json, headers)
+      end
+    end
+
     private
 
     attr_reader :host
