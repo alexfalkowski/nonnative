@@ -39,7 +39,8 @@ module Nonnative
     attr_reader :timeout, :pid
 
     def command_kill
-      Process.kill('SIGINT', pid)
+      signal = Signal.list['INT']
+      Process.kill(signal, pid)
     end
 
     def command_spawn
@@ -49,7 +50,8 @@ module Nonnative
     def command_exists?
       return false if pid.nil?
 
-      Process.kill(0, pid)
+      signal = Signal.list['EXIT']
+      Process.kill(signal, pid)
       true
     rescue Errno::ESRCH
       false
