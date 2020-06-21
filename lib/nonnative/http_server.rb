@@ -6,9 +6,6 @@ module Nonnative
       @timeout = Nonnative::Timeout.new(service.timeout)
       @queue = Queue.new
 
-      Application.set :port, service.port
-      configure Application
-
       super service
     end
 
@@ -17,6 +14,9 @@ module Nonnative
     end
 
     def perform_start
+      Application.set :port, service.port
+      configure Application
+
       Application.start! do |server|
         queue << server
       end

@@ -5,9 +5,6 @@ module Nonnative
     def initialize(service)
       @server = GRPC::RpcServer.new
 
-      server.add_http2_port("0.0.0.0:#{service.port}", :this_port_is_insecure)
-      configure server
-
       super service
     end
 
@@ -16,6 +13,9 @@ module Nonnative
     end
 
     def perform_start
+      server.add_http2_port("0.0.0.0:#{service.port}", :this_port_is_insecure)
+      configure server
+
       server.run
     end
 
