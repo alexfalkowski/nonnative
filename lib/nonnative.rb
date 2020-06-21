@@ -28,6 +28,9 @@ require 'nonnative/http_server'
 require 'nonnative/grpc_server'
 require 'nonnative/grpc_server'
 require 'nonnative/observability'
+require 'nonnative/proxy_factory'
+require 'nonnative/proxy'
+require 'nonnative/no_proxy'
 
 Thread.abort_on_exception = true
 

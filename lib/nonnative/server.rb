@@ -28,6 +28,16 @@ module Nonnative
       id
     end
 
+    protected
+
     attr_reader :id, :thread
+
+    def perform_start
+      proxy.start
+    end
+
+    def perform_stop
+      proxy.stop
+    end
   end
 end

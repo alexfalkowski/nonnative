@@ -12,20 +12,24 @@ module Nonnative
       # Classes will add configuration
     end
 
+    protected
+
     def perform_start
-      Application.set :port, service.port
+      Application.set :port, proxy.port
       configure Application
 
       Application.start! do |server|
         queue << server
       end
+
+      super
     end
 
     def perform_stop
       Application.stop!
-    end
 
-    protected
+      super
+    end
 
     def wait_start
       timeout.perform do

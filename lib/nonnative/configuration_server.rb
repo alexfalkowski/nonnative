@@ -6,5 +6,6 @@ module Nonnative
     attr_accessor :klass
     attr_accessor :timeout
     attr_accessor :port
+    attr_accessor :proxy
   end
 end

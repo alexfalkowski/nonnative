@@ -8,5 +8,6 @@ module Nonnative
     attr_accessor :port
     attr_accessor :file
     attr_accessor :signal
+    attr_accessor :proxy
   end
 end
