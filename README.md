@@ -60,6 +60,7 @@ Nonnative.configure do |config|
     d.timeout = 0.5
     d.port = 12_321
     d.file = 'features/logs/12_321.log'
+    d.signal = 'INT' # Possible values are described in Signal.list.keys
   end
 
   config.process do |d|
@@ -84,6 +85,7 @@ processes:
     timeout: 5
     port: 12321
     file: features/logs/12_321.log
+    signal: INT # Possible values are described in Signal.list.keys
   -
     name: start_2
     command: features/support/bin/start 12_322

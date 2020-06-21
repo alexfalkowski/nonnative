@@ -25,6 +25,7 @@ module Nonnative
             d.timeout = fd['timeout']
             d.port = fd['port']
             d.file = fd['file']
+            d.signal = fd['signal']
           end
         end
       end

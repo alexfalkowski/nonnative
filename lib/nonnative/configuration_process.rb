@@ -7,5 +7,6 @@ module Nonnative
     attr_accessor :timeout
     attr_accessor :port
     attr_accessor :file
+    attr_accessor :signal
   end
 end

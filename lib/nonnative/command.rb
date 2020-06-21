@@ -39,7 +39,7 @@ module Nonnative
     attr_reader :timeout, :pid
 
     def command_kill
-      signal = Signal.list['INT']
+      signal = Signal.list[service.signal || 'INT'] || Signal.list['INT']
       Process.kill(signal, pid)
     end
 
