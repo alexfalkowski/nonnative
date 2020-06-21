@@ -29,6 +29,8 @@ require 'nonnative/grpc_server'
 require 'nonnative/grpc_server'
 require 'nonnative/observability'
 
+Thread.abort_on_exception = true
+
 module Nonnative
   class << self
     def load_configuration(path)
