@@ -4,6 +4,7 @@ module Nonnative
   class Service
     def initialize(service)
       @service = service
+      @timeout = Nonnative::Timeout.new(service.timeout)
     end
 
     def name
@@ -12,7 +13,7 @@ module Nonnative
 
     protected
 
-    attr_reader :service
+    attr_reader :service, :timeout
 
     def wait_start
       sleep 0.1

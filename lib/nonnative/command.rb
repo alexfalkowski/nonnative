@@ -2,12 +2,6 @@
 
 module Nonnative
   class Command < Nonnative::Service
-    def initialize(service)
-      @timeout = Nonnative::Timeout.new(service.timeout)
-
-      super service
-    end
-
     def start
       unless command_exists?
         @pid = command_spawn
@@ -36,7 +30,7 @@ module Nonnative
 
     private
 
-    attr_reader :timeout, :pid
+    attr_reader :pid
 
     def command_kill
       signal = Signal.list[service.signal || 'INT'] || Signal.list['INT']

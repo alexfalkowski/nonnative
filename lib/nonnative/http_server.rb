@@ -3,7 +3,6 @@
 module Nonnative
   class HTTPServer < Nonnative::Server
     def initialize(service)
-      @timeout = Nonnative::Timeout.new(service.timeout)
       @queue = Queue.new
 
       super service
@@ -36,6 +35,6 @@ module Nonnative
 
     private
 
-    attr_reader :timeout, :queue
+    attr_reader :queue
   end
 end
