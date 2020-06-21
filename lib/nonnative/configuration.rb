@@ -20,6 +20,7 @@ module Nonnative
         processes = file['processes'] || []
         processes.each do |fd|
           config.process do |d|
+            d.name = fd['name']
             d.command = fd['command']
             d.timeout = fd['timeout']
             d.port = fd['port']
@@ -32,6 +33,7 @@ module Nonnative
         servers = file['servers'] || []
         servers.each do |fd|
           config.server do |s|
+            s.name = fd['name']
             s.klass = Object.const_get(fd['klass'])
             s.timeout = fd['timeout']
             s.port = fd['port']

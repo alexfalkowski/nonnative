@@ -3,12 +3,9 @@
 module Nonnative
   class Server < Nonnative::Service
     def initialize(service)
-      @service = service
       @id = SecureRandom.hex(5)
-    end
 
-    def name
-      self.class.to_s
+      super service
     end
 
     def start
@@ -31,6 +28,6 @@ module Nonnative
       id
     end
 
-    attr_reader :service, :id, :thread
+    attr_reader :id, :thread
   end
 end

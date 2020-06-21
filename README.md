@@ -55,6 +55,7 @@ Nonnative.configure do |config|
   config.strategy = :startup or :before or :manual
 
   config.process do |d|
+    d.name = 'start_1'
     d.command = 'features/support/bin/start 12_321'
     d.timeout = 0.5
     d.port = 12_321
@@ -62,6 +63,7 @@ Nonnative.configure do |config|
   end
 
   config.process do |d|
+    d.name = 'start_2'
     d.command = 'features/support/bin/start 12_322'
     d.timeout = 0.5
     d.port = 12_322
@@ -77,11 +79,13 @@ version: 1.0
 strategy: manual
 processes:
   -
+    name: start_1
     command: features/support/bin/start 12_321
     timeout: 5
     port: 12321
     file: features/logs/12_321.log
   -
+    name: start_2
     command: features/support/bin/start 12_322
     timeout: 5
     port: 12322
@@ -130,12 +134,14 @@ Nonnative.configure do |config|
   config.strategy = :manual
 
   config.server do |d|
+    d.name = 'server_1'
     d.klass = Nonnative::EchoServer
     d.timeout = 1
     d.port = 12_323
   end
 
   config.server do |d|
+    d.name = 'server_2'
     d.klass = Nonnative::EchoServer
     d.timeout = 1
     d.port = 12_324
@@ -150,10 +156,12 @@ version: 1.0
 strategy: manual
 servers:
   -
+    name: server_1
     klass: Nonnative::EchoServer
     timeout: 1
     port: 12323
   -
+    name: server_2
     klass: Nonnative::EchoServer
     timeout: 1
     port: 12324
@@ -202,6 +210,7 @@ Nonnative.configure do |config|
   config.strategy = :manual
 
   config.server do |d|
+    d.name = 'http_server_1'
     d.klass = Nonnative::Features::HTTPServer
     d.timeout = 1
     d.port = 4567
@@ -216,6 +225,7 @@ version: 1.0
 strategy: manual
 servers:
   -
+    name: http_server_1
     klass: Nonnative::Features::HTTPServer
     timeout: 1
     port: 4567
@@ -260,6 +270,7 @@ Nonnative.configure do |config|
   config.strategy = :manual
 
   config.server do |d|
+    d.name = 'grpc_server_1'
     d.klass = Nonnative::Features::GRPCServer
     d.timeout = 1
     d.port = 9002
@@ -274,6 +285,7 @@ version: 1.0
 strategy: manual
 servers:
   -
+    name: grpc_server_1
     klass: Nonnative::Features::GRPCServer
     timeout: 1
     port: 9002

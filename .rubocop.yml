@@ -8,6 +8,9 @@ Layout/LineLength:
 Metrics/MethodLength:
   Max: 15
 
+Metrics/BlockLength:
+  Max: 30
+
 Style/Documentation:
   Enabled: false
 

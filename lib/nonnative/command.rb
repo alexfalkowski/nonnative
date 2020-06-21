@@ -3,12 +3,9 @@
 module Nonnative
   class Command < Nonnative::Service
     def initialize(service)
-      @service = service
       @timeout = Nonnative::Timeout.new(service.timeout)
-    end
 
-    def name
-      service.command
+      super service
     end
 
     def start
@@ -39,7 +36,7 @@ module Nonnative
 
     private
 
-    attr_reader :service, :timeout, :pid
+    attr_reader :timeout, :pid
 
     def command_kill
       Process.kill('SIGINT', pid)
