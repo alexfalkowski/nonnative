@@ -8,6 +8,7 @@ require 'yaml'
 require 'grpc'
 require 'sinatra'
 require 'rest-client'
+require 'random-port'
 
 require 'nonnative/version'
 require 'nonnative/error'
