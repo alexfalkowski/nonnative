@@ -21,14 +21,10 @@ module Nonnative
       Application.start! do |server|
         queue << server
       end
-
-      super
     end
 
     def perform_stop
       Application.stop!
-
-      super
     end
 
     def wait_start

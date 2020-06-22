@@ -23,6 +23,7 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::HTTPServer
       d.timeout = 1
       d.port = 4567
+      d.proxy = 'chaos'
     end
 
     config.server do |d|
@@ -30,6 +31,7 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::GRPCServer
       d.timeout = 1
       d.port = 9002
+      d.proxy = 'chaos'
     end
   end
 end

@@ -19,14 +19,10 @@ module Nonnative
       configure server
 
       server.run
-
-      super
     end
 
     def perform_stop
       server.stop
-
-      super
     end
 
     def wait_start

@@ -32,6 +32,7 @@ require 'nonnative/observability'
 require 'nonnative/proxy_factory'
 require 'nonnative/proxy'
 require 'nonnative/no_proxy'
+require 'nonnative/chaos_proxy'
 
 Thread.abort_on_exception = true
 

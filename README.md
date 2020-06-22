@@ -38,13 +38,11 @@ Configure nonnative with the following:
 - Port to verify.
 - The class for servers.
 - The file you want STDOUT to be logged to for processes.
-- The strategy (Startup will start the process once and before will hook into cucumbers Before and After) for processes.
+- The strategy for processes/servers.
+  * Startup will start the process once.
+  * Before will hook into cucumbers Before and After.
 
-### Ruby
-
-We can start a process, server or both.
-
-#### Processes
+### Processes
 
 Setup it up programmatically:
 
@@ -102,7 +100,7 @@ require 'nonnative'
 Nonnative.load_configuration('configuration.yml')
 ```
 
-#### Servers
+### Servers
 
 Define your server:
 
@@ -177,7 +175,7 @@ require 'nonnative'
 Nonnative.load_configuration('configuration.yml')
 ```
 
-##### HTTP
+#### HTTP
 
 Define your server:
 
@@ -241,7 +239,7 @@ require 'nonnative'
 Nonnative.load_configuration('configuration.yml')
 ```
 
-##### gRPC
+#### gRPC
 
 Define your server:
 
@@ -299,4 +297,33 @@ Then load the file with:
 require 'nonnative'
 
 Nonnative.load_configuration('configuration.yml')
+```
+#### Proxies
+
+We allow different proxies to be configured. These proxies can be used to simulate all kind of situations. The proxies that can be configured are:
+- none (this is the default)
+- chaos
+
+Setup it up programmatically:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.strategy = :manual
+
+  config.server do |d|
+    d.proxy = 'chaos'
+  end
+end
+```
+
+Setup it up through configuration:
+
+```yaml
+version: 1.0
+strategy: manual
+servers:
+  -
+    proxy: chaos
 ```
