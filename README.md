@@ -38,13 +38,11 @@ Configure nonnative with the following:
 - Port to verify.
 - The class for servers.
 - The file you want STDOUT to be logged to for processes.
-- The strategy (Startup will start the process once and before will hook into cucumbers Before and After) for processes.
+- The strategy for processes/servers.
+  * Startup will start the process once.
+  * Before will hook into cucumbers Before and After.
 
-### Ruby
-
-We can start a process, server or both.
-
-#### Processes
+### Processes
 
 Setup it up programmatically:
 
@@ -55,13 +53,16 @@ Nonnative.configure do |config|
   config.strategy = :startup or :before or :manual
 
   config.process do |d|
+    d.name = 'start_1'
     d.command = 'features/support/bin/start 12_321'
     d.timeout = 0.5
     d.port = 12_321
     d.file = 'features/logs/12_321.log'
+    d.signal = 'INT' # Possible values are described in Signal.list.keys
   end
 
   config.process do |d|
+    d.name = 'start_2'
     d.command = 'features/support/bin/start 12_322'
     d.timeout = 0.5
     d.port = 12_322
@@ -77,11 +78,14 @@ version: 1.0
 strategy: manual
 processes:
   -
+    name: start_1
     command: features/support/bin/start 12_321
     timeout: 5
     port: 12321
     file: features/logs/12_321.log
+    signal: INT # Possible values are described in Signal.list.keys
   -
+    name: start_2
     command: features/support/bin/start 12_322
     timeout: 5
     port: 12322
@@ -96,7 +100,7 @@ require 'nonnative'
 Nonnative.load_configuration('configuration.yml')
 ```
 
-#### Servers
+### Servers
 
 Define your server:
 
@@ -130,12 +134,14 @@ Nonnative.configure do |config|
   config.strategy = :manual
 
   config.server do |d|
+    d.name = 'server_1'
     d.klass = Nonnative::EchoServer
     d.timeout = 1
     d.port = 12_323
   end
 
   config.server do |d|
+    d.name = 'server_2'
     d.klass = Nonnative::EchoServer
     d.timeout = 1
     d.port = 12_324
@@ -150,10 +156,12 @@ version: 1.0
 strategy: manual
 servers:
   -
+    name: server_1
     klass: Nonnative::EchoServer
     timeout: 1
     port: 12323
   -
+    name: server_2
     klass: Nonnative::EchoServer
     timeout: 1
     port: 12324
@@ -167,7 +175,7 @@ require 'nonnative'
 Nonnative.load_configuration('configuration.yml')
 ```
 
-##### HTTP
+#### HTTP
 
 Define your server:
 
@@ -202,6 +210,7 @@ Nonnative.configure do |config|
   config.strategy = :manual
 
   config.server do |d|
+    d.name = 'http_server_1'
     d.klass = Nonnative::Features::HTTPServer
     d.timeout = 1
     d.port = 4567
@@ -216,6 +225,7 @@ version: 1.0
 strategy: manual
 servers:
   -
+    name: http_server_1
     klass: Nonnative::Features::HTTPServer
     timeout: 1
     port: 4567
@@ -229,7 +239,7 @@ require 'nonnative'
 Nonnative.load_configuration('configuration.yml')
 ```
 
-##### gRPC
+#### gRPC
 
 Define your server:
 
@@ -260,6 +270,7 @@ Nonnative.configure do |config|
   config.strategy = :manual
 
   config.server do |d|
+    d.name = 'grpc_server_1'
     d.klass = Nonnative::Features::GRPCServer
     d.timeout = 1
     d.port = 9002
@@ -274,6 +285,7 @@ version: 1.0
 strategy: manual
 servers:
   -
+    name: grpc_server_1
     klass: Nonnative::Features::GRPCServer
     timeout: 1
     port: 9002
@@ -285,4 +297,33 @@ Then load the file with:
 require 'nonnative'
 
 Nonnative.load_configuration('configuration.yml')
+```
+#### Proxies
+
+We allow different proxies to be configured. These proxies can be used to simulate all kind of situations. The proxies that can be configured are:
+- none (this is the default)
+- chaos
+
+Setup it up programmatically:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.strategy = :manual
+
+  config.server do |d|
+    d.proxy = 'chaos'
+  end
+end
+```
+
+Setup it up through configuration:
+
+```yaml
+version: 1.0
+strategy: manual
+servers:
+  -
+    proxy: chaos
 ```

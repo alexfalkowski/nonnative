@@ -8,6 +8,7 @@ require 'yaml'
 require 'grpc'
 require 'sinatra'
 require 'rest-client'
+require 'random-port'
 
 require 'nonnative/version'
 require 'nonnative/error'
@@ -28,6 +29,12 @@ require 'nonnative/http_server'
 require 'nonnative/grpc_server'
 require 'nonnative/grpc_server'
 require 'nonnative/observability'
+require 'nonnative/proxy_factory'
+require 'nonnative/proxy'
+require 'nonnative/no_proxy'
+require 'nonnative/chaos_proxy'
+
+Thread.abort_on_exception = true
 
 module Nonnative
   class << self

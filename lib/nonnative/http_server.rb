@@ -3,11 +3,7 @@
 module Nonnative
   class HTTPServer < Nonnative::Server
     def initialize(service)
-      @timeout = Nonnative::Timeout.new(service.timeout)
       @queue = Queue.new
-
-      Application.set :port, service.port
-      configure Application
 
       super service
     end
@@ -16,7 +12,12 @@ module Nonnative
       # Classes will add configuration
     end
 
+    protected
+
     def perform_start
+      Application.set :port, proxy.port
+      configure Application
+
       Application.start! do |server|
         queue << server
       end
@@ -26,8 +27,6 @@ module Nonnative
       Application.stop!
     end
 
-    protected
-
     def wait_start
       timeout.perform do
         queue.pop
@@ -36,6 +35,6 @@ module Nonnative
 
     private
 
-    attr_reader :timeout, :queue
+    attr_reader :queue
   end
 end

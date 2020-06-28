@@ -5,27 +5,33 @@ Given('I configure nonnative programatically with servers') do
     config.strategy = :manual
 
     config.server do |d|
+      d.name = 'tcp_server_1'
       d.klass = Nonnative::Features::TCPServer
       d.timeout = 1
       d.port = 12_323
     end
 
     config.server do |d|
+      d.name = 'tcp_server_2'
       d.klass = Nonnative::Features::TCPServer
       d.timeout = 1
       d.port = 12_324
     end
 
     config.server do |d|
+      d.name = 'http_server_1'
       d.klass = Nonnative::Features::HTTPServer
       d.timeout = 1
       d.port = 4567
+      d.proxy = 'chaos'
     end
 
     config.server do |d|
+      d.name = 'http_server_2'
       d.klass = Nonnative::Features::GRPCServer
       d.timeout = 1
       d.port = 9002
+      d.proxy = 'chaos'
     end
   end
 end

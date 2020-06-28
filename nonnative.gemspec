@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'cucumber', '~> 3.1', '>= 3.1.2'
   spec.add_dependency 'grpc', '~> 1.28'
   spec.add_dependency 'puma', '~> 4.3', '>= 4.3.3'
+  spec.add_dependency 'random-port', '~> 0.5.1'
   spec.add_dependency 'rest-client', '~> 2.1'
   spec.add_dependency 'rspec-benchmark', '~> 0.6.0'
   spec.add_dependency 'rspec-expectations', '~> 3.9', '>= 3.9.2'
@@ -36,7 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'chutney', '~> 2.0', '>= 2.0.3.1'
   spec.add_development_dependency 'grpc-tools', '~> 1.28'
   spec.add_development_dependency 'rake', '~> 13.0', '>= 13.0.1'
-  spec.add_development_dependency 'rubocop', '~> 0.83.0'
+  spec.add_development_dependency 'rubocop', '~> 0.86.0'
   spec.add_development_dependency 'simplecov', '~> 0.17.1'
   spec.add_development_dependency 'solargraph', '~> 0.39.7'
 end

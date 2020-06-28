@@ -3,17 +3,16 @@
 module Nonnative
   class Server < Nonnative::Service
     def initialize(service)
-      @service = service
       @id = SecureRandom.hex(5)
-    end
 
-    def name
-      self.class.to_s
+      super service
     end
 
     def start
       unless thread
+        proxy.start
         @thread = Thread.new { perform_start }
+
         wait_start
       end
 
@@ -24,6 +23,8 @@ module Nonnative
       if thread
         perform_stop
         thread.terminate
+        proxy.stop
+
         @thread = nil
         wait_stop
       end
@@ -31,6 +32,8 @@ module Nonnative
       id
     end
 
-    attr_reader :service, :id, :thread
+    protected
+
+    attr_reader :id, :thread
   end
 end

@@ -2,15 +2,6 @@
 
 module Nonnative
   class Command < Nonnative::Service
-    def initialize(service)
-      @service = service
-      @timeout = Nonnative::Timeout.new(service.timeout)
-    end
-
-    def name
-      service.command
-    end
-
     def start
       unless command_exists?
         @pid = command_spawn
@@ -39,10 +30,11 @@ module Nonnative
 
     private
 
-    attr_reader :service, :timeout, :pid
+    attr_reader :pid
 
     def command_kill
-      Process.kill('SIGINT', pid)
+      signal = Signal.list[service.signal || 'INT'] || Signal.list['INT']
+      Process.kill(signal, pid)
     end
 
     def command_spawn
@@ -52,7 +44,8 @@ module Nonnative
     def command_exists?
       return false if pid.nil?
 
-      Process.kill(0, pid)
+      signal = Signal.list['EXIT']
+      Process.kill(signal, pid)
       true
     rescue Errno::ESRCH
       false

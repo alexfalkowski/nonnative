@@ -2,10 +2,14 @@ version: 1.0
 strategy: manual
 servers:
   -
+    name: tcp_server_1
     klass: Nonnative::Features::TCPServer
     timeout: 1
     port: 12323
+    proxy: chaos
   -
+    name: tcp_server_2
     klass: Nonnative::Features::TCPServer
     timeout: 1
     port: 12324
+    proxy: chaos

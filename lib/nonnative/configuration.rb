@@ -20,10 +20,13 @@ module Nonnative
         processes = file['processes'] || []
         processes.each do |fd|
           config.process do |d|
+            d.name = fd['name']
             d.command = fd['command']
             d.timeout = fd['timeout']
             d.port = fd['port']
             d.file = fd['file']
+            d.signal = fd['signal']
+            d.proxy = fd['proxy']
           end
         end
       end
@@ -32,9 +35,11 @@ module Nonnative
         servers = file['servers'] || []
         servers.each do |fd|
           config.server do |s|
+            s.name = fd['name']
             s.klass = Object.const_get(fd['klass'])
             s.timeout = fd['timeout']
             s.port = fd['port']
+            s.proxy = fd['proxy']
           end
         end
       end

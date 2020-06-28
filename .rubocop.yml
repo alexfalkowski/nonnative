@@ -8,6 +8,9 @@ Layout/LineLength:
 Metrics/MethodLength:
   Max: 15
 
+Metrics/BlockLength:
+  Max: 30
+
 Style/Documentation:
   Enabled: false
 
@@ -36,4 +39,19 @@ Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
 
 Style/SlicingWithRange:
+  Enabled: true
+
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
+
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+
+Style/RedundantRegexpEscape:
+  Enabled: true
+
+Style/RedundantFetchBlock:
   Enabled: true
