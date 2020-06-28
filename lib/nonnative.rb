@@ -8,7 +8,6 @@ require 'yaml'
 require 'grpc'
 require 'sinatra'
 require 'rest-client'
-require 'random-port'
 
 require 'nonnative/version'
 require 'nonnative/error'
@@ -19,6 +18,7 @@ require 'nonnative/port'
 require 'nonnative/configuration'
 require 'nonnative/configuration_process'
 require 'nonnative/configuration_server'
+require 'nonnative/configuration_proxy'
 require 'nonnative/service'
 require 'nonnative/command'
 require 'nonnative/pool'
@@ -47,7 +47,7 @@ module Nonnative
     end
 
     def configure
-      yield configuration if block_given?
+      yield configuration
 
       require "nonnative/#{configuration.strategy}"
     end
