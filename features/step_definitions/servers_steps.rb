@@ -19,19 +19,21 @@ Given('I configure nonnative programatically with servers') do
     end
 
     config.server do |d|
-      d.name = 'http_server_1'
+      d.name = 'http_server'
       d.klass = Nonnative::Features::HTTPServer
       d.timeout = 1
       d.port = 4567
-      d.proxy = 'chaos'
+      d.proxy.type = 'chaos'
+      d.proxy.port = 20_001
     end
 
     config.server do |d|
-      d.name = 'http_server_2'
+      d.name = 'grpc_server'
       d.klass = Nonnative::Features::GRPCServer
       d.timeout = 1
       d.port = 9002
-      d.proxy = 'chaos'
+      d.proxy.type = 'chaos'
+      d.proxy.port = 20_002
     end
   end
 end

@@ -6,10 +6,14 @@ servers:
     klass: Nonnative::Features::TCPServer
     timeout: 1
     port: 12323
-    proxy: chaos
+    proxy:
+      type: chaos
+      port: 20000
   -
     name: tcp_server_2
     klass: Nonnative::Features::TCPServer
     timeout: 1
     port: 12324
-    proxy: chaos
+    proxy:
+      type: chaos
+      port: 20001

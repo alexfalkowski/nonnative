@@ -7,5 +7,9 @@ module Nonnative
     attr_accessor :timeout
     attr_accessor :port
     attr_accessor :proxy
+
+    def initialize
+      self.proxy = Nonnative::ConfigurationProxy.new
+    end
   end
 end

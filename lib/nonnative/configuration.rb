@@ -26,7 +26,6 @@ module Nonnative
             d.port = fd['port']
             d.file = fd['file']
             d.signal = fd['signal']
-            d.proxy = fd['proxy']
           end
         end
       end
@@ -39,7 +38,13 @@ module Nonnative
             s.klass = Object.const_get(fd['klass'])
             s.timeout = fd['timeout']
             s.port = fd['port']
-            s.proxy = fd['proxy']
+
+            proxy = fd['proxy']
+
+            if proxy
+              s.proxy.type = proxy['type']
+              s.proxy.port = proxy['port']
+            end
           end
         end
       end

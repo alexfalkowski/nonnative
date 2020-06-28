@@ -2,14 +2,7 @@
 
 module Nonnative
   class ChaosProxy < Nonnative::Proxy
-    def initialize(service)
-      @pool = RandomPort::Pool.new
-
-      super service
-    end
-
     def start
-      @acquired_port = pool.acquire
       @tcp_server = ::TCPServer.new('0.0.0.0', service.port)
       @thread = Thread.new { perform_start }
     end
@@ -17,16 +10,15 @@ module Nonnative
     def stop
       thread.terminate
       tcp_server.close
-      pool.release(acquired_port)
     end
 
     def port
-      acquired_port
+      service.proxy.port
     end
 
     private
 
-    attr_reader :pool, :acquired_port, :tcp_server, :thread
+    attr_reader :tcp_server, :thread
 
     def perform_start
       loop do
@@ -51,7 +43,7 @@ module Nonnative
 
     def create_remote_socket
       timeout.perform do
-        ::TCPSocket.new('0.0.0.0', acquired_port)
+        ::TCPSocket.new('0.0.0.0', port)
       rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
         sleep 0.01
         retry

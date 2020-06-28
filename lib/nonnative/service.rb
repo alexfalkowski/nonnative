@@ -5,7 +5,6 @@ module Nonnative
     def initialize(service)
       @service = service
       @timeout = Nonnative::Timeout.new(service.timeout)
-      @proxy = Nonnative::ProxyFactory.create(service)
     end
 
     def name
@@ -14,7 +13,7 @@ module Nonnative
 
     protected
 
-    attr_reader :service, :timeout, :proxy
+    attr_reader :service, :timeout
 
     def wait_start
       sleep 0.1

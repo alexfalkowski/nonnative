@@ -4,7 +4,7 @@ module Nonnative
   class ProxyFactory
     class << self
       def create(service)
-        case service.proxy
+        case service.proxy.type
         when 'chaos'
           ChaosProxy.new(service)
         else
