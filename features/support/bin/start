@@ -3,7 +3,15 @@
 
 require 'socket'
 
-sleep 1
+sleep 1 # Simulate delay
+
+Signal.trap 'INT' do
+  exit
+end
+
+Signal.trap 'TERM' do
+  exit
+end
 
 Socket.tcp_server_loop('0.0.0.0', ARGV[0].to_i) do |conn, _addr|
   Thread.new do
