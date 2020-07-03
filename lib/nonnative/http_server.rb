@@ -2,23 +2,33 @@
 
 module Nonnative
   class HTTPServer < Nonnative::Server
+    def initialize(service)
+      @server = Puma::Server.new(app, Puma::Events.strings)
+
+      super service
+    end
+
     protected
 
     def perform_start
-      options = {
-        Host: '0.0.0.0',
-        Port: proxy.port,
-        Logger: ::WEBrick::Log.new('/dev/null'),
-        AccessLog: []
-      }
-
-      Rack::Handler::WEBrick.run(app, options) do |server|
-        @server = server
-      end
+      server.add_tcp_listener '0.0.0.0', proxy.port
+      server.run.join
     end
 
     def perform_stop
-      server.shutdown
+      server.stop(true)
+    end
+
+    def wait_start
+      timeout.perform do
+        super until server.running
+      end
+    end
+
+    def wait_stop
+      timeout.perform do
+        super while server.running
+      end
     end
 
     private
