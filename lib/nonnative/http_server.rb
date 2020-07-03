@@ -2,39 +2,27 @@
 
 module Nonnative
   class HTTPServer < Nonnative::Server
-    def initialize(service)
-      @queue = Queue.new
-
-      super service
-    end
-
-    def configure(http)
-      # Classes will add configuration
-    end
-
     protected
 
     def perform_start
-      Application.set :port, proxy.port
-      configure Application
+      options = {
+        Host: '0.0.0.0',
+        Port: proxy.port,
+        Logger: ::WEBrick::Log.new('/dev/null'),
+        AccessLog: []
+      }
 
-      Application.start! do |server|
-        queue << server
+      Rack::Handler::WEBrick.run(app, options) do |server|
+        @server = server
       end
     end
 
     def perform_stop
-      Application.stop!
-    end
-
-    def wait_start
-      timeout.perform do
-        queue.pop
-      end
+      server.shutdown
     end
 
     private
 
-    attr_reader :queue
+    attr_reader :queue, :server
   end
 end

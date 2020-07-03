@@ -8,7 +8,7 @@ module Nonnative
       super service
     end
 
-    def configure(grpc)
+    def configure(server)
       # Classes will add configuration
     end
 

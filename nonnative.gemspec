@@ -26,7 +26,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'cucumber', '~> 3.1', '>= 3.1.2'
   spec.add_dependency 'grpc', '~> 1.28'
-  spec.add_dependency 'puma', '~> 4.3', '>= 4.3.3'
   spec.add_dependency 'rest-client', '~> 2.1'
   spec.add_dependency 'rspec-benchmark', '~> 0.6.0'
   spec.add_dependency 'rspec-expectations', '~> 3.9', '>= 3.9.2'
