@@ -26,7 +26,15 @@ module Nonnative
     end
 
     def wait_start
-      server.wait_till_running(service.timeout)
+      timeout.perform do
+        super until server.running?
+      end
+    end
+
+    def wait_stop
+      timeout.perform do
+        super until server.stopped?
+      end
     end
 
     private
