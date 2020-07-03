@@ -182,19 +182,15 @@ Define your server:
 ```ruby
 module Nonnative
   module Features
-    module Hello
-      class << self
-        def registered(app)
-          app.get '/hello' do
-            'Hello World!'
-          end
-        end
+    class Application < Sinatra::Base
+      get '/hello' do
+        'Hello World!'
       end
     end
 
     class HTTPServer < Nonnative::HTTPServer
-      def configure(http)
-        http.register(Hello)
+      def app
+        Application.new
       end
     end
   end
