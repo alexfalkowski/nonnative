@@ -4,11 +4,12 @@ require 'socket'
 require 'timeout'
 require 'thwait'
 require 'yaml'
-require 'webrick'
 
 require 'grpc'
 require 'sinatra'
 require 'rest-client'
+require 'puma'
+require 'puma/server'
 
 require 'nonnative/version'
 require 'nonnative/error'
