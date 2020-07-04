@@ -249,8 +249,8 @@ module Nonnative
     end
 
     class GRPCServer < Nonnative::GRPCServer
-      def configure(grpc)
-        grpc.handle(GreeterService.new)
+      def svc
+        GreeterService.new
       end
     end
   end

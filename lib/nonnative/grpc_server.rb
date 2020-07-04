@@ -4,20 +4,15 @@ module Nonnative
   class GRPCServer < Nonnative::Server
     def initialize(service)
       @server = GRPC::RpcServer.new
+      server.handle(svc)
 
       super service
-    end
-
-    def configure(server)
-      # Classes will add configuration
     end
 
     protected
 
     def perform_start
       server.add_http2_port("0.0.0.0:#{proxy.port}", :this_port_is_insecure)
-      configure server
-
       server.run
     end
 
