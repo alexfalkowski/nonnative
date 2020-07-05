@@ -7,7 +7,7 @@ outdated-dependencies:
 	bundle outdated --only-explicit
 
 features: clean
-	bundle exec cucumber --profile report $(feature)
+	bundle exec cucumber --profile report --fail-fast $(feature)
 
 analysis:
 	bundle exec rubocop
