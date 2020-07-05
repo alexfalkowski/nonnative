@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
   spec.add_dependency 'cucumber', '~> 3.1', '>= 3.1.2'
   spec.add_dependency 'grpc', '~> 1.28'
   spec.add_dependency 'puma', '~> 4.3', '>= 4.3.3'
