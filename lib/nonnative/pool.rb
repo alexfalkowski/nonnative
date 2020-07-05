@@ -7,12 +7,12 @@ module Nonnative
     end
 
     def start(&block)
-      all = processes + servers
+      all = servers + processes
       process_all(all, :start, :open?, &block)
     end
 
     def stop(&block)
-      all = processes + servers
+      all = servers + processes
       process_all(all, :stop, :closed?, &block)
     end
 
