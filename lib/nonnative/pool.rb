@@ -12,7 +12,7 @@ module Nonnative
     end
 
     def stop(&block)
-      all = servers + processes
+      all =  processes + servers
       process_all(all, :stop, :closed?, &block)
     end
 
