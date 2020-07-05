@@ -35,8 +35,6 @@ require 'nonnative/proxy'
 require 'nonnative/no_proxy'
 require 'nonnative/chaos_proxy'
 
-Thread.abort_on_exception = true
-
 module Nonnative
   class << self
     def load_configuration(path)
