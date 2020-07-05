@@ -7,13 +7,11 @@ module Nonnative
     end
 
     def start(&block)
-      all = servers + processes
-      process_all(all, :start, :open?, &block)
+      [servers, processes].each { |t| process(t, :start, :open?, &block) }
     end
 
     def stop(&block)
-      all =  processes + servers
-      process_all(all, :stop, :closed?, &block)
+      [processes, servers].each { |t| process(t, :stop, :closed?, &block) }
     end
 
     private
@@ -32,7 +30,7 @@ module Nonnative
       end
     end
 
-    def process_all(all, type_method, port_method, &block)
+    def process(all, type_method, port_method, &block)
       types = []
       pids = []
       threads = []
