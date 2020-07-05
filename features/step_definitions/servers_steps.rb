@@ -106,6 +106,11 @@ When('I send a not found message with the http client to the servers') do
   @response = Nonnative::Features::HTTPClient.new('http://localhost:4567').not_found
 end
 
+When('I set the proxy for server {string} to {string}') do |name, operation|
+  server = Nonnative.pool.server_by_name(name)
+  server.proxy.send(operation)
+end
+
 Then('I should receive a http {string} response') do |response|
   @responses.each do |r|
     expect(r.code).to eq(200)
@@ -129,4 +134,13 @@ end
 
 Then('I should receive a http not found response') do
   expect(@response.code).to eq(404)
+end
+
+Then('I should receive a connection error for metrics response') do
+  expect { Nonnative::Observability.new('http://localhost:4567').metrics }.to raise_error(Errno::ECONNRESET)
+end
+
+Then('I should reset the proxy for server {string}') do |name|
+  server = Nonnative.pool.server_by_name(name)
+  server.proxy.reset
 end

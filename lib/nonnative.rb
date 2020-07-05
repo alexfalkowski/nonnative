@@ -38,6 +38,8 @@ require 'nonnative/chaos_proxy'
 
 module Nonnative
   class << self
+    attr_reader :pool
+
     def load_configuration(path)
       @configuration ||= Nonnative::Configuration.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
     end

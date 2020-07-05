@@ -2,8 +2,9 @@
 
 module Nonnative
   class Server < Nonnative::Service
+    attr_reader :proxy
+
     def initialize(service)
-      @id = SecureRandom.hex(5)
       @proxy = Nonnative::ProxyFactory.create(service)
 
       super service
@@ -17,7 +18,7 @@ module Nonnative
         wait_start
       end
 
-      id
+      object_id
     end
 
     def stop
@@ -30,15 +31,11 @@ module Nonnative
         wait_stop
       end
 
-      id
+      object_id
     end
-
-    protected
-
-    attr_reader :id
 
     private
 
-    attr_reader :proxy, :thread
+    attr_reader :thread
   end
 end
