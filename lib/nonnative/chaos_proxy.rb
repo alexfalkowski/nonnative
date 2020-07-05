@@ -36,6 +36,8 @@ module Nonnative
         break if write(ready, local_socket, remote_socket)
         break if write(ready, remote_socket, local_socket)
       end
+    rescue Errno::ECONNRESET
+      # Just ignore it.
     ensure
       local_socket.close
       remote_socket&.close
