@@ -10,6 +10,7 @@ require 'sinatra'
 require 'rest-client'
 require 'puma'
 require 'puma/server'
+require 'concurrent'
 
 require 'nonnative/version'
 require 'nonnative/error'

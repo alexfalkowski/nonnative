@@ -2,6 +2,12 @@
 
 module Nonnative
   class ChaosProxy < Nonnative::Proxy
+    def initialize(service)
+      @connections = Concurrent::Hash.new
+
+      super service
+    end
+
     def start
       @tcp_server = ::TCPServer.new('0.0.0.0', service.port)
       @thread = Thread.new { perform_start }
@@ -18,11 +24,12 @@ module Nonnative
 
     private
 
-    attr_reader :tcp_server, :thread
+    attr_reader :tcp_server, :thread, :connections
 
     def perform_start
       loop do
-        Thread.start(tcp_server.accept) { |local_socket| connect(local_socket) }
+        thread = Thread.start(tcp_server.accept) { |local_socket| connect(local_socket) }
+        connections[thread.object_id] = thread
       end
     end
 
@@ -41,6 +48,7 @@ module Nonnative
     ensure
       local_socket.close
       remote_socket&.close
+      connections.delete(Thread.current.object_id)
     end
 
     def create_remote_socket
