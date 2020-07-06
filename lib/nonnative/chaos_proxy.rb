@@ -4,6 +4,7 @@ module Nonnative
   class ChaosProxy < Nonnative::Proxy
     def initialize(service)
       @connections = Concurrent::Hash.new
+      @mutex = Mutex.new
       @state = :none
 
       super service
@@ -20,11 +21,11 @@ module Nonnative
     end
 
     def close_all
-      @state = :close_all
+      apply_state :close_all
     end
 
     def reset
-      @state = :none
+      apply_state :none
     end
 
     def port
@@ -33,7 +34,7 @@ module Nonnative
 
     private
 
-    attr_reader :tcp_server, :thread, :connections, :state
+    attr_reader :tcp_server, :thread, :connections, :mutex, :state
 
     def perform_start
       loop do
@@ -43,7 +44,7 @@ module Nonnative
     end
 
     def connect(local_socket)
-      return local_socket.close if state == :close_all
+      return local_socket.close if state?(:close_all)
 
       remote_socket = create_remote_socket
       return unless remote_socket
@@ -80,6 +81,14 @@ module Nonnative
       end
 
       false
+    end
+
+    def apply_state(state)
+      mutex.synchronize { @state = state }
+    end
+
+    def state?(state)
+      mutex.synchronize { @state == state }
     end
   end
 end
