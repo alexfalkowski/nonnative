@@ -44,3 +44,10 @@ Feature: Servers
     And I start nonnative
     When I send a metrics request
     Then I should receive a successful metrics response
+
+  Scenario: Successfully starting of HTTP servers programatically and getting closing connections while getting metrics
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I set the proxy for server 'http_server_1' to 'close_all'
+    Then I should receive a connection error for metrics response
+    And I should reset the proxy for server 'http_server_1'

@@ -10,6 +10,7 @@ require 'sinatra'
 require 'rest-client'
 require 'puma'
 require 'puma/server'
+require 'concurrent'
 
 require 'nonnative/version'
 require 'nonnative/error'
@@ -35,10 +36,10 @@ require 'nonnative/proxy'
 require 'nonnative/no_proxy'
 require 'nonnative/chaos_proxy'
 
-Thread.abort_on_exception = true
-
 module Nonnative
   class << self
+    attr_reader :pool
+
     def load_configuration(path)
       @configuration ||= Nonnative::Configuration.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
     end
