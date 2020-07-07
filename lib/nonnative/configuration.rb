@@ -42,8 +42,10 @@ module Nonnative
             proxy = fd['proxy']
 
             if proxy
-              s.proxy.type = proxy['type']
-              s.proxy.port = proxy['port']
+              s.proxy = {
+                type: proxy['type'],
+                port: proxy['port']
+              }
             end
           end
         end

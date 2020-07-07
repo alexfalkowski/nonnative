@@ -309,8 +309,10 @@ Nonnative.configure do |config|
   config.strategy = :manual
 
   config.server do |d|
-    d.proxy.type = 'chaos'
-    d.proxy.port = 20_000
+    d.proxy = {
+      type: 'chaos',
+      port: 20_000
+    }
   end
 end
 ```

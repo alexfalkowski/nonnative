@@ -6,10 +6,15 @@ module Nonnative
     attr_accessor :klass
     attr_accessor :timeout
     attr_accessor :port
-    attr_accessor :proxy
+    attr_reader :proxy
 
     def initialize
-      self.proxy = Nonnative::ConfigurationProxy.new
+      @proxy = Nonnative::ConfigurationProxy.new
+    end
+
+    def proxy=(value)
+      proxy.type = value[:type]
+      proxy.port = value[:port]
     end
   end
 end
