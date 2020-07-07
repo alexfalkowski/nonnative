@@ -23,8 +23,10 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::HTTPServer
       d.timeout = 1
       d.port = 4567
-      d.proxy.type = 'chaos'
-      d.proxy.port = 20_001
+      d.proxy = {
+        type: 'chaos',
+        port: 20_001
+      }
     end
 
     config.server do |d|
@@ -32,8 +34,10 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::HTTPServer
       d.timeout = 1
       d.port = 4568
-      d.proxy.type = 'chaos'
-      d.proxy.port = 20_002
+      d.proxy = {
+        type: 'chaos',
+        port: 20_002
+      }
     end
 
     config.server do |d|
@@ -41,8 +45,10 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::GRPCServer
       d.timeout = 1
       d.port = 9002
-      d.proxy.type = 'chaos'
-      d.proxy.port = 20_003
+      d.proxy = {
+        type: 'chaos',
+        port: 20_003
+      }
     end
 
     config.server do |d|
@@ -50,8 +56,10 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::GRPCServer
       d.timeout = 1
       d.port = 9003
-      d.proxy.type = 'chaos'
-      d.proxy.port = 20_004
+      d.proxy = {
+        type: 'chaos',
+        port: 20_004
+      }
     end
   end
 end
