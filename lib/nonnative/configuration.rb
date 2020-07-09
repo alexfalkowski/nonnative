@@ -58,9 +58,7 @@ module Nonnative
       self.servers = []
     end
 
-    attr_accessor :strategy
-    attr_accessor :processes
-    attr_accessor :servers
+    attr_accessor :strategy, :processes, :servers
 
     def process
       process = Nonnative::ConfigurationProcess.new
