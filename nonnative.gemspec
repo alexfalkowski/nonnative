@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
   spec.add_dependency 'cucumber', '~> 3.1', '>= 3.1.2'
-  spec.add_dependency 'grpc', '~> 1', '>= 1'
+  spec.add_dependency 'grpc', ['>= 1', '< 2']
   spec.add_dependency 'puma', '~> 4.3', '>= 4.3.3'
   spec.add_dependency 'rest-client', '~> 2.1'
   spec.add_dependency 'rspec-benchmark', '~> 0.6.0'
@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 2.1', '>= 2.1.4'
   spec.add_development_dependency 'chutney', '~> 2.0', '>= 2.0.3.1'
-  spec.add_development_dependency 'grpc-tools', '~> 1', '>= 1'
+  spec.add_development_dependency 'grpc-tools', ['>= 1', '< 2']
   spec.add_development_dependency 'rake', '~> 13.0', '>= 13.0.1'
   spec.add_development_dependency 'rubocop', '~> 0.87.1'
   spec.add_development_dependency 'simplecov', '~> 0.17.1'
