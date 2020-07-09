@@ -145,7 +145,7 @@ Then('I should receive a http not found response') do
 end
 
 Then('I should receive a connection error for metrics response') do
-  expect { Nonnative::Observability.new('http://localhost:4567').metrics }.to raise_error(Errno::ECONNRESET)
+  expect { Nonnative::Observability.new('http://localhost:4567').metrics }.to raise_error(StandardError)
 end
 
 Then('I should reset the proxy for server {string}') do |name|
