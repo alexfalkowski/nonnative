@@ -2,8 +2,7 @@
 
 module Nonnative
   class ConfigurationProxy
-    attr_accessor :type
-    attr_accessor :port
+    attr_accessor :type, :port
 
     def initialize
       self.type = 'none'
