@@ -39,5 +39,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 13.0', '>= 13.0.1'
   spec.add_development_dependency 'rubocop', '~> 0.87.1'
   spec.add_development_dependency 'simplecov', '~> 0.17.1'
-  spec.add_development_dependency 'solargraph', '~> 0.39.7'
+  spec.add_development_dependency 'solargraph', '~> 0.39.11'
 end
