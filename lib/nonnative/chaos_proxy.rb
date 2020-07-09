@@ -64,12 +64,7 @@ module Nonnative
     end
 
     def create_remote_socket
-      timeout.perform do
-        ::TCPSocket.new('0.0.0.0', port)
-      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-        sleep 0.01
-        retry
-      end
+      ::TCPSocket.new('0.0.0.0', port)
     end
 
     def write(ready, socket1, socket2)
