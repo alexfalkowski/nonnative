@@ -26,7 +26,6 @@ module Nonnative
     def delete(pathname, headers = {}, timeout = 60)
       with_exception do
         uri = URI.join(host, pathname)
-        RestClient.delete(uri.to_s, headers)
         RestClient::Request.execute(method: :delete, url: uri.to_s, headers: headers, timeout: timeout)
       end
     end
@@ -45,6 +44,8 @@ module Nonnative
 
     def with_exception
       yield
+    rescue RestClient::Exceptions::ReadTimeout => e
+      raise e
     rescue RestClient::ExceptionWithResponse => e
       e.response
     end

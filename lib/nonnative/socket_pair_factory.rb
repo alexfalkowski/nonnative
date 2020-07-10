@@ -7,6 +7,8 @@ module Nonnative
         case type
         when :close_all
           CloseSocketPair.new(port)
+        when :delay
+          DelaySocketPair.new(port)
         else
           SocketPair.new(port)
         end

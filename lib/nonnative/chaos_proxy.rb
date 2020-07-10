@@ -24,6 +24,10 @@ module Nonnative
       apply_state :close_all
     end
 
+    def delay
+      apply_state :delay
+    end
+
     def reset
       apply_state :none
     end
