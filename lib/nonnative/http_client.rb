@@ -11,14 +11,14 @@ module Nonnative
     def get(pathname, headers = {})
       with_exception do
         uri = URI.join(host, pathname)
-        RestClient.get(uri.to_s, headers)
+        RestClient::Request.execute(method: :get, url: uri.to_s, headers: headers)
       end
     end
 
     def post(pathname, payload, headers = {})
       with_exception do
         uri = URI.join(host, pathname)
-        RestClient.post(uri.to_s, payload.to_json, headers)
+        RestClient::Request.execute(method: :post, url: uri.to_s, payload: payload.to_json, headers: headers)
       end
     end
 
@@ -26,13 +26,14 @@ module Nonnative
       with_exception do
         uri = URI.join(host, pathname)
         RestClient.delete(uri.to_s, headers)
+        RestClient::Request.execute(method: :delete, url: uri.to_s, headers: headers)
       end
     end
 
     def put(pathname, payload, headers = {})
       with_exception do
         uri = URI.join(host, pathname)
-        RestClient.put(uri.to_s, payload.to_json, headers)
+        RestClient::Request.execute(method: :put, url: uri.to_s, payload: payload.to_json, headers: headers)
       end
     end
 
