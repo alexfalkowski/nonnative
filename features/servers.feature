@@ -58,3 +58,10 @@ Feature: Servers
     When I set the proxy for server 'http_server_1' to 'delay'
     Then I should receive a delay error for hello response
     And I should reset the proxy for server 'http_server_1'
+
+  Scenario: Successfully starting of HTTP servers programatically and sending invalid data while getting hello
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I set the proxy for server 'http_server_1' to 'invalid_data'
+    Then I should receive a invalid data error for hello response
+    And I should reset the proxy for server 'http_server_1'

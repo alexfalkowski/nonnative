@@ -28,6 +28,10 @@ module Nonnative
       apply_state :delay
     end
 
+    def invalid_data
+      apply_state :invalid_data
+    end
+
     def reset
       apply_state :none
     end

@@ -9,6 +9,8 @@ module Nonnative
           CloseSocketPair.new(port)
         when :delay
           DelaySocketPair.new(port)
+        when :invalid_data
+          InvalidDataSocketPair.new(port)
         else
           SocketPair.new(port)
         end

@@ -38,6 +38,7 @@ require 'nonnative/chaos_proxy'
 require 'nonnative/socket_pair'
 require 'nonnative/close_socket_pair'
 require 'nonnative/delay_socket_pair'
+require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/socket_pair_factory'
 
 module Nonnative

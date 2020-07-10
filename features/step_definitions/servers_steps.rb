@@ -153,6 +153,11 @@ Then('I should receive a delay error for hello response') do
   expect(call).to raise_error(RestClient::Exceptions::ReadTimeout)
 end
 
+Then('I should receive a invalid data error for hello response') do
+  call = -> { Nonnative::Features::HTTPClient.new('http://localhost:4567').hello_get }
+  expect(call).to raise_error(Net::HTTPBadResponse)
+end
+
 Then('I should reset the proxy for server {string}') do |name|
   server = Nonnative.pool.server_by_name(name)
   server.proxy.reset
