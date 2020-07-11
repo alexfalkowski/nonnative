@@ -2,8 +2,8 @@
 
 module Nonnative
   class SocketPair
-    def initialize(port)
-      @port = port
+    def initialize(proxy)
+      @proxy = proxy
     end
 
     def connect(local_socket)
@@ -22,10 +22,10 @@ module Nonnative
 
     protected
 
-    attr_reader :port
+    attr_reader :proxy
 
     def create_remote_socket
-      ::TCPSocket.new('0.0.0.0', port)
+      ::TCPSocket.new('0.0.0.0', proxy.port)
     end
 
     def pipe(ready, socket1, socket2)

@@ -47,7 +47,7 @@ module Nonnative
     def perform_start
       loop do
         thread = Thread.start(tcp_server.accept) do |local_socket|
-          SocketPairFactory.create(read_state, port).connect(local_socket)
+          SocketPairFactory.create(read_state, service.proxy).connect(local_socket)
           connections.delete(Thread.current.object_id)
         end
         thread.report_on_exception = false

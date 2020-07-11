@@ -311,7 +311,10 @@ Nonnative.configure do |config|
   config.server do |d|
     d.proxy = {
       type: 'chaos',
-      port: 20_000
+      port: 20_000,
+      options: {
+        delay: 5
+      }
     }
   end
 end
@@ -327,13 +330,15 @@ servers:
     proxy:
       type: chaos
       port: 20000
+      options:
+        delay: 5
 ```
 
 ##### Fault Injection
 
 The `chaos` proxy allows you to simulate failures by injecting them. We currently support the following:
 - `close_all` - Closes the socket as soon as it connects.
-- `delay` - This delays the communication between the connection.
+- `delay` - This delays the communication between the connection. Default is 2 secs can be configured through options.
 - `invalid_data` - This takes the input and rearranges it to produce invalid data.
 
 Setup it up programmatically:
