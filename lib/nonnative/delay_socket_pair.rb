@@ -3,7 +3,8 @@
 module Nonnative
   class DelaySocketPair < SocketPair
     def read(socket)
-      sleep 2
+      duration = proxy.options.dig(:delay) || 2
+      sleep duration
 
       super socket
     end

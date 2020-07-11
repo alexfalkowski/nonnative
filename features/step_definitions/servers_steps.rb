@@ -25,7 +25,10 @@ Given('I configure nonnative programatically with servers') do
       d.port = 4567
       d.proxy = {
         type: 'chaos',
-        port: 20_001
+        port: 20_001,
+        options: {
+          delay: 10
+        }
       }
     end
 
@@ -36,7 +39,10 @@ Given('I configure nonnative programatically with servers') do
       d.port = 4568
       d.proxy = {
         type: 'chaos',
-        port: 20_002
+        port: 20_002,
+        options: {
+          delay: 2
+        }
       }
     end
 
@@ -47,7 +53,10 @@ Given('I configure nonnative programatically with servers') do
       d.port = 9002
       d.proxy = {
         type: 'chaos',
-        port: 20_003
+        port: 20_003,
+        options: {
+          delay: 5
+        }
       }
     end
 
@@ -58,7 +67,10 @@ Given('I configure nonnative programatically with servers') do
       d.port = 9003
       d.proxy = {
         type: 'chaos',
-        port: 20_004
+        port: 20_004,
+        options: {
+          delay: 7
+        }
       }
     end
   end

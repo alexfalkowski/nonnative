@@ -44,7 +44,8 @@ module Nonnative
             if proxy
               s.proxy = {
                 type: proxy['type'],
-                port: proxy['port']
+                port: proxy['port'],
+                options: proxy['options']
               }
             end
           end
