@@ -24,6 +24,14 @@ module Nonnative
       apply_state :close_all
     end
 
+    def delay
+      apply_state :delay
+    end
+
+    def invalid_data
+      apply_state :invalid_data
+    end
+
     def reset
       apply_state :none
     end
@@ -38,57 +46,21 @@ module Nonnative
 
     def perform_start
       loop do
-        thread = Thread.start(tcp_server.accept) { |local_socket| connect(local_socket) }
+        thread = Thread.start(tcp_server.accept) do |local_socket|
+          SocketPairFactory.create(read_state, port).connect(local_socket)
+          connections.delete(Thread.current.object_id)
+        end
+        thread.report_on_exception = false
         connections[thread.object_id] = thread
       end
-    end
-
-    def connect(local_socket)
-      return local_socket.close if state?(:close_all)
-
-      remote_socket = create_remote_socket
-      return unless remote_socket
-
-      loop do
-        ready = select([local_socket, remote_socket], nil, nil)
-
-        break if write(ready, local_socket, remote_socket)
-        break if write(ready, remote_socket, local_socket)
-      end
-    rescue Errno::ECONNRESET
-      # Just ignore it.
-    ensure
-      local_socket.close
-      remote_socket&.close
-      connections.delete(Thread.current.object_id)
-    end
-
-    def create_remote_socket
-      timeout.perform do
-        ::TCPSocket.new('0.0.0.0', port)
-      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-        sleep 0.01
-        retry
-      end
-    end
-
-    def write(ready, socket1, socket2)
-      if ready[0].include?(socket1)
-        data = socket1.recv(1024)
-        return true if data.empty?
-
-        socket2.write(data)
-      end
-
-      false
     end
 
     def apply_state(state)
       mutex.synchronize { @state = state }
     end
 
-    def state?(state)
-      mutex.synchronize { @state == state }
+    def read_state
+      mutex.synchronize { state }
     end
   end
 end

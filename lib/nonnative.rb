@@ -35,6 +35,11 @@ require 'nonnative/proxy_factory'
 require 'nonnative/proxy'
 require 'nonnative/no_proxy'
 require 'nonnative/chaos_proxy'
+require 'nonnative/socket_pair'
+require 'nonnative/close_all_socket_pair'
+require 'nonnative/delay_socket_pair'
+require 'nonnative/invalid_data_socket_pair'
+require 'nonnative/socket_pair_factory'
 
 module Nonnative
   class << self
