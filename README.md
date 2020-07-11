@@ -297,8 +297,8 @@ Nonnative.load_configuration('configuration.yml')
 #### Proxies
 
 We allow different proxies to be configured. These proxies can be used to simulate all kind of situations. The proxies that can be configured are:
-- none (this is the default)
-- chaos
+- `none` (this is the default)
+- `chaos`
 
 Setup it up programmatically:
 
@@ -327,4 +327,21 @@ servers:
     proxy:
       type: chaos
       port: 20000
+```
+
+##### Fault Injection
+
+The `chaos` proxy allows you to simulate failures by injecting them. We currently support the following:
+- `close_all` - Closes the socket as soon as it connects.
+- `delay` - This delays the communication between the connection.
+- `invalid_data` - This takes the input and rearranges it to produce invalid data.
+
+Setup it up programmatically:
+
+```ruby
+name = 'name of server in configuration'
+server = Nonnative.pool.server_by_name(name)
+
+server.proxy.close_all # To use close_all.
+server.proxy.reset # To reset it back to a good state.
 ```
