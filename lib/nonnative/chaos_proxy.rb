@@ -50,6 +50,7 @@ module Nonnative
           SocketPairFactory.create(read_state, port).connect(local_socket)
           connections.delete(Thread.current.object_id)
         end
+        thread.report_on_exception = false
         connections[thread.object_id] = thread
       end
     end

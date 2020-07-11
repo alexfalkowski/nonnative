@@ -8,7 +8,6 @@ module Nonnative
 
     def connect(local_socket)
       remote_socket = create_remote_socket
-      return unless remote_socket
 
       loop do
         ready = select([local_socket, remote_socket], nil, nil)
@@ -16,8 +15,6 @@ module Nonnative
         break if pipe(ready, local_socket, remote_socket)
         break if pipe(ready, remote_socket, local_socket)
       end
-    rescue Errno::ECONNRESET
-      # Just ignore it.
     ensure
       local_socket.close
       remote_socket&.close
