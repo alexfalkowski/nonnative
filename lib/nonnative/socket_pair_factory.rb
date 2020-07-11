@@ -6,7 +6,7 @@ module Nonnative
       def create(type, port)
         case type
         when :close_all
-          CloseSocketPair.new(port)
+          CloseAllSocketPair.new(port)
         when :delay
           DelaySocketPair.new(port)
         when :invalid_data
