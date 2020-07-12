@@ -10,6 +10,7 @@ servers:
     proxy:
       type: fault_injection
       port: 20000
+      log: features/logs/proxy_tcp_server_1.log
   -
     name: tcp_server_2
     klass: Nonnative::Features::TCPServer
@@ -19,3 +20,4 @@ servers:
     proxy:
       type: fault_injection
       port: 20001
+      log: features/logs/proxy_tcp_server_2.log

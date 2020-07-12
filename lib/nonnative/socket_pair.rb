@@ -2,8 +2,9 @@
 
 module Nonnative
   class SocketPair
-    def initialize(proxy)
+    def initialize(proxy, logger)
       @proxy = proxy
+      @logger = logger
     end
 
     def connect(local_socket)
@@ -15,6 +16,8 @@ module Nonnative
         break if pipe(ready, local_socket, remote_socket)
         break if pipe(ready, remote_socket, local_socket)
       end
+    rescue StandardError => e
+      logger.error e
     ensure
       local_socket.close
       remote_socket&.close
@@ -22,7 +25,7 @@ module Nonnative
 
     protected
 
-    attr_reader :proxy
+    attr_reader :proxy, :logger
 
     def create_remote_socket
       ::TCPSocket.new('0.0.0.0', proxy.port)

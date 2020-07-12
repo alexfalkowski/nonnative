@@ -4,13 +4,14 @@ module Nonnative
   class ProxyFactory
     class << self
       def create(service)
-        case service.proxy.type
-        when 'fault_injection'
-          FaultInjectionProxy.new(service)
-        else
-          # By default we want no proxy.
-          NoProxy.new(service)
-        end
+        proxy = case service.proxy.type
+                when 'fault_injection'
+                  FaultInjectionProxy
+                else
+                  NoProxy
+                end
+
+        proxy.new(service)
       end
     end
   end

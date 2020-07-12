@@ -324,6 +324,7 @@ Nonnative.configure do |config|
     d.proxy = {
       type: 'fault_injection',
       port: 20_000,
+      log: 'features/logs/proxy_server.log',
       options: {
         delay: 5
       }
@@ -342,6 +343,7 @@ servers:
     proxy:
       type: fault_injection
       port: 20000
+      log: features/logs/proxy_server.log
       options:
         delay: 5
 ```

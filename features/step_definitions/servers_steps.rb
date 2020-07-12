@@ -4,76 +4,80 @@ Given('I configure nonnative programatically with servers') do
   Nonnative.configure do |config|
     config.strategy = :manual
 
-    config.server do |d|
-      d.name = 'tcp_server_1'
-      d.klass = Nonnative::Features::TCPServer
-      d.timeout = 1
-      d.port = 12_323
-      d.log = 'features/logs/tcp_server_1.log'
+    config.server do |s|
+      s.name = 'tcp_server_1'
+      s.klass = Nonnative::Features::TCPServer
+      s.timeout = 1
+      s.port = 12_323
+      s.log = 'features/logs/tcp_server_1.log'
     end
 
-    config.server do |d|
-      d.name = 'tcp_server_2'
-      d.klass = Nonnative::Features::TCPServer
-      d.timeout = 1
-      d.port = 12_324
-      d.log = 'features/logs/tcp_server_2.log'
+    config.server do |s|
+      s.name = 'tcp_server_2'
+      s.klass = Nonnative::Features::TCPServer
+      s.timeout = 1
+      s.port = 12_324
+      s.log = 'features/logs/tcp_server_2.log'
     end
 
-    config.server do |d|
-      d.name = 'http_server_1'
-      d.klass = Nonnative::Features::HTTPServer
-      d.timeout = 1
-      d.port = 4567
-      d.log = 'features/logs/http_server_1.log'
-      d.proxy = {
+    config.server do |s|
+      s.name = 'http_server_1'
+      s.klass = Nonnative::Features::HTTPServer
+      s.timeout = 1
+      s.port = 4567
+      s.log = 'features/logs/http_server_1.log'
+      s.proxy = {
         type: 'fault_injection',
         port: 20_001,
+        log: 'features/logs/proxy_http_server_1.log',
         options: {
           delay: 10
         }
       }
     end
 
-    config.server do |d|
-      d.name = 'http_server_2'
-      d.klass = Nonnative::Features::HTTPServer
-      d.timeout = 1
-      d.port = 4568
-      d.log = 'features/logs/http_server_2.log'
-      d.proxy = {
+    config.server do |s|
+      s.name = 'http_server_2'
+      s.klass = Nonnative::Features::HTTPServer
+      s.timeout = 1
+      s.port = 4568
+      s.log = 'features/logs/http_server_2.log'
+      s.proxy = {
         type: 'fault_injection',
         port: 20_002,
+        log: 'features/logs/proxy_http_server_2.log',
         options: {
           delay: 2
         }
       }
     end
 
-    config.server do |d|
-      d.name = 'grpc_server_1'
-      d.klass = Nonnative::Features::GRPCServer
-      d.timeout = 1
-      d.port = 9002
-      d.log = 'features/logs/grpc_server_1.log'
-      d.proxy = {
+    config.server do |s|
+      s.name = 'grpc_server_1'
+      s.klass = Nonnative::Features::GRPCServer
+      s.timeout = 1
+      s.port = 9002
+      s.log = 'features/logs/grpc_server_1.log'
+      s.proxy = {
         type: 'fault_injection',
         port: 20_003,
+        log: 'features/logs/proxy_grpc_server_1.log',
         options: {
           delay: 5
         }
       }
     end
 
-    config.server do |d|
-      d.name = 'grpc_server_2'
-      d.klass = Nonnative::Features::GRPCServer
-      d.timeout = 1
-      d.port = 9003
-      d.log = 'features/logs/grpc_server_2.log'
-      d.proxy = {
+    config.server do |s|
+      s.name = 'grpc_server_2'
+      s.klass = Nonnative::Features::GRPCServer
+      s.timeout = 1
+      s.port = 9003
+      s.log = 'features/logs/grpc_server_2.log'
+      s.proxy = {
         type: 'fault_injection',
         port: 20_004,
+        log: 'features/logs/proxy_grpc_server_2.log',
         options: {
           delay: 7
         }

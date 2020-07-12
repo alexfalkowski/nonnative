@@ -4,6 +4,7 @@ module Nonnative
   class FaultInjectionProxy < Nonnative::Proxy
     def initialize(service)
       @connections = Concurrent::Hash.new
+      @logger = Logger.new(service.proxy.log)
       @mutex = Mutex.new
       @state = :none
 
@@ -42,17 +43,28 @@ module Nonnative
 
     private
 
-    attr_reader :tcp_server, :thread, :connections, :mutex, :state
+    attr_reader :tcp_server, :thread, :connections, :mutex, :state, :logger
 
     def perform_start
       loop do
         thread = Thread.start(tcp_server.accept) do |local_socket|
-          SocketPairFactory.create(read_state, service.proxy).connect(local_socket)
-          connections.delete(Thread.current.object_id)
+          id = Thread.current.object_id
+
+          logger.info "started connection for #{id} with socket #{local_socket.inspect}"
+
+          connect local_socket
+          connections.delete(id)
+
+          logger.info "finished connection for #{id} with socket #{local_socket.inspect}"
         end
+
         thread.report_on_exception = false
         connections[thread.object_id] = thread
       end
+    end
+
+    def connect(local_socket)
+      SocketPairFactory.create(read_state, service.proxy, logger).connect(local_socket)
     end
 
     def apply_state(state)

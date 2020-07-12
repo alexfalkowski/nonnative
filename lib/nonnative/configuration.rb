@@ -46,6 +46,7 @@ module Nonnative
               s.proxy = {
                 type: proxy['type'],
                 port: proxy['port'],
+                log: proxy['log'],
                 options: proxy['options']
               }
             end

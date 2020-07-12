@@ -3,17 +3,19 @@
 module Nonnative
   class SocketPairFactory
     class << self
-      def create(type, port)
-        case type
-        when :close_all
-          CloseAllSocketPair.new(port)
-        when :delay
-          DelaySocketPair.new(port)
-        when :invalid_data
-          InvalidDataSocketPair.new(port)
-        else
-          SocketPair.new(port)
-        end
+      def create(type, proxy, logger)
+        pair = case type
+               when :close_all
+                 CloseAllSocketPair
+               when :delay
+                 DelaySocketPair
+               when :invalid_data
+                 InvalidDataSocketPair
+               else
+                 SocketPair
+               end
+
+        pair.new(proxy, logger)
       end
     end
   end
