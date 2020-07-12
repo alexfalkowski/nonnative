@@ -24,7 +24,7 @@ module Nonnative
             d.command = fd['command']
             d.timeout = fd['timeout']
             d.port = fd['port']
-            d.file = fd['file']
+            d.log = fd['log']
             d.signal = fd['signal']
           end
         end
@@ -38,6 +38,7 @@ module Nonnative
             s.klass = Object.const_get(fd['klass'])
             s.timeout = fd['timeout']
             s.port = fd['port']
+            s.log = fd['log']
 
             proxy = fd['proxy']
 

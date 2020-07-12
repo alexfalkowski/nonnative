@@ -9,6 +9,7 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::TCPServer
       d.timeout = 1
       d.port = 12_323
+      d.log = 'features/logs/tcp_server_1.log'
     end
 
     config.server do |d|
@@ -16,6 +17,7 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::TCPServer
       d.timeout = 1
       d.port = 12_324
+      d.log = 'features/logs/tcp_server_2.log'
     end
 
     config.server do |d|
@@ -23,6 +25,7 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::HTTPServer
       d.timeout = 1
       d.port = 4567
+      d.log = 'features/logs/http_server_1.log'
       d.proxy = {
         type: 'chaos',
         port: 20_001,
@@ -37,6 +40,7 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::HTTPServer
       d.timeout = 1
       d.port = 4568
+      d.log = 'features/logs/http_server_2.log'
       d.proxy = {
         type: 'chaos',
         port: 20_002,
@@ -51,6 +55,7 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::GRPCServer
       d.timeout = 1
       d.port = 9002
+      d.log = 'features/logs/grpc_server_1.log'
       d.proxy = {
         type: 'chaos',
         port: 20_003,
@@ -65,6 +70,7 @@ Given('I configure nonnative programatically with servers') do
       d.klass = Nonnative::Features::GRPCServer
       d.timeout = 1
       d.port = 9003
+      d.log = 'features/logs/grpc_server_2.log'
       d.proxy = {
         type: 'chaos',
         port: 20_004,

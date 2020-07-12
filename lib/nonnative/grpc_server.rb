@@ -6,6 +6,11 @@ module Nonnative
       @server = GRPC::RpcServer.new
       server.handle(svc)
 
+      # Unfortunately gRPC has only one logger so the first server wins.
+      GRPC.define_singleton_method(:logger) do
+        @logger ||= Logger.new(service.log)
+      end
+
       super service
     end
 
