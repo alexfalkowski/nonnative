@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class ChaosProxy < Nonnative::Proxy
+  class FaultInjectionProxy < Nonnative::Proxy
     def initialize(service)
       @connections = Concurrent::Hash.new
       @mutex = Mutex.new

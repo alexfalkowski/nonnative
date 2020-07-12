@@ -310,7 +310,7 @@ Nonnative.load_configuration('configuration.yml')
 
 We allow different proxies to be configured. These proxies can be used to simulate all kind of situations. The proxies that can be configured are:
 - `none` (this is the default)
-- `chaos`
+- `fault_injection`
 
 Setup it up programmatically:
 
@@ -322,7 +322,7 @@ Nonnative.configure do |config|
 
   config.server do |d|
     d.proxy = {
-      type: 'chaos',
+      type: 'fault_injection',
       port: 20_000,
       options: {
         delay: 5
@@ -340,7 +340,7 @@ strategy: manual
 servers:
   -
     proxy:
-      type: chaos
+      type: fault_injection
       port: 20000
       options:
         delay: 5
@@ -348,7 +348,7 @@ servers:
 
 ##### Fault Injection
 
-The `chaos` proxy allows you to simulate failures by injecting them. We currently support the following:
+The `fault_injection` proxy allows you to simulate failures by injecting them. We currently support the following:
 - `close_all` - Closes the socket as soon as it connects.
 - `delay` - This delays the communication between the connection. Default is 2 secs can be configured through options.
 - `invalid_data` - This takes the input and rearranges it to produce invalid data.
