@@ -133,18 +133,20 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.strategy = :manual
 
-  config.server do |d|
-    d.name = 'server_1'
-    d.klass = Nonnative::EchoServer
-    d.timeout = 1
-    d.port = 12_323
+  config.server do |s|
+    s.name = 'server_1'
+    s.klass = Nonnative::EchoServer
+    s.timeout = 1
+    s.port = 12_323
+    s.log = 'features/logs/server_1.log'
   end
 
-  config.server do |d|
-    d.name = 'server_2'
-    d.klass = Nonnative::EchoServer
-    d.timeout = 1
-    d.port = 12_324
+  config.server do |s|
+    s.name = 'server_2'
+    s.klass = Nonnative::EchoServer
+    s.timeout = 1
+    s.port = 12_324
+    s.log = 'features/logs/server_2.log'
   end
 end
 ```
@@ -160,11 +162,13 @@ servers:
     klass: Nonnative::EchoServer
     timeout: 1
     port: 12323
+    log: features/logs/server_1.log
   -
     name: server_2
     klass: Nonnative::EchoServer
     timeout: 1
     port: 12324
+    log: features/logs/server_2.log
 ```
 
 Then load the file with:
@@ -182,7 +186,11 @@ Define your server:
 ```ruby
 module Nonnative
   module Features
-    class Application < Sinatra::Base
+    class Application < Sinatra::Application
+      configure do
+        set :server_settings, log_requests: true
+      end
+
       get '/hello' do
         'Hello World!'
       end
@@ -205,11 +213,12 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.strategy = :manual
 
-  config.server do |d|
-    d.name = 'http_server_1'
-    d.klass = Nonnative::Features::HTTPServer
-    d.timeout = 1
-    d.port = 4567
+  config.server do |s|
+    s.name = 'http_server_1'
+    s.klass = Nonnative::Features::HTTPServer
+    s.timeout = 1
+    s.port = 4567
+    s.log = 'features/logs/http_server_1.log'
   end
 end
 ```
@@ -225,6 +234,7 @@ servers:
     klass: Nonnative::Features::HTTPServer
     timeout: 1
     port: 4567
+    log: features/logs/http_server_1.log
 ```
 
 Then load the file with:
@@ -265,11 +275,12 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.strategy = :manual
 
-  config.server do |d|
-    d.name = 'grpc_server_1'
-    d.klass = Nonnative::Features::GRPCServer
-    d.timeout = 1
-    d.port = 9002
+  config.server do |s|
+    s.name = 'grpc_server_1'
+    s.klass = Nonnative::Features::GRPCServer
+    s.timeout = 1
+    s.port = 9002
+    s.log = 'features/logs/grpc_server_1.log'
   end
 end
 ```
@@ -285,6 +296,7 @@ servers:
     klass: Nonnative::Features::GRPCServer
     timeout: 1
     port: 9002
+    log: features/logs/grpc_server_1.log
 ```
 
 Then load the file with:
