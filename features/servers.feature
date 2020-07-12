@@ -49,19 +49,40 @@ Feature: Servers
     Given I configure nonnative programatically with servers
     And I start nonnative
     When I set the proxy for server 'http_server_1' to 'close_all'
-    Then I should receive a connection error for metrics response
+    Then I should receive a connection error for metrics response with HTTP
     And I should reset the proxy for server 'http_server_1'
 
   Scenario: Successfully starting of HTTP servers programatically and delaying connections while getting hello
     Given I configure nonnative programatically with servers
     And I start nonnative
     When I set the proxy for server 'http_server_1' to 'delay'
-    Then I should receive a delay error for hello response
+    Then I should receive a delay error for hello response with HTTP
     And I should reset the proxy for server 'http_server_1'
 
   Scenario: Successfully starting of HTTP servers programatically and sending invalid data while getting hello
     Given I configure nonnative programatically with servers
     And I start nonnative
     When I set the proxy for server 'http_server_1' to 'invalid_data'
-    Then I should receive a invalid data error for hello response
+    Then I should receive a invalid data error for hello response with HTTP
     And I should reset the proxy for server 'http_server_1'
+
+  Scenario: Successfully starting of gRPC servers programatically and closing connections while getting greeted
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I set the proxy for server 'grpc_server_1' to 'close_all'
+    Then I should receive a connection error for being greeted with gRPC
+    And I should reset the proxy for server 'grpc_server_1'
+
+  Scenario: Successfully starting of gRCP servers programatically and delaying connections while getting greeted
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I set the proxy for server 'grpc_server_1' to 'delay'
+    Then I should receive a delay error for being greeted with gRPC
+    And I should reset the proxy for server 'grpc_server_1'
+
+  Scenario: Successfully starting of gRPC servers programatically and sending invalid data while getting greeted
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I set the proxy for server 'grpc_server_1' to 'invalid_data'
+    Then I should receive a invalid data error for being greeted with gRPC
+    And I should reset the proxy for server 'grpc_server_1'

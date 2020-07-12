@@ -119,9 +119,6 @@ When('I send a message with the grpc client to the servers') do
 
     @responses << stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!'))
   end
-
-  stub = Nonnative::Features::Greeter::Stub.new('localhost:9002', :this_channel_is_insecure)
-  @response = stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!'))
 end
 
 When('I send a health request') do
@@ -166,18 +163,39 @@ Then('I should receive a http not found response') do
   expect(@response.code).to eq(404)
 end
 
-Then('I should receive a connection error for metrics response') do
+Then('I should receive a connection error for metrics response with HTTP') do
   expect { Nonnative::Observability.new('http://localhost:4567').metrics }.to raise_error(StandardError)
 end
 
-Then('I should receive a delay error for hello response') do
+Then('I should receive a delay error for hello response with HTTP') do
   call = -> { Nonnative::Features::HTTPClient.new('http://localhost:4567').hello_get }
   expect(call).to raise_error(RestClient::Exceptions::ReadTimeout)
 end
 
-Then('I should receive a invalid data error for hello response') do
+Then('I should receive a invalid data error for hello response with HTTP') do
   call = -> { Nonnative::Features::HTTPClient.new('http://localhost:4567').hello_get }
   expect(call).to raise_error(Net::HTTPBadResponse)
+end
+
+Then('I should receive a connection error for being greeted with gRPC') do
+  stub = Nonnative::Features::Greeter::Stub.new('localhost:9002', :this_channel_is_insecure)
+  call = -> { stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!')) }
+
+  expect(call).to raise_error(GRPC::Unavailable)
+end
+
+Then('I should receive a delay error for being greeted with gRPC') do
+  stub = Nonnative::Features::Greeter::Stub.new('localhost:9002', :this_channel_is_insecure, timeout: 1)
+  call = -> { stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!')) }
+
+  expect(call).to raise_error(GRPC::DeadlineExceeded)
+end
+
+Then('I should receive a invalid data error for being greeted with gRPC') do
+  stub = Nonnative::Features::Greeter::Stub.new('localhost:9002', :this_channel_is_insecure)
+  call = -> { stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!')) }
+
+  expect(call).to raise_error(StandardError)
 end
 
 Then('I should reset the proxy for server {string}') do |name|
