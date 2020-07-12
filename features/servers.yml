@@ -8,7 +8,7 @@ servers:
     port: 12323
     log: features/logs/tcp_server_1.log
     proxy:
-      type: chaos
+      type: fault_injection
       port: 20000
   -
     name: tcp_server_2
@@ -17,5 +17,5 @@ servers:
     port: 12324
     log: features/logs/tcp_server_2.log
     proxy:
-      type: chaos
+      type: fault_injection
       port: 20001

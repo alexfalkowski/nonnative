@@ -27,7 +27,7 @@ Given('I configure nonnative programatically with servers') do
       d.port = 4567
       d.log = 'features/logs/http_server_1.log'
       d.proxy = {
-        type: 'chaos',
+        type: 'fault_injection',
         port: 20_001,
         options: {
           delay: 10
@@ -42,7 +42,7 @@ Given('I configure nonnative programatically with servers') do
       d.port = 4568
       d.log = 'features/logs/http_server_2.log'
       d.proxy = {
-        type: 'chaos',
+        type: 'fault_injection',
         port: 20_002,
         options: {
           delay: 2
@@ -57,7 +57,7 @@ Given('I configure nonnative programatically with servers') do
       d.port = 9002
       d.log = 'features/logs/grpc_server_1.log'
       d.proxy = {
-        type: 'chaos',
+        type: 'fault_injection',
         port: 20_003,
         options: {
           delay: 5
@@ -72,7 +72,7 @@ Given('I configure nonnative programatically with servers') do
       d.port = 9003
       d.log = 'features/logs/grpc_server_2.log'
       d.proxy = {
-        type: 'chaos',
+        type: 'fault_injection',
         port: 20_004,
         options: {
           delay: 7
