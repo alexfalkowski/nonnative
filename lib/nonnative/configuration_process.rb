@@ -2,6 +2,6 @@
 
 module Nonnative
   class ConfigurationProcess
-    attr_accessor :name, :command, :timeout, :port, :file, :signal
+    attr_accessor :name, :command, :timeout, :port, :log, :signal
   end
 end

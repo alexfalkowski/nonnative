@@ -2,7 +2,7 @@
 
 module Nonnative
   class ConfigurationServer
-    attr_accessor :name, :klass, :timeout, :port
+    attr_accessor :name, :klass, :timeout, :port, :log
     attr_reader :proxy
 
     def initialize

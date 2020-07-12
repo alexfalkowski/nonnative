@@ -9,7 +9,7 @@ Given('I configure nonnative programatically with processes') do
       d.command = 'features/support/bin/start 12_321'
       d.timeout = 5
       d.port = 12_321
-      d.file = 'features/logs/12_321.log'
+      d.log = 'features/logs/12_321.log'
       d.signal = 'INT'
     end
 
@@ -18,7 +18,7 @@ Given('I configure nonnative programatically with processes') do
       d.command = 'features/support/bin/start 12_322'
       d.timeout = 5
       d.port = 12_322
-      d.file = 'features/logs/12_322.log'
+      d.log = 'features/logs/12_322.log'
       d.signal = 'TERM'
     end
   end

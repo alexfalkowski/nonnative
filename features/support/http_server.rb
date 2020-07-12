@@ -8,7 +8,11 @@ module Nonnative
       end
     end
 
-    class Application < Sinatra::Base
+    class Application < Sinatra::Application
+      configure do
+        set :server_settings, log_requests: true
+      end
+
       get '/hello' do
         'Hello World!'.to_json
       end

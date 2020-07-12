@@ -38,7 +38,7 @@ module Nonnative
     end
 
     def command_spawn
-      spawn(service.command, %i[out err] => [service.file, 'a'])
+      spawn(service.command, %i[out err] => [service.log, 'a'])
     end
 
     def command_exists?

@@ -6,12 +6,12 @@ processes:
     command: features/support/bin/start 12_321
     timeout: 5
     port: 12321
-    file: features/logs/12_321.log
+    log: features/logs/12_321.log
     signal: INT
   -
     name: start_2
     command: features/support/bin/start 12_322
     timeout: 5
     port: 12322
-    file: features/logs/12_322.log
+    log: features/logs/12_322.log
     signal: TERM
