@@ -46,8 +46,6 @@ module Nonnative
         threads << Thread.new { port.send(port_method) }
       end
 
-      threads.each(&:join)
-
       ports = threads.map(&:value)
 
       yield_results(types, pids, ports, &block)
