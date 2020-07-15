@@ -46,7 +46,7 @@ module Nonnative
         threads << Thread.new { port.send(port_method) }
       end
 
-      ThreadsWait.all_waits(*threads)
+      threads.each(&:join)
 
       ports = threads.map(&:value)
 

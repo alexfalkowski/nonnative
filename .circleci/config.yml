@@ -5,7 +5,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.6
+      - image: circleci/ruby:2.7
         environment:
           BUNDLE_JOBS: "3"
           BUNDLE_PATH: vendor/bundle
