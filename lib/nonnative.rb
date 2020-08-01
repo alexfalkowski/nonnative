@@ -3,6 +3,7 @@
 require 'socket'
 require 'timeout'
 require 'yaml'
+require 'open3'
 
 require 'grpc'
 require 'sinatra'
@@ -40,6 +41,7 @@ require 'nonnative/delay_socket_pair'
 require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/socket_pair_factory'
 require 'nonnative/strategy'
+require 'nonnative/go_command'
 
 module Nonnative
   class << self
