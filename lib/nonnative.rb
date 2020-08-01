@@ -5,6 +5,7 @@ require 'timeout'
 require 'yaml'
 require 'open3'
 
+require 'jwt'
 require 'grpc'
 require 'sinatra'
 require 'rest-client'

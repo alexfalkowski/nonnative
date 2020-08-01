@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
   spec.add_dependency 'cucumber', ['>= 4', '< 5']
   spec.add_dependency 'grpc', ['>= 1', '< 2']
+  spec.add_dependency 'jwt', '~> 2.2', '>= 2.2.1'
   spec.add_dependency 'puma', '~> 4.3', '>= 4.3.3'
   spec.add_dependency 'rest-client', '~> 2.1'
   spec.add_dependency 'rspec-benchmark', '~> 0.6.0'
