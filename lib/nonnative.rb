@@ -43,6 +43,7 @@ require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/socket_pair_factory'
 require 'nonnative/strategy'
 require 'nonnative/go_command'
+require 'nonnative/token'
 
 module Nonnative
   class << self
