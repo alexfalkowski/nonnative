@@ -373,3 +373,39 @@ server = Nonnative.pool.server_by_name(name)
 server.proxy.close_all # To use close_all.
 server.proxy.reset # To reset it back to a good state.
 ```
+
+
+### Go
+
+As we love using go as a language for services we have added support to start binaries with defined parameters. This expects that you build your services in the format of `command sub_command --params`
+
+To get this to work you will need to create a `main_test.go` file with these contents:
+
+```go
+// +build features
+
+package main
+
+import (
+	"testing"
+)
+
+// TestFeatures is a hack that allows us to figure out what the coverage is during
+// integration tests. I would not recommend that you use a binary built using
+// this hack outside of a test suite.
+func TestFeatures(t *testing.T) {
+	main()
+}
+```
+
+Then to compile this binary you will need to do the following:
+
+```sh
+go test -mod vendor -c -tags features -covermode=count -o your_binary -coverpkg=./... github.com/your_location
+```
+
+Then to get an executable you do the following:
+
+```ruby
+Nonnative::GoCommand.new('your_binary', 'reports').executable('sub_command', '--config config.yaml')
+```
