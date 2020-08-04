@@ -37,10 +37,19 @@ Configure nonnative with the following:
 - A timeout value.
 - Port to verify.
 - The class for servers.
-- The file you want STDOUT to be logged to for processes.
+- The log for servers/processes
 - The strategy for processes/servers.
-  * Startup will start the process once.
-  * Before will hook into cucumbers Before and After.
+
+### Strategy
+
+The strategy can be one of the following values:
+- startup - will start the process once.
+- before - will hook into cucumbers Before and After.
+- manual - do this manually
+
+This can be overridden by the following environment variables:
+- NONNATIVE_STRATEGY - Set this to override what is set in the config.
+- NONNATIVE_TIMEOUT - Set this (in seconds, e.g 5) to override what is set in the config.
 
 ### Processes
 
@@ -50,12 +59,12 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup or :before or :manual
+  config.strategy = :startup
 
   config.process do |d|
     d.name = 'start_1'
     d.command = 'features/support/bin/start 12_321'
-    d.timeout = 0.5
+    d.timeout = config.strategy.timeout
     d.port = 12_321
     d.log = 'features/logs/12_321.log'
     d.signal = 'INT' # Possible values are described in Signal.list.keys

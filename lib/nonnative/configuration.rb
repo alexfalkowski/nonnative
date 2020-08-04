@@ -56,12 +56,17 @@ module Nonnative
     end
 
     def initialize
-      self.strategy = :before
-      self.processes = []
-      self.servers = []
+      @strategy = Strategy.new
+      @processes = []
+      @servers = []
     end
 
-    attr_accessor :strategy, :processes, :servers
+    attr_accessor :processes, :servers
+    attr_reader :strategy
+
+    def strategy=(value)
+      @strategy = Strategy.new(value)
+    end
 
     def process
       process = Nonnative::ConfigurationProcess.new
