@@ -39,6 +39,7 @@ require 'nonnative/close_all_socket_pair'
 require 'nonnative/delay_socket_pair'
 require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/socket_pair_factory'
+require 'nonnative/strategy'
 
 module Nonnative
   class << self
