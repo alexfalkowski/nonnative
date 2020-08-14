@@ -40,18 +40,20 @@ module Nonnative
             s.port = fd['port']
             s.log = fd['log']
 
-            proxy = fd['proxy']
-
-            if proxy
-              s.proxy = {
-                type: proxy['type'],
-                port: proxy['port'],
-                log: proxy['log'],
-                options: proxy['options']
-              }
-            end
+            proxy s, fd['proxy']
           end
         end
+      end
+
+      def proxy(server, proxy)
+        return unless proxy
+
+        server.proxy = {
+          type: proxy['type'],
+          port: proxy['port'],
+          log: proxy['log'],
+          options: proxy['options']
+        }
       end
     end
 
