@@ -13,7 +13,7 @@ analysis:
 	bundle exec rubocop
 
 cleanup-analysis:
-	bundle exec rubocop -a
+	bundle exec rubocop -A
 
 cleanup-logs:
 	rm -rf features/logs/*.log
