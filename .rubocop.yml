@@ -17,3 +17,6 @@ Metrics/AbcSize:
 
 Style/Documentation:
   Enabled: false
+
+Lint/HashCompareByIdentity:
+  Enabled: false
