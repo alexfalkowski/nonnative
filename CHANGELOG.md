@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.33.0](https://github.com/alexfalkowski/nonnative/compare/v1.32.0...v1.33.0) (2020-10-30)
+
+
+### Features
+
+* bump to version 1.33.0 ([538ebf5](https://github.com/alexfalkowski/nonnative/commit/538ebf54c9d49ac3227f9c0a14ce9074d961c42d))
+
+
+### Bug Fixes
+
+* make sure we don't run ci again ([bf40e54](https://github.com/alexfalkowski/nonnative/commit/bf40e5471d7701040e64c035e652df534db7e783))
+
 ## [1.32.0](https://github.com/alexfalkowski/nonnative/compare/v1.31.0...v1.32.0) (2020-10-30)
 
 
