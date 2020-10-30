@@ -26,9 +26,22 @@ jobs:
       - store_artifacts:
           path: features/logs
       - sonarcloud/scan
+  release:
+    docker:
+      - image: alexfalkowski/ruby:2.7
+    steps:
+      - checkout
+      - run: standard-version
+      - run: git push --follow-tags origin master
 
 workflows:
   nonnative:
     jobs:
       - build:
           context: SonarCloud
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
