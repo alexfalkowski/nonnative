@@ -1,1 +1,1 @@
-report: --format junit --out reports --format html --out reports/index.html --format pretty
+report: --format junit --out reports --format html --out reports/index.html --format pretty --publish-quiet
