@@ -31,6 +31,8 @@ jobs:
       - image: alexfalkowski/ruby:2.7
     steps:
       - checkout
+      - run: git config --global user.email "alexrfalkowski@gmail.com"
+      - run: git config --global user.name "Alejandro Falkowski"
       - run: standard-version
       - run: git push --follow-tags origin master
 
