@@ -5,11 +5,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.7
-        environment:
-          BUNDLE_JOBS: "3"
-          BUNDLE_PATH: vendor/bundle
-          BUNDLE_RETRY: "3"
+      - image: alexfalkowski/ruby:2.7
     steps:
       - checkout
       - restore_cache:
