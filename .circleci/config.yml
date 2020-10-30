@@ -28,19 +28,10 @@ jobs:
       - sonarcloud/scan
   release:
     docker:
-      - image: alexfalkowski/ruby:2.7
+      - image: alexfalkowski/release:1.0
     steps:
       - checkout
-      - run:
-          name: setup git
-          command: |
-            git config --global user.email "alexrfalkowski@gmail.com"
-            git config --global user.name "Alejandro Falkowski"
-      - run:
-          name: standard version
-          command: |
-            standard-version --releaseCommitMessageFormat "chore(release): {{currentTag}} [ci skip]"
-      - run: git push --follow-tags origin master
+      - run: release.sh
 
 workflows:
   nonnative:
