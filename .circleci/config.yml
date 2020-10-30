@@ -31,9 +31,15 @@ jobs:
       - image: alexfalkowski/ruby:2.7
     steps:
       - checkout
-      - run: git config --global user.email "alexrfalkowski@gmail.com"
-      - run: git config --global user.name "Alejandro Falkowski"
-      - run: standard-version
+      - run:
+          name: setup git
+          command: |
+            git config --global user.email "alexrfalkowski@gmail.com"
+            git config --global user.name "Alejandro Falkowski"
+      - run:
+          name: standard version
+          command: |
+            standard-version --releaseCommitMessageFormat "chore(release): {{currentTag}} [ci skip]"
       - run: git push --follow-tags origin master
 
 workflows:
