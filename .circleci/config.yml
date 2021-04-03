@@ -25,7 +25,7 @@ jobs:
           path: features/logs
   release:
     docker:
-      - image: alexfalkowski/release:1.0
+      - image: alexfalkowski/release:2.0
     steps:
       - checkout
       - run: release.sh
