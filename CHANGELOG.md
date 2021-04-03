@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.35.0](https://github.com/alexfalkowski/nonnative/compare/v1.34.0...v1.35.0) (2021-04-03)
+
+
+### Features
+
+* **deps:** udate to latest ([#69](https://github.com/alexfalkowski/nonnative/issues/69)) ([8989b5d](https://github.com/alexfalkowski/nonnative/commit/8989b5dd960cc7064ed196545625c9ef8b9ee280))
+* update ruby to version 2.7.2 [ci skip] ([90d3cb7](https://github.com/alexfalkowski/nonnative/commit/90d3cb7b24d2c4a70dd8e4fad809f008c849b34b))
+
 ## [1.34.0](https://github.com/alexfalkowski/nonnative/compare/v1.33.0...v1.34.0) (2020-10-30)
 
 
