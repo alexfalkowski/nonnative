@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  sonarcloud: sonarsource/sonarcloud@1.0.1
 
 jobs:
   build:
@@ -25,10 +23,9 @@ jobs:
           path: coverage
       - store_artifacts:
           path: features/logs
-      - sonarcloud/scan
   release:
     docker:
-      - image: alexfalkowski/release:1.0
+      - image: alexfalkowski/release:2.0
     steps:
       - checkout
       - run: release.sh
@@ -36,8 +33,7 @@ jobs:
 workflows:
   nonnative:
     jobs:
-      - build:
-          context: SonarCloud
+      - build
       - release:
           requires:
             - build
