@@ -1,5 +1,4 @@
 [![CircleCI](https://circleci.com/gh/alexfalkowski/nonnative.svg?style=svg)](https://circleci.com/gh/alexfalkowski/nonnative)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alexfalkowski_nonnative&metric=alert_status)](https://sonarcloud.io/dashboard?id=alexfalkowski_nonnative)
 
 # Nonnative
 
