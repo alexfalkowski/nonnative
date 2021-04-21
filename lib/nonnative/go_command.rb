@@ -2,14 +2,14 @@
 
 module Nonnative
   class GoCommand
-    def initialize(main, output)
-      @main = main
+    def initialize(exec, output)
+      @exec = exec
       @output = output
     end
 
     def executable(cmd, *params)
       params = params.join(' ')
-      "#{main} #{flags(cmd, params).join(' ')} #{cmd} #{params}"
+      "#{exec} #{flags(cmd, params).join(' ')} #{cmd} #{params}".strip
     end
 
     def execute(cmd, *params)
@@ -20,12 +20,13 @@ module Nonnative
 
     private
 
-    attr_reader :main, :output
+    attr_reader :exec, :output
 
     def flags(cmd, params)
-      m = File.basename(main, File.extname(main))
+      m = File.basename(exec, File.extname(exec))
       p = params.gsub(/\W/, '')
-      path = "#{output}/#{m}-#{cmd}-#{p}"
+      name = [m, cmd, p].reject(&:empty?).join('-')
+      path = "#{output}/#{name}"
 
       [
         "-test.cpuprofile=#{path}-cpu.prof",
