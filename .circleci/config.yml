@@ -10,7 +10,7 @@ jobs:
           keys:
             - nonnative-gem-cache-{{ checksum "Gemfile.lock" }}
             - nonnative-gem-cache-
-      - run: make dependencies
+      - run: make dep
       - save_cache:
           key: nonnative-gem-cache-{{ checksum "Gemfile.lock" }}
           paths:
@@ -18,7 +18,7 @@ jobs:
       - run: make features
       - store_test_results:
           path: reports
-      - run: make analysis
+      - run: make lint
       - store_artifacts:
           path: coverage
       - store_artifacts:

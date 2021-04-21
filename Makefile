@@ -1,27 +1,27 @@
 .PHONY: features
 
-dependencies:
+dep:
 	bin/setup
 
-outdated-dependencies:
+outdated:
 	bundle outdated --only-explicit
 
 features: clean
 	bundle exec cucumber --profile report --fail-fast $(feature)
 
-analysis:
+lint:
 	bundle exec rubocop
 
-cleanup-analysis:
+fix-lint:
 	bundle exec rubocop -A
 
-cleanup-logs:
+clean-logs:
 	rm -rf features/logs/*.log
 
-cleanup-reports:
+clean-reports:
 	rm -rf reports
 
-cleanup-coverage:
+clean-coverage:
 	rm -rf coverage
 
-clean: cleanup-logs cleanup-reports cleanup-coverage
+clean: clean-logs clean-reports clean-coverage
