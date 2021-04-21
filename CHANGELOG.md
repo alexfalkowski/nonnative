@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.36.0](https://github.com/alexfalkowski/nonnative/compare/v1.35.2...v1.36.0) (2021-04-21)
+
+
+### Features
+
+* remove badge from docs ([#72](https://github.com/alexfalkowski/nonnative/issues/72)) ([2cd384c](https://github.com/alexfalkowski/nonnative/commit/2cd384cb9f73da1f131829f1eaf9b0c9e1ae3cdf))
+
 ### [1.35.2](https://github.com/alexfalkowski/nonnative/compare/v1.35.1...v1.35.2) (2021-04-21)
 
 
