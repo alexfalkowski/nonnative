@@ -373,7 +373,6 @@ server.proxy.close_all # To use close_all.
 server.proxy.reset # To reset it back to a good state.
 ```
 
-
 ### Go
 
 As we love using go as a language for services we have added support to start binaries with defined parameters. This expects that you build your services in the format of `command sub_command --params`
@@ -381,8 +380,6 @@ As we love using go as a language for services we have added support to start bi
 To get this to work you will need to create a `main_test.go` file with these contents:
 
 ```go
-// +build features
-
 package main
 
 import (
@@ -400,11 +397,11 @@ func TestFeatures(t *testing.T) {
 Then to compile this binary you will need to do the following:
 
 ```sh
-go test -mod vendor -c -tags features -covermode=count -o your_binary -coverpkg=./... github.com/your_location
+go test -mod vendor -c -covermode=count -o your_binary -coverpkg=./... github.com/your_location
 ```
 
 Then to get an executable you do the following:
 
 ```ruby
-Nonnative::GoCommand.new('your_binary', 'reports').executable('sub_command', '--config config.yaml')
+Nonnative.go_executable('reports', 'your_binary', 'sub_command', '--config config.yaml')
 ```
