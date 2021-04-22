@@ -64,7 +64,9 @@ module Nonnative
     end
 
     def connect(local_socket)
-      SocketPairFactory.create(read_state, service.proxy, logger).connect(local_socket)
+      pair = SocketPairFactory.create(read_state, service.proxy, logger)
+
+      pair.connect(local_socket)
     end
 
     def apply_state(state)
