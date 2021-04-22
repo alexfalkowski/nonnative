@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.38.0](https://github.com/alexfalkowski/nonnative/compare/v1.37.0...v1.38.0) (2021-04-22)
+
+
+### Features
+
+* terminate connections on change ([#74](https://github.com/alexfalkowski/nonnative/issues/74)) ([6c1cc8e](https://github.com/alexfalkowski/nonnative/commit/6c1cc8e1c3f15d11848889852897b523f5848794))
+
 ## [1.37.0](https://github.com/alexfalkowski/nonnative/compare/v1.36.0...v1.37.0) (2021-04-22)
 
 
