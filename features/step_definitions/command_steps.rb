@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-Given('I have an executable {string} with output {string}') do |exec, output|
-  @command = Nonnative::GoCommand.new(exec, output)
-end
-
-When('I create the go command with command {string} and parameters {string}') do |cmd, params|
-  @exec_path = @command.executable(cmd, params)
+When('I create the go command with output {string} and executable {string} and command {string} and parameters {string}') do |output, exec, cmd, params|
+  @exec_path = Nonnative.go_executable(output, exec, cmd, params)
 end
 
 Then('the go command should be {string}') do |output|

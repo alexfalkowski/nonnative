@@ -46,6 +46,10 @@ module Nonnative
   class << self
     attr_reader :pool
 
+    def go_executable(output, exec, cmd, *params)
+      Nonnative::GoCommand.new(exec, output).executable(cmd, params)
+    end
+
     def load_configuration(path)
       @configuration ||= Nonnative::Configuration.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
     end
