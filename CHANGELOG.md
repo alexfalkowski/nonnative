@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.37.0](https://github.com/alexfalkowski/nonnative/compare/v1.36.0...v1.37.0) (2021-04-22)
+
+
+### Features
+
+* simplify go exeutable ([#73](https://github.com/alexfalkowski/nonnative/issues/73)) ([95e4cf4](https://github.com/alexfalkowski/nonnative/commit/95e4cf44180ee84d32cc42ee058d6742732b57b9))
+
 ## [1.36.0](https://github.com/alexfalkowski/nonnative/compare/v1.35.2...v1.36.0) (2021-04-21)
 
 
