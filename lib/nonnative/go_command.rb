@@ -12,12 +12,6 @@ module Nonnative
       "#{exec} #{flags(cmd, params).join(' ')} #{cmd} #{params}".strip
     end
 
-    def execute(cmd, *params)
-      Open3.popen3(executable(cmd, params)) do |_stdin, stdout, stderr, wait_thr|
-        return stdout.read, stderr.read, wait_thr.value
-      end
-    end
-
     private
 
     attr_reader :exec, :output
