@@ -48,14 +48,7 @@ module Nonnative
     def perform_start
       loop do
         thread = Thread.start(tcp_server.accept) do |local_socket|
-          id = Thread.current.object_id
-
-          logger.info "started connection for #{id} with socket #{local_socket.inspect}"
-
-          connect local_socket
-          connections.delete(id)
-
-          logger.info "finished connection for #{id} with socket #{local_socket.inspect}"
+          accept_connection local_socket
         end
 
         thread.report_on_exception = false
@@ -63,12 +56,32 @@ module Nonnative
       end
     end
 
+    def accept_connection(local_socket)
+      id = Thread.current.object_id
+      socket_info = local_socket.inspect
+
+      connect local_socket
+      connections.delete(id)
+    ensure
+      logger.info "handled connection for #{id} with socket #{socket_info}"
+    end
+
     def connect(local_socket)
-      SocketPairFactory.create(read_state, service.proxy, logger).connect(local_socket)
+      pair = SocketPairFactory.create(read_state, service.proxy)
+
+      pair.connect(local_socket)
+    end
+
+    def close_connections
+      connections.each_value(&:terminate)
+      connections.clear
     end
 
     def apply_state(state)
-      mutex.synchronize { @state = state }
+      mutex.synchronize do
+        @state = state
+        close_connections
+      end
     end
 
     def read_state

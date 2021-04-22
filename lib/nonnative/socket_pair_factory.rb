@@ -3,7 +3,7 @@
 module Nonnative
   class SocketPairFactory
     class << self
-      def create(type, proxy, logger)
+      def create(type, proxy)
         pair = case type
                when :close_all
                  CloseAllSocketPair
@@ -15,7 +15,7 @@ module Nonnative
                  SocketPair
                end
 
-        pair.new(proxy, logger)
+        pair.new(proxy)
       end
     end
   end
