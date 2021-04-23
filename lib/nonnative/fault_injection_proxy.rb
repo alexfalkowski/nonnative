@@ -51,7 +51,6 @@ module Nonnative
           accept_connection local_socket
         end
 
-        thread.report_on_exception = false
         connections[thread.object_id] = thread
       end
     end
@@ -70,6 +69,8 @@ module Nonnative
       pair = SocketPairFactory.create(read_state, service.proxy)
 
       pair.connect(local_socket)
+    rescue
+      local_socket.close
     end
 
     def close_connections
