@@ -11,7 +11,8 @@ module Nonnative
           client_socket.puts 'Hello World!'
           client_socket.close
         end
-      rescue StandardError # rubocop:disable Lint/SuppressedException
+      rescue IOError
+        @socket_server.close
       end
 
       def perform_stop
