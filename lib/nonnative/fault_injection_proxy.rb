@@ -59,18 +59,23 @@ module Nonnative
       id = Thread.current.object_id
       socket_info = local_socket.inspect
 
-      connect local_socket
+      error = connect(local_socket)
+      if error
+        logger.error "could not handle the connection for '#{id}' with socket '#{socket_info}' and error '#{error}'"
+      else
+        logger.info "handled connection for '#{id}' with socket '#{socket_info}'"
+      end
+
       connections.delete(id)
-    ensure
-      logger.info "handled connection for #{id} with socket #{socket_info}"
     end
 
     def connect(local_socket)
       pair = SocketPairFactory.create(read_state, service.proxy)
-
       pair.connect(local_socket)
-    rescue
+    rescue StandardError => e
       local_socket.close
+
+      e
     end
 
     def close_connections

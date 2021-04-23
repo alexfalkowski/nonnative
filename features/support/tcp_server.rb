@@ -11,7 +11,7 @@ module Nonnative
           client_socket.puts 'Hello World!'
           client_socket.close
         end
-      rescue IOError
+      rescue StandardError
         @socket_server.close
       end
 
