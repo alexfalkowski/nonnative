@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
   spec.add_dependency 'cucumber', ['>= 5', '< 6']
   spec.add_dependency 'grpc', ['>= 1', '< 2']
+  spec.add_dependency 'grpc-tools', ['>= 1', '< 2']
   spec.add_dependency 'puma', '~> 5.0'
   spec.add_dependency 'rest-client', '~> 2.1'
   spec.add_dependency 'rspec-benchmark', '~> 0.6.0'
@@ -33,7 +34,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sinatra', '~> 2.0', '>= 2.0.8.1'
 
   spec.add_development_dependency 'bundler', '~> 2.1', '>= 2.1.4'
-  spec.add_development_dependency 'grpc-tools', ['>= 1', '< 2']
   spec.add_development_dependency 'rubocop', '~> 1.12'
   spec.add_development_dependency 'simplecov', '~> 0.21.2'
   spec.add_development_dependency 'solargraph', '~> 0.40.4'
