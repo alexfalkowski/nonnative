@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sinatra', '~> 2.0', '>= 2.0.8.1'
 
   spec.add_development_dependency 'bundler', '~> 2.1', '>= 2.1.4'
+  spec.add_development_dependency 'coveralls', '~> 0.8.23'
   spec.add_development_dependency 'rubocop', '~> 1.12'
-  spec.add_development_dependency 'simplecov', '~> 0.21.2'
   spec.add_development_dependency 'solargraph', '~> 0.40.4'
 end
