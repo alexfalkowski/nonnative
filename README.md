@@ -1,4 +1,5 @@
 [![CircleCI](https://circleci.com/gh/alexfalkowski/nonnative.svg?style=svg)](https://circleci.com/gh/alexfalkowski/nonnative)
+[![Coverage Status](https://coveralls.io/repos/github/alexfalkowski/nonnative/badge.svg?branch=master)](https://coveralls.io/github/alexfalkowski/nonnative?branch=master)
 
 # Nonnative
 
