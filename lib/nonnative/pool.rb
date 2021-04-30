@@ -7,11 +7,13 @@ module Nonnative
     end
 
     def start(&block)
+      services.each(&:start)
       [servers, processes].each { |t| process(t, :start, :open?, &block) }
     end
 
     def stop(&block)
       [processes, servers].each { |t| process(t, :stop, :closed?, &block) }
+      services.each(&:stop)
     end
 
     def process_by_name(name)
@@ -24,20 +26,29 @@ module Nonnative
       servers[index].first
     end
 
+    def service_by_name(name)
+      index = configuration.services.find_index { |s| s.name == name }
+      services[index]
+    end
+
     private
 
     attr_reader :configuration
 
     def processes
-      @processes ||= configuration.processes.map do |d|
-        [Nonnative::Process.new(d), Nonnative::Port.new(d)]
+      @processes ||= configuration.processes.map do |p|
+        [Nonnative::Process.new(p), Nonnative::Port.new(p)]
       end
     end
 
     def servers
-      @servers ||= configuration.servers.map do |d|
-        [d.klass.new(d), Nonnative::Port.new(d)]
+      @servers ||= configuration.servers.map do |s|
+        [s.klass.new(s), Nonnative::Port.new(s)]
       end
+    end
+
+    def services
+      @services ||= configuration.services.map { |s| Nonnative::Service.new(s) }
     end
 
     def process(all, type_method, port_method, &block)

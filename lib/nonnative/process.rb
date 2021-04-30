@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class Process < Nonnative::Service
+  class Process < Runner
     def start
       unless process_exists?
         proxy.start

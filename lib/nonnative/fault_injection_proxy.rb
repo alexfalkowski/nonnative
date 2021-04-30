@@ -17,8 +17,8 @@ module Nonnative
     end
 
     def stop
-      thread.terminate
-      tcp_server.close
+      thread&.terminate
+      tcp_server&.close
     end
 
     def close_all

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class Server < Nonnative::Service
-    attr_reader :proxy
-
+  class Server < Runner
     def start
       unless thread
         proxy.start

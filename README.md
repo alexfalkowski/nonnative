@@ -33,12 +33,12 @@ Or install it yourself as:
 
 Configure nonnative with the following:
 
-- Process/Server that you want to start.
+- Process, Server or Service that you want to start.
 - A timeout value.
 - Port to verify.
 - The class for servers.
 - The log for servers/processes
-- The strategy for processes/servers.
+- The strategy for processes, servers and services.
 
 ### Strategy
 
@@ -52,6 +52,8 @@ This can be overridden by the following environment variables:
 - NONNATIVE_TIMEOUT - Set this (in seconds, e.g 5) to override what is set in the config.
 
 ### Processes
+
+A process is some sort of command that you would run locally.
 
 Setup it up programmatically:
 
@@ -84,7 +86,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: manual
+strategy: startup
 processes:
   -
     name: start_1
@@ -110,6 +112,8 @@ Nonnative.load_configuration('configuration.yml')
 ```
 
 ### Servers
+
+A server is a dependency to some external API.
 
 Define your server:
 
@@ -140,7 +144,7 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :manual
+  config.strategy = :startup
 
   config.server do |s|
     s.name = 'server_1'
@@ -164,7 +168,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: manual
+strategy: startup
 servers:
   -
     name: server_1
@@ -220,7 +224,7 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :manual
+  config.strategy = :startup
 
   config.server do |s|
     s.name = 'http_server_1'
@@ -236,7 +240,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: manual
+strategy: startup
 servers:
   -
     name: http_server_1
@@ -282,7 +286,7 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :manual
+  config.strategy = :startup
 
   config.server do |s|
     s.name = 'grpc_server_1'
@@ -298,7 +302,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: manual
+strategy: startup
 servers:
   -
     name: grpc_server_1
@@ -315,6 +319,53 @@ require 'nonnative'
 
 Nonnative.load_configuration('configuration.yml')
 ```
+
+### Services
+
+A service is an external dependency to your system. This is usually an expensive process to start like a DB and you would prefer to be managed externally. Services are not really exciting by themselves, it's when we add proxies that they allow us to do some extra work.
+
+Setup it up programmatically:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.strategy = :startup
+
+  config.service do |s|
+    s.name = 'postgres'
+    p.port = 5432
+  end
+
+  config.service do |s|
+    s.name = 'redis'
+    s.port = 6379
+  end
+end
+```
+
+Setup it up through configuration:
+
+```yaml
+version: 1.0
+strategy: startup
+processes:
+  -
+    name: postgres
+    port: 5432
+  -
+    name: redis
+    port: 6379
+```
+
+Then load the file with
+
+```ruby
+require 'nonnative'
+
+Nonnative.load_configuration('configuration.yml')
+```
+
 #### Proxies
 
 We allow different proxies to be configured. These proxies can be used to simulate all kind of situations. The proxies that can be configured are:
@@ -329,7 +380,7 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :manual
+  config.strategy = :startup
 
   config.process do |p|
     p.proxy = {
@@ -348,7 +399,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: manual
+strategy: startup
 processes:
   -
     proxy:
@@ -367,7 +418,7 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :manual
+  config.strategy = :startup
 
   config.server do |s|
     s.proxy = {
@@ -386,8 +437,46 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: manual
+strategy: startup
 servers:
+  -
+    proxy:
+      type: fault_injection
+      port: 20000
+      log: features/logs/proxy_server.log
+      options:
+        delay: 5
+```
+
+##### Services
+
+Setup it up programmatically:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.strategy = :startup
+
+  config.service do |s|
+    s.proxy = {
+      type: 'fault_injection',
+      port: 20_000,
+      log: 'features/logs/proxy_server.log',
+      options: {
+        delay: 5
+      }
+    }
+  end
+end
+```
+
+Setup it up through configuration:
+
+```yaml
+version: 1.0
+strategy: startup
+services:
   -
     proxy:
       type: fault_injection
