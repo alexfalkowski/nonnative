@@ -37,9 +37,10 @@ Given('I start nonnative') do
 end
 
 When('I send {string} with the TCP client to the processes') do |message|
-  @responses = []
-  @responses << Nonnative::Features::TCPClient.new(12_321).request(message)
-  @responses << Nonnative::Features::TCPClient.new(12_322).request(message)
+  @responses = [
+    Nonnative::Features::TCPClient.new(12_321).request(message),
+    Nonnative::Features::TCPClient.new(12_322).request(message)
+  ]
 end
 
 When('I send {string} with the TCP client {string} to the processe') do |message, name|

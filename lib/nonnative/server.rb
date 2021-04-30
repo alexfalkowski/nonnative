@@ -2,8 +2,6 @@
 
 module Nonnative
   class Server < Runner
-    attr_reader :proxy
-
     def start
       unless thread
         proxy.start

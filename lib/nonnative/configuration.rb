@@ -47,6 +47,20 @@ module Nonnative
         end
       end
 
+      def services(file, config)
+        services = file['services'] || []
+        services.each do |fd|
+          config.service do |s|
+            s.name = fd['name']
+            s.timeout = fd['timeout']
+            s.port = fd['port']
+            s.log = fd['log']
+
+            proxy s, fd['proxy']
+          end
+        end
+      end
+
       def proxy(server, proxy)
         return unless proxy
 
@@ -63,9 +77,10 @@ module Nonnative
       @strategy = Strategy.new
       @processes = []
       @servers = []
+      @services = []
     end
 
-    attr_accessor :processes, :servers
+    attr_accessor :processes, :servers, :services
     attr_reader :strategy
 
     def strategy=(value)
@@ -84,6 +99,13 @@ module Nonnative
       yield server
 
       servers << server
+    end
+
+    def service
+      service = Nonnative::ConfigurationService.new
+      yield service
+
+      services << service
     end
   end
 end

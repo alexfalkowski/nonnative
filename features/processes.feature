@@ -1,7 +1,7 @@
 @manual
 Feature: Processes
 
-  Allows us to start a server and use a client to get a response.
+  Allows us to start a process and use a client to get a response.
 
   Scenario: Successfully starting of processes
     Given I configure nonnative programatically with processes
