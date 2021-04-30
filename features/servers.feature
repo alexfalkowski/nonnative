@@ -7,13 +7,13 @@ Feature: Servers
     Given I configure nonnative programatically with servers
     And I start nonnative
     When I send a message with the tcp client to the servers
-    Then I should receive a tcp "Hello World!" response
+    Then I should receive a TCP "Hello World!" response
 
   Scenario: Successfully starting of TCP servers through configuration
     Given I configure nonnative through configuration with servers
     And I start nonnative
     When I send a message with the tcp client to the servers
-    Then I should receive a tcp "Hello World!" response
+    Then I should receive a TCP "Hello World!" response
 
   Scenario: Successfully starting of HTTP servers programatically
     Given I configure nonnative programatically with servers
