@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 When('I configure nonnative through configuration with processes') do
-  Nonnative.load_configuration('features/processes.yml')
+  Nonnative.load_configuration('features/configs/processes.yml')
 end
 
 When('I configure nonnative programatially with a no op server') do

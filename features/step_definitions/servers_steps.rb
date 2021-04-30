@@ -87,7 +87,7 @@ Given('I configure nonnative programatically with servers') do
 end
 
 Given('I configure nonnative through configuration with servers') do
-  Nonnative.load_configuration('features/servers.yml')
+  Nonnative.load_configuration('features/configs/servers.yml')
 end
 
 When('I send a message with the tcp client to the servers') do
