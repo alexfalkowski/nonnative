@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.42.2](https://github.com/alexfalkowski/nonnative/compare/v1.42.1...v1.42.2) (2021-04-30)
+
+
+### Bug Fixes
+
+* make sure we parse services config ([#82](https://github.com/alexfalkowski/nonnative/issues/82)) ([2a52af7](https://github.com/alexfalkowski/nonnative/commit/2a52af74b75443674a2235c424d69f15516ab60f))
+
 ### [1.42.1](https://github.com/alexfalkowski/nonnative/compare/v1.42.0...v1.42.1) (2021-04-30)
 
 ## [1.42.0](https://github.com/alexfalkowski/nonnative/compare/v1.41.0...v1.42.0) (2021-04-30)
