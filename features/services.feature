@@ -3,8 +3,14 @@ Feature: Services
 
   Allows us to use an external service and use a client to get a response.
 
-  Scenario: Successfully using of services
+  Scenario: Successfully using of services programatically
     Given I configure nonnative programatically with services
+    And I start nonnative
+    When I connect to the service
+    Then I should have a succesful connection
+
+  Scenario: Successfully using of services through configuration
+    Given I configure nonnative through configuration with services
     And I start nonnative
     When I connect to the service
     Then I should have a succesful connection

@@ -19,6 +19,10 @@ Given('I configure nonnative programatically with services') do
   end
 end
 
+Given('I configure nonnative through configuration with services') do
+  Nonnative.load_configuration('features/configs/services.yml')
+end
+
 When('I connect to the service') do
   @service = Nonnative::Features::Service.new(20_006)
 end
