@@ -1,0 +1,10 @@
+version: 1.0
+strategy: manual
+services:
+  -
+    name: service_1
+    port: 20006
+    proxy:
+      type: fault_injection
+      port: 30000
+      log: features/logs/proxy_service_1.log

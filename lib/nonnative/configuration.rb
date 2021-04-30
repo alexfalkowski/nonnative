@@ -11,6 +11,7 @@ module Nonnative
 
           processes(file, c)
           servers(file, c)
+          services(file, c)
         end
       end
 
