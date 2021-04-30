@@ -61,21 +61,21 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.strategy = :startup
 
-  config.process do |d|
-    d.name = 'start_1'
-    d.command = 'features/support/bin/start 12_321'
-    d.timeout = config.strategy.timeout
-    d.port = 12_321
-    d.log = 'features/logs/12_321.log'
-    d.signal = 'INT' # Possible values are described in Signal.list.keys
+  config.process do |p|
+    p.name = 'start_1'
+    p.command = 'features/support/bin/start 12_321'
+    p.timeout = config.strategy.timeout
+    p.port = 12_321
+    p.log = 'features/logs/12_321.log'
+    p.signal = 'INT' # Possible values are described in Signal.list.keys
   end
 
-  config.process do |d|
-    d.name = 'start_2'
-    d.command = 'features/support/bin/start 12_322'
-    d.timeout = 0.5
-    d.port = 12_322
-    d.log = 'features/logs/12_322.log'
+  config.process do |p|
+    p.name = 'start_2'
+    p.command = 'features/support/bin/start 12_322'
+    p.timeout = 0.5
+    p.port = 12_322
+    p.log = 'features/logs/12_322.log'
   end
 end
 ```
@@ -321,6 +321,8 @@ We allow different proxies to be configured. These proxies can be used to simula
 - `none` (this is the default)
 - `fault_injection`
 
+##### Processes
+
 Setup it up programmatically:
 
 ```ruby
@@ -329,8 +331,46 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.strategy = :manual
 
-  config.server do |d|
-    d.proxy = {
+  config.process do |p|
+    p.proxy = {
+      type: 'fault_injection',
+      port: 20_000,
+      log: 'features/logs/proxy_server.log',
+      options: {
+        delay: 5
+      }
+    }
+  end
+end
+```
+
+Setup it up through configuration:
+
+```yaml
+version: 1.0
+strategy: manual
+processes:
+  -
+    proxy:
+      type: fault_injection
+      port: 20000
+      log: features/logs/proxy_server.log
+      options:
+        delay: 5
+```
+
+##### Servers
+
+Setup it up programmatically:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.strategy = :manual
+
+  config.server do |s|
+    s.proxy = {
       type: 'fault_injection',
       port: 20_000,
       log: 'features/logs/proxy_server.log',
@@ -363,6 +403,20 @@ The `fault_injection` proxy allows you to simulate failures by injecting them. W
 - `close_all` - Closes the socket as soon as it connects.
 - `delay` - This delays the communication between the connection. Default is 2 secs can be configured through options.
 - `invalid_data` - This takes the input and rearranges it to produce invalid data.
+
+###### Processes
+
+Setup it up programmatically:
+
+```ruby
+name = 'name of process in configuration'
+server = Nonnative.pool.process_by_name(name)
+
+server.proxy.close_all # To use close_all.
+server.proxy.reset # To reset it back to a good state.
+```
+
+###### Servers
 
 Setup it up programmatically:
 

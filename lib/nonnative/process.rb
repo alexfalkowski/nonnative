@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class Command < Nonnative::Service
+  class Process < Nonnative::Service
     def start
-      unless command_exists?
-        @pid = command_spawn
+      unless process_exists?
+        proxy.start
+        @pid = process_spawn
         wait_start
       end
 
@@ -12,8 +13,9 @@ module Nonnative
     end
 
     def stop
-      if command_exists?
-        command_kill
+      if process_exists?
+        process_kill
+        proxy.stop
         wait_stop
       end
 
@@ -24,7 +26,7 @@ module Nonnative
 
     def wait_stop
       timeout.perform do
-        Process.waitpid2(pid)
+        ::Process.waitpid2(pid)
       end
     end
 
@@ -32,20 +34,20 @@ module Nonnative
 
     attr_reader :pid
 
-    def command_kill
+    def process_kill
       signal = Signal.list[service.signal || 'INT'] || Signal.list['INT']
-      Process.kill(signal, pid)
+      ::Process.kill(signal, pid)
     end
 
-    def command_spawn
+    def process_spawn
       spawn(service.command, %i[out err] => [service.log, 'a'])
     end
 
-    def command_exists?
+    def process_exists?
       return false if pid.nil?
 
       signal = Signal.list['EXIT']
-      Process.kill(signal, pid)
+      ::Process.kill(signal, pid)
       true
     rescue Errno::ESRCH
       false

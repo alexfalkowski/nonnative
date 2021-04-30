@@ -26,6 +26,8 @@ module Nonnative
             d.port = fd['port']
             d.log = fd['log']
             d.signal = fd['signal']
+
+            proxy d, fd['proxy']
           end
         end
       end

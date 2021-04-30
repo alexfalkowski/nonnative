@@ -2,9 +2,12 @@
 
 module Nonnative
   class Service
+    attr_reader :proxy
+
     def initialize(service)
       @service = service
       @timeout = Nonnative::Timeout.new(service.timeout)
+      @proxy = Nonnative::ProxyFactory.create(service)
     end
 
     def name

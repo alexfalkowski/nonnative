@@ -13,6 +13,8 @@ module Nonnative
         response = s.gets.chomp
         s.close
         response
+      rescue StandardError => e
+        e
       end
     end
   end

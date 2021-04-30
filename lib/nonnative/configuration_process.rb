@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class ConfigurationProcess
-    attr_accessor :name, :command, :timeout, :port, :log, :signal
+  class ConfigurationProcess < ConfigurationService
+    attr_accessor :command, :signal
   end
 end
