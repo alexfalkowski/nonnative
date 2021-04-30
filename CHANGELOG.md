@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.41.0](https://github.com/alexfalkowski/nonnative/compare/v1.40.2...v1.41.0) (2021-04-30)
+
+
+### Features
+
+* add proxy to processes ([#79](https://github.com/alexfalkowski/nonnative/issues/79)) ([d52b2bb](https://github.com/alexfalkowski/nonnative/commit/d52b2bb6fad91612f9b9a64817c861d1c227ef0b))
+
 ### [1.40.2](https://github.com/alexfalkowski/nonnative/compare/v1.40.1...v1.40.2) (2021-04-27)
 
 ### [1.40.1](https://github.com/alexfalkowski/nonnative/compare/v1.40.0...v1.40.1) (2021-04-27)
