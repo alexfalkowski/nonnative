@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class ConfigurationService
+  class ConfigurationRunner
     attr_accessor :name, :timeout, :port, :log
     attr_reader :proxy
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  class Server < Nonnative::Service
+  class Server < Runner
     attr_reader :proxy
 
     def start
