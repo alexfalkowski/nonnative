@@ -14,6 +14,11 @@ module Nonnative
       [processes, servers].each { |t| process(t, :stop, :closed?, &block) }
     end
 
+    def process_by_name(name)
+      index = configuration.processes.find_index { |s| s.name == name }
+      processes[index].first
+    end
+
     def server_by_name(name)
       index = configuration.servers.find_index { |s| s.name == name }
       servers[index].first

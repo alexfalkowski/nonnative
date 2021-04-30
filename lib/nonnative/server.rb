@@ -4,12 +4,6 @@ module Nonnative
   class Server < Nonnative::Service
     attr_reader :proxy
 
-    def initialize(service)
-      @proxy = Nonnative::ProxyFactory.create(service)
-
-      super service
-    end
-
     def start
       unless thread
         proxy.start

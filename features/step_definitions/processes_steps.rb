@@ -6,11 +6,19 @@ Given('I configure nonnative programatically with processes') do
 
     config.process do |d|
       d.name = 'start_1'
-      d.command = 'features/support/bin/start 12_321'
+      d.command = 'features/support/bin/start 20_005'
       d.timeout = config.strategy.timeout
       d.port = 12_321
       d.log = 'features/logs/12_321.log'
       d.signal = 'INT'
+      d.proxy = {
+        type: 'fault_injection',
+        port: 20_005,
+        log: 'features/logs/proxy_start_1.log',
+        options: {
+          delay: 10
+        }
+      }
     end
 
     config.process do |d|
@@ -28,12 +36,41 @@ Given('I start nonnative') do
   Nonnative.start
 end
 
-When('I send {string} with the tcp client to the processes') do |message|
+When('I send {string} with the TCP client to the processes') do |message|
   @responses = []
   @responses << Nonnative::Features::TCPClient.new(12_321).request(message)
   @responses << Nonnative::Features::TCPClient.new(12_322).request(message)
 end
 
-Then('I should receive a tcp {string} response') do |response|
+When('I send {string} with the TCP client {string} to the processe') do |message, name|
+  client = case name
+           when 'start_1'
+             Nonnative::Features::TCPClient.new(12_321)
+           when 'start_2'
+             Nonnative::Features::TCPClient.new(12_322)
+           end
+
+  @response = client.request(message)
+end
+
+When('I set the proxy for process {string} to {string}') do |name, operation|
+  server = Nonnative.pool.process_by_name(name)
+  server.proxy.send(operation)
+end
+
+Then('I should receive a TCP {string} response') do |response|
   @responses.each { |r| expect(r).to eq(response) }
+end
+
+Then('I should receive a connection error for client response with TCP') do
+  expect(@response).to be_a Errno::ECONNRESET
+end
+
+Then('I should receive a invalid data that is not {string} for client response with TCP') do |message|
+  expect(@response).not_to eq(message)
+end
+
+Then('I should reset the proxy for process {string}') do |name|
+  server = Nonnative.pool.process_by_name(name)
+  server.proxy.reset
 end
