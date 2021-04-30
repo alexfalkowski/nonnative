@@ -517,6 +517,18 @@ server.proxy.close_all # To use close_all.
 server.proxy.reset # To reset it back to a good state.
 ```
 
+###### Services
+
+Setup it up programmatically:
+
+```ruby
+name = 'name of service in configuration'
+service = Nonnative.pool.service_by_name(name)
+
+service.proxy.close_all # To use close_all.
+service.proxy.reset # To reset it back to a good state.
+```
+
 ### Go
 
 As we love using go as a language for services we have added support to start binaries with defined parameters. This expects that you build your services in the format of `command sub_command --params`
