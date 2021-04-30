@@ -25,7 +25,7 @@ module Nonnative
 
     def processes
       @processes ||= configuration.processes.map do |d|
-        [Nonnative::Command.new(d), Nonnative::Port.new(d)]
+        [Nonnative::Process.new(d), Nonnative::Port.new(d)]
       end
     end
 
