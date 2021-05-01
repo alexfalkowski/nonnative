@@ -12,15 +12,21 @@ Feature: Processes
   Scenario: Successfully starting of processes and closing connections
     Given I configure nonnative programatically with processes
     And I start nonnative
-    When I set the proxy for process 'start_1' to 'close_all'
-    And I send "test" with the TCP client 'start_1' to the processe
+    And I set the proxy for process 'start_1' to 'close_all'
+    When I send "test" with the TCP client 'start_1' to the processe
     Then I should receive a connection error for client response with TCP
     And I should reset the proxy for process 'start_1'
 
   Scenario: Successfully starting of processes and getting invalid data
     Given I configure nonnative programatically with processes
     And I start nonnative
-    When I set the proxy for process 'start_1' to 'invalid_data'
-    And I send "test" with the TCP client 'start_1' to the processe
+    And I set the proxy for process 'start_1' to 'invalid_data'
+    When I send "test" with the TCP client 'start_1' to the processe
     Then I should receive a invalid data that is not "test" for client response with TCP
     And I should reset the proxy for process 'start_1'
+
+  Scenario: Proxy for process is not found
+    Given I configure nonnative programatically with processes
+    And I start nonnative
+    When I try to find the proxy for process 'non_existent'
+    Then I should get a proxy not found error

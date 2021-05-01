@@ -11,11 +11,13 @@ require 'rest-client'
 require 'puma'
 require 'puma/server'
 require 'concurrent'
+require 'cucumber'
 
 require 'nonnative/version'
 require 'nonnative/error'
 require 'nonnative/start_error'
 require 'nonnative/stop_error'
+require 'nonnative/not_found_error'
 require 'nonnative/timeout'
 require 'nonnative/port'
 require 'nonnative/configuration'
@@ -44,6 +46,7 @@ require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/socket_pair_factory'
 require 'nonnative/strategy'
 require 'nonnative/go_command'
+require 'nonnative/cucumber'
 
 module Nonnative
   class << self

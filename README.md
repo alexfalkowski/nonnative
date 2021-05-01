@@ -505,6 +505,13 @@ server.proxy.close_all # To use close_all.
 server.proxy.reset # To reset it back to a good state.
 ```
 
+With cucumber:
+
+```cucumber
+Given I set the proxy for process 'process_1' to 'close_all'
+Then And I should reset the proxy for process 'process_1'
+```
+
 ###### Servers
 
 Setup it up programmatically:
@@ -517,6 +524,13 @@ server.proxy.close_all # To use close_all.
 server.proxy.reset # To reset it back to a good state.
 ```
 
+With cucumber:
+
+```cucumber
+Given I set the proxy for server 'server_1' to 'close_all'
+Then And I should reset the proxy for server 'server_1'
+```
+
 ###### Services
 
 Setup it up programmatically:
@@ -527,6 +541,13 @@ service = Nonnative.pool.service_by_name(name)
 
 service.proxy.close_all # To use close_all.
 service.proxy.reset # To reset it back to a good state.
+```
+
+With cucumber:
+
+```cucumber
+Given I set the proxy for service 'service_1' to 'close_all'
+Then And I should reset the proxy for service 'service_1'
 ```
 
 ### Go
