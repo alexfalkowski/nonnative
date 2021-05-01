@@ -17,23 +17,27 @@ module Nonnative
     end
 
     def process_by_name(name)
-      index = configuration.processes.find_index { |s| s.name == name }
-      processes[index].first
+      processes[runner_index(configuration.processes, name)].first
     end
 
     def server_by_name(name)
-      index = configuration.servers.find_index { |s| s.name == name }
-      servers[index].first
+      servers[runner_index(configuration.servers, name)].first
     end
 
     def service_by_name(name)
-      index = configuration.services.find_index { |s| s.name == name }
-      services[index]
+      services[runner_index(configuration.services, name)]
     end
 
     private
 
     attr_reader :configuration
+
+    def runner_index(runners, name)
+      index = runners.find_index { |s| s.name == name }
+      raise NotFoundError, "Could not find runner with name '#{name}'" if index.nil?
+
+      index
+    end
 
     def processes
       @processes ||= configuration.processes.map do |p|

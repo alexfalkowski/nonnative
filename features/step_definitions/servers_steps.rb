@@ -133,6 +133,16 @@ When('I send a not found message with the http client to the servers') do
   @response = Nonnative::Features::HTTPClient.new('http://localhost:4567').not_found
 end
 
+When('I try to find the proxy for server {string}') do |name|
+  Nonnative.pool.server_by_name(name)
+rescue StandardError => e
+  @error = e
+end
+
+Then('I should get a proxy not found error') do
+  expect(@error).to be_a_kind_of(Nonnative::NotFoundError)
+end
+
 Then('I should receive a http {string} response') do |response|
   @responses.each do |r|
     expect(r.code).to eq(200)

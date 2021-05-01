@@ -54,6 +54,12 @@ When('I send {string} with the TCP client {string} to the processe') do |message
   @response = client.request(message)
 end
 
+When('I try to find the proxy for process {string}') do |name|
+  Nonnative.pool.process_by_name(name)
+rescue StandardError => e
+  @error = e
+end
+
 Then('I should receive a TCP {string} response') do |response|
   @responses.each { |r| expect(r).to eq(response) }
 end
@@ -65,4 +71,3 @@ end
 Then('I should receive a invalid data that is not {string} for client response with TCP') do |message|
   expect(@response).not_to eq(message)
 end
-

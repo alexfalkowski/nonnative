@@ -86,3 +86,9 @@ Feature: Servers
     When I set the proxy for server 'grpc_server_1' to 'invalid_data'
     Then I should receive a invalid data error for being greeted with gRPC
     And I should reset the proxy for server 'grpc_server_1'
+
+  Scenario: Proxy for server is not found
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I try to find the proxy for server 'non_existent'
+    Then I should get a proxy not found error

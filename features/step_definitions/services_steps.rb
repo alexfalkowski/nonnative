@@ -27,6 +27,12 @@ When('I connect to the service') do
   @service = Nonnative::Features::Service.new(20_006)
 end
 
+When('I try to find the proxy for service {string}') do |name|
+  Nonnative.pool.service_by_name(name)
+rescue StandardError => e
+  @error = e
+end
+
 Then('I should receive a connection error from the service') do
   expect(@service.receive).to be_nil
 end

@@ -24,3 +24,9 @@ Feature: Processes
     When I send "test" with the TCP client 'start_1' to the processe
     Then I should receive a invalid data that is not "test" for client response with TCP
     And I should reset the proxy for process 'start_1'
+
+  Scenario: Proxy for process is not found
+    Given I configure nonnative programatically with processes
+    And I start nonnative
+    When I try to find the proxy for process 'non_existent'
+    Then I should get a proxy not found error
