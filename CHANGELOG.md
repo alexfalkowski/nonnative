@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.44.0](https://github.com/alexfalkowski/nonnative/compare/v1.43.0...v1.44.0) (2021-05-01)
+
+
+### Features
+
+* move to reusable steps ([#84](https://github.com/alexfalkowski/nonnative/issues/84)) ([37b6175](https://github.com/alexfalkowski/nonnative/commit/37b6175e920dfb70f3d6f13226240dd045c2db3d))
+
 ## [1.43.0](https://github.com/alexfalkowski/nonnative/compare/v1.42.2...v1.43.0) (2021-04-30)
 
 
