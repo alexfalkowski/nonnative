@@ -11,6 +11,7 @@ require 'rest-client'
 require 'puma'
 require 'puma/server'
 require 'concurrent'
+require 'cucumber'
 
 require 'nonnative/version'
 require 'nonnative/error'
