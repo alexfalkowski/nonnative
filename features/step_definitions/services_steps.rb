@@ -27,20 +27,10 @@ When('I connect to the service') do
   @service = Nonnative::Features::Service.new(20_006)
 end
 
-When('I set the proxy for service {string} to {string}') do |name, operation|
-  service = Nonnative.pool.service_by_name(name)
-  service.proxy.send(operation)
-end
-
 Then('I should receive a connection error from the service') do
   expect(@service.receive).to be_nil
 end
 
 Then('I should have a succesful connection') do
   expect(@service).not_to be_closed
-end
-
-Then('I should reset the proxy for service {string}') do |name|
-  service = Nonnative.pool.service_by_name(name)
-  service.proxy.reset
 end
