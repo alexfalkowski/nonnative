@@ -35,6 +35,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 2.1', '>= 2.1.4'
   spec.add_development_dependency 'coveralls', '~> 0.8.23'
-  spec.add_development_dependency 'rubocop', '~> 1.12'
+  spec.add_development_dependency 'rubocop', '~> 1.14'
   spec.add_development_dependency 'solargraph', '~> 0.40.4'
 end
