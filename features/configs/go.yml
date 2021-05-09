@@ -1,0 +1,14 @@
+version: 1.0
+strategy: manual
+processes:
+  -
+    name: go
+    go:
+      output: reports
+      executable: example
+      command: serve
+      parameters:
+        - --level=info
+    timeout: 5
+    port: 8000
+    log: features/logs/go.log

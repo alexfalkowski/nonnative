@@ -22,7 +22,7 @@ module Nonnative
         processes.each do |fd|
           config.process do |d|
             d.name = fd['name']
-            d.command = fd['command']
+            d.command = command(fd)
             d.timeout = fd['timeout']
             d.port = fd['port']
             d.log = fd['log']
@@ -30,6 +30,15 @@ module Nonnative
 
             proxy d, fd['proxy']
           end
+        end
+      end
+
+      def command(process)
+        go = process['go']
+        if go
+          Nonnative.go_executable(go['output'], go['executable'], go['command'], *go['parameters'])
+        else
+          process['command']
         end
       end
 
