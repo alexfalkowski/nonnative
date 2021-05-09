@@ -172,13 +172,13 @@ strategy: startup
 servers:
   -
     name: server_1
-    klass: Nonnative::EchoServer
+    class: Nonnative::EchoServer
     timeout: 1
     port: 12323
     log: features/logs/server_1.log
   -
     name: server_2
-    klass: Nonnative::EchoServer
+    class: Nonnative::EchoServer
     timeout: 1
     port: 12324
     log: features/logs/server_2.log
@@ -244,7 +244,7 @@ strategy: startup
 servers:
   -
     name: http_server_1
-    klass: Nonnative::Features::HTTPServer
+    class: Nonnative::Features::HTTPServer
     timeout: 1
     port: 4567
     log: features/logs/http_server_1.log
@@ -306,7 +306,7 @@ strategy: startup
 servers:
   -
     name: grpc_server_1
-    klass: Nonnative::Features::GRPCServer
+    class: Nonnative::Features::GRPCServer
     timeout: 1
     port: 9002
     log: features/logs/grpc_server_1.log

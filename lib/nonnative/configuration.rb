@@ -38,7 +38,7 @@ module Nonnative
         servers.each do |fd|
           config.server do |s|
             s.name = fd['name']
-            s.klass = Object.const_get(fd['klass'])
+            s.klass = Object.const_get(fd['class'])
             s.timeout = fd['timeout']
             s.port = fd['port']
             s.log = fd['log']
