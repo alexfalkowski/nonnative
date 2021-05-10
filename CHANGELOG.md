@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.46.0](https://github.com/alexfalkowski/nonnative/compare/v1.45.0...v1.46.0) (2021-05-10)
+
+
+### Features
+
+* add loading config through configure ([#87](https://github.com/alexfalkowski/nonnative/issues/87)) ([a95e8b6](https://github.com/alexfalkowski/nonnative/commit/a95e8b6817380afd732d0aefb170726f905548cb))
+
 ## [1.45.0](https://github.com/alexfalkowski/nonnative/compare/v1.44.1...v1.45.0) (2021-05-10)
 
 
