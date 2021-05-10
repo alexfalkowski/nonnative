@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.45.0](https://github.com/alexfalkowski/nonnative/compare/v1.44.1...v1.45.0) (2021-05-10)
+
+
+### Features
+
+* add loading go command through config ([#86](https://github.com/alexfalkowski/nonnative/issues/86)) ([2f500d3](https://github.com/alexfalkowski/nonnative/commit/2f500d34ef6eb536b223651f84213f4f3d10c496))
+
 ### [1.44.1](https://github.com/alexfalkowski/nonnative/compare/v1.44.0...v1.44.1) (2021-05-06)
 
 ## [1.44.0](https://github.com/alexfalkowski/nonnative/compare/v1.43.0...v1.44.0) (2021-05-01)
