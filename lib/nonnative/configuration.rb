@@ -22,7 +22,7 @@ module Nonnative
         processes.each do |fd|
           config.process do |d|
             d.name = fd['name']
-            d.command = fd['command']
+            d.command = command(fd)
             d.timeout = fd['timeout']
             d.port = fd['port']
             d.log = fd['log']
@@ -33,12 +33,21 @@ module Nonnative
         end
       end
 
+      def command(process)
+        go = process['go']
+        if go
+          Nonnative.go_executable(go['output'], go['executable'], go['command'], *go['parameters'])
+        else
+          process['command']
+        end
+      end
+
       def servers(file, config)
         servers = file['servers'] || []
         servers.each do |fd|
           config.server do |s|
             s.name = fd['name']
-            s.klass = Object.const_get(fd['klass'])
+            s.klass = Object.const_get(fd['class'])
             s.timeout = fd['timeout']
             s.port = fd['port']
             s.log = fd['log']

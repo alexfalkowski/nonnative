@@ -71,3 +71,7 @@ end
 Then('I should receive a invalid data that is not {string} for client response with TCP') do |message|
   expect(@response).not_to eq(message)
 end
+
+Then('I should see a log entry of {string} in the file {string}') do |message, path|
+  expect(Nonnative.log_lines(path, ->(l) { l.include?(message) }).first).to include(message)
+end

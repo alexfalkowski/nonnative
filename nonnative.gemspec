@@ -8,7 +8,7 @@ require 'nonnative/version'
 Gem::Specification.new do |spec|
   spec.name          = 'nonnative'
   spec.version       = Nonnative::VERSION
-  spec.authors       = ['Alex Falkowski']
+  spec.authors       = ['Alejandro Falkowski']
   spec.email         = ['alexrfalkowski@gmail.com']
 
   spec.summary       = 'Allows you to keep using the power of ruby to test other systems'

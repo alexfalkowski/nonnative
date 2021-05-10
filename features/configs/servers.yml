@@ -3,7 +3,7 @@ strategy: manual
 servers:
   -
     name: tcp_server_1
-    klass: Nonnative::Features::TCPServer
+    class: Nonnative::Features::TCPServer
     timeout: 1
     port: 12323
     log: features/logs/tcp_server_1.log
@@ -13,7 +13,7 @@ servers:
       log: features/logs/proxy_tcp_server_1.log
   -
     name: tcp_server_2
-    klass: Nonnative::Features::TCPServer
+    class: Nonnative::Features::TCPServer
     timeout: 1
     port: 12324
     log: features/logs/tcp_server_2.log

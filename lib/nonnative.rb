@@ -52,6 +52,10 @@ module Nonnative
   class << self
     attr_reader :pool
 
+    def log_lines(path, predicate)
+      File.readlines(path).select { |l| predicate.call(l) }
+    end
+
     def go_executable(output, exec, cmd, *params)
       Nonnative::GoCommand.new(exec, output).executable(cmd, params)
     end

@@ -172,13 +172,13 @@ strategy: startup
 servers:
   -
     name: server_1
-    klass: Nonnative::EchoServer
+    class: Nonnative::EchoServer
     timeout: 1
     port: 12323
     log: features/logs/server_1.log
   -
     name: server_2
-    klass: Nonnative::EchoServer
+    class: Nonnative::EchoServer
     timeout: 1
     port: 12324
     log: features/logs/server_2.log
@@ -244,7 +244,7 @@ strategy: startup
 servers:
   -
     name: http_server_1
-    klass: Nonnative::Features::HTTPServer
+    class: Nonnative::Features::HTTPServer
     timeout: 1
     port: 4567
     log: features/logs/http_server_1.log
@@ -306,7 +306,7 @@ strategy: startup
 servers:
   -
     name: grpc_server_1
-    klass: Nonnative::Features::GRPCServer
+    class: Nonnative::Features::GRPCServer
     timeout: 1
     port: 9002
     log: features/logs/grpc_server_1.log
@@ -561,16 +561,10 @@ To get this to work you will need to create a `main_test.go` file with these con
 
 package main
 
-import (
-	"testing"
-
-	"github.com/your_location/cmd"
-)
+import "testing"
 
 func TestFeatures(t *testing.T) {
-	if err := cmd.Execute(); err != nil {
-		t.Fatal(err.Error())
-	}
+	main()
 }
 ```
 
@@ -580,8 +574,27 @@ Then to compile this binary you will need to do the following:
 go test -mod vendor -c -tags features -covermode=count -o your_binary -coverpkg=./... github.com/your_location
 ```
 
-Then to get an executable you do the following:
+Setup it up programmatically:
 
 ```ruby
 Nonnative.go_executable('reports', 'your_binary', 'sub_command', '--config config.yaml')
+```
+
+Setup it up through configuration:
+
+```yaml
+version: 1.0
+strategy: startup
+processes:
+  -
+    name: go
+    go:
+      output: reports
+      executable: your_binary
+      command: sub_command
+      parameters:
+        - --config config.yaml
+    timeout: 5
+    port: 8000
+    log: features/logs/go.log
 ```
