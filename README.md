@@ -108,7 +108,9 @@ Then load the file with
 ```ruby
 require 'nonnative'
 
-Nonnative.load_configuration('configuration.yml')
+Nonnative.configure do |config|
+  config.load_file('configuration.yml')
+end
 ```
 
 ### Servers
@@ -189,7 +191,9 @@ Then load the file with:
 ```ruby
 require 'nonnative'
 
-Nonnative.load_configuration('configuration.yml')
+Nonnative.configure do |config|
+  config.load_file('configuration.yml')
+end
 ```
 
 #### HTTP
@@ -255,7 +259,9 @@ Then load the file with:
 ```ruby
 require 'nonnative'
 
-Nonnative.load_configuration('configuration.yml')
+Nonnative.configure do |config|
+  config.load_file('configuration.yml')
+end
 ```
 
 #### gRPC
@@ -317,7 +323,9 @@ Then load the file with:
 ```ruby
 require 'nonnative'
 
-Nonnative.load_configuration('configuration.yml')
+Nonnative.configure do |config|
+  config.load_file('configuration.yml')
+end
 ```
 
 ### Services
@@ -363,7 +371,9 @@ Then load the file with
 ```ruby
 require 'nonnative'
 
-Nonnative.load_configuration('configuration.yml')
+Nonnative.configure do |config|
+  config.load_file('configuration.yml')
+end
 ```
 
 #### Proxies

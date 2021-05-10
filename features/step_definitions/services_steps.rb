@@ -20,7 +20,9 @@ Given('I configure nonnative programatically with services') do
 end
 
 Given('I configure nonnative through configuration with services') do
-  Nonnative.load_configuration('features/configs/services.yml')
+  Nonnative.configure do |config|
+    config.load_file('features/configs/services.yml')
+  end
 end
 
 When('I connect to the service') do

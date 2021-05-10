@@ -60,10 +60,6 @@ module Nonnative
       Nonnative::GoCommand.new(exec, output).executable(cmd, params)
     end
 
-    def load_configuration(path)
-      @configuration ||= Nonnative::Configuration.load_file(path) # rubocop:disable Naming/MemoizedInstanceVariableName
-    end
-
     def configuration
       @configuration ||= Nonnative::Configuration.new
     end
