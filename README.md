@@ -561,16 +561,10 @@ To get this to work you will need to create a `main_test.go` file with these con
 
 package main
 
-import (
-	"testing"
-
-	"github.com/your_location/cmd"
-)
+import "testing"
 
 func TestFeatures(t *testing.T) {
-	if err := cmd.Execute(); err != nil {
-		t.Fatal(err.Error())
-	}
+	main()
 }
 ```
 
@@ -580,8 +574,27 @@ Then to compile this binary you will need to do the following:
 go test -mod vendor -c -tags features -covermode=count -o your_binary -coverpkg=./... github.com/your_location
 ```
 
-Then to get an executable you do the following:
+Setup it up programmatically:
 
 ```ruby
 Nonnative.go_executable('reports', 'your_binary', 'sub_command', '--config config.yaml')
+```
+
+Setup it up through configuration:
+
+```yaml
+version: 1.0
+strategy: startup
+processes:
+  -
+    name: go
+    go:
+      output: reports
+      executable: your_binary
+      command: sub_command
+      parameters:
+        - --config config.yaml
+    timeout: 5
+    port: 8000
+    log: features/logs/go.log
 ```
