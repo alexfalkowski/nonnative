@@ -5,7 +5,10 @@ When('I create the go command with output {string} and executable {string} and c
 end
 
 When('I load the go configuration') do
-  Nonnative.load_configuration('features/configs/go.yml')
+  Nonnative.configure do |config|
+    config.load_file('features/configs/go.yml')
+  end
+
   @exec_path = Nonnative.configuration.processes.first.command
 end
 
