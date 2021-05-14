@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-When('I configure nonnative through configuration with processes') do
-  Nonnative.configure do |config|
-    config.load_file('features/configs/processes.yml')
-  end
-end
-
 When('I configure nonnative programatially with a no op server') do
   Nonnative.configure do |config|
     config.strategy = :manual

@@ -8,6 +8,8 @@ processes:
     port: 12321
     log: features/logs/12_321.log
     signal: INT
+    environment:
+      STRING: true
   -
     name: start_2
     command: features/support/bin/start 12_322

@@ -11,6 +11,9 @@ Given('I configure nonnative programatically with processes') do
       d.port = 12_321
       d.log = 'features/logs/12_321.log'
       d.signal = 'INT'
+      d.environment = {
+        'STRING' => 'true'
+      }
       d.proxy = {
         type: 'fault_injection',
         port: 20_005,
@@ -29,6 +32,12 @@ Given('I configure nonnative programatically with processes') do
       d.log = 'features/logs/12_322.log'
       d.signal = 'TERM'
     end
+  end
+end
+
+Given('I configure nonnative through configuration with processes') do
+  Nonnative.configure do |config|
+    config.load_file('features/configs/processes.yml')
   end
 end
 
