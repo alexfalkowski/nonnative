@@ -2,7 +2,7 @@
 
 module Nonnative
   class ConfigurationRunner
-    attr_accessor :name, :timeout, :port, :log
+    attr_accessor :name, :port
     attr_reader :proxy
 
     def initialize

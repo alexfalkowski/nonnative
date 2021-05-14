@@ -2,6 +2,12 @@
 
 module Nonnative
   class Server < Runner
+    def initialize(service)
+      super service
+
+      @timeout = Nonnative::Timeout.new(service.timeout)
+    end
+
     def start
       unless thread
         proxy.start
@@ -28,6 +34,6 @@ module Nonnative
 
     private
 
-    attr_reader :thread
+    attr_reader :thread, :timeout
   end
 end

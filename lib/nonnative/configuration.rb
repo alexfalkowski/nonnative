@@ -95,9 +95,7 @@ module Nonnative
       services.each do |fd|
         service do |s|
           s.name = fd['name']
-          s.timeout = fd['timeout']
           s.port = fd['port']
-          s.log = fd['log']
 
           proxy s, fd['proxy']
         end
