@@ -2,6 +2,6 @@
 
 module Nonnative
   class ConfigurationProcess < ConfigurationRunner
-    attr_accessor :command, :signal
+    attr_accessor :command, :signal, :timeout, :log, :environment
   end
 end

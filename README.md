@@ -69,7 +69,10 @@ Nonnative.configure do |config|
     p.timeout = config.strategy.timeout
     p.port = 12_321
     p.log = 'features/logs/12_321.log'
-    p.signal = 'INT' # Possible values are described in Signal.list.keys
+    p.signal = 'INT' # Possible values are described in Signal.list.keys.
+    p.environment = { # Pass environment variables to process.
+      'TEST' => 'true'
+    }
   end
 
   config.process do |p|
@@ -94,7 +97,9 @@ processes:
     timeout: 5
     port: 12321
     log: features/logs/12_321.log
-    signal: INT # Possible values are described in Signal.list.keys
+    signal: INT # Possible values are described in Signal.list.keys.
+    environment: # Pass environment variables to process.
+      TEST: true
   -
     name: start_2
     command: features/support/bin/start 12_322

@@ -2,6 +2,12 @@
 
 module Nonnative
   class Process < Runner
+    def initialize(service)
+      super service
+
+      @timeout = Nonnative::Timeout.new(service.timeout)
+    end
+
     def start
       unless process_exists?
         proxy.start
@@ -32,7 +38,7 @@ module Nonnative
 
     private
 
-    attr_reader :pid
+    attr_reader :pid, :timeout
 
     def process_kill
       signal = Signal.list[service.signal || 'INT'] || Signal.list['INT']
@@ -40,7 +46,10 @@ module Nonnative
     end
 
     def process_spawn
-      spawn(service.command, %i[out err] => [service.log, 'a'])
+      environment = service.environment || {}
+      environment = environment.transform_keys(&:to_s).transform_values(&:to_s)
+
+      spawn(environment, service.command, %i[out err] => [service.log, 'a'])
     end
 
     def process_exists?
