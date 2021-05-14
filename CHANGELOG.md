@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.47.0](https://github.com/alexfalkowski/nonnative/compare/v1.46.0...v1.47.0) (2021-05-14)
+
+
+### Features
+
+* allow to pass env variables to processes ([#88](https://github.com/alexfalkowski/nonnative/issues/88)) ([4401a77](https://github.com/alexfalkowski/nonnative/commit/4401a776ccc50dbefa45b06de01945abf4724864))
+
 ## [1.46.0](https://github.com/alexfalkowski/nonnative/compare/v1.45.0...v1.46.0) (2021-05-10)
 
 
