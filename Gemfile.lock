@@ -207,11 +207,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 2.1, >= 2.1.4)
+  bundler (~> 2.2, >= 2.2.17)
   coveralls (~> 0.8.23)
   nonnative!
   rubocop (~> 1.14)
   solargraph (~> 0.40.4)
 
 BUNDLED WITH
-   2.1.4
+   2.2.17
