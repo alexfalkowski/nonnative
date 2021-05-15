@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.48.0](https://github.com/alexfalkowski/nonnative/compare/v1.47.0...v1.48.0) (2021-05-15)
+
+
+### Features
+
+* **deps:** update to ruby version 3.0.0 ([#89](https://github.com/alexfalkowski/nonnative/issues/89)) ([e2b37bf](https://github.com/alexfalkowski/nonnative/commit/e2b37bfc6e6dd922258cc1d1bc5b6abc4d78fd02))
+
 ## [1.47.0](https://github.com/alexfalkowski/nonnative/compare/v1.46.0...v1.47.0) (2021-05-14)
 
 
