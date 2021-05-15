@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (1.47.0)
+    nonnative (1.48.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       cucumber (>= 6, < 7)
       grpc (>= 1, < 2)
