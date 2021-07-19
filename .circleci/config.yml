@@ -28,7 +28,7 @@ jobs:
       - image: alexfalkowski/release:2.0
     steps:
       - checkout
-      - run: release.sh
+      - run: release
 
 workflows:
   nonnative:
