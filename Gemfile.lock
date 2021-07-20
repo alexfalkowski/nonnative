@@ -170,10 +170,11 @@ GEM
       rack (~> 2.2)
       rack-protection (= 2.1.0)
       tilt (~> 2.0)
-    solargraph (0.41.2)
-      backport (~> 1.1)
+    solargraph (0.42.4)
+      backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
+      diff-lcs (~> 1.4)
       e2mmap
       jaro_winkler (~> 1.5)
       kramdown (~> 2.3)
@@ -211,7 +212,7 @@ DEPENDENCIES
   coveralls (~> 0.8.23)
   nonnative!
   rubocop (~> 1.16)
-  solargraph (~> 0.41.1)
+  solargraph (~> 0.41)
 
 BUNDLED WITH
    2.2.17
