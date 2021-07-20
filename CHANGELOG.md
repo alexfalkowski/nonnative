@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.51.0](https://github.com/alexfalkowski/nonnative/compare/v1.50.1...v1.51.0) (2021-07-20)
+
+
+### Features
+
+* **deps:** update cucumber to 7.0.0 ([#93](https://github.com/alexfalkowski/nonnative/issues/93)) ([996c014](https://github.com/alexfalkowski/nonnative/commit/996c014eb843950b62febfc4fbd3f82c959c42ae))
+
 ### [1.50.1](https://github.com/alexfalkowski/nonnative/compare/v1.50.0...v1.50.1) (2021-07-19)
 
 ## [1.50.0](https://github.com/alexfalkowski/nonnative/compare/v1.49.0...v1.50.0) (2021-06-06)
