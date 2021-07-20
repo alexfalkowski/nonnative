@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ['>= 3.0.0', '< 4.0.0']
 
   spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
-  spec.add_dependency 'cucumber', ['>= 6', '< 7']
+  spec.add_dependency 'cucumber', ['>= 7', '< 8']
   spec.add_dependency 'grpc', ['>= 1', '< 2']
   spec.add_dependency 'grpc-tools', ['>= 1', '< 2']
   spec.add_dependency 'puma', '~> 5.0'
@@ -36,5 +36,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 2.2', '>= 2.2.17'
   spec.add_development_dependency 'coveralls', '~> 0.8.23'
   spec.add_development_dependency 'rubocop', '~> 1.16'
-  spec.add_development_dependency 'solargraph', '~> 0.41.1'
+  spec.add_development_dependency 'solargraph', '~> 0.41'
 end
