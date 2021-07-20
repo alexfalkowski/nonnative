@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ['>= 3.0.0', '< 4.0.0']
 
   spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
-  spec.add_dependency 'cucumber', ['>= 6', '< 7']
+  spec.add_dependency 'cucumber', ['>= 7', '< 8']
   spec.add_dependency 'grpc', ['>= 1', '< 2']
   spec.add_dependency 'grpc-tools', ['>= 1', '< 2']
   spec.add_dependency 'puma', '~> 5.0'
