@@ -28,6 +28,12 @@ module Nonnative
       pid
     end
 
+    def memory
+      return if pid.nil?
+
+      @memory ||= GetProcessMem.new(pid)
+    end
+
     protected
 
     def wait_stop

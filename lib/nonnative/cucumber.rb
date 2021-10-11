@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 Given('I set the proxy for process {string} to {string}') do |name, operation|
-  server = Nonnative.pool.process_by_name(name)
-  server.proxy.send(operation)
+  process = Nonnative.pool.process_by_name(name)
+  process.proxy.send(operation)
 end
 
 Given('I set the proxy for server {string} to {string}') do |name, operation|
@@ -16,8 +16,8 @@ Given('I set the proxy for service {string} to {string}') do |name, operation|
 end
 
 Then('I should reset the proxy for process {string}') do |name|
-  server = Nonnative.pool.process_by_name(name)
-  server.proxy.reset
+  process = Nonnative.pool.process_by_name(name)
+  process.proxy.reset
 end
 
 Then('I should reset the proxy for server {string}') do |name|
@@ -28,4 +28,24 @@ end
 Then('I should reset the proxy for service {string}') do |name|
   service = Nonnative.pool.service_by_name(name)
   service.proxy.reset
+end
+
+Then('the process {string} should consume {string} {string} of memory') do |name, op, mem|
+  process = Nonnative.pool.process_by_name(name)
+  _, size, type = mem.split(/(\d+)/)
+  actual = process.memory.send(type)
+  size = size.to_i
+
+  case op
+  when '='
+    expect(actual).to eq(size)
+  when '<'
+    expect(actual).to be < size
+  when '<='
+    expect(actual).to be <= size
+  when '>'
+    expect(actual).to be > size
+  when '>='
+    expect(actual).to be >= size
+  end
 end

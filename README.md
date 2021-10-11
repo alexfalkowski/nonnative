@@ -118,6 +118,12 @@ Nonnative.configure do |config|
 end
 ```
 
+With cucumber you can also verify how much memory is used by the process:
+
+```cucumber
+Then the process 'start_1' should consume '<=' '20mb' of memory
+```
+
 ### Servers
 
 A server is a dependency to some external API.
