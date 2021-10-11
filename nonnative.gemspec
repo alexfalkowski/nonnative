@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
   spec.add_dependency 'cucumber', ['>= 7', '< 8']
+  spec.add_dependency 'get_process_mem', '~> 0.2.1'
   spec.add_dependency 'grpc', ['>= 1', '< 2']
   spec.add_dependency 'grpc-tools', ['>= 1', '< 2']
   spec.add_dependency 'puma', '~> 5.0'

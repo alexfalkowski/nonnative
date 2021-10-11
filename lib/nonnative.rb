@@ -12,6 +12,7 @@ require 'puma'
 require 'puma/server'
 require 'concurrent'
 require 'cucumber'
+require 'get_process_mem'
 
 require 'nonnative/version'
 require 'nonnative/error'
