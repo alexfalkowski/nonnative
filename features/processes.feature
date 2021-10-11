@@ -9,7 +9,7 @@ Feature: Processes
     When I send "test" with the TCP client to the processes
     Then I should receive a TCP "test" response
     And I should see a log entry of "test" in the file "features/logs/12_321.log"
-    And the process 'start_1' should consume '<=' '20mb' of memory
+    And the process 'start_1' should consume '<=' '25mb' of memory
 
   Scenario: Successfully starting of processes and closing connections
     Given I configure nonnative programatically with processes
