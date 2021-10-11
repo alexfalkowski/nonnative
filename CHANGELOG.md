@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.54.0](https://github.com/alexfalkowski/nonnative/compare/v1.53.0...v1.54.0) (2021-10-11)
+
+
+### Features
+
+* only add less than for memory ([#99](https://github.com/alexfalkowski/nonnative/issues/99)) ([fed4929](https://github.com/alexfalkowski/nonnative/commit/fed4929a157982adcfbefac9a79f593289234418))
+
 ## [1.53.0](https://github.com/alexfalkowski/nonnative/compare/v1.52.0...v1.53.0) (2021-10-11)
 
 
