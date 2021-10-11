@@ -121,7 +121,7 @@ end
 With cucumber you can also verify how much memory is used by the process:
 
 ```cucumber
-Then the process 'start_1' should consume '<=' '20mb' of memory
+Then the process 'start_1' should consume less than '25mb' of memory
 ```
 
 ### Servers
