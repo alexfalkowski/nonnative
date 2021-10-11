@@ -30,22 +30,11 @@ Then('I should reset the proxy for service {string}') do |name|
   service.proxy.reset
 end
 
-Then('the process {string} should consume {string} {string} of memory') do |name, op, mem|
+Then('the process {string} should consume less than {string} of memory') do |name, mem|
   process = Nonnative.pool.process_by_name(name)
   _, size, type = mem.split(/(\d+)/)
   actual = process.memory.send(type)
   size = size.to_i
 
-  case op
-  when '='
-    expect(actual).to eq(size)
-  when '<'
-    expect(actual).to be < size
-  when '<='
-    expect(actual).to be <= size
-  when '>'
-    expect(actual).to be > size
-  when '>='
-    expect(actual).to be >= size
-  end
+  expect(actual).to be < size
 end
