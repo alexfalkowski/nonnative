@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.53.0](https://github.com/alexfalkowski/nonnative/compare/v1.52.0...v1.53.0) (2021-10-11)
+
+
+### Features
+
+* add ability to read process memory ([#98](https://github.com/alexfalkowski/nonnative/issues/98)) ([2139932](https://github.com/alexfalkowski/nonnative/commit/21399326bd342711a2cc98ab941cc3b8aaea6d56))
+
 ## [1.52.0](https://github.com/alexfalkowski/nonnative/compare/v1.51.2...v1.52.0) (2021-09-21)
 
 
