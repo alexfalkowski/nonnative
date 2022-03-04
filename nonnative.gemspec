@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
   spec.required_ruby_version = ['>= 3.0.0', '< 4.0.0']
+  spec.metadata['rubygems_mfa_required'] = 'true'
 
   spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
   spec.add_dependency 'cucumber', ['>= 7', '< 8']
@@ -34,8 +35,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rspec-expectations', '~> 3.9', '>= 3.9.2'
   spec.add_dependency 'sinatra', '~> 2.0', '>= 2.0.8.1'
 
-  spec.add_development_dependency 'bundler', '~> 2.2', '>= 2.2.17'
+  spec.add_development_dependency 'bundler', '~> 2.3', '>= 2.3.8'
   spec.add_development_dependency 'coveralls', '~> 0.8.23'
-  spec.add_development_dependency 'rubocop', '~> 1.22', '>= 1.22.1'
-  spec.add_development_dependency 'solargraph', '~> 0.44.0'
+  spec.add_development_dependency 'rubocop', '~> 1.25', '>= 1.25.1'
+  spec.add_development_dependency 'solargraph', '~> 0.44.3'
 end
