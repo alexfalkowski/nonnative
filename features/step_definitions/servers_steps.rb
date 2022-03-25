@@ -123,12 +123,8 @@ When('I send a message with the grpc client to the servers') do
   end
 end
 
-When('I send a health request') do
-  @response = Nonnative::Observability.new('http://localhost:4567').health
-end
-
-When('I send a metrics request') do
-  @response = Nonnative::Observability.new('http://localhost:4567').metrics
+When('I send a {string} request') do |name|
+  @response = Nonnative::Observability.new('http://localhost:4567').send(name)
 end
 
 When('I send a not found message with the http client to the servers') do
@@ -158,11 +154,7 @@ Then('I should receive a grpc {string} response') do |response|
   end
 end
 
-Then('I should receive a successful health response') do
-  expect(@response.code).to eq(200)
-end
-
-Then('I should receive a successful metrics response') do
+Then('I should receive a successful {string} response') do |_|
   expect(@response.code).to eq(200)
 end
 

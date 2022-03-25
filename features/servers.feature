@@ -36,14 +36,26 @@ Feature: Servers
   Scenario: Successfully starting of HTTP servers programatically and getting health
     Given I configure nonnative programatically with servers
     And I start nonnative
-    When I send a health request
-    Then I should receive a successful health response
+    When I send a "health" request
+    Then I should receive a successful "health" response
+
+  Scenario: Successfully starting of HTTP servers programatically and getting liveness
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I send a "liveness" request
+    Then I should receive a successful "liveness" response
+
+  Scenario: Successfully starting of HTTP servers programatically and getting readiness
+    Given I configure nonnative programatically with servers
+    And I start nonnative
+    When I send a "readiness" request
+    Then I should receive a successful "readiness" response
 
   Scenario: Successfully starting of HTTP servers programatically and getting metrics
     Given I configure nonnative programatically with servers
     And I start nonnative
-    When I send a metrics request
-    Then I should receive a successful metrics response
+    When I send a "metrics" request
+    Then I should receive a successful "metrics" response
 
   Scenario: Successfully starting of HTTP servers programatically and closing connections while getting metrics
     Given I configure nonnative programatically with servers
