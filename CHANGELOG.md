@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.55.0](https://github.com/alexfalkowski/nonnative/compare/v1.54.4...v1.55.0) (2022-03-25)
+
+
+### Features
+
+* **observability:** add liveness and readiness ([#108](https://github.com/alexfalkowski/nonnative/issues/108)) ([526f43c](https://github.com/alexfalkowski/nonnative/commit/526f43cf0a21876418233abca558d8611acd10c7))
+
 ### [1.54.4](https://github.com/alexfalkowski/nonnative/compare/v1.54.3...v1.54.4) (2022-03-20)
 
 ### [1.54.3](https://github.com/alexfalkowski/nonnative/compare/v1.54.2...v1.54.3) (2022-03-05)
