@@ -33,6 +33,14 @@ module Nonnative
         status 200
       end
 
+      get '/liveness' do
+        status 200
+      end
+
+      get '/readiness' do
+        status 200
+      end
+
       get '/metrics' do
         status 200
       end

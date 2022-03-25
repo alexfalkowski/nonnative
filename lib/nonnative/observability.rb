@@ -6,6 +6,14 @@ module Nonnative
       get('health', { content_type: :json, accept: :json })
     end
 
+    def liveness
+      get('liveness', { content_type: :json, accept: :json })
+    end
+
+    def readiness
+      get('readiness', { content_type: :json, accept: :json })
+    end
+
     def metrics
       get('metrics')
     end
