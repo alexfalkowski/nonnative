@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.56.1](https://github.com/alexfalkowski/nonnative/compare/v1.56.0...v1.56.1) (2022-03-28)
+
+
+### Bug Fixes
+
+* **process:** use key for env ([#110](https://github.com/alexfalkowski/nonnative/issues/110)) ([48f1959](https://github.com/alexfalkowski/nonnative/commit/48f1959cb36047ed88e1407313ef4828182142eb))
+
 ## [1.56.0](https://github.com/alexfalkowski/nonnative/compare/v1.55.0...v1.56.0) (2022-03-28)
 
 
