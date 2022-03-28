@@ -55,6 +55,10 @@ module Nonnative
       environment = service.environment || {}
       environment = environment.transform_keys(&:to_s).transform_values(&:to_s)
 
+      environment.each do |k, v|
+        environment[k] = ENV[k] || environment[v]
+      end
+
       spawn(environment, service.command, %i[out err] => [service.log, 'a'])
     end
 
