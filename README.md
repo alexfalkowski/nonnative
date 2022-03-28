@@ -65,7 +65,7 @@ Nonnative.configure do |config|
 
   config.process do |p|
     p.name = 'start_1'
-    p.command = 'features/support/bin/start 12_321'
+    p.command = -> { 'features/support/bin/start 12_321' }
     p.timeout = config.strategy.timeout
     p.port = 12_321
     p.log = 'features/logs/12_321.log'
@@ -77,7 +77,7 @@ Nonnative.configure do |config|
 
   config.process do |p|
     p.name = 'start_2'
-    p.command = 'features/support/bin/start 12_322'
+    p.command = -> { 'features/support/bin/start 12_322' }
     p.timeout = 0.5
     p.port = 12_322
     p.log = 'features/logs/12_322.log'
