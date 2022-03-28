@@ -6,7 +6,7 @@ Given('I configure nonnative programatically with processes') do
 
     config.process do |d|
       d.name = 'start_1'
-      d.command = 'features/support/bin/start 20_005'
+      d.command = -> { 'features/support/bin/start 20_005' }
       d.timeout = config.strategy.timeout
       d.port = 12_321
       d.log = 'features/logs/12_321.log'
@@ -26,7 +26,7 @@ Given('I configure nonnative programatically with processes') do
 
     config.process do |d|
       d.name = 'start_2'
-      d.command = 'features/support/bin/start 12_322'
+      d.command = -> { 'features/support/bin/start 12_322' }
       d.timeout = config.strategy.timeout
       d.port = 12_322
       d.log = 'features/logs/12_322.log'

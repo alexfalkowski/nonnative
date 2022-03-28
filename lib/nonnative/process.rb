@@ -59,7 +59,7 @@ module Nonnative
         environment[k] = ENV[k] || environment[k]
       end
 
-      spawn(environment, service.command, %i[out err] => [service.log, 'a'])
+      spawn(environment, service.command.call, %i[out err] => [service.log, 'a'])
     end
 
     def process_exists?

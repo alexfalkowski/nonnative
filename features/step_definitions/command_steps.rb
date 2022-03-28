@@ -9,7 +9,7 @@ When('I load the go configuration') do
     config.load_file('features/configs/go.yml')
   end
 
-  @exec_path = Nonnative.configuration.processes.first.command
+  @exec_path = Nonnative.configuration.processes.first.command.call
 end
 
 Then('I should have a valid go command with output {string} and executable {string} and command {string} and parameters {string}') do |output, exec, cmd, params|
