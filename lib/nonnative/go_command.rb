@@ -17,10 +17,11 @@ module Nonnative
     attr_reader :exec, :output
 
     def flags(cmd, params)
+      suffix = SecureRandom.alphanumeric(4)
       m = File.basename(exec, File.extname(exec))
       p = params.gsub(/\W/, '')
       name = [m, cmd, p].reject(&:empty?).join('-')
-      path = "#{output}/#{name}"
+      path = "#{output}/#{name}-#{suffix}"
 
       [
         "-test.cpuprofile=#{path}-cpu.prof",

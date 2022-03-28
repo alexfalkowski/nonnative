@@ -12,6 +12,23 @@ When('I load the go configuration') do
   @exec_path = Nonnative.configuration.processes.first.command
 end
 
-Then('the go command should be {string}') do |output|
-  expect(@exec_path).to eq(output)
+Then('I should have a valid go command with output {string} and executable {string} and command {string} and parameters {string}') do |output, exec, cmd, params|
+  parts = @exec_path.split
+
+  expect(parts.first).to eq(exec)
+
+  if params == ''
+    expect(parts.last).to eq(cmd)
+
+    parts = parts[1..parts.length - 2]
+  else
+    expect(parts[parts.length - 2]).to eq(cmd)
+    expect(parts.last).to eq(params)
+
+    parts = parts[1..parts.length - 3]
+  end
+
+  parts.each do |p|
+    expect(p).to include("#{output}/#{exec}-#{cmd}")
+  end
 end
