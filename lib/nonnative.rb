@@ -4,6 +4,7 @@ require 'socket'
 require 'timeout'
 require 'yaml'
 require 'open3'
+require 'securerandom'
 
 require 'grpc'
 require 'sinatra'
