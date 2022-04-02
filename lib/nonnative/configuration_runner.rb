@@ -2,10 +2,13 @@
 
 module Nonnative
   class ConfigurationRunner
-    attr_accessor :name, :port
+    attr_accessor :name, :host, :port
     attr_reader :proxy
 
     def initialize
+      self.host = '0.0.0.0'
+      self.port = 0
+
       @proxy = Nonnative::ConfigurationProxy.new
     end
 

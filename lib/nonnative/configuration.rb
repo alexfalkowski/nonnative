@@ -96,6 +96,7 @@ module Nonnative
       services.each do |fd|
         service do |s|
           s.name = fd['name']
+          s.host = fd['host'] if fd['host']
           s.port = fd['port']
 
           proxy s, fd['proxy']
