@@ -106,12 +106,16 @@ module Nonnative
     def proxy(runner, proxy)
       return unless proxy
 
-      runner.proxy = {
+      p = {
         type: proxy['type'],
         port: proxy['port'],
         log: proxy['log'],
         options: proxy['options']
       }
+
+      p[:host] = proxy['host'] if proxy['host']
+
+      runner.proxy = p
     end
   end
 end

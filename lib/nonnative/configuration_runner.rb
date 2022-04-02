@@ -11,6 +11,7 @@ module Nonnative
 
     def proxy=(value)
       proxy.type = value[:type]
+      proxy.host = value[:host] if value[:host]
       proxy.port = value[:port]
       proxy.log = value[:log]
       proxy.options = value[:options]
