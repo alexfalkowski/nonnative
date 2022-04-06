@@ -134,7 +134,7 @@ Define your server:
 module Nonnative
   class EchoServer < Nonnative::Server
     def perform_start
-      @socket_server = TCPServer.new('0.0.0.0', port)
+      @socket_server = TCPServer.new(service.host, service.port)
 
       loop do
         client_socket = @socket_server.accept

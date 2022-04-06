@@ -10,6 +10,10 @@ module Nonnative
       # Do nothing.
     end
 
+    def host
+      service.host
+    end
+
     def port
       service.port
     end
