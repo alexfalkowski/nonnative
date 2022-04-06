@@ -12,7 +12,7 @@ module Nonnative
     end
 
     def start
-      @tcp_server = ::TCPServer.new('0.0.0.0', service.port)
+      @tcp_server = ::TCPServer.new(service.host, service.port)
       @thread = Thread.new { perform_start }
     end
 

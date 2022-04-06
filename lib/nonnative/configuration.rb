@@ -96,6 +96,7 @@ module Nonnative
       services.each do |fd|
         service do |s|
           s.name = fd['name']
+          s.host = fd['host'] if fd['host']
           s.port = fd['port']
 
           proxy s, fd['proxy']
@@ -106,12 +107,16 @@ module Nonnative
     def proxy(runner, proxy)
       return unless proxy
 
-      runner.proxy = {
+      p = {
         type: proxy['type'],
         port: proxy['port'],
         log: proxy['log'],
         options: proxy['options']
       }
+
+      p[:host] = proxy['host'] if proxy['host']
+
+      runner.proxy = p
     end
   end
 end

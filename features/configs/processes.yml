@@ -5,6 +5,7 @@ processes:
     name: start_1
     command: features/support/bin/start 12_321
     timeout: 5
+    host: 127.0.0.1
     port: 12321
     log: features/logs/12_321.log
     signal: INT

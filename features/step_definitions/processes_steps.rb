@@ -8,6 +8,7 @@ Given('I configure nonnative programatically with processes') do
       d.name = 'start_1'
       d.command = -> { 'features/support/bin/start 20_005' }
       d.timeout = config.strategy.timeout
+      d.host = '127.0.0.1'
       d.port = 12_321
       d.log = 'features/logs/12_321.log'
       d.signal = 'INT'
@@ -16,6 +17,7 @@ Given('I configure nonnative programatically with processes') do
       }
       d.proxy = {
         type: 'fault_injection',
+        host: '127.0.0.1',
         port: 20_005,
         log: 'features/logs/proxy_start_1.log',
         options: {

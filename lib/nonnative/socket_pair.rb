@@ -25,7 +25,7 @@ module Nonnative
     attr_reader :proxy
 
     def create_remote_socket
-      ::TCPSocket.new('0.0.0.0', proxy.port)
+      ::TCPSocket.new(proxy.host, proxy.port)
     end
 
     def pipe(ready, socket1, socket2)

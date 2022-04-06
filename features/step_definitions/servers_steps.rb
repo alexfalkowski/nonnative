@@ -24,10 +24,12 @@ Given('I configure nonnative programatically with servers') do
       s.name = 'http_server_1'
       s.klass = Nonnative::Features::HTTPServer
       s.timeout = 1
+      s.host = '127.0.0.1'
       s.port = 4567
       s.log = 'features/logs/http_server_1.log'
       s.proxy = {
         type: 'fault_injection',
+        host: '127.0.0.1',
         port: 20_001,
         log: 'features/logs/proxy_http_server_1.log',
         options: {
