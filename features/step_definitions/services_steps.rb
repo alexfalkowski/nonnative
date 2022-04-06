@@ -6,9 +6,11 @@ Given('I configure nonnative programatically with services') do
 
     config.service do |s|
       s.name = 'service_1'
+      s.host = '127.0.0.1'
       s.port = 20_006
       s.proxy = {
         type: 'fault_injection',
+        host: '127.0.0.1',
         port: 30_000,
         log: 'features/logs/proxy_service_1.log',
         options: {
