@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.58.1](https://github.com/alexfalkowski/nonnative/compare/v1.58.0...v1.58.1) (2022-04-06)
+
+
+### Bug Fixes
+
+* use host ([#115](https://github.com/alexfalkowski/nonnative/issues/115)) ([98cccf3](https://github.com/alexfalkowski/nonnative/commit/98cccf3f7c0918cfb00650283cf472dd4e24fbbc))
+
 ## [1.58.0](https://github.com/alexfalkowski/nonnative/compare/v1.57.1...v1.58.0) (2022-04-06)
 
 
