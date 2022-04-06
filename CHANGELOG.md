@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.58.0](https://github.com/alexfalkowski/nonnative/compare/v1.57.1...v1.58.0) (2022-04-06)
+
+
+### Features
+
+* allow services and proxy to use a host ([#114](https://github.com/alexfalkowski/nonnative/issues/114)) ([0e3fbd8](https://github.com/alexfalkowski/nonnative/commit/0e3fbd8bc7ba76b5c5219615b66e80da4b9545ee))
+
 ### [1.57.1](https://github.com/alexfalkowski/nonnative/compare/v1.57.0...v1.57.1) (2022-03-28)
 
 
