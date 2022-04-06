@@ -37,6 +37,10 @@ module Nonnative
       apply_state :none
     end
 
+    def host
+      service.proxy.host
+    end
+
     def port
       service.proxy.port
     end

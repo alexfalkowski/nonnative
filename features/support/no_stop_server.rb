@@ -4,7 +4,7 @@ module Nonnative
   module Features
     class NoStopServer < Nonnative::Server
       def perform_start
-        @socket_server = ::TCPServer.new('0.0.0.0', service.port)
+        @socket_server = ::TCPServer.new(service.host, service.port)
       end
 
       def perform_stop
