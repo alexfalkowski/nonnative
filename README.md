@@ -282,15 +282,15 @@ Define your server:
 ```ruby
 module Nonnative
   module Features
-    class GreeterService < Greeter::Service
+    class Greeter < GreeterService::Service
       def say_hello(request, _call)
-        Nonnative::Features::HelloReply.new(message: request.name.to_s)
+        Nonnative::Features::SayHelloResponse.new(message: request.name.to_s)
       end
     end
 
     class GRPCServer < Nonnative::GRPCServer
       def svc
-        GreeterService.new
+        Greeter.new
       end
     end
   end

@@ -28,7 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'cucumber', ['>= 7', '< 8']
   spec.add_dependency 'get_process_mem', '~> 0.2.1'
   spec.add_dependency 'grpc', ['>= 1', '< 2']
-  spec.add_dependency 'grpc-tools', ['>= 1', '< 2']
   spec.add_dependency 'puma', '~> 5.0'
   spec.add_dependency 'rest-client', '~> 2.1'
   spec.add_dependency 'rspec-benchmark', '~> 0.6.0'
@@ -37,6 +36,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 2.3'
   spec.add_development_dependency 'coveralls_reborn', '~> 0.24.0'
+  spec.add_development_dependency 'grpc-tools', ['>= 1', '< 2']
   spec.add_development_dependency 'rubocop', '~> 1.26'
   spec.add_development_dependency 'solargraph', '~> 0.44.3'
 end

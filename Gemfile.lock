@@ -6,7 +6,6 @@ PATH
       cucumber (>= 7, < 8)
       get_process_mem (~> 0.2.1)
       grpc (>= 1, < 2)
-      grpc-tools (>= 1, < 2)
       puma (~> 5.0)
       rest-client (~> 2.1)
       rspec-benchmark (~> 0.6.0)
@@ -191,6 +190,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 2.3)
   coveralls_reborn (~> 0.24.0)
+  grpc-tools (>= 1, < 2)
   nonnative!
   rubocop (~> 1.26)
   solargraph (~> 0.44.3)

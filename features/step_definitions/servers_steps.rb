@@ -119,9 +119,9 @@ When('I send a message with the grpc client to the servers') do
   urls = ['localhost:9002', 'localhost:9003']
 
   urls.each do |u|
-    stub = Nonnative::Features::Greeter::Stub.new(u, :this_channel_is_insecure)
+    stub = Nonnative::Features::GreeterService::Stub.new(u, :this_channel_is_insecure)
 
-    @responses << stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!'))
+    @responses << stub.say_hello(Nonnative::Features::SayHelloRequest.new(name: 'Hello World!'))
   end
 end
 
@@ -177,16 +177,16 @@ Then('I should receive a invalid data error for hello response with HTTP') do
 end
 
 Then('I should receive a connection error for being greeted with gRPC') do
-  stub = Nonnative::Features::Greeter::Stub.new('localhost:9002', :this_channel_is_insecure)
-  expect { stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!')) }.to raise_error(GRPC::Unavailable)
+  stub = Nonnative::Features::GreeterService::Stub.new('localhost:9002', :this_channel_is_insecure)
+  expect { stub.say_hello(Nonnative::Features::SayHelloRequest.new(name: 'Hello World!')) }.to raise_error(GRPC::Unavailable)
 end
 
 Then('I should receive a delay error for being greeted with gRPC') do
-  stub = Nonnative::Features::Greeter::Stub.new('localhost:9002', :this_channel_is_insecure, timeout: 1)
-  expect { stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!')) }.to raise_error(GRPC::DeadlineExceeded)
+  stub = Nonnative::Features::GreeterService::Stub.new('localhost:9002', :this_channel_is_insecure, timeout: 1)
+  expect { stub.say_hello(Nonnative::Features::SayHelloRequest.new(name: 'Hello World!')) }.to raise_error(GRPC::DeadlineExceeded)
 end
 
 Then('I should receive a invalid data error for being greeted with gRPC') do
-  stub = Nonnative::Features::Greeter::Stub.new('localhost:9002', :this_channel_is_insecure)
-  expect { stub.say_hello(Nonnative::Features::HelloRequest.new(name: 'Hello World!')) }.to raise_error(StandardError)
+  stub = Nonnative::Features::GreeterService::Stub.new('localhost:9002', :this_channel_is_insecure)
+  expect { stub.say_hello(Nonnative::Features::SayHelloRequest.new(name: 'Hello World!')) }.to raise_error(StandardError)
 end
