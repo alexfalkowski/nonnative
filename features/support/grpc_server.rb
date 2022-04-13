@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative '../../test/grpc/helloworld_services_pb'
+require_relative '../../test/grpc/nonnative/v1/greeter_services_pb'
 
 module Nonnative
   module Features
     class GRPCServer < Nonnative::GRPCServer
       def svc
-        GreeterService.new
+        Greeter.new
       end
     end
   end
