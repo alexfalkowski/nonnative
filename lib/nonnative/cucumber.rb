@@ -2,6 +2,14 @@
 
 World(RSpec::Benchmark::Matchers)
 
+Before('@startup') do
+  Nonnative.start
+end
+
+After('@startup') do
+  Nonnative.stop
+end
+
 After('@manual') do
   Nonnative.stop
 end
