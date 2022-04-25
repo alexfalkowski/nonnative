@@ -56,7 +56,7 @@ module Nonnative
       environment = environment.transform_keys(&:to_s).transform_values(&:to_s)
 
       environment.each_key do |k|
-        environment[k] = ENV[k] || environment[k]
+        environment[k] = ENV.fetch(k, nil) || environment[k]
       end
 
       spawn(environment, service.command.call, %i[out err] => [service.log, 'a'])
