@@ -2,8 +2,6 @@
 
 Given('I configure the system programatically with servers') do
   Nonnative.configure do |config|
-    config.strategy = :manual
-
     config.server do |s|
       s.name = 'tcp_server_1'
       s.klass = Nonnative::Features::TCPServer

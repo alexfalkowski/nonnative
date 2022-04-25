@@ -13,7 +13,3 @@ SimpleCov.start do
 end
 
 require 'nonnative'
-
-Before do
-  Nonnative.clear
-end

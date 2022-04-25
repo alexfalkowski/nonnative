@@ -1,5 +1,4 @@
 version: 1.0
-strategy: manual
 servers:
   -
     name: tcp_server_1

@@ -1,4 +1,4 @@
-@manual
+@manual @clear
 Feature: Servers
 
   Allows us to start a server and use a client to get a response.

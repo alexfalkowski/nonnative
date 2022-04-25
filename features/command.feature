@@ -1,3 +1,4 @@
+@clear
 Feature: Command
 
   Verify commands are formatted correctly when they run.

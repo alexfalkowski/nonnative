@@ -47,7 +47,6 @@ require 'nonnative/close_all_socket_pair'
 require 'nonnative/delay_socket_pair'
 require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/socket_pair_factory'
-require 'nonnative/strategy'
 require 'nonnative/go_command'
 require 'nonnative/cucumber'
 
@@ -69,8 +68,6 @@ module Nonnative
 
     def configure
       yield configuration
-
-      require "nonnative/#{configuration.strategy}"
     end
 
     def start

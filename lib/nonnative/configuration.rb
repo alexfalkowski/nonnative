@@ -3,27 +3,19 @@
 module Nonnative
   class Configuration
     def initialize
-      @strategy = Strategy.new
       @processes = []
       @servers = []
       @services = []
     end
 
     attr_accessor :processes, :servers, :services
-    attr_reader :strategy
 
     def load_file(path)
       file = YAML.load_file(path)
 
-      self.strategy = file['strategy']
-
       add_processes(file)
       add_servers(file)
       add_services(file)
-    end
-
-    def strategy=(value)
-      @strategy = Strategy.new(value)
     end
 
     def process

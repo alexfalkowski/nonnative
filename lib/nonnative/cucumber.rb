@@ -2,8 +2,20 @@
 
 World(RSpec::Benchmark::Matchers)
 
+Before('@startup') do
+  Nonnative.start
+end
+
+After('@startup') do
+  Nonnative.stop
+end
+
 After('@manual') do
   Nonnative.stop
+end
+
+Before('@clear') do
+  Nonnative.clear
 end
 
 Given('I set the proxy for process {string} to {string}') do |name, operation|
