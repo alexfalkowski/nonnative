@@ -46,3 +46,11 @@ Then('the process {string} should consume less than {string} of memory') do |nam
 
   expect(actual).to be < size
 end
+
+Then('starting the system should raise an error') do
+  expect { Nonnative.start }.to raise_error(Nonnative::StartError)
+end
+
+Then('stopping the system should raise an error') do
+  expect { Nonnative.stop }.to raise_error(Nonnative::StopError)
+end

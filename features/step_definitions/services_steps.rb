@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given('I configure nonnative programatically with services') do
+Given('I configure the system programatically with services') do
   Nonnative.configure do |config|
     config.strategy = :manual
 
@@ -21,7 +21,7 @@ Given('I configure nonnative programatically with services') do
   end
 end
 
-Given('I configure nonnative through configuration with services') do
+Given('I configure the system through configuration with services') do
   Nonnative.configure do |config|
     config.load_file('features/configs/services.yml')
   end
