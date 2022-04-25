@@ -73,3 +73,7 @@ Then('I should see a log entry of {string} for process {string}') do |message, p
   process = Nonnative.configuration.process_by_name(process)
   expect(Nonnative.log_lines(process.log, ->(l) { l.include?(message) }).first).to include(message)
 end
+
+Then('I should see a log entry of {string} in the file {string}') do |message, path|
+  expect(Nonnative.log_lines(path, ->(l) { l.include?(message) }).first).to include(message)
+end
