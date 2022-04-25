@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.60.0](https://github.com/alexfalkowski/nonnative/compare/v1.59.1...v1.60.0) (2022-04-25)
+
+
+### Features
+
+* remove strategy to allow finer control in features. ([#119](https://github.com/alexfalkowski/nonnative/issues/119)) ([60b8310](https://github.com/alexfalkowski/nonnative/commit/60b8310ab8ae2a2761d867ab169f8ad5bbbed416))
+
 ### [1.59.1](https://github.com/alexfalkowski/nonnative/compare/v1.59.0...v1.59.1) (2022-04-25)
 
 ## [1.59.0](https://github.com/alexfalkowski/nonnative/compare/v1.58.2...v1.59.0) (2022-04-25)
