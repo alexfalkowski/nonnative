@@ -39,6 +39,13 @@ module Nonnative
       services << service
     end
 
+    def process_by_name(name)
+      process = processes.find { |s| s.name == name }
+      raise NotFoundError, "Could not find process with name '#{name}'" if process.nil?
+
+      process
+    end
+
     private
 
     def add_processes(file)

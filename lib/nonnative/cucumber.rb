@@ -68,3 +68,8 @@ end
 Then('stopping the system should raise an error') do
   expect { Nonnative.stop }.to raise_error(Nonnative::StopError)
 end
+
+Then('I should see a log entry of {string} for process {string}') do |message, process|
+  process = Nonnative.configuration.process_by_name(process)
+  expect(Nonnative.log_lines(process.log, ->(l) { l.include?(message) }).first).to include(message)
+end
