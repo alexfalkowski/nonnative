@@ -1,3 +1,4 @@
+@clear
 Feature: Benchmark
 
   Allows us to check that start and stop responds in adequate time

@@ -14,6 +14,10 @@ After('@manual') do
   Nonnative.stop
 end
 
+Before('@clear') do
+  Nonnative.clear
+end
+
 Given('I set the proxy for process {string} to {string}') do |name, operation|
   process = Nonnative.pool.process_by_name(name)
   process.proxy.send(operation)
