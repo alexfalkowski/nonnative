@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.59.0](https://github.com/alexfalkowski/nonnative/compare/v1.58.2...v1.59.0) (2022-04-25)
+
+
+### Features
+
+* **cucumber:** verify system start errors ([#117](https://github.com/alexfalkowski/nonnative/issues/117)) ([f8c7f7f](https://github.com/alexfalkowski/nonnative/commit/f8c7f7f4cb4d1506e1b8ae038bd6c46f7ce529a2))
+
 ### [1.58.2](https://github.com/alexfalkowski/nonnative/compare/v1.58.1...v1.58.2) (2022-04-13)
 
 ### [1.58.1](https://github.com/alexfalkowski/nonnative/compare/v1.58.0...v1.58.1) (2022-04-06)
