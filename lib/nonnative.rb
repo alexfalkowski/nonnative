@@ -14,6 +14,7 @@ require 'puma/server'
 require 'concurrent'
 require 'cucumber'
 require 'get_process_mem'
+require 'rspec-benchmark'
 
 require 'nonnative/version'
 require 'nonnative/error'

@@ -13,9 +13,6 @@ SimpleCov.start do
 end
 
 require 'nonnative'
-require 'rspec-benchmark'
-
-World(RSpec::Benchmark::Matchers)
 
 Before do
   Nonnative.clear

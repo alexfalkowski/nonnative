@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+World(RSpec::Benchmark::Matchers)
+
 After('@manual') do
   Nonnative.stop
 end
