@@ -36,7 +36,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 2.3'
   spec.add_development_dependency 'coveralls_reborn', '~> 0.24.0'
-  spec.add_development_dependency 'grpc-tools', ['>= 1', '< 2']
   spec.add_development_dependency 'rubocop', '~> 1.26'
   spec.add_development_dependency 'solargraph', '~> 0.44.3'
 end

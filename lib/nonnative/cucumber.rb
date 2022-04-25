@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+World(RSpec::Benchmark::Matchers)
+
+After('@manual') do
+  Nonnative.stop
+end
+
 Given('I set the proxy for process {string} to {string}') do |name, operation|
   process = Nonnative.pool.process_by_name(name)
   process.proxy.send(operation)
@@ -13,6 +19,10 @@ end
 Given('I set the proxy for service {string} to {string}') do |name, operation|
   service = Nonnative.pool.service_by_name(name)
   service.proxy.send(operation)
+end
+
+Given('I start the system') do
+  Nonnative.start
 end
 
 Then('I should reset the proxy for process {string}') do |name|
@@ -37,4 +47,12 @@ Then('the process {string} should consume less than {string} of memory') do |nam
   size = size.to_i
 
   expect(actual).to be < size
+end
+
+Then('starting the system should raise an error') do
+  expect { Nonnative.start }.to raise_error(Nonnative::StartError)
+end
+
+Then('stopping the system should raise an error') do
+  expect { Nonnative.stop }.to raise_error(Nonnative::StopError)
 end
