@@ -43,10 +43,6 @@ Given('I configure nonnative through configuration with processes') do
   end
 end
 
-Given('I start nonnative') do
-  Nonnative.start
-end
-
 When('I send {string} with the TCP client to the processes') do |message|
   @responses = [
     Nonnative::Features::TCPClient.new(12_321).request(message),

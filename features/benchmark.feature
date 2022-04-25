@@ -9,7 +9,7 @@ Feature: Benchmark
 
   Scenario: Stop nonnative within an adequate time
     Given I configure nonnative through configuration with processes
-    When I start nonnative
+    When I start the system
     Then stoping nonnative should happen within an adequate time
 
   @manual
@@ -19,5 +19,5 @@ Feature: Benchmark
 
   Scenario: Stop nonnative with a long stopping time server will error
     Given I configure nonnative programatially with a no stop server
-    When I start nonnative
+    When I start the system
     Then stopping nonnative should raise an error

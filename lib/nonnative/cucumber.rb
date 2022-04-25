@@ -15,6 +15,10 @@ Given('I set the proxy for service {string} to {string}') do |name, operation|
   service.proxy.send(operation)
 end
 
+Given('I start the system') do
+  Nonnative.start
+end
+
 Then('I should reset the proxy for process {string}') do |name|
   process = Nonnative.pool.process_by_name(name)
   process.proxy.reset
