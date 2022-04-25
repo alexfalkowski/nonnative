@@ -18,11 +18,11 @@ module Nonnative
     private
 
     def env_strategy
-      @env_strategy ||= ENV['NONNATIVE_STRATEGY']
+      @env_strategy ||= ENV.fetch('NONNATIVE_STRATEGY', nil)
     end
 
     def env_timeout
-      @env_timeout ||= ENV['NONNATIVE_TIMEOUT']
+      @env_timeout ||= ENV.fetch('NONNATIVE_TIMEOUT', nil)
     end
   end
 end
