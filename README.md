@@ -43,13 +43,9 @@ Configure nonnative with the following:
 ### Strategy
 
 The strategy can be one of the following values:
-- startup - will start the process once.
-- before - will hook into cucumbers Before and After.
-- manual - do this manually
-
-This can be overridden by the following environment variables:
-- NONNATIVE_STRATEGY - Set this to override what is set in the config.
-- NONNATIVE_TIMEOUT - Set this (in seconds, e.g 5) to override what is set in the config.
+- startup - When we include `nonnative/startup`, it will start it once.
+- before - When we tag our features with `@startup` it will start and stop after the scenario.
+- manual - When we tag our features with `@manual` it will stop after the scenario.
 
 ### Processes
 
@@ -61,12 +57,10 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup
-
   config.process do |p|
     p.name = 'start_1'
     p.command = -> { 'features/support/bin/start 12_321' }
-    p.timeout = config.strategy.timeout
+    p.timeout = 5
     p.port = 12_321
     p.log = 'features/logs/12_321.log'
     p.signal = 'INT' # Possible values are described in Signal.list.keys.
@@ -89,7 +83,6 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: startup
 processes:
   -
     name: start_1
@@ -157,8 +150,6 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup
-
   config.server do |s|
     s.name = 'server_1'
     s.klass = Nonnative::EchoServer
@@ -181,7 +172,6 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: startup
 servers:
   -
     name: server_1
@@ -239,8 +229,6 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup
-
   config.server do |s|
     s.name = 'http_server_1'
     s.klass = Nonnative::Features::HTTPServer
@@ -255,7 +243,6 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: startup
 servers:
   -
     name: http_server_1
@@ -303,8 +290,6 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup
-
   config.server do |s|
     s.name = 'grpc_server_1'
     s.klass = Nonnative::Features::GRPCServer
@@ -319,7 +304,6 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: startup
 servers:
   -
     name: grpc_server_1
@@ -349,8 +333,6 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup
-
   config.service do |s|
     s.name = 'postgres'
     p.port = 5432
@@ -367,7 +349,6 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: startup
 processes:
   -
     name: postgres
@@ -401,8 +382,6 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup
-
   config.process do |p|
     p.proxy = {
       type: 'fault_injection',
@@ -420,7 +399,6 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: startup
 processes:
   -
     proxy:
@@ -439,8 +417,6 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup
-
   config.server do |s|
     s.proxy = {
       type: 'fault_injection',
@@ -458,7 +434,6 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: startup
 servers:
   -
     proxy:
@@ -477,8 +452,6 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.strategy = :startup
-
   config.service do |s|
     s.proxy = {
       type: 'fault_injection',
@@ -496,7 +469,6 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: startup
 services:
   -
     proxy:
@@ -605,7 +577,6 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
-strategy: startup
 processes:
   -
     name: go

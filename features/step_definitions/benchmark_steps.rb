@@ -2,8 +2,6 @@
 
 When('I configure the system programatially with a no op server') do
   Nonnative.configure do |config|
-    config.strategy = :manual
-
     config.server do |d|
       d.klass = Nonnative::Features::NoOpServer
       d.timeout = 1
@@ -14,8 +12,6 @@ end
 
 When('I configure the system programatially with a no stop server') do
   Nonnative.configure do |config|
-    config.strategy = :manual
-
     config.server do |d|
       d.klass = Nonnative::Features::NoStopServer
       d.timeout = 1

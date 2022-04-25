@@ -2,8 +2,6 @@
 
 Given('I configure the system programatically with services') do
   Nonnative.configure do |config|
-    config.strategy = :manual
-
     config.service do |s|
       s.name = 'service_1'
       s.host = '127.0.0.1'
