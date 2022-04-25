@@ -530,7 +530,7 @@ With cucumber:
 
 ```cucumber
 Given I set the proxy for process 'process_1' to 'close_all'
-Then And I should reset the proxy for process 'process_1'
+Then I should reset the proxy for process 'process_1'
 ```
 
 ###### Servers
@@ -549,7 +549,7 @@ With cucumber:
 
 ```cucumber
 Given I set the proxy for server 'server_1' to 'close_all'
-Then And I should reset the proxy for server 'server_1'
+Then I should reset the proxy for server 'server_1'
 ```
 
 ###### Services
@@ -568,7 +568,7 @@ With cucumber:
 
 ```cucumber
 Given I set the proxy for service 'service_1' to 'close_all'
-Then And I should reset the proxy for service 'service_1'
+Then I should reset the proxy for service 'service_1'
 ```
 
 ### Go
