@@ -32,6 +32,14 @@ module Nonnative
       object_id
     end
 
+    def exists?
+      true
+    end
+
+    def not_exists?
+      true
+    end
+
     private
 
     attr_reader :thread, :timeout

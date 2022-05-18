@@ -9,9 +9,9 @@ module Nonnative
     end
 
     def start
-      unless process_exists?
+      unless exists?
         proxy.start
-        @pid = process_spawn
+        @pid = spawn
         wait_start
       end
 
@@ -19,8 +19,8 @@ module Nonnative
     end
 
     def stop
-      if process_exists?
-        process_kill
+      if exists?
+        kill
         proxy.stop
         wait_stop
       end
@@ -32,6 +32,20 @@ module Nonnative
       return if pid.nil?
 
       @memory ||= GetProcessMem.new(pid)
+    end
+
+    def exists?
+      return false if pid.nil?
+
+      signal = Signal.list['EXIT']
+      ::Process.kill(signal, pid)
+      true
+    rescue Errno::ESRCH
+      false
+    end
+
+    def not_exists?
+      !exists?
     end
 
     protected
@@ -46,12 +60,12 @@ module Nonnative
 
     attr_reader :pid, :timeout
 
-    def process_kill
+    def kill
       signal = Signal.list[service.signal || 'INT'] || Signal.list['INT']
       ::Process.kill(signal, pid)
     end
 
-    def process_spawn
+    def spawn
       environment = service.environment || {}
       environment = environment.transform_keys(&:to_s).transform_values(&:to_s)
 
@@ -59,17 +73,7 @@ module Nonnative
         environment[k] = ENV.fetch(k, nil) || environment[k]
       end
 
-      spawn(environment, service.command.call, %i[out err] => [service.log, 'a'])
-    end
-
-    def process_exists?
-      return false if pid.nil?
-
-      signal = Signal.list['EXIT']
-      ::Process.kill(signal, pid)
-      true
-    rescue Errno::ESRCH
-      false
+      ::Kernel.spawn(environment, service.command.call, %i[out err] => [service.log, 'a'])
     end
   end
 end
