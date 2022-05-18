@@ -21,9 +21,9 @@ When('I configure the system programatially with a no stop server') do
 end
 
 Then('starting the system should happen within an adequate time') do
-  expect { Nonnative.start }.to perform_under(2, warmup: 0).sec
+  expect { Nonnative.start }.to perform_under(3, warmup: 0).sec
 end
 
 Then('stoping the system should happen within an adequate time') do
-  expect { Nonnative.stop }.to perform_under(2, warmup: 0).sec
+  expect { Nonnative.stop }.to perform_under(3, warmup: 0).sec
 end

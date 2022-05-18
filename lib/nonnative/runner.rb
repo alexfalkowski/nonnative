@@ -18,11 +18,11 @@ module Nonnative
     attr_reader :service
 
     def wait_start
-      sleep 0.1
+      sleep 1
     end
 
     def wait_stop
-      sleep 0.1
+      sleep 1
     end
   end
 end
