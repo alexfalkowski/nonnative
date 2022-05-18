@@ -23,6 +23,7 @@ jobs:
           path: coverage
       - store_artifacts:
           path: features/logs
+    resource_class: large
   release:
     docker:
       - image: alexfalkowski/release:2.0
