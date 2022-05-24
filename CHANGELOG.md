@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.63.0](https://github.com/alexfalkowski/nonnative/compare/v1.62.5...v1.63.0) (2022-05-24)
+
+
+### Features
+
+* **cucumber:** update to v8 ([#128](https://github.com/alexfalkowski/nonnative/issues/128)) ([337d12c](https://github.com/alexfalkowski/nonnative/commit/337d12c498798fe1a6d62a928bdeb3f1fc7a8e07))
+
 ### [1.62.5](https://github.com/alexfalkowski/nonnative/compare/v1.62.4...v1.62.5) (2022-05-23)
 
 ### [1.62.4](https://github.com/alexfalkowski/nonnative/compare/v1.62.3...v1.62.4) (2022-05-23)
