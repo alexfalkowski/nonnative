@@ -15,14 +15,15 @@ jobs:
           key: nonnative-gem-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+      - run: make lint
       - run: make features
       - store_test_results:
           path: reports
-      - run: make lint
       - store_artifacts:
           path: coverage
       - store_artifacts:
           path: features/logs
+    resource_class: large
   release:
     docker:
       - image: alexfalkowski/release:2.0

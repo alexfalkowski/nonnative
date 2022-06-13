@@ -107,7 +107,7 @@ module Nonnative
       return unless proxy
 
       p = {
-        type: proxy['type'],
+        kind: proxy['kind'],
         port: proxy['port'],
         log: proxy['log'],
         options: proxy['options']

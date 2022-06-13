@@ -14,7 +14,7 @@ Given('I configure the system programatically with processes') do
         'STRING' => 'true'
       }
       d.proxy = {
-        type: 'fault_injection',
+        kind: 'fault_injection',
         host: '127.0.0.1',
         port: 20_005,
         log: 'features/logs/proxy_start_1.log',

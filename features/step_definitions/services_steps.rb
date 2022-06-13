@@ -7,7 +7,7 @@ Given('I configure the system programatically with services') do
       s.host = '127.0.0.1'
       s.port = 20_006
       s.proxy = {
-        type: 'fault_injection',
+        kind: 'fault_injection',
         host: '127.0.0.1',
         port: 30_000,
         log: 'features/logs/proxy_service_1.log',

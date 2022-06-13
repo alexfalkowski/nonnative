@@ -8,7 +8,7 @@ servers:
     port: 12323
     log: features/logs/tcp_server_1.log
     proxy:
-      type: fault_injection
+      kind: fault_injection
       host: 127.0.0.1
       port: 20000
       log: features/logs/proxy_tcp_server_1.log
@@ -19,6 +19,6 @@ servers:
     port: 12324
     log: features/logs/tcp_server_2.log
     proxy:
-      type: fault_injection
+      kind: fault_injection
       port: 20001
       log: features/logs/proxy_tcp_server_2.log

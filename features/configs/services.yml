@@ -5,7 +5,7 @@ services:
     host: 127.0.0.1
     port: 20006
     proxy:
-      type: fault_injection
+      kind: fault_injection
       host: 127.0.0.1
       port: 30000
       log: features/logs/proxy_service_1.log
