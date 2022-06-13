@@ -3,8 +3,8 @@
 module Nonnative
   class SocketPairFactory
     class << self
-      def create(type, proxy)
-        pair = case type
+      def create(kind, proxy)
+        pair = case kind
                when :close_all
                  CloseAllSocketPair
                when :delay

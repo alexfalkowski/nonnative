@@ -26,7 +26,7 @@ Given('I configure the system programatically with servers') do
       s.port = 4567
       s.log = 'features/logs/http_server_1.log'
       s.proxy = {
-        type: 'fault_injection',
+        kind: 'fault_injection',
         host: '127.0.0.1',
         port: 20_001,
         log: 'features/logs/proxy_http_server_1.log',
@@ -43,7 +43,7 @@ Given('I configure the system programatically with servers') do
       s.port = 4568
       s.log = 'features/logs/http_server_2.log'
       s.proxy = {
-        type: 'fault_injection',
+        kind: 'fault_injection',
         port: 20_002,
         log: 'features/logs/proxy_http_server_2.log',
         options: {
@@ -59,7 +59,7 @@ Given('I configure the system programatically with servers') do
       s.port = 9002
       s.log = 'features/logs/grpc_server_1.log'
       s.proxy = {
-        type: 'fault_injection',
+        kind: 'fault_injection',
         port: 20_003,
         log: 'features/logs/proxy_grpc_server_1.log',
         options: {
@@ -75,7 +75,7 @@ Given('I configure the system programatically with servers') do
       s.port = 9003
       s.log = 'features/logs/grpc_server_2.log'
       s.proxy = {
-        type: 'fault_injection',
+        kind: 'fault_injection',
         port: 20_004,
         log: 'features/logs/proxy_grpc_server_2.log',
         options: {

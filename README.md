@@ -384,7 +384,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.process do |p|
     p.proxy = {
-      type: 'fault_injection',
+      kind: 'fault_injection',
       port: 20_000,
       log: 'features/logs/proxy_server.log',
       options: {
@@ -402,7 +402,7 @@ version: 1.0
 processes:
   -
     proxy:
-      type: fault_injection
+      kind: fault_injection
       port: 20000
       log: features/logs/proxy_server.log
       options:
@@ -419,7 +419,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.server do |s|
     s.proxy = {
-      type: 'fault_injection',
+      kind: 'fault_injection',
       port: 20_000,
       log: 'features/logs/proxy_server.log',
       options: {
@@ -437,7 +437,7 @@ version: 1.0
 servers:
   -
     proxy:
-      type: fault_injection
+      kind: fault_injection
       port: 20000
       log: features/logs/proxy_server.log
       options:
@@ -454,7 +454,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.service do |s|
     s.proxy = {
-      type: 'fault_injection',
+      kind: 'fault_injection',
       port: 20_000,
       log: 'features/logs/proxy_server.log',
       options: {
@@ -472,7 +472,7 @@ version: 1.0
 services:
   -
     proxy:
-      type: fault_injection
+      kind: fault_injection
       port: 20000
       log: features/logs/proxy_server.log
       options:
