@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.64.0](https://github.com/alexfalkowski/nonnative/compare/v1.63.4...v1.64.0) (2022-06-13)
+
+
+### Features
+
+* rename to kind ([#133](https://github.com/alexfalkowski/nonnative/issues/133)) ([c0adc32](https://github.com/alexfalkowski/nonnative/commit/c0adc32320f8ccb32602c68b5b449baf13cd0d34))
+
 ### [1.63.4](https://github.com/alexfalkowski/nonnative/compare/v1.63.3...v1.63.4) (2022-06-07)
 
 ### [1.63.3](https://github.com/alexfalkowski/nonnative/compare/v1.63.2...v1.63.3) (2022-06-03)
