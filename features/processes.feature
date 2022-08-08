@@ -10,7 +10,7 @@ Feature: Processes
     Then I should receive a TCP "test" response
     And I should see a log entry of "test" for process 'start_1'
     And I should see a log entry of "test" in the file "features/logs/12_321.log"
-    And the process 'start_1' should consume less than '30mb' of memory
+    And the process 'start_1' should consume less than '40mb' of memory
 
   Scenario: Successfully starting of processes and closing connections
     Given I configure the system programatically with processes
