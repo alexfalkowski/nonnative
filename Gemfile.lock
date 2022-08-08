@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (1.64.0)
+    nonnative (1.65.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       cucumber (>= 7, < 9)
       get_process_mem (~> 0.2.1)
