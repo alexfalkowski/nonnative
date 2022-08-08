@@ -6,3 +6,6 @@ format:
 
 generate:
 	buf generate
+
+update-all:
+	buf mod update
