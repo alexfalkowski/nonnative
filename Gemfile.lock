@@ -153,7 +153,7 @@ GEM
       rack (~> 2.2)
       rack-protection (= 2.2.2)
       tilt (~> 2.0)
-    solargraph (0.45.0)
+    solargraph (0.46.0)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
@@ -194,7 +194,7 @@ DEPENDENCIES
   coveralls_reborn (~> 0.25.0)
   nonnative!
   rubocop (~> 1.30)
-  solargraph (~> 0.45.0)
+  solargraph (~> 0.46.0)
 
 BUNDLED WITH
    2.3.9
