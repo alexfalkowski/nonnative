@@ -101,7 +101,7 @@ GEM
     rack-protection (3.0.1)
       rack
     rainbow (3.1.1)
-    regexp_parser (2.5.0)
+    regexp_parser (2.6.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -153,7 +153,7 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.0.1)
       tilt (~> 2.0)
-    solargraph (0.47.0)
+    solargraph (0.47.1)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
