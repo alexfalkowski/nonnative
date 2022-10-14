@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.66.0](https://github.com/alexfalkowski/nonnative/compare/v1.65.15...v1.66.0) (2022-10-14)
+
+
+### Features
+
+* **puma:** upgrade to v6.0.0 ([#161](https://github.com/alexfalkowski/nonnative/issues/161)) ([5d5b8cf](https://github.com/alexfalkowski/nonnative/commit/5d5b8cf5754d0dfc7be65d6c42a088eefc3b9dd1))
+
 ### [1.65.15](https://github.com/alexfalkowski/nonnative/compare/v1.65.14...v1.65.15) (2022-10-05)
 
 ### [1.65.14](https://github.com/alexfalkowski/nonnative/compare/v1.65.13...v1.65.14) (2022-10-03)
