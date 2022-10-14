@@ -4,8 +4,8 @@ module Nonnative
   class HTTPServer < Nonnative::Server
     def initialize(service)
       log = File.open(service.log, 'a')
-      events = Puma::Events.new(log, log)
-      @server = Puma::Server.new(app, events)
+      options = { log_writer: Puma::LogWriter.new(log, log) }
+      @server = Puma::Server.new(app, Puma::Events.new, options)
 
       super service
     end
