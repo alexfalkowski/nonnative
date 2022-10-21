@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.66.3](https://github.com/alexfalkowski/nonnative/compare/v1.66.2...v1.66.3) (2022-10-21)
+
 ### [1.66.2](https://github.com/alexfalkowski/nonnative/compare/v1.66.1...v1.66.2) (2022-10-19)
 
 ### [1.66.1](https://github.com/alexfalkowski/nonnative/compare/v1.66.0...v1.66.1) (2022-10-19)
