@@ -6,15 +6,7 @@ jobs:
       - image: alexfalkowski/ruby:3.1
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - nonnative-gem-cache-{{ checksum "Gemfile.lock" }}
-            - nonnative-gem-cache-
       - run: make dep
-      - save_cache:
-          key: nonnative-gem-cache-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
       - run: make lint
       - run: make features
       - store_test_results:
