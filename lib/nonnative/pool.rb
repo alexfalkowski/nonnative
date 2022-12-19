@@ -6,13 +6,13 @@ module Nonnative
       @configuration = configuration
     end
 
-    def start(&block)
+    def start(&)
       services.each(&:start)
-      [servers, processes].each { |t| process(t, :start, :open?, &block) }
+      [servers, processes].each { |t| process(t, :start, :open?, &) }
     end
 
-    def stop(&block)
-      [processes, servers].each { |t| process(t, :stop, :closed?, &block) }
+    def stop(&)
+      [processes, servers].each { |t| process(t, :stop, :closed?, &) }
       services.each(&:stop)
     end
 
@@ -55,7 +55,7 @@ module Nonnative
       @services ||= configuration.services.map { |s| Nonnative::Service.new(s) }
     end
 
-    def process(all, type_method, port_method, &block)
+    def process(all, type_method, port_method, &)
       types = []
       pids = []
       threads = []
@@ -68,7 +68,7 @@ module Nonnative
 
       ports = threads.map(&:value)
 
-      yield_results(types, pids, ports, &block)
+      yield_results(types, pids, ports, &)
     end
 
     def yield_results(all, pids, ports)

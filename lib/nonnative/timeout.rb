@@ -6,8 +6,8 @@ module Nonnative
       @time = time
     end
 
-    def perform(&block)
-      ::Timeout.timeout(time, &block)
+    def perform(&)
+      ::Timeout.timeout(time, &)
     rescue ::Timeout::Error
       false
     end
