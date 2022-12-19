@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.67.0](https://github.com/alexfalkowski/nonnative/compare/v1.66.12...v1.67.0) (2022-12-19)
+
+
+### Features
+
+* use ruby 3.1 syntax ([#176](https://github.com/alexfalkowski/nonnative/issues/176)) ([1aee396](https://github.com/alexfalkowski/nonnative/commit/1aee39617c7b585797c62d18ac7a375f588769b8))
+
 ### [1.66.12](https://github.com/alexfalkowski/nonnative/compare/v1.66.11...v1.66.12) (2022-12-19)
 
 ### [1.66.11](https://github.com/alexfalkowski/nonnative/compare/v1.66.10...v1.66.11) (2022-12-19)
