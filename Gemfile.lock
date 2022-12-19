@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (1.66.0)
+    nonnative (1.67.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       cucumber (>= 7, < 9)
       get_process_mem (~> 0.2.1)
@@ -60,8 +60,8 @@ GEM
     ffi (1.15.5)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
-    google-protobuf (3.21.10-x86_64-darwin)
-    google-protobuf (3.21.10-x86_64-linux)
+    google-protobuf (3.21.12-x86_64-darwin)
+    google-protobuf (3.21.12-x86_64-linux)
     googleapis-common-protos-types (1.4.0)
       google-protobuf (~> 3.14)
     grpc (1.50.0-x86_64-darwin)
@@ -124,7 +124,7 @@ GEM
     rspec-expectations (3.12.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.0)
+    rspec-mocks (3.12.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
