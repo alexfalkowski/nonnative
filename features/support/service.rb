@@ -5,7 +5,7 @@ Before('@service') do
 end
 
 After('@service') do
-  ::Process.kill(9, @service_pid)
+  Process.kill(9, @service_pid)
 end
 
 module Nonnative

@@ -11,30 +11,28 @@ module Nonnative
     def get(pathname, headers = {}, timeout = 60)
       with_exception do
         uri = URI.join(host, pathname)
-        RestClient::Request.execute(method: :get, url: uri.to_s, headers: headers, timeout: timeout)
+        RestClient::Request.execute(method: :get, url: uri.to_s, headers:, timeout:)
       end
     end
 
     def post(pathname, payload, headers = {}, timeout = 60)
       with_exception do
         uri = URI.join(host, pathname)
-        RestClient::Request.execute(method: :post, url: uri.to_s, payload: payload.to_json, headers: headers,
-                                    timeout: timeout)
+        RestClient::Request.execute(method: :post, url: uri.to_s, payload: payload.to_json, headers:, timeout:)
       end
     end
 
     def delete(pathname, headers = {}, timeout = 60)
       with_exception do
         uri = URI.join(host, pathname)
-        RestClient::Request.execute(method: :delete, url: uri.to_s, headers: headers, timeout: timeout)
+        RestClient::Request.execute(method: :delete, url: uri.to_s, headers:, timeout:)
       end
     end
 
     def put(pathname, payload, headers = {}, timeout = 60)
       with_exception do
         uri = URI.join(host, pathname)
-        RestClient::Request.execute(method: :put, url: uri.to_s, payload: payload.to_json, headers: headers,
-                                    timeout: timeout)
+        RestClient::Request.execute(method: :put, url: uri.to_s, payload: payload.to_json, headers:, timeout:)
       end
     end
 
