@@ -10,6 +10,7 @@ formatters = [
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.start do
   add_filter '/features/'
+  coverage_dir 'reports'
 end
 
 require 'nonnative'

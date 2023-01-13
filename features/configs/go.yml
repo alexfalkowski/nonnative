@@ -10,4 +10,4 @@ processes:
         - --level=info
     timeout: 5
     port: 8000
-    log: features/logs/go.log
+    log: reports/go.log

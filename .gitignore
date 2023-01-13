@@ -1,11 +1,8 @@
 /.bundle/
 /.yardoc
 /_yardoc/
-/coverage/
 /doc/
 /pkg/
 /reports/
 /tmp/
 vendor
-coverage
-features/logs/*.log

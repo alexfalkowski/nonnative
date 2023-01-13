@@ -9,7 +9,7 @@ Feature: Processes
     When I send "test" with the TCP client to the processes
     Then I should receive a TCP "test" response
     And I should see a log entry of "test" for process 'start_1'
-    And I should see a log entry of "test" in the file "features/logs/12_321.log"
+    And I should see a log entry of "test" in the file "reports/12_321.log"
     And the process 'start_1' should consume less than '40mb' of memory
 
   Scenario: Successfully starting of processes and closing connections
