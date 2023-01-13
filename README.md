@@ -62,7 +62,7 @@ Nonnative.configure do |config|
     p.command = -> { 'features/support/bin/start 12_321' }
     p.timeout = 5
     p.port = 12_321
-    p.log = 'features/logs/12_321.log'
+    p.log = 'reports/12_321.log'
     p.signal = 'INT' # Possible values are described in Signal.list.keys.
     p.environment = { # Pass environment variables to process.
       'TEST' => 'true'
@@ -74,7 +74,7 @@ Nonnative.configure do |config|
     p.command = -> { 'features/support/bin/start 12_322' }
     p.timeout = 0.5
     p.port = 12_322
-    p.log = 'features/logs/12_322.log'
+    p.log = 'reports/12_322.log'
   end
 end
 ```
@@ -89,7 +89,7 @@ processes:
     command: features/support/bin/start 12_321
     timeout: 5
     port: 12321
-    log: features/logs/12_321.log
+    log: reports/12_321.log
     signal: INT # Possible values are described in Signal.list.keys.
     environment: # Pass environment variables to process.
       TEST: true
@@ -98,7 +98,7 @@ processes:
     command: features/support/bin/start 12_322
     timeout: 5
     port: 12322
-    log: features/logs/12_322.log
+    log: reports/12_322.log
 ```
 
 Then load the file with
@@ -155,7 +155,7 @@ Nonnative.configure do |config|
     s.klass = Nonnative::EchoServer
     s.timeout = 1
     s.port = 12_323
-    s.log = 'features/logs/server_1.log'
+    s.log = 'reports/server_1.log'
   end
 
   config.server do |s|
@@ -163,7 +163,7 @@ Nonnative.configure do |config|
     s.klass = Nonnative::EchoServer
     s.timeout = 1
     s.port = 12_324
-    s.log = 'features/logs/server_2.log'
+    s.log = 'reports/server_2.log'
   end
 end
 ```
@@ -178,13 +178,13 @@ servers:
     class: Nonnative::EchoServer
     timeout: 1
     port: 12323
-    log: features/logs/server_1.log
+    log: reports/server_1.log
   -
     name: server_2
     class: Nonnative::EchoServer
     timeout: 1
     port: 12324
-    log: features/logs/server_2.log
+    log: reports/server_2.log
 ```
 
 Then load the file with:
@@ -234,7 +234,7 @@ Nonnative.configure do |config|
     s.klass = Nonnative::Features::HTTPServer
     s.timeout = 1
     s.port = 4567
-    s.log = 'features/logs/http_server_1.log'
+    s.log = 'reports/http_server_1.log'
   end
 end
 ```
@@ -249,7 +249,7 @@ servers:
     class: Nonnative::Features::HTTPServer
     timeout: 1
     port: 4567
-    log: features/logs/http_server_1.log
+    log: reports/http_server_1.log
 ```
 
 Then load the file with:
@@ -295,7 +295,7 @@ Nonnative.configure do |config|
     s.klass = Nonnative::Features::GRPCServer
     s.timeout = 1
     s.port = 9002
-    s.log = 'features/logs/grpc_server_1.log'
+    s.log = 'reports/grpc_server_1.log'
   end
 end
 ```
@@ -310,7 +310,7 @@ servers:
     class: Nonnative::Features::GRPCServer
     timeout: 1
     port: 9002
-    log: features/logs/grpc_server_1.log
+    log: reports/grpc_server_1.log
 ```
 
 Then load the file with:
@@ -386,7 +386,7 @@ Nonnative.configure do |config|
     p.proxy = {
       kind: 'fault_injection',
       port: 20_000,
-      log: 'features/logs/proxy_server.log',
+      log: 'reports/proxy_server.log',
       options: {
         delay: 5
       }
@@ -404,7 +404,7 @@ processes:
     proxy:
       kind: fault_injection
       port: 20000
-      log: features/logs/proxy_server.log
+      log: reports/proxy_server.log
       options:
         delay: 5
 ```
@@ -421,7 +421,7 @@ Nonnative.configure do |config|
     s.proxy = {
       kind: 'fault_injection',
       port: 20_000,
-      log: 'features/logs/proxy_server.log',
+      log: 'reports/proxy_server.log',
       options: {
         delay: 5
       }
@@ -439,7 +439,7 @@ servers:
     proxy:
       kind: fault_injection
       port: 20000
-      log: features/logs/proxy_server.log
+      log: reports/proxy_server.log
       options:
         delay: 5
 ```
@@ -456,7 +456,7 @@ Nonnative.configure do |config|
     s.proxy = {
       kind: 'fault_injection',
       port: 20_000,
-      log: 'features/logs/proxy_server.log',
+      log: 'reports/proxy_server.log',
       options: {
         delay: 5
       }
@@ -474,7 +474,7 @@ services:
     proxy:
       kind: fault_injection
       port: 20000
-      log: features/logs/proxy_server.log
+      log: reports/proxy_server.log
       options:
         delay: 5
 ```
@@ -588,5 +588,5 @@ processes:
         - --config config.yaml
     timeout: 5
     port: 8000
-    log: features/logs/go.log
+    log: reports/go.log
 ```

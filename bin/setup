@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-IFS=$'\n\t'
-set -vx
-
-gem install bundler
-bundle config set path 'vendor/bundle'
-bundle check || bundle install
-bundle clean --force

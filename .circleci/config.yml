@@ -6,15 +6,15 @@ jobs:
       - image: alexfalkowski/ruby:3.1
     steps:
       - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
       - run: make dep
       - run: make lint
       - run: make features
       - store_test_results:
           path: reports
       - store_artifacts:
-          path: coverage
-      - store_artifacts:
-          path: features/logs
+          path: reports
     resource_class: large
   release:
     docker:
@@ -22,6 +22,7 @@ jobs:
     steps:
       - checkout
       - run: release
+    resource_class: large
 
 workflows:
   nonnative:
