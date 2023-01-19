@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.67.10](https://github.com/alexfalkowski/nonnative/releases/tag/v1.67.10) - 2023-01-19
+
+- [`dccd4aa`](https://github.com/alexfalkowski/nonnative/commit/dccd4aa6d04e59b39fd5493635af821fdf967d27) fix(deps): bump rack from 2.2.4 to 2.2.6.2 (#191)
+- [`0513939`](https://github.com/alexfalkowski/nonnative/commit/05139393b8cf25ca1c90d54e7b10673052a1c433) build: add bin (#190)
+- [`795268e`](https://github.com/alexfalkowski/nonnative/commit/795268eb892646bea4cb94fe407fa499ccefe9dd) ci(dependabot): change commit message (#189)
+- [`1f6f891`](https://github.com/alexfalkowski/nonnative/commit/1f6f8911164684fbaaaea09bcac35affacd816cf) ci: use release 3.1 (#188)
+- [`81742bf`](https://github.com/alexfalkowski/nonnative/commit/81742bf4f748af91e0ad4af2f08b2da1229bd5d1) ci: use release 3.0 (#187)
+
 ## [v1.67.9](https://github.com/alexfalkowski/nonnative/releases/tag/v1.67.9) - 2023-01-11
 
 - [`255a89e`](https://github.com/alexfalkowski/nonnative/commit/255a89ef322f4aaaa52a943b554af55dc00fd493) build(deps-dev): bump rubocop from 1.42.0 to 1.43.0 (#185)
