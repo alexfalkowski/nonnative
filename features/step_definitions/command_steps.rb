@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-When('I create the go command with output {string} and executable {string} and command {string} and parameters {string}') do |output, exec, cmd, params|
-  @exec_path = Nonnative.go_executable(output, exec, cmd, params)
+When('I create a go command with:') do |table|
+  rows = table.rows_hash
+  @exec_path = Nonnative.go_executable(rows['output'], rows['executable'], rows['command'], rows['parameters'])
 end
 
 When('I load the go configuration') do
@@ -12,7 +13,12 @@ When('I load the go configuration') do
   @exec_path = Nonnative.configuration.processes.first.command.call
 end
 
-Then('I should have a valid go command with output {string} and executable {string} and command {string} and parameters {string}') do |output, exec, cmd, params|
+Then('I should have a valid go command with:') do |table|
+  rows = table.rows_hash
+  params = rows['parameters']
+  output = rows['output']
+  exec = rows['executable']
+  cmd = rows['command']
   parts = @exec_path.split
 
   expect(parts.first).to eq(exec)
