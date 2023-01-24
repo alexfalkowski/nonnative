@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.67.11](https://github.com/alexfalkowski/nonnative/releases/tag/v1.67.11) - 2023-01-24
+
+- [`6f3ead7`](https://github.com/alexfalkowski/nonnative/commit/6f3ead741390560468ed4b4b77ae644936a275b5) fix(deps): bump concurrent-ruby from 1.1.10 to 1.2.0 (#196)
+- [`47eb32c`](https://github.com/alexfalkowski/nonnative/commit/47eb32cac1fa202ae96a6636539682528013176b) build(deps-dev): bump rubocop from 1.43.0 to 1.44.0 (#195)
+- [`a4791e1`](https://github.com/alexfalkowski/nonnative/commit/a4791e139f53c7f8be72ce6e710d3cc1fcb1331c) test: use tables (#194)
+- [`033a107`](https://github.com/alexfalkowski/nonnative/commit/033a107b9d3ff15769c52826bfbef74157f6be87) build(deps): update bin (#193)
+- [`7c96714`](https://github.com/alexfalkowski/nonnative/commit/7c96714a101d5053754a71328770fb52095adb95) build(deps): update (#192)
+
 ## [v1.67.10](https://github.com/alexfalkowski/nonnative/releases/tag/v1.67.10) - 2023-01-19
 
 - [`dccd4aa`](https://github.com/alexfalkowski/nonnative/commit/dccd4aa6d04e59b39fd5493635af821fdf967d27) fix(deps): bump rack from 2.2.4 to 2.2.6.2 (#191)
