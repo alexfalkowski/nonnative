@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.67.12](https://github.com/alexfalkowski/nonnative/releases/tag/v1.67.12) - 2023-01-25
+
+- [`c2ccad4`](https://github.com/alexfalkowski/nonnative/commit/c2ccad4e445f0d51acd1169b13404a718633dc95) fix(deps): bump grpc from 1.50.0 to 1.51.0 (#197)
+
 ## [v1.67.11](https://github.com/alexfalkowski/nonnative/releases/tag/v1.67.11) - 2023-01-24
 
 - [`6f3ead7`](https://github.com/alexfalkowski/nonnative/commit/6f3ead741390560468ed4b4b77ae644936a275b5) fix(deps): bump concurrent-ruby from 1.1.10 to 1.2.0 (#196)
