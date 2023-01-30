@@ -29,15 +29,15 @@ module Nonnative
         'Hello World!'.to_json
       end
 
-      get '/health' do
+      get '/healthz' do
         status 200
       end
 
-      get '/liveness' do
+      get '/livez' do
         status 200
       end
 
-      get '/readiness' do
+      get '/readyz' do
         status 200
       end
 
