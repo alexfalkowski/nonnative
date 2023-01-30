@@ -3,15 +3,15 @@
 module Nonnative
   class Observability < Nonnative::HTTPClient
     def health
-      get('health', { content_type: :json, accept: :json })
+      get('healthz', { content_type: :json, accept: :json })
     end
 
     def liveness
-      get('liveness', { content_type: :json, accept: :json })
+      get('livez', { content_type: :json, accept: :json })
     end
 
     def readiness
-      get('readiness', { content_type: :json, accept: :json })
+      get('readyz', { content_type: :json, accept: :json })
     end
 
     def metrics
