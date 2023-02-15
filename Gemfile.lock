@@ -23,7 +23,7 @@ GEM
     benchmark-trend (0.4.0)
     builder (3.2.4)
     concurrent-ruby (1.2.0)
-    coveralls_reborn (0.26.0)
+    coveralls_reborn (0.27.0)
       simplecov (~> 0.22.0)
       term-ansicolor (~> 1.7)
       thor (~> 1.2)
@@ -191,7 +191,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 2.3)
-  coveralls_reborn (~> 0.26.0)
+  coveralls_reborn (~> 0.27.0)
   nonnative!
   rubocop (~> 1.30)
   solargraph (~> 0.48.0)
