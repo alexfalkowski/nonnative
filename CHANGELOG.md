@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.68.3](https://github.com/alexfalkowski/nonnative/releases/tag/v1.68.3) - 2023-02-27
+
+- [`a30062a`](https://github.com/alexfalkowski/nonnative/commit/a30062ab1466a112930944784c0e86dca8860096) fix(deps): bump concurrent-ruby from 1.2.0 to 1.2.2 (#205)
+- [`d02c7ae`](https://github.com/alexfalkowski/nonnative/commit/d02c7aec4895b95f9fa9e4ba825690e758d25f85) build(deps-dev): bump rubocop from 1.45.1 to 1.46.0 (#204)
+- [`991e6a1`](https://github.com/alexfalkowski/nonnative/commit/991e6a16b43b01933b548975bd454856e8518f81) build(deps-dev): update coveralls_reborn requirement from ~> 0.26.0 to ~> 0.27.0 (#203)
+
 ## [v1.68.2](https://github.com/alexfalkowski/nonnative/releases/tag/v1.68.2) - 2023-02-13
 
 - [`f7775ae`](https://github.com/alexfalkowski/nonnative/commit/f7775aeddb03df4d57d5e4047274d68633deb5b9) fix(deps): bump puma from 6.0.2 to 6.1.0 (#202)
