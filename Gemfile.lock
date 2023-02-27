@@ -22,7 +22,7 @@ GEM
     benchmark-perf (0.6.0)
     benchmark-trend (0.4.0)
     builder (3.2.4)
-    concurrent-ruby (1.2.0)
+    concurrent-ruby (1.2.2)
     coveralls_reborn (0.27.0)
       simplecov (~> 0.22.0)
       term-ansicolor (~> 1.7)
