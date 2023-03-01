@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.68.4](https://github.com/alexfalkowski/nonnative/releases/tag/v1.68.4) - 2023-03-01
+
+- [`1023756`](https://github.com/alexfalkowski/nonnative/commit/102375624547d73127f8d7ee0c4bdef4594905b3) fix(deps): bump puma from 6.1.0 to 6.1.1 (#206)
+
 ## [v1.68.3](https://github.com/alexfalkowski/nonnative/releases/tag/v1.68.3) - 2023-02-27
 
 - [`a30062a`](https://github.com/alexfalkowski/nonnative/commit/a30062ab1466a112930944784c0e86dca8860096) fix(deps): bump concurrent-ruby from 1.2.0 to 1.2.2 (#205)
