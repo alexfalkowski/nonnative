@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.68.10](https://github.com/alexfalkowski/nonnative/releases/tag/v1.68.10) - 2023-04-12
+
+- [`7a6ae1e`](https://github.com/alexfalkowski/nonnative/commit/7a6ae1e7cac50de4a0dc748ebbebceae5901b2f5) fix(deps): bump sinatra from 3.0.5 to 3.0.6 (#218)
+- [`18962da`](https://github.com/alexfalkowski/nonnative/commit/18962da3a83af3a626c8193a441dfd5965909a7a) build(deps-dev): bump rubocop from 1.49.0 to 1.50.0 (#217)
+- [`41b8530`](https://github.com/alexfalkowski/nonnative/commit/41b8530c178d8383b04f3592b819daab3b6aa6fb) build(deps-dev): update solargraph requirement from ~> 0.48.0 to ~> 0.49.0 (#216)
+- [`478ae59`](https://github.com/alexfalkowski/nonnative/commit/478ae59fdbbf2f6c17c47ece3c5d4887d864d67d) build(deps-dev): bump rubocop from 1.48.1 to 1.49.0 (#215)
+
 ## [v1.68.9](https://github.com/alexfalkowski/nonnative/releases/tag/v1.68.9) - 2023-04-03
 
 - [`cf700d2`](https://github.com/alexfalkowski/nonnative/commit/cf700d207a64716ee85b000d5ab15b3ed343e1ba) fix(deps): bump puma from 6.2.0 to 6.2.1 (#214)
