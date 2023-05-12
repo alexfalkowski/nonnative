@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.68.15](https://github.com/alexfalkowski/nonnative/releases/tag/v1.68.15) - 2023-05-12
+
+- [`c405f8c`](https://github.com/alexfalkowski/nonnative/commit/c405f8cdc3a1dc9af05fff8c6352710083f17578) fix(deps): bump grpc from 1.54.0 to 1.54.2 (#225)
+
 ## [v1.68.14](https://github.com/alexfalkowski/nonnative/releases/tag/v1.68.14) - 2023-04-21
 
 - [`b80c9d1`](https://github.com/alexfalkowski/nonnative/commit/b80c9d1281cce22dcb7a57c846dce8300f71b80c) fix(deps): bump rspec-expectations from 3.12.2 to 3.12.3 (#224)
