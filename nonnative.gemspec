@@ -33,9 +33,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rspec-benchmark', '~> 0.6.0'
   spec.add_dependency 'rspec-expectations', '~> 3.9', '>= 3.9.2'
   spec.add_dependency 'sinatra', '>= 2.0.8.1', '< 4'
-
-  spec.add_development_dependency 'bundler', '~> 2.3'
-  spec.add_development_dependency 'coveralls_reborn', '~> 0.27.0'
-  spec.add_development_dependency 'rubocop', '~> 1.30'
-  spec.add_development_dependency 'solargraph', '~> 0.49.0'
 end
