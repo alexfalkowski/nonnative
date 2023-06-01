@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.69.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.69.1) - 2023-06-01
+
+- [`aa682ae`](https://github.com/alexfalkowski/nonnative/commit/aa682aeb916ca96d7da1e5b05a02d2ebe10eebbc) fix(deps): bump grpc from 1.54.2 to 1.55.0 (#228)
+
 ## [v1.69.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.69.0) - 2023-05-17
 
 - [`6aebd49`](https://github.com/alexfalkowski/nonnative/commit/6aebd495fbb94ad6be1baeac14a3a5a285741d43) feat: move dev deps to gemfile (#227)
