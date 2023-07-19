@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (1.69.0)
+    nonnative (1.70.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       cucumber (>= 7, < 9)
       get_process_mem (~> 0.2.1)
@@ -127,10 +127,10 @@ GEM
     rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.5)
+    rspec-mocks (3.12.6)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-support (3.12.0)
+    rspec-support (3.12.1)
     rubocop (1.54.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
