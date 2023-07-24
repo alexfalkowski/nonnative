@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.70.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.70.1) - 2023-07-24
+
+- [`8452bc9`](https://github.com/alexfalkowski/nonnative/commit/8452bc9f6dabb40279bb48df42843d1e1b352ba7) fix(deps): bump coveralls_reborn from 0.27.0 to 0.28.0 (#240)
+
 ## [v1.70.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.70.0) - 2023-07-19
 
 - [`bf52684`](https://github.com/alexfalkowski/nonnative/commit/bf52684161cc569f4b53551dc4e794fe213f527f) feat(ruby): upgrade to version 3.2.2 (#239)
