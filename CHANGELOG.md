@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.70.2](https://github.com/alexfalkowski/nonnative/releases/tag/v1.70.2) - 2023-07-26
+
+- [`d4f9034`](https://github.com/alexfalkowski/nonnative/commit/d4f9034525292315278d8fa4a9c451864e41fba7) fix(deps): bump rubocop from 1.54.2 to 1.55.0 (#241)
+
 ## [v1.70.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.70.1) - 2023-07-24
 
 - [`8452bc9`](https://github.com/alexfalkowski/nonnative/commit/8452bc9f6dabb40279bb48df42843d1e1b352ba7) fix(deps): bump coveralls_reborn from 0.27.0 to 0.28.0 (#240)
