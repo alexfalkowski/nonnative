@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.70.4](https://github.com/alexfalkowski/nonnative/releases/tag/v1.70.4) - 2023-08-08
+
+- [`f03e67b`](https://github.com/alexfalkowski/nonnative/commit/f03e67b078e61ad61f5523922f7d533ce41fae28) fix(deps): bump sinatra from 3.0.6 to 3.1.0 (#243)
+
 ## [v1.70.3](https://github.com/alexfalkowski/nonnative/releases/tag/v1.70.3) - 2023-08-01
 
 - [`0de5c87`](https://github.com/alexfalkowski/nonnative/commit/0de5c87e42a2ac491e9cdf143ddc0dd7106f0e4a) fix(deps): bump rubocop from 1.55.0 to 1.55.1 (#242)
