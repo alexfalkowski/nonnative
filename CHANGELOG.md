@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.71.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.71.0) - 2023-08-24
+
+- [`7597461`](https://github.com/alexfalkowski/nonnative/commit/759746110040e7599cda8c5b97ae9c7ccd9a3cc9) feat: update deps (#249)
+
 ## [v1.70.9](https://github.com/alexfalkowski/nonnative/releases/tag/v1.70.9) - 2023-08-24
 
 - [`2b2241c`](https://github.com/alexfalkowski/nonnative/commit/2b2241c4a18818aa29b8e24b10cd2017acd4489f) fix: truncate name to 15 characters (#248)
