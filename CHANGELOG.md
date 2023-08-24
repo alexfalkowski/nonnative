@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.70.9](https://github.com/alexfalkowski/nonnative/releases/tag/v1.70.9) - 2023-08-24
+
+- [`2b2241c`](https://github.com/alexfalkowski/nonnative/commit/2b2241c4a18818aa29b8e24b10cd2017acd4489f) fix: truncate name to 15 characters (#248)
+
 ## [v1.70.8](https://github.com/alexfalkowski/nonnative/releases/tag/v1.70.8) - 2023-08-22
 
 - [`8896cf9`](https://github.com/alexfalkowski/nonnative/commit/8896cf92ab832c2a21db666305b4b98c2e0ec8a6) fix(deps): bump rubocop from 1.56.0 to 1.56.1 (#247)
