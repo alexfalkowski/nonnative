@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.metadata['rubygems_mfa_required'] = 'true'
 
   spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
-  spec.add_dependency 'cucumber', '>= 7', '< 9'
+  spec.add_dependency 'cucumber', '>= 7', '< 10'
   spec.add_dependency 'get_process_mem', '~> 0.2.1'
   spec.add_dependency 'grpc', ['>= 1', '< 2']
   spec.add_dependency 'puma', '~> 6.0'
