@@ -15,6 +15,7 @@ require 'concurrent'
 require 'cucumber'
 require 'get_process_mem'
 require 'rspec-benchmark'
+require 'opentelemetry/sdk'
 
 require 'nonnative/version'
 require 'nonnative/error'
@@ -38,6 +39,7 @@ require 'nonnative/http_client'
 require 'nonnative/http_server'
 require 'nonnative/grpc_server'
 require 'nonnative/observability'
+require 'nonnative/trace'
 require 'nonnative/proxy_factory'
 require 'nonnative/proxy'
 require 'nonnative/no_proxy'
@@ -53,6 +55,10 @@ require 'nonnative/cucumber'
 module Nonnative
   class << self
     attr_reader :pool
+
+    def traces
+      @traces ||= Concurrent::Array.new
+    end
 
     def log_lines(path, predicate)
       File.readlines(path).select { |l| predicate.call(l) }
@@ -96,6 +102,7 @@ module Nonnative
     def clear
       @configuration = nil
       @pool = nil
+      @traces = nil
     end
   end
 end

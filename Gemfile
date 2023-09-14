@@ -9,5 +9,7 @@ gemspec
 
 gem 'bundler'
 gem 'coveralls_reborn'
+gem 'opentelemetry-exporter-otlp'
+gem 'opentelemetry-instrumentation-all'
 gem 'rubocop'
 gem 'solargraph'

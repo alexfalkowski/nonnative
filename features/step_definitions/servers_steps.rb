@@ -19,6 +19,14 @@ Given('I configure the system programatically with servers') do
     end
 
     config.server do |s|
+      s.name = 'trace'
+      s.klass = Nonnative::Trace
+      s.timeout = 1
+      s.port = 4318
+      s.log = 'reports/trace.log'
+    end
+
+    config.server do |s|
       s.name = 'http_server_1'
       s.klass = Nonnative::Features::HTTPServer
       s.timeout = 1

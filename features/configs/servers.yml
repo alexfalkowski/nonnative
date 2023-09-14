@@ -1,6 +1,13 @@
 version: 1.0
 servers:
   -
+    name: trace
+    class: Nonnative::Trace
+    timeout: 1
+    host: 127.0.0.1
+    port: 4318
+    log: reports/trace.log
+  -
     name: tcp_server_1
     class: Nonnative::Features::TCPServer
     timeout: 1
