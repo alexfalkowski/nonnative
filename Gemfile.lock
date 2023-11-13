@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (1.72.0)
+    nonnative (1.73.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       cucumber (>= 7, < 10)
       get_process_mem (~> 0.2.1)
@@ -191,7 +191,7 @@ GEM
       sync
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.8.2)
+    unf_ext (0.0.9)
     unicode-display_width (2.5.0)
     yard (0.9.34)
 

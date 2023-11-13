@@ -69,7 +69,9 @@ module Nonnative
       go = process['go']
       if go
         params = go['parameters'] || []
-        -> { Nonnative.go_executable(go['output'], go['executable'], go['command'], *params) }
+        tools = go['tools'] || []
+
+        -> { Nonnative.go_executable(tools, go['output'], go['executable'], go['command'], *params) }
       else
         -> { process['command'] }
       end

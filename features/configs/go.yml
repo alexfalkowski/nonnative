@@ -3,6 +3,7 @@ processes:
   -
     name: go
     go:
+      tools: [prof, trace, cover]
       output: reports
       executable: example
       command: serve

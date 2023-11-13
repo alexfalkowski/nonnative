@@ -58,8 +58,8 @@ module Nonnative
       File.readlines(path).select { |l| predicate.call(l) }
     end
 
-    def go_executable(output, exec, cmd, *params)
-      Nonnative::GoCommand.new(exec, output).executable(cmd, params)
+    def go_executable(tools, output, exec, cmd, *params)
+      Nonnative::GoCommand.new(tools, exec, output).executable(cmd, params)
     end
 
     def configuration
