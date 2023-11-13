@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.73.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.73.0) - 2023-11-13
+
+- [`37c5dd2`](https://github.com/alexfalkowski/nonnative/commit/37c5dd26b44b51b5f7b56ab36a0da226f9dd4222) feat(command): add tools to go command (#271)
+- [`08912b1`](https://github.com/alexfalkowski/nonnative/commit/08912b14940da14b0ecf71f4531f30dc621f28ca) build(deps): update bin (#270)
+- [`f94a4ef`](https://github.com/alexfalkowski/nonnative/commit/f94a4ef7d62cefd92e75de3e987c459043e927e2) build(deps): update bin (#269)
+
 ## [v1.72.10](https://github.com/alexfalkowski/nonnative/releases/tag/v1.72.10) - 2023-11-02
 
 - [`2f472aa`](https://github.com/alexfalkowski/nonnative/commit/2f472aad913ebddeb3f92f069891032f51fe3fce) fix(deps): bump grpc from 1.59.0 to 1.59.2 (#268)
