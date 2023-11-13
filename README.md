@@ -570,7 +570,9 @@ go test -mod vendor -c -tags features -covermode=count -o your_binary -coverpkg=
 Setup it up programmatically:
 
 ```ruby
-Nonnative.go_executable('reports', 'your_binary', 'sub_command', '--config config.yaml')
+tools = %w[prof trace cover]
+
+Nonnative.go_executable(tools, 'reports', 'your_binary', 'sub_command', '--config config.yaml')
 ```
 
 Setup it up through configuration:
@@ -581,6 +583,7 @@ processes:
   -
     name: go
     go:
+      tools: [prof, trace, cover]
       output: reports
       executable: your_binary
       command: sub_command

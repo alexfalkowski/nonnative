@@ -2,7 +2,8 @@
 
 module Nonnative
   class GoCommand
-    def initialize(exec, output)
+    def initialize(tools, exec, output)
+      @tools = tools.nil? || tools.empty? ? %w[prof trace cover] : tools
       @exec = exec
       @output = output
     end
@@ -14,7 +15,7 @@ module Nonnative
 
     private
 
-    attr_reader :exec, :output
+    attr_reader :tools, :exec, :output
 
     def flags(cmd, params)
       suffix = SecureRandom.alphanumeric(4)
@@ -23,13 +24,33 @@ module Nonnative
       name = [m, cmd, p].reject(&:empty?).join('-')[0...15]
       path = "#{output}/#{name}-#{suffix}"
 
+      prof(path) + trace(path) + cover(path)
+    end
+
+    def prof(path)
+      return [] unless tools.include?('prof')
+
       [
         "-test.cpuprofile=#{path}-cpu.prof",
         "-test.memprofile=#{path}-mem.prof",
         "-test.blockprofile=#{path}-block.prof",
-        "-test.mutexprofile=#{path}-mutex.prof",
-        "-test.coverprofile=#{path}.cov",
+        "-test.mutexprofile=#{path}-mutex.prof"
+      ]
+    end
+
+    def trace(path)
+      return [] unless tools.include?('trace')
+
+      [
         "-test.trace=#{path}-trace.out"
+      ]
+    end
+
+    def cover(path)
+      return [] unless tools.include?('cover')
+
+      [
+        "-test.coverprofile=#{path}.cov"
       ]
     end
   end

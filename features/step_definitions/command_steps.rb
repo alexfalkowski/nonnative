@@ -2,7 +2,8 @@
 
 When('I create a go command with:') do |table|
   rows = table.rows_hash
-  @exec_path = Nonnative.go_executable(rows['output'], rows['executable'], rows['command'], rows['parameters'])
+
+  @exec_path = Nonnative.go_executable([], rows['output'], rows['executable'], rows['command'], rows['parameters'])
 end
 
 When('I load the go configuration') do
