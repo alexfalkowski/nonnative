@@ -4,11 +4,23 @@ jobs:
   build:
     docker:
       - image: alexfalkowski/ruby:3.2
+    working_directory: ~/nonnative
     steps:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make setup
+      - restore_cache:
+          name: restore deps
+          keys:
+            - nonnative-cache-{{ checksum "Gemfile.lock" }}
+            - nonnative-cache-
       - run: make dep
+      - save_cache:
+          name: save deps
+          key: nonnative-cache-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor
       - run: make lint
       - run: make features
       - store_test_results:
@@ -19,6 +31,7 @@ jobs:
   release:
     docker:
       - image: alexfalkowski/release:3.1
+    working_directory: ~/nonnative
     steps:
       - checkout
       - run: release
