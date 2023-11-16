@@ -124,7 +124,7 @@ When('I send a message with the grpc client to the servers') do
 end
 
 When('I send a {string} request') do |name|
-  @response = Nonnative::Observability.new('http://localhost:4567').send(name)
+  @response = Nonnative::Observability.new('http://localhost:4567').send(name, { headers: { content_type: :json, accept: :json } })
 end
 
 When('I send a not found message with the http client to the servers') do
