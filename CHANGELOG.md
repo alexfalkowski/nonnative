@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.74.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.74.0) - 2023-11-16
+
+- [`82fa7dc`](https://github.com/alexfalkowski/nonnative/commit/82fa7dccda6acd5bccc2bc146decf8d1bad850db) feat(http): use resource so we can use opts (#276)
+- [`4955fe9`](https://github.com/alexfalkowski/nonnative/commit/4955fe9d7b1e92c1438b43d88aeba12516df75ae) ci: cache deps (#275)
+- [`2b372b8`](https://github.com/alexfalkowski/nonnative/commit/2b372b86ebbb2c0e45b4dc7503990a65aa75d906) build(deps): update bin (#274)
+- [`02a15e5`](https://github.com/alexfalkowski/nonnative/commit/02a15e54035b7d1f68995733a8b0c0fd37e07a94) build(deps): update bin (#273)
+- [`27755f0`](https://github.com/alexfalkowski/nonnative/commit/27755f0902ffccb254aa103d69bf38b453be5bc6) build(deps): update bin (#272)
+
 ## [v1.73.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.73.0) - 2023-11-13
 
 - [`37c5dd2`](https://github.com/alexfalkowski/nonnative/commit/37c5dd26b44b51b5f7b56ab36a0da226f9dd4222) feat(command): add tools to go command (#271)
