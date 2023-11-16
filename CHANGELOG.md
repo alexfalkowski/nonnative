@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.74.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.74.1) - 2023-11-16
+
+- [`57a67b4`](https://github.com/alexfalkowski/nonnative/commit/57a67b4fde47cf1ab1a8299d759cffcc6cd821f6) fix(http): do not override opts (#277)
+
 ## [v1.74.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.74.0) - 2023-11-16
 
 - [`82fa7dc`](https://github.com/alexfalkowski/nonnative/commit/82fa7dccda6acd5bccc2bc146decf8d1bad850db) feat(http): use resource so we can use opts (#276)
