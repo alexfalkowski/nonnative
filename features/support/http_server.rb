@@ -18,11 +18,11 @@ module Nonnative
       end
 
       post '/hello' do
-        request.body.read
+        request.body.read.to_json
       end
 
       put '/hello' do
-        request.body.read
+        request.body.read.to_json
       end
 
       delete '/hello' do

@@ -8,32 +8,32 @@ module Nonnative
 
     protected
 
-    def get(pathname, headers = {}, timeout = 60)
+    def get(pathname, opts = {})
       with_exception do
-        uri = URI.join(host, pathname)
-        RestClient::Request.execute(method: :get, url: uri.to_s, headers:, timeout:)
+        resource(pathname, opts).get
       end
     end
 
-    def post(pathname, payload, headers = {}, timeout = 60)
+    def post(pathname, payload, opts = {})
       with_exception do
-        uri = URI.join(host, pathname)
-        RestClient::Request.execute(method: :post, url: uri.to_s, payload: payload.to_json, headers:, timeout:)
+        resource(pathname, opts).post(payload)
       end
     end
 
-    def delete(pathname, headers = {}, timeout = 60)
+    def delete(pathname, opts = {})
       with_exception do
-        uri = URI.join(host, pathname)
-        RestClient::Request.execute(method: :delete, url: uri.to_s, headers:, timeout:)
+        resource(pathname, opts).delete
       end
     end
 
-    def put(pathname, payload, headers = {}, timeout = 60)
+    def put(pathname, payload, opts = {})
       with_exception do
-        uri = URI.join(host, pathname)
-        RestClient::Request.execute(method: :put, url: uri.to_s, payload: payload.to_json, headers:, timeout:)
+        resource(pathname, opts).put(payload)
       end
+    end
+
+    def resource(pathname, opts)
+      RestClient::Resource.new(URI.join(host, pathname).to_s, opts)
     end
 
     private
