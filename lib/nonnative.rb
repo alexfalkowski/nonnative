@@ -12,6 +12,7 @@ require 'rest-client'
 require 'puma'
 require 'puma/server'
 require 'concurrent'
+require 'config'
 require 'cucumber'
 require 'get_process_mem'
 require 'rspec-benchmark'
@@ -49,10 +50,15 @@ require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/socket_pair_factory'
 require 'nonnative/go_command'
 require 'nonnative/cucumber'
+require 'nonnative/header'
 
 module Nonnative
   class << self
     attr_reader :pool
+
+    def configurations(*files)
+      Config.load_files(files)
+    end
 
     def log_lines(path, predicate)
       File.readlines(path).select { |l| predicate.call(l) }

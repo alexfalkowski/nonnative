@@ -5,6 +5,7 @@ AllCops:
   Exclude:
     - 'bin/**/*'
     - 'vendor/**/*'
+    - 'test/grpc/**/*'
 
 Layout/LineLength:
   Max: 150
