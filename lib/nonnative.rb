@@ -50,6 +50,7 @@ require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/socket_pair_factory'
 require 'nonnative/go_command'
 require 'nonnative/cucumber'
+require 'nonnative/header'
 
 module Nonnative
   class << self
