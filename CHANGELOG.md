@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.75.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.75.0) - 2023-11-18
+
+- [`dba4d0c`](https://github.com/alexfalkowski/nonnative/commit/dba4d0c4281226b818f95aee637b7433005d4aba) feat: add header (#280)
+- [`9810746`](https://github.com/alexfalkowski/nonnative/commit/98107465057cebcd2c165e50fbfacebd40b7cece) build(deps): update bin (#278)
+
 ## [v1.74.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.74.1) - 2023-11-16
 
 - [`57a67b4`](https://github.com/alexfalkowski/nonnative/commit/57a67b4fde47cf1ab1a8299d759cffcc6cd821f6) fix(http): do not override opts (#277)
