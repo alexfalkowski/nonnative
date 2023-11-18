@@ -11,11 +11,11 @@ module Nonnative
     attr_accessor :processes, :servers, :services
 
     def load_file(path)
-      file = YAML.load_file(path)
+      cfg = Nonnative.configurations(path)
 
-      add_processes(file)
-      add_servers(file)
-      add_services(file)
+      add_processes(cfg)
+      add_servers(cfg)
+      add_services(cfg)
     end
 
     def process
@@ -48,59 +48,59 @@ module Nonnative
 
     private
 
-    def add_processes(file)
-      processes = file['processes'] || []
+    def add_processes(cfg)
+      processes = cfg.processes || []
       processes.each do |fd|
         process do |d|
-          d.name = fd['name']
+          d.name = fd.name
           d.command = command(fd)
-          d.timeout = fd['timeout']
-          d.port = fd['port']
-          d.log = fd['log']
-          d.signal = fd['signal']
-          d.environment = fd['environment']
+          d.timeout = fd.timeout
+          d.port = fd.port
+          d.log = fd.log
+          d.signal = fd.signal
+          d.environment = fd.environment
 
-          proxy d, fd['proxy']
+          proxy d, fd.proxy
         end
       end
     end
 
     def command(process)
-      go = process['go']
+      go = process.go
       if go
-        params = go['parameters'] || []
-        tools = go['tools'] || []
+        params = go.parameters || []
+        tools = go.tools || []
 
-        -> { Nonnative.go_executable(tools, go['output'], go['executable'], go['command'], *params) }
+        -> { Nonnative.go_executable(tools, go.output, go.executable, go.command, *params) }
       else
-        -> { process['command'] }
+        -> { process.command }
       end
     end
 
-    def add_servers(file)
-      servers = file['servers'] || []
+    def add_servers(cfg)
+      servers = cfg.servers || []
       servers.each do |fd|
         server do |s|
-          s.name = fd['name']
-          s.klass = Object.const_get(fd['class'])
-          s.timeout = fd['timeout']
-          s.port = fd['port']
-          s.log = fd['log']
+          s.name = fd.name
+          s.klass = Object.const_get(fd.class)
+          s.timeout = fd.timeout
+          s.port = fd.port
+          s.log = fd.log
 
-          proxy s, fd['proxy']
+          proxy s, fd.proxy
         end
       end
     end
 
-    def add_services(file)
-      services = file['services'] || []
+    def add_services(cfg)
+      services = cfg.services || []
       services.each do |fd|
         service do |s|
-          s.name = fd['name']
-          s.host = fd['host'] if fd['host']
-          s.port = fd['port']
+          s.name = fd.name
+          s.host = fd.host if fd.host
+          s.port = fd.port
 
-          proxy s, fd['proxy']
+          proxy s, fd.proxy
         end
       end
     end
@@ -109,13 +109,13 @@ module Nonnative
       return unless proxy
 
       p = {
-        kind: proxy['kind'],
-        port: proxy['port'],
-        log: proxy['log'],
-        options: proxy['options']
+        kind: proxy.kind,
+        port: proxy.port,
+        log: proxy.log,
+        options: proxy.options
       }
 
-      p[:host] = proxy['host'] if proxy['host']
+      p[:host] = proxy.host if proxy.host
 
       runner.proxy = p
     end

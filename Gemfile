@@ -10,4 +10,3 @@ gemspec
 gem 'bundler'
 gem 'coveralls_reborn'
 gem 'rubocop'
-gem 'solargraph'

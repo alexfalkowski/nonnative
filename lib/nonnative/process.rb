@@ -52,7 +52,7 @@ module Nonnative
     end
 
     def process_spawn
-      environment = service.environment || {}
+      environment = service.environment.to_h
       environment = environment.transform_keys(&:to_s).transform_values(&:to_s)
 
       environment.each_key do |k|

@@ -117,7 +117,7 @@ When('I send a message with the grpc client to the servers') do
   urls = ['localhost:9002', 'localhost:9003']
 
   urls.each do |u|
-    stub = Nonnative::Features::GreeterService::Stub.new(u, :this_channel_is_insecure)
+    stub = Nonnative::Features::GreeterService::Stub.new(u, :this_channel_is_insecure, channel_args: Nonnative::Header.grpc_user_agent('test 1.0'))
 
     @responses << stub.say_hello(Nonnative::Features::SayHelloRequest.new(name: 'Hello World!'))
   end
