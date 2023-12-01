@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.75.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.75.1) - 2023-12-01
+
+- [`8717eee`](https://github.com/alexfalkowski/nonnative/commit/8717eee7d0fe6c9f6c402ad8dd9c3ab7ec4d3df8) fix(deps): bump grpc from 1.59.2 to 1.60.0 (#283)
+- [`0c66d5e`](https://github.com/alexfalkowski/nonnative/commit/0c66d5e34b4a1851d8778d7f037b0eb003f0a0ab) build(deps): add bin (#282)
+- [`411ed2e`](https://github.com/alexfalkowski/nonnative/commit/411ed2e7755906baa350c7b6fd50716ce1e4b163) build(deps): update bin (#281)
+
 ## [v1.75.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.75.0) - 2023-11-18
 
 - [`dba4d0c`](https://github.com/alexfalkowski/nonnative/commit/dba4d0c4281226b818f95aee637b7433005d4aba) feat: add header (#280)
