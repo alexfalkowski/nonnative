@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.75.5](https://github.com/alexfalkowski/nonnative/releases/tag/v1.75.5) - 2024-01-01
+
+- [`a620d5e`](https://github.com/alexfalkowski/nonnative/commit/a620d5e0e60a276a3529f82f9f03703fec258342) fix(deps): bump sinatra from 3.1.0 to 3.2.0 (#289)
+- [`2cc4fdf`](https://github.com/alexfalkowski/nonnative/commit/2cc4fdfb714a277f240302274134704da47d6052) build(deps): update (#288)
+
 ## [v1.75.4](https://github.com/alexfalkowski/nonnative/releases/tag/v1.75.4) - 2023-12-19
 
 - [`6de7979`](https://github.com/alexfalkowski/nonnative/commit/6de79792069d8337037f65daffe7ff37ed1d9ffd) fix(deps): bump config from 5.0.0 to 5.1.0 (#287)
