@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.75.6](https://github.com/alexfalkowski/nonnative/releases/tag/v1.75.6) - 2024-01-03
+
+- [`fe8c5ca`](https://github.com/alexfalkowski/nonnative/commit/fe8c5cacf074a0cf48580f8d3023be5bbfcc1e66) fix(deps): bump puma from 6.4.0 to 6.4.1 (#290)
+
 ## [v1.75.5](https://github.com/alexfalkowski/nonnative/releases/tag/v1.75.5) - 2024-01-01
 
 - [`a620d5e`](https://github.com/alexfalkowski/nonnative/commit/a620d5e0e60a276a3529f82f9f03703fec258342) fix(deps): bump sinatra from 3.1.0 to 3.2.0 (#289)
