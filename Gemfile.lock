@@ -22,7 +22,7 @@ GEM
     benchmark-perf (0.6.0)
     benchmark-trend (0.4.0)
     builder (3.2.4)
-    concurrent-ruby (1.2.2)
+    concurrent-ruby (1.2.3)
     config (5.1.0)
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
