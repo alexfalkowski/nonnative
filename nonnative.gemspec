@@ -33,5 +33,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rest-client', '~> 2.1'
   spec.add_dependency 'rspec-benchmark', '~> 0.6.0'
   spec.add_dependency 'rspec-expectations', '~> 3.9', '>= 3.9.2'
-  spec.add_dependency 'sinatra', '>= 2.0.8.1', '< 4'
+  spec.add_dependency 'sinatra', '>= 2.0.8.1', '< 5'
 end
