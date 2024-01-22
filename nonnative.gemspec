@@ -24,14 +24,14 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ['>= 3.2.0', '< 4.0.0']
   spec.metadata['rubygems_mfa_required'] = 'true'
 
-  spec.add_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.5'
-  spec.add_dependency 'config', '~> 5.0'
+  spec.add_dependency 'concurrent-ruby', '>= 1', '< 2'
+  spec.add_dependency 'config', '>= 5', '< 6'
   spec.add_dependency 'cucumber', '>= 7', '< 10'
-  spec.add_dependency 'get_process_mem', '~> 0.2.1'
-  spec.add_dependency 'grpc', ['>= 1', '< 2']
-  spec.add_dependency 'puma', '~> 6.0'
-  spec.add_dependency 'rest-client', '~> 2.1'
-  spec.add_dependency 'rspec-benchmark', '~> 0.6.0'
-  spec.add_dependency 'rspec-expectations', '~> 3.9', '>= 3.9.2'
-  spec.add_dependency 'sinatra', '>= 2.0.8.1', '< 4'
+  spec.add_dependency 'get_process_mem', '>= 0', '< 1'
+  spec.add_dependency 'grpc', '>= 1', '< 2'
+  spec.add_dependency 'puma', '>= 6', '< 7'
+  spec.add_dependency 'rest-client', '>= 2', '< 3'
+  spec.add_dependency 'rspec-benchmark', '>= 0', '< 1'
+  spec.add_dependency 'rspec-expectations', '>= 3', '< 4'
+  spec.add_dependency 'sinatra', '>= 2', '< 5'
 end
