@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.76.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.76.0) - 2024-01-22
+
+- [`6a42560`](https://github.com/alexfalkowski/nonnative/commit/6a42560b3983e1e1599363f3e6e07a8ffde0778f) feat(deps): update sinatra to v4.0.0 (#297)
+
 ## [v1.75.11](https://github.com/alexfalkowski/nonnative/releases/tag/v1.75.11) - 2024-01-18
 
 - [`b476b9e`](https://github.com/alexfalkowski/nonnative/commit/b476b9e1e8bef2bf8f89ee5cc095fe1f047f7aee) fix(deps): bump rubocop from 1.60.0 to 1.60.1 (#295)
