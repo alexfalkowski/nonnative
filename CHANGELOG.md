@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.76.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.76.1) - 2024-01-24
+
+- [`64c5425`](https://github.com/alexfalkowski/nonnative/commit/64c5425126fcacdc655cb11ee2272b3a8d9ff2b4) fix(deps): bump cucumber from 9.1.1 to 9.1.2 (#298)
+
 ## [v1.76.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.76.0) - 2024-01-22
 
 - [`6a42560`](https://github.com/alexfalkowski/nonnative/commit/6a42560b3983e1e1599363f3e6e07a8ffde0778f) feat(deps): update sinatra to v4.0.0 (#297)
