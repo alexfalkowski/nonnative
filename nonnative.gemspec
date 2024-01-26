@@ -33,5 +33,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rest-client', '>= 2', '< 3'
   spec.add_dependency 'rspec-benchmark', '>= 0', '< 1'
   spec.add_dependency 'rspec-expectations', '>= 3', '< 4'
+  spec.add_dependency 'ruby-lsp', '>= 0', '< 1'
   spec.add_dependency 'sinatra', '>= 2', '< 5'
 end
