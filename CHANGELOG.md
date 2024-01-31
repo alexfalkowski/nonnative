@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.76.3](https://github.com/alexfalkowski/nonnative/releases/tag/v1.76.3) - 2024-01-31
+
+- [`a131a8f`](https://github.com/alexfalkowski/nonnative/commit/a131a8f0eada5a684fb07c34259a2d4262860159) fix(deps): move ruby-lsp to Gemfile (#301)
+- [`2cf480a`](https://github.com/alexfalkowski/nonnative/commit/2cf480a8febfa83c86ff91a675311aa2c2802e3a) build(deps): add ruby-lsp (0.13.4) (#300)
+
 ## [v1.76.2](https://github.com/alexfalkowski/nonnative/releases/tag/v1.76.2) - 2024-01-25
 
 - [`ad3466c`](https://github.com/alexfalkowski/nonnative/commit/ad3466c4494dd11ae013805c518514bd6bd549ac) fix(deps): bump rubocop from 1.60.1 to 1.60.2 (#299)
