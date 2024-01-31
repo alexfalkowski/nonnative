@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (1.76.0)
+    nonnative (1.76.3)
       concurrent-ruby (>= 1, < 2)
       config (>= 5, < 6)
       cucumber (>= 7, < 10)
@@ -11,7 +11,6 @@ PATH
       rest-client (>= 2, < 3)
       rspec-benchmark (>= 0, < 1)
       rspec-expectations (>= 3, < 4)
-      ruby-lsp (>= 0, < 1)
       sinatra (>= 2, < 5)
 
 GEM
@@ -219,6 +218,7 @@ DEPENDENCIES
   coveralls_reborn
   nonnative!
   rubocop
+  ruby-lsp
 
 BUNDLED WITH
-   2.3.9
+   2.4.10
