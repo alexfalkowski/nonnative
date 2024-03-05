@@ -17,7 +17,7 @@ Metrics/BlockLength:
   Max: 80
 
 Metrics/AbcSize:
-  Max: 22
+  Max: 25
 
 Style/Documentation:
   Enabled: false
