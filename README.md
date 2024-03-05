@@ -35,6 +35,7 @@ Configure nonnative with the following:
 
 - Process, Server or Service that you want to start.
 - A timeout value.
+- A time to wait.
 - Port to verify.
 - The class for servers.
 - The log for servers/processes
@@ -61,6 +62,7 @@ Nonnative.configure do |config|
     p.name = 'start_1'
     p.command = -> { 'features/support/bin/start 12_321' }
     p.timeout = 5
+    p.wait = 0.1
     p.port = 12_321
     p.log = 'reports/12_321.log'
     p.signal = 'INT' # Possible values are described in Signal.list.keys.
@@ -73,6 +75,7 @@ Nonnative.configure do |config|
     p.name = 'start_2'
     p.command = -> { 'features/support/bin/start 12_322' }
     p.timeout = 0.5
+    p.wait = 0.1
     p.port = 12_322
     p.log = 'reports/12_322.log'
   end
@@ -88,6 +91,7 @@ processes:
     name: start_1
     command: features/support/bin/start 12_321
     timeout: 5
+    wait: 0.1
     port: 12321
     log: reports/12_321.log
     signal: INT # Possible values are described in Signal.list.keys.
@@ -97,6 +101,7 @@ processes:
     name: start_2
     command: features/support/bin/start 12_322
     timeout: 5
+    wait: 0.1
     port: 12322
     log: reports/12_322.log
 ```

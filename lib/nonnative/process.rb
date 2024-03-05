@@ -15,7 +15,7 @@ module Nonnative
         wait_start
       end
 
-      pid
+      [pid, ::Process.waitpid2(pid, ::Process::WNOHANG).nil?]
     end
 
     def stop

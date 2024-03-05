@@ -55,6 +55,7 @@ module Nonnative
           d.name = fd.name
           d.command = command(fd)
           d.timeout = fd.timeout
+          d.wait = fd.wait if fd.wait
           d.port = fd.port
           d.log = fd.log
           d.signal = fd.signal
@@ -84,6 +85,7 @@ module Nonnative
           s.name = fd.name
           s.klass = Object.const_get(fd.class)
           s.timeout = fd.timeout
+          s.wait = fd.wait if fd.wait
           s.port = fd.port
           s.log = fd.log
 

@@ -16,7 +16,7 @@ module Nonnative
         wait_start
       end
 
-      object_id
+      [object_id, true]
     end
 
     def stop

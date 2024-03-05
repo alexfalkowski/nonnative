@@ -80,8 +80,9 @@ module Nonnative
       @pool ||= Nonnative::Pool.new(configuration)
       errors = []
 
-      @pool.start do |name, id, result|
-        errors << "Started #{name} with id #{id}, though did respond in time" unless result
+      @pool.start do |name, values, result|
+        id, started = values
+        errors << "Started #{name} with id #{id}, though did respond in time" if !started || !result
       end
 
       raise Nonnative::StartError, errors.join("\n") unless errors.empty?

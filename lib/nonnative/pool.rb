@@ -72,8 +72,8 @@ module Nonnative
     end
 
     def yield_results(all, pids, ports)
-      all.zip(pids, ports).each do |type, id, result|
-        yield type.name, id, result
+      all.zip(pids, ports).each do |type, values, result|
+        yield type.name, values, result
       end
     end
   end
