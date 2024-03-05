@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.78.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.78.0) - 2024-03-05
+
+- [`84b23b9`](https://github.com/alexfalkowski/nonnative/commit/84b23b974d7dff216b1617c68b46a89523170c4c) feat: add ability to wait for start (#314)
+
 ## [v1.77.5](https://github.com/alexfalkowski/nonnative/releases/tag/v1.77.5) - 2024-03-05
 
 - [`caa09a9`](https://github.com/alexfalkowski/nonnative/commit/caa09a910e726e36a7f096aebc8aa4bd1c258c66) fix(deps): bump ruby-lsp from 0.14.3 to 0.14.4 (#313)
