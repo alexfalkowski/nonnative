@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.78.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.78.1) - 2024-03-07
+
+- [`cfe85d0`](https://github.com/alexfalkowski/nonnative/commit/cfe85d0d4c387145291c4116ece9d4fbd72896d6) fix(deps): bump rubocop from 1.61.0 to 1.62.0 (#315)
+
 ## [v1.78.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.78.0) - 2024-03-05
 
 - [`84b23b9`](https://github.com/alexfalkowski/nonnative/commit/84b23b974d7dff216b1617c68b46a89523170c4c) feat: add ability to wait for start (#314)
