@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (1.78.0)
+    nonnative (1.79.0)
       concurrent-ruby (>= 1, < 2)
       config (>= 5, < 6)
       cucumber (>= 7, < 10)
@@ -21,7 +21,7 @@ GEM
     benchmark-malloc (0.2.0)
     benchmark-perf (0.6.0)
     benchmark-trend (0.4.0)
-    bigdecimal (3.1.6)
+    bigdecimal (3.1.7)
     builder (3.2.4)
     concurrent-ruby (1.2.3)
     config (5.3.0)
@@ -162,7 +162,7 @@ GEM
       rack-protection (= 4.0.0)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sorbet-runtime (0.5.11286)
+    sorbet-runtime (0.5.11292)
     sync (0.5.0)
     sys-uname (1.2.3)
       ffi (~> 1.1)
