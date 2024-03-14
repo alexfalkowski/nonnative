@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.0) - 2024-03-14
+
+- [`fe7cb06`](https://github.com/alexfalkowski/nonnative/commit/fe7cb065e46812f884e5df3f4ce77a7f6d06c124) feat: change license to MIT (#319)
+
 ## [v1.78.3](https://github.com/alexfalkowski/nonnative/releases/tag/v1.78.3) - 2024-03-12
 
 - [`0ecf0b1`](https://github.com/alexfalkowski/nonnative/commit/0ecf0b1acd8e2526c94c17c782482e06af71ceee) fix(deps): bump rubocop from 1.62.0 to 1.62.1 (#318)
