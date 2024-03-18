@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.1) - 2024-03-18
+
+- [`fc70f75`](https://github.com/alexfalkowski/nonnative/commit/fc70f759e829216058c461a961648672d5d2950a) fix(deps): bump config from 5.3.0 to 5.4.0 (#322)
+- [`fb8b7ae`](https://github.com/alexfalkowski/nonnative/commit/fb8b7ae7f46be36e3bef5c78d55ea374050a527c) build(deps): bump bin from `66f6a24` to `355347a` (#320)
+
 ## [v1.79.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.0) - 2024-03-14
 
 - [`fe7cb06`](https://github.com/alexfalkowski/nonnative/commit/fe7cb065e46812f884e5df3f4ce77a7f6d06c124) feat: change license to MIT (#319)
