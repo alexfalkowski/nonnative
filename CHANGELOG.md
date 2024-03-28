@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.4](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.4) - 2024-03-28
+
+- [`f423947`](https://github.com/alexfalkowski/nonnative/commit/f42394725087dbf2888a05b8e4c73aafd0709f53) fix(deps): bump ruby-lsp from 0.14.6 to 0.15.0 (#332)
+- [`6e453cb`](https://github.com/alexfalkowski/nonnative/commit/6e453cb48260a0df3025e01b47048ab40c264ed5) build(deps): bump bin from `b9b6ae3` to `a19d7ca` (#331)
+- [`18909fe`](https://github.com/alexfalkowski/nonnative/commit/18909fe389c396444fbbb0dd673b0d11e9f70387) build(deps): bump bin from `60071ae` to `b9b6ae3` (#330)
+- [`f6b56f3`](https://github.com/alexfalkowski/nonnative/commit/f6b56f3ec195d08166227b4847995eeb579df9eb) build(dependabot): change prefixes (#329)
+- [`cf11171`](https://github.com/alexfalkowski/nonnative/commit/cf11171033390e10ffcf160da179154eb4a65d4a) build(make): remove phony (#328)
+- [`34cf9de`](https://github.com/alexfalkowski/nonnative/commit/34cf9de8925a279c3cd05aa048faeecbc1911b94) build(deps): bump bin from `b7532c8` to `60071ae` (#327)
+- [`562adf0`](https://github.com/alexfalkowski/nonnative/commit/562adf09ec966b567ad690bb54725e4f74c1af66) build: add git tasks to makefile (#326)
+- [`74d4258`](https://github.com/alexfalkowski/nonnative/commit/74d42584b5163a10c8a57feaaf5cfbf20087efa1) build(deps): bump bin from `355347a` to `b7532c8` (#325)
+
 ## [v1.79.3](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.3) - 2024-03-20
 
 - [`8ae54cb`](https://github.com/alexfalkowski/nonnative/commit/8ae54cb30afcd05c883c4570fed33fa26955ca75) fix(deps): bump cucumber from 9.1.2 to 9.2.0 (#323)
