@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.5](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.5) - 2024-04-03
+
+- [`96f5e84`](https://github.com/alexfalkowski/nonnative/commit/96f5e8470378d3140b43fb449a11a88002c05e9a) fix(deps): bump ruby-lsp from 0.15.0 to 0.16.0 (#337)
+- [`a65f27c`](https://github.com/alexfalkowski/nonnative/commit/a65f27cb228f07d60c23e1dc0f50965ca5e8ea85) build(deps): bump bin from `024be7f` to `ed17684` (#336)
+- [`41c8d93`](https://github.com/alexfalkowski/nonnative/commit/41c8d93a16e99838c509df2ec8a26fd14a0f6470) build(deps): bump bin from `608889f` to `024be7f` (#335)
+- [`2edc07b`](https://github.com/alexfalkowski/nonnative/commit/2edc07b3be5f6ea39d6edfaa1fd2ad2342a68184) build(circleci): use dep (#334)
+- [`e535120`](https://github.com/alexfalkowski/nonnative/commit/e53512068d5d7e29ca278d0637e2cdcfa5e8ee8e) build(deps): bump bin from `a19d7ca` to `608889f` (#333)
+
 ## [v1.79.4](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.4) - 2024-03-28
 
 - [`f423947`](https://github.com/alexfalkowski/nonnative/commit/f42394725087dbf2888a05b8e4c73aafd0709f53) fix(deps): bump ruby-lsp from 0.14.6 to 0.15.0 (#332)
