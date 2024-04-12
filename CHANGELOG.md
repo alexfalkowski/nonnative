@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.11](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.11) - 2024-04-12
+
+- [`443cb00`](https://github.com/alexfalkowski/nonnative/commit/443cb00b4c632e078ce82d1b94abee687c4e5e09) fix(deps): bump ruby-lsp from 0.16.3 to 0.16.4 (#344)
+
 ## [v1.79.10](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.10) - 2024-04-11
 
 - [`ef1b055`](https://github.com/alexfalkowski/nonnative/commit/ef1b0559647219a8cb83f18df36e286d036b7e46) fix(deps): bump rubocop from 1.63.0 to 1.63.1 (#343)
