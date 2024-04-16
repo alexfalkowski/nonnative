@@ -12,12 +12,11 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - nonnative-cache-{{ checksum "Gemfile.lock" }}
-            - nonnative-cache-
+            - nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}
       - run: make dep
       - save_cache:
           name: save deps
-          key: nonnative-cache-{{ checksum "Gemfile.lock" }}
+          key: nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor
       - run: make lint
