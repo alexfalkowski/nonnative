@@ -13,6 +13,7 @@ jobs:
           name: restore deps
           keys:
             - nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}
+            - nonnative-ruby-cache-
       - run: make dep
       - save_cache:
           name: save deps
