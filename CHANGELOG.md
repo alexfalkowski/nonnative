@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.12](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.12) - 2024-04-17
+
+- [`86d12c1`](https://github.com/alexfalkowski/nonnative/commit/86d12c147c05996f76a1eb1d8051d45832277164) fix(deps): bump rubocop from 1.63.1 to 1.63.2 (#350)
+- [`3076d04`](https://github.com/alexfalkowski/nonnative/commit/3076d046329057363ec486947275cd385ab87a92) build(deps): bump bin from `b850b19` to `d5f116d` (#351)
+- [`72ebc61`](https://github.com/alexfalkowski/nonnative/commit/72ebc61433506cf02cb79075085b42219f5db128) build(deps): bump bin from `f01b719` to `b850b19` (#349)
+- [`8bf6e3d`](https://github.com/alexfalkowski/nonnative/commit/8bf6e3d1f0de8ef31bf314ec81c2c58ca01cd961) build(ci): remove cache key (#348)
+- [`6d5f3a4`](https://github.com/alexfalkowski/nonnative/commit/6d5f3a4a403e1eb04a3da6d7a454e0c880c46174) build(deps): bump bin from `51c6ece` to `f01b719` (#347)
+- [`4f2b637`](https://github.com/alexfalkowski/nonnative/commit/4f2b637ee4d835538fa02b4108b018b24a54e950) build(deps): bump bin from `c322696` to `51c6ece` (#346)
+- [`cffab40`](https://github.com/alexfalkowski/nonnative/commit/cffab4042bfd1ec1486a390fc0996f85ef3b86c3) build(deps): bump bin from `13a7302` to `c322696` (#345)
+
 ## [v1.79.11](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.11) - 2024-04-12
 
 - [`443cb00`](https://github.com/alexfalkowski/nonnative/commit/443cb00b4c632e078ce82d1b94abee687c4e5e09) fix(deps): bump ruby-lsp from 0.16.3 to 0.16.4 (#344)
