@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.13](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.13) - 2024-04-23
+
+- [`0a34808`](https://github.com/alexfalkowski/nonnative/commit/0a34808c46e70076fb6f8a6b842e0675284c4e79) fix(deps): bump rubocop from 1.63.2 to 1.63.3 (#355)
+- [`bb5efa5`](https://github.com/alexfalkowski/nonnative/commit/bb5efa58e6dd374f9008d9c0d312942fee8d697f) build(deps): bump bin from `d5f116d` to `c06391c` (#354)
+- [`faf57e0`](https://github.com/alexfalkowski/nonnative/commit/faf57e0aeb966dc0868b15a3408bb240b395d6fe) build(ci): find the most recently generated cache (#353)
+- [`4d03601`](https://github.com/alexfalkowski/nonnative/commit/4d036012d16611ea73900d6777c51f664ae4ecde) build(deps): add arm64-darwin-23 to Gemfile (#352)
+
 ## [v1.79.12](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.12) - 2024-04-17
 
 - [`86d12c1`](https://github.com/alexfalkowski/nonnative/commit/86d12c147c05996f76a1eb1d8051d45832277164) fix(deps): bump rubocop from 1.63.1 to 1.63.2 (#350)
