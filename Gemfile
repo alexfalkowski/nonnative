@@ -8,6 +8,6 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 gemspec
 
 gem 'bundler'
-gem 'coveralls_reborn'
 gem 'rubocop'
 gem 'ruby-lsp'
+gem 'simplecov'
