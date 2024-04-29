@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.15](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.15) - 2024-04-29
+
+- [`a8f31ce`](https://github.com/alexfalkowski/nonnative/commit/a8f31ce20767347d4b17ba35d84360414f78b30a) fix(deps): bump ruby-lsp from 0.16.5 to 0.16.6 (#361)
+- [`b4c45ef`](https://github.com/alexfalkowski/nonnative/commit/b4c45ef2c7de91a45e8661defaefde305964c2d4) build(deps): bump bin from `1755d45` to `3976e45` (#360)
+- [`614b2ec`](https://github.com/alexfalkowski/nonnative/commit/614b2ec9b9161ba58f440b2113d19054bb9dd9e3) build(deps): bump bin from `c06391c` to `1755d45` (#359)
+- [`b2e602e`](https://github.com/alexfalkowski/nonnative/commit/b2e602e15d9ccdf816643f41cc8e9fe39583a8ba) build(coveralls): remove goveralls (#358)
+- [`93550e9`](https://github.com/alexfalkowski/nonnative/commit/93550e9908392531b1e90ff0b55b9fab01fb3892) build(deps): upgrade ruby to v3.3.1 (#357)
+
 ## [v1.79.14](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.14) - 2024-04-25
 
 - [`4b0b6da`](https://github.com/alexfalkowski/nonnative/commit/4b0b6da047a6a825a04d2db78381c24bcc3ae8ab) fix(deps): bump ruby-lsp from 0.16.4 to 0.16.5 (#356)
