@@ -85,7 +85,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: 2.0
 processes:
   -
     name: start_1
@@ -176,7 +176,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: 2.0
 servers:
   -
     name: server_1
@@ -247,7 +247,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: 2.0
 servers:
   -
     name: http_server_1
@@ -308,7 +308,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: 2.0
 servers:
   -
     name: grpc_server_1
@@ -328,9 +328,9 @@ Nonnative.configure do |config|
 end
 ```
 
-### Services
+### Proxy
 
-A service is an external dependency to your system. This is usually an expensive process to start like a DB and you would prefer to be managed externally. Services are not really exciting by themselves, it's when we add proxies that they allow us to do some extra work.
+As we believe [chaos engineering](https://en.wikipedia.org/wiki/Chaos_engineering), we have added support for [toxiproxy](https://github.com/Shopify/toxiproxy) using the awesome [ruby library](https://github.com/Shopify/toxiproxy-ruby).
 
 Setup it up programmatically:
 
@@ -338,14 +338,9 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
-  config.service do |s|
-    s.name = 'postgres'
-    p.port = 5432
-  end
-
-  config.service do |s|
-    s.name = 'redis'
-    s.port = 6379
+  config.proxy do |p|
+    p.strategy = 'start'
+    p.config = 'toxiproxy.json'
   end
 end
 ```
@@ -353,17 +348,13 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
-processes:
-  -
-    name: postgres
-    port: 5432
-  -
-    name: redis
-    port: 6379
+version: 2.0
+proxy:
+  strategy: start
+  config: toxiproxy.json
 ```
 
-Then load the file with
+Then load the file with:
 
 ```ruby
 require 'nonnative'
@@ -371,181 +362,6 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.load_file('configuration.yml')
 end
-```
-
-#### Proxies
-
-We allow different proxies to be configured. These proxies can be used to simulate all kind of situations. The proxies that can be configured are:
-- `none` (this is the default)
-- `fault_injection`
-
-##### Processes
-
-Setup it up programmatically:
-
-```ruby
-require 'nonnative'
-
-Nonnative.configure do |config|
-  config.process do |p|
-    p.proxy = {
-      kind: 'fault_injection',
-      port: 20_000,
-      log: 'reports/proxy_server.log',
-      options: {
-        delay: 5
-      }
-    }
-  end
-end
-```
-
-Setup it up through configuration:
-
-```yaml
-version: 1.0
-processes:
-  -
-    proxy:
-      kind: fault_injection
-      port: 20000
-      log: reports/proxy_server.log
-      options:
-        delay: 5
-```
-
-##### Servers
-
-Setup it up programmatically:
-
-```ruby
-require 'nonnative'
-
-Nonnative.configure do |config|
-  config.server do |s|
-    s.proxy = {
-      kind: 'fault_injection',
-      port: 20_000,
-      log: 'reports/proxy_server.log',
-      options: {
-        delay: 5
-      }
-    }
-  end
-end
-```
-
-Setup it up through configuration:
-
-```yaml
-version: 1.0
-servers:
-  -
-    proxy:
-      kind: fault_injection
-      port: 20000
-      log: reports/proxy_server.log
-      options:
-        delay: 5
-```
-
-##### Services
-
-Setup it up programmatically:
-
-```ruby
-require 'nonnative'
-
-Nonnative.configure do |config|
-  config.service do |s|
-    s.proxy = {
-      kind: 'fault_injection',
-      port: 20_000,
-      log: 'reports/proxy_server.log',
-      options: {
-        delay: 5
-      }
-    }
-  end
-end
-```
-
-Setup it up through configuration:
-
-```yaml
-version: 1.0
-services:
-  -
-    proxy:
-      kind: fault_injection
-      port: 20000
-      log: reports/proxy_server.log
-      options:
-        delay: 5
-```
-
-##### Fault Injection
-
-The `fault_injection` proxy allows you to simulate failures by injecting them. We currently support the following:
-- `close_all` - Closes the socket as soon as it connects.
-- `delay` - This delays the communication between the connection. Default is 2 secs can be configured through options.
-- `invalid_data` - This takes the input and rearranges it to produce invalid data.
-
-###### Processes
-
-Setup it up programmatically:
-
-```ruby
-name = 'name of process in configuration'
-server = Nonnative.pool.process_by_name(name)
-
-server.proxy.close_all # To use close_all.
-server.proxy.reset # To reset it back to a good state.
-```
-
-With cucumber:
-
-```cucumber
-Given I set the proxy for process 'process_1' to 'close_all'
-Then I should reset the proxy for process 'process_1'
-```
-
-###### Servers
-
-Setup it up programmatically:
-
-```ruby
-name = 'name of server in configuration'
-server = Nonnative.pool.server_by_name(name)
-
-server.proxy.close_all # To use close_all.
-server.proxy.reset # To reset it back to a good state.
-```
-
-With cucumber:
-
-```cucumber
-Given I set the proxy for server 'server_1' to 'close_all'
-Then I should reset the proxy for server 'server_1'
-```
-
-###### Services
-
-Setup it up programmatically:
-
-```ruby
-name = 'name of service in configuration'
-service = Nonnative.pool.service_by_name(name)
-
-service.proxy.close_all # To use close_all.
-service.proxy.reset # To reset it back to a good state.
-```
-
-With cucumber:
-
-```cucumber
-Given I set the proxy for service 'service_1' to 'close_all'
-Then I should reset the proxy for service 'service_1'
 ```
 
 ### Go
@@ -583,7 +399,7 @@ Nonnative.go_executable(tools, 'reports', 'your_binary', 'sub_command', '--confi
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: 2.0
 processes:
   -
     name: go

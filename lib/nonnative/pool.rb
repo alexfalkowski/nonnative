@@ -7,13 +7,11 @@ module Nonnative
     end
 
     def start(&block)
-      services.each(&:start)
       [servers, processes].each { |t| process(t, :start, :open?, &block) }
     end
 
     def stop(&block)
       [processes, servers].each { |t| process(t, :stop, :closed?, &block) }
-      services.each(&:stop)
     end
 
     def process_by_name(name)
@@ -22,10 +20,6 @@ module Nonnative
 
     def server_by_name(name)
       servers[runner_index(configuration.servers, name)].first
-    end
-
-    def service_by_name(name)
-      services[runner_index(configuration.services, name)]
     end
 
     private
@@ -49,10 +43,6 @@ module Nonnative
       @servers ||= configuration.servers.map do |s|
         [s.klass.new(s), Nonnative::Port.new(s)]
       end
-    end
-
-    def services
-      @services ||= configuration.services.map { |s| Nonnative::Service.new(s) }
     end
 
     def process(all, type_method, port_method, &)

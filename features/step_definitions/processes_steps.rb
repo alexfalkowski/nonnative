@@ -4,7 +4,7 @@ Given('I configure the system programatically with processes') do
   Nonnative.configure do |config|
     config.process do |d|
       d.name = 'start_1'
-      d.command = -> { 'features/support/bin/start 20_005' }
+      d.command = -> { 'features/support/bin/start 12_321' }
       d.timeout = 5
       d.host = '127.0.0.1'
       d.port = 12_321
@@ -12,15 +12,6 @@ Given('I configure the system programatically with processes') do
       d.signal = 'INT'
       d.environment = {
         'STRING' => 'true'
-      }
-      d.proxy = {
-        kind: 'fault_injection',
-        host: '127.0.0.1',
-        port: 20_005,
-        log: 'reports/proxy_start_1.log',
-        options: {
-          delay: 10
-        }
       }
     end
 
@@ -48,7 +39,7 @@ When('I send {string} with the TCP client to the processes') do |message|
   ]
 end
 
-When('I send {string} with the TCP client {string} to the processe') do |message, name|
+When('I send {string} with the TCP client {string} to the process') do |message, name|
   client = case name
            when 'start_1'
              Nonnative::Features::TCPClient.new(12_321)
@@ -67,12 +58,4 @@ end
 
 Then('I should receive a TCP {string} response') do |response|
   @responses.each { |r| expect(r).to eq(response) }
-end
-
-Then('I should receive a connection error for client response with TCP') do
-  expect(@response).to be_a Errno::ECONNRESET
-end
-
-Then('I should receive a invalid data that is not {string} for client response with TCP') do |message|
-  expect(@response).not_to eq(message)
 end

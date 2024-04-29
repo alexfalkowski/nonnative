@@ -1,4 +1,4 @@
-version: 1.0
+version: 2.0
 servers:
   -
     name: tcp_server_1
@@ -7,18 +7,9 @@ servers:
     host: 127.0.0.1
     port: 12323
     log: reports/tcp_server_1.log
-    proxy:
-      kind: fault_injection
-      host: 127.0.0.1
-      port: 20000
-      log: reports/proxy_tcp_server_1.log
   -
     name: tcp_server_2
     class: Nonnative::Features::TCPServer
     timeout: 1
     port: 12324
     log: reports/tcp_server_2.log
-    proxy:
-      kind: fault_injection
-      port: 20001
-      log: reports/proxy_tcp_server_2.log

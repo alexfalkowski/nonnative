@@ -10,7 +10,6 @@ module Nonnative
 
     def start
       unless thread
-        proxy.start
         @thread = Thread.new { perform_start }
 
         wait_start
@@ -23,7 +22,6 @@ module Nonnative
       if thread
         perform_stop
         thread.terminate
-        proxy.stop
 
         @thread = nil
         wait_stop

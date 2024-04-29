@@ -10,7 +10,6 @@ module Nonnative
 
     def start
       unless process_exists?
-        proxy.start
         @pid = process_spawn
         wait_start
       end
@@ -21,7 +20,6 @@ module Nonnative
     def stop
       if process_exists?
         process_kill
-        proxy.stop
         wait_stop
       end
 

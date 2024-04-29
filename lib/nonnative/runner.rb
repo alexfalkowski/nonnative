@@ -2,11 +2,8 @@
 
 module Nonnative
   class Runner
-    attr_reader :proxy
-
     def initialize(service)
       @service = service
-      @proxy = Nonnative::ProxyFactory.create(service)
     end
 
     def name

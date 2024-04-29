@@ -17,7 +17,7 @@ module Nonnative
     protected
 
     def perform_start
-      server.add_http2_port("#{proxy.host}:#{proxy.port}", :this_port_is_insecure)
+      server.add_http2_port("#{service.host}:#{service.port}", :this_port_is_insecure)
       server.run
     end
 

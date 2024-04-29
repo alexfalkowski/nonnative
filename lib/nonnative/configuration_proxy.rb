@@ -2,13 +2,11 @@
 
 module Nonnative
   class ConfigurationProxy
-    attr_accessor :kind, :host, :port, :log, :options
+    attr_accessor :strategy, :config
 
     def initialize
-      self.kind = 'none'
-      self.host = '0.0.0.0'
-      self.port = 0
-      self.options = {}
+      self.strategy = 'none'
+      self.config = 'toxiproxy.json'
     end
   end
 end

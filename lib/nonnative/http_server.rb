@@ -13,7 +13,7 @@ module Nonnative
     protected
 
     def perform_start
-      server.add_tcp_listener proxy.host, proxy.port
+      server.add_tcp_listener service.host, service.port
       server.run.join
     end
 

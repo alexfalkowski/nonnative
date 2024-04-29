@@ -3,19 +3,18 @@
 module Nonnative
   class Configuration
     def initialize
+      @proxy = Nonnative::ConfigurationProxy.new
       @processes = []
       @servers = []
-      @services = []
     end
 
-    attr_accessor :processes, :servers, :services
+    attr_accessor :proxy, :processes, :servers, :services
 
     def load_file(path)
       cfg = Nonnative.configurations(path)
 
       add_processes(cfg)
       add_servers(cfg)
-      add_services(cfg)
     end
 
     def process
@@ -30,13 +29,6 @@ module Nonnative
       yield server
 
       servers << server
-    end
-
-    def service
-      service = Nonnative::ConfigurationService.new
-      yield service
-
-      services << service
     end
 
     def process_by_name(name)
@@ -60,8 +52,20 @@ module Nonnative
           d.log = fd.log
           d.signal = fd.signal
           d.environment = fd.environment
+        end
+      end
+    end
 
-          proxy d, fd.proxy
+    def add_servers(cfg)
+      servers = cfg.servers || []
+      servers.each do |fd|
+        server do |s|
+          s.name = fd.name
+          s.klass = Object.const_get(fd.class)
+          s.timeout = fd.timeout
+          s.wait = fd.wait if fd.wait
+          s.port = fd.port
+          s.log = fd.log
         end
       end
     end
@@ -76,50 +80,6 @@ module Nonnative
       else
         -> { process.command }
       end
-    end
-
-    def add_servers(cfg)
-      servers = cfg.servers || []
-      servers.each do |fd|
-        server do |s|
-          s.name = fd.name
-          s.klass = Object.const_get(fd.class)
-          s.timeout = fd.timeout
-          s.wait = fd.wait if fd.wait
-          s.port = fd.port
-          s.log = fd.log
-
-          proxy s, fd.proxy
-        end
-      end
-    end
-
-    def add_services(cfg)
-      services = cfg.services || []
-      services.each do |fd|
-        service do |s|
-          s.name = fd.name
-          s.host = fd.host if fd.host
-          s.port = fd.port
-
-          proxy s, fd.proxy
-        end
-      end
-    end
-
-    def proxy(runner, proxy)
-      return unless proxy
-
-      p = {
-        kind: proxy.kind,
-        port: proxy.port,
-        log: proxy.log,
-        options: proxy.options
-      }
-
-      p[:host] = proxy.host if proxy.host
-
-      runner.proxy = p
     end
   end
 end

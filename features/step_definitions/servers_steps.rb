@@ -25,15 +25,6 @@ Given('I configure the system programatically with servers') do
       s.host = '127.0.0.1'
       s.port = 4567
       s.log = 'reports/http_server_1.log'
-      s.proxy = {
-        kind: 'fault_injection',
-        host: '127.0.0.1',
-        port: 20_001,
-        log: 'reports/proxy_http_server_1.log',
-        options: {
-          delay: 10
-        }
-      }
     end
 
     config.server do |s|
@@ -42,14 +33,6 @@ Given('I configure the system programatically with servers') do
       s.timeout = 1
       s.port = 4568
       s.log = 'reports/http_server_2.log'
-      s.proxy = {
-        kind: 'fault_injection',
-        port: 20_002,
-        log: 'reports/proxy_http_server_2.log',
-        options: {
-          delay: 2
-        }
-      }
     end
 
     config.server do |s|
@@ -58,14 +41,6 @@ Given('I configure the system programatically with servers') do
       s.timeout = 1
       s.port = 9002
       s.log = 'reports/grpc_server_1.log'
-      s.proxy = {
-        kind: 'fault_injection',
-        port: 20_003,
-        log: 'reports/proxy_grpc_server_1.log',
-        options: {
-          delay: 5
-        }
-      }
     end
 
     config.server do |s|
@@ -74,14 +49,6 @@ Given('I configure the system programatically with servers') do
       s.timeout = 1
       s.port = 9003
       s.log = 'reports/grpc_server_2.log'
-      s.proxy = {
-        kind: 'fault_injection',
-        port: 20_004,
-        log: 'reports/proxy_grpc_server_2.log',
-        options: {
-          delay: 7
-        }
-      }
     end
   end
 end
@@ -129,16 +96,6 @@ end
 
 When('I send a not found message with the http client to the servers') do
   @response = Nonnative::Features::HTTPClient.new('http://localhost:4567').not_found
-end
-
-When('I try to find the proxy for server {string}') do |name|
-  Nonnative.pool.server_by_name(name)
-rescue StandardError => e
-  @error = e
-end
-
-Then('I should get a proxy not found error') do
-  expect(@error).to be_a_kind_of(Nonnative::NotFoundError)
 end
 
 Then('I should receive a http {string} response') do |response|
