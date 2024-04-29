@@ -12,11 +12,22 @@ Feature: Processes
     And I should see a log entry of "test" in the file "reports/12_321.log"
     And the process 'start_1' should consume less than '40mb' of memory
 
+  Scenario: Successfully starting of processes with delay
+    Given I configure the system programatically with processes
+    And I start the system
+    And I set the proxy for process 'start_1' to 'delay'
+    When I send "test" with the TCP client to the processes
+    Then I should receive a TCP "test" response
+    And I should see a log entry of "test" for process 'start_1'
+    And I should see a log entry of "test" in the file "reports/12_321.log"
+    And the process 'start_1' should consume less than '40mb' of memory
+    And I should reset the proxy for process 'start_1'
+
   Scenario: Successfully starting of processes and closing connections
     Given I configure the system programatically with processes
     And I start the system
     And I set the proxy for process 'start_1' to 'close_all'
-    When I send "test" with the TCP client 'start_1' to the processe
+    When I send "test" with the TCP client 'start_1' to the process
     Then I should receive a connection error for client response with TCP
     And I should reset the proxy for process 'start_1'
 
@@ -24,7 +35,7 @@ Feature: Processes
     Given I configure the system programatically with processes
     And I start the system
     And I set the proxy for process 'start_1' to 'invalid_data'
-    When I send "test" with the TCP client 'start_1' to the processe
+    When I send "test" with the TCP client 'start_1' to the process
     Then I should receive a invalid data that is not "test" for client response with TCP
     And I should reset the proxy for process 'start_1'
 

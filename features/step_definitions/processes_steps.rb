@@ -48,7 +48,7 @@ When('I send {string} with the TCP client to the processes') do |message|
   ]
 end
 
-When('I send {string} with the TCP client {string} to the processe') do |message, name|
+When('I send {string} with the TCP client {string} to the process') do |message, name|
   client = case name
            when 'start_1'
              Nonnative::Features::TCPClient.new(12_321)
