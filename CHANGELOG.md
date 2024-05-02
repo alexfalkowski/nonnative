@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.79.17](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.17) - 2024-05-02
+
+- [`c9f6feb`](https://github.com/alexfalkowski/nonnative/commit/c9f6febe6837304c7c4af9179b245a4cf7264341) fix(deps): bump grpc from 1.62.0 to 1.63.0 (#369)
+- [`38b533d`](https://github.com/alexfalkowski/nonnative/commit/38b533d1092893f6ecd72105baa341e224c18924) build(deps): bump bin from `e47704b` to `63b9d75` (#368)
+- [`b75b2ce`](https://github.com/alexfalkowski/nonnative/commit/b75b2ceb5dcb0b3e46b022754b94f3aa01d28c44) build(cucumber): ignore files from coverage (#367)
+- [`16884d7`](https://github.com/alexfalkowski/nonnative/commit/16884d7c5da4db7b626f331b858125b57513ccca) test(delay): handle delay (#366)
+- [`4fde86a`](https://github.com/alexfalkowski/nonnative/commit/4fde86a6d8e98e36395ba4cfa8bec02878149a76) build(deps): bump bin from `3976e45` to `e47704b` (#365)
+
 ## [v1.79.16](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.16) - 2024-04-29
 
 - [`975926b`](https://github.com/alexfalkowski/nonnative/commit/975926bace7fac77dc451911ba98cb0b42baece6) fix(deps): bump rubocop from 1.63.3 to 1.63.4 (#362)
