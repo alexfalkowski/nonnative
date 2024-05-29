@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.80.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.80.0) - 2024-05-29
+
+- [`51aa68b`](https://github.com/alexfalkowski/nonnative/commit/51aa68b5d2a344893e6a3710c7b18d8535635b49) feat(deps): add dependabot (#378)
+
 ## [v1.79.19](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.19) - 2024-05-29
 
 - [`1c3b786`](https://github.com/alexfalkowski/nonnative/commit/1c3b786d0f604e122c7027075a46c3c90f00e26c) fix(lint): use super without parenthesis (#377)
