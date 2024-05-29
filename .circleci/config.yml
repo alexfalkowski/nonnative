@@ -26,7 +26,6 @@ jobs:
           path: reports
       - store_artifacts:
           path: reports
-      - run: make outdated-dep
     resource_class: large
   release:
     docker:
