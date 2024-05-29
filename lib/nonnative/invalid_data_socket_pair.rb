@@ -5,7 +5,7 @@ module Nonnative
     def write(socket, data)
       data = data.chars.shuffle.join
 
-      super(socket, data)
+      super
     end
   end
 end

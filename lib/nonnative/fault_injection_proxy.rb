@@ -8,7 +8,7 @@ module Nonnative
       @mutex = Mutex.new
       @state = :none
 
-      super(service)
+      super
     end
 
     def start
