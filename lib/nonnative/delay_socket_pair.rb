@@ -6,7 +6,7 @@ module Nonnative
       duration = proxy.options[:delay] || 2
       sleep duration
 
-      super(socket)
+      super
     end
   end
 end
