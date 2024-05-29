@@ -11,7 +11,7 @@ module Nonnative
         @logger ||= Logger.new(service.log)
       end
 
-      super(service)
+      super
     end
 
     protected

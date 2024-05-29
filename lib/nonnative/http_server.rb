@@ -7,7 +7,7 @@ module Nonnative
       options = { log_writer: Puma::LogWriter.new(log, log) }
       @server = Puma::Server.new(app, Puma::Events.new, options)
 
-      super(service)
+      super
     end
 
     protected

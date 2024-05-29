@@ -3,7 +3,7 @@
 module Nonnative
   class Process < Runner
     def initialize(service)
-      super(service)
+      super
 
       @timeout = Nonnative::Timeout.new(service.timeout)
     end
