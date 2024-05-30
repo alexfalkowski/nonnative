@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.80.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.80.1) - 2024-05-30
+
+- [`ed07e5e`](https://github.com/alexfalkowski/nonnative/commit/ed07e5e4696ac32f49093ae3c50df18aa7772b54) fix(deps): bump config from 5.5.0 to 5.5.1 (#380)
+
 ## [v1.80.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.80.0) - 2024-05-29
 
 - [`51aa68b`](https://github.com/alexfalkowski/nonnative/commit/51aa68b5d2a344893e6a3710c7b18d8535635b49) feat(deps): add dependabot (#378)
