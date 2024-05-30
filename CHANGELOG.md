@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.80.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.80.0) - 2024-05-29
+
+- [`51aa68b`](https://github.com/alexfalkowski/nonnative/commit/51aa68b5d2a344893e6a3710c7b18d8535635b49) feat(deps): add dependabot (#378)
+
+## [v1.79.19](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.19) - 2024-05-29
+
+- [`1c3b786`](https://github.com/alexfalkowski/nonnative/commit/1c3b786d0f604e122c7027075a46c3c90f00e26c) fix(lint): use super without parenthesis (#377)
+- [`9f61d40`](https://github.com/alexfalkowski/nonnative/commit/9f61d40ba12016f49a882fc4db12fbb4d41480f1) build(deps): bump rexml from 3.2.6 to 3.2.8 (#375)
+- [`42d3812`](https://github.com/alexfalkowski/nonnative/commit/42d381273867fbd47db3f5b2d8e6890c663fe18f) build(deps): bump bin from `55a2500` to `93c02b7` (#374)
+- [`91e33d5`](https://github.com/alexfalkowski/nonnative/commit/91e33d5ecd5dc179af1edbc72ba918de08599f84) build(deps): bump bin from `693b345` to `55a2500` (#373)
+
 ## [v1.79.18](https://github.com/alexfalkowski/nonnative/releases/tag/v1.79.18) - 2024-05-09
 
 - [`69e8f65`](https://github.com/alexfalkowski/nonnative/commit/69e8f6599fe48904d1a4c4211359e233f3357a0b) fix(deps): update all (#372)
