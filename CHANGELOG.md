@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.80.2](https://github.com/alexfalkowski/nonnative/releases/tag/v1.80.2) - 2024-06-03
+
+- [`23be8e2`](https://github.com/alexfalkowski/nonnative/commit/23be8e2171da8be55cd4b0ef66ba913005ec6671) fix(deps): bump rubocop from 1.64.0 to 1.64.1 (#383)
+- [`a7fb53d`](https://github.com/alexfalkowski/nonnative/commit/a7fb53ddef4df879276bfa147712afa3e50985ca) build(deps): upgraded to v3.3.2 (#381)
+
 ## [v1.80.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.80.1) - 2024-05-30
 
 - [`ed07e5e`](https://github.com/alexfalkowski/nonnative/commit/ed07e5e4696ac32f49093ae3c50df18aa7772b54) fix(deps): bump config from 5.5.0 to 5.5.1 (#380)
