@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  codecov: codecov/codecov@4.0.1
+
 jobs:
   build:
     docker:
@@ -26,6 +29,8 @@ jobs:
           path: reports
       - store_artifacts:
           path: reports
+      - codecov/upload:
+          file: reports/coverage.xml
     resource_class: large
   release:
     docker:
