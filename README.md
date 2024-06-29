@@ -1,5 +1,7 @@
-[![CircleCI](https://circleci.com/gh/alexfalkowski/nonnative.svg?style=svg)](https://circleci.com/gh/alexfalkowski/nonnative)
+[![CircleCI](https://circleci.com/gh/alexfalkowski/nonnative.svg?style=shield)](https://circleci.com/gh/alexfalkowski/nonnative)
 [![codecov](https://codecov.io/gh/alexfalkowski/nonnative/graph/badge.svg?token=4ISVHEZ72O)](https://codecov.io/gh/alexfalkowski/nonnative)
+[![Gem Version](https://badge.fury.io/rb/nonnative.svg)](https://badge.fury.io/rb/nonnative)
+[![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
 
 # Nonnative
 
