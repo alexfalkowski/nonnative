@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.81.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.81.0) - 2024-07-23
+
+- [`ad59898`](https://github.com/alexfalkowski/nonnative/commit/ad59898a7674aa3357ca44f5322f7200628137ee) feat(deps): upgraded get_process_mem (1.0.0) (#402)
+
 ## [v1.80.15](https://github.com/alexfalkowski/nonnative/releases/tag/v1.80.15) - 2024-07-19
 
 - [`5b47bc5`](https://github.com/alexfalkowski/nonnative/commit/5b47bc52006ee5b8bd7801db217d0f650e4519c4) fix(deps): bump ruby-lsp from 0.17.7 to 0.17.8 (#400)
