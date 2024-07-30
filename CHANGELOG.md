@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.81.3](https://github.com/alexfalkowski/nonnative/releases/tag/v1.81.3) - 2024-07-30
+
+- [`6f075d4`](https://github.com/alexfalkowski/nonnative/commit/6f075d42f63651d01a1aa5fa619326b5a9a970dc) fix(deps): bump rexml from 3.3.1 to 3.3.2 (#405)
+
 ## [v1.81.2](https://github.com/alexfalkowski/nonnative/releases/tag/v1.81.2) - 2024-07-29
 
 - [`8684427`](https://github.com/alexfalkowski/nonnative/commit/8684427b1a9d23ea3f525aba63a2882aa9757e6b) fix(deps): bump grpc from 1.65.1 to 1.65.2 (#404)
