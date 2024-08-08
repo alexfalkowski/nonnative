@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.82.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.0) - 2024-08-08
+
+- [`fff293e`](https://github.com/alexfalkowski/nonnative/commit/fff293ed25a062a474913f2fbf7625c4762da245) feat(go): do not truncate after 16 chars (#412)
+- [`2e7944f`](https://github.com/alexfalkowski/nonnative/commit/2e7944f78d565629d1afc00993adf50c82b9933f) build(ci): remove coveralls (#410)
+
 ## [v1.81.6](https://github.com/alexfalkowski/nonnative/releases/tag/v1.81.6) - 2024-08-05
 
 - [`57687d4`](https://github.com/alexfalkowski/nonnative/commit/57687d442fb909d39711c0f48bcb17aecbd1b416) fix(deps): bump ruby-lsp from 0.17.10 to 0.17.11 (#409)
