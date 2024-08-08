@@ -6,7 +6,7 @@ processes:
       tools: [prof, trace, cover]
       output: reports
       executable: example
-      command: serve
+      command: server
       parameters:
         - --level=info
     timeout: 5

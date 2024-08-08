@@ -7,24 +7,24 @@ Feature: Command
     When I create a go command with:
       | output     | reports      |
       | executable | example      |
-      | command    | serve        |
+      | command    | server        |
       | parameters | --level=info |
     Then I should have a valid go command with:
       | output     | reports      |
       | executable | example      |
-      | command    | serve        |
+      | command    | server        |
       | parameters | --level=info |
 
   Scenario: Go command without parameters
     When I create a go command with:
       | output     | reports |
       | executable | example |
-      | command    | serve   |
+      | command    | server   |
       | parameters |         |
     Then I should have a valid go command with:
       | output     | reports |
       | executable | example |
-      | command    | serve   |
+      | command    | server   |
       | parameters |         |
 
   Scenario: Go command from configuration
@@ -32,5 +32,5 @@ Feature: Command
     Then I should have a valid go command with:
       | output     | reports      |
       | executable | example      |
-      | command    | serve        |
+      | command    | server        |
       | parameters | --level=info |
