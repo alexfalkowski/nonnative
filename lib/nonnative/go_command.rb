@@ -21,7 +21,7 @@ module Nonnative
       suffix = SecureRandom.alphanumeric(4)
       m = File.basename(exec, File.extname(exec))
       p = params.gsub(/\W/, '')
-      name = [m, cmd, p].reject(&:empty?).join('-')[0...15]
+      name = [m, cmd, p].reject(&:empty?).join('-')
       path = "#{output}/#{name}-#{suffix}"
 
       prof(path) + trace(path) + cover(path)

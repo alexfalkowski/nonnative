@@ -5,8 +5,8 @@ processes:
     go:
       tools: [prof, trace, cover]
       output: reports
-      executable: example
-      command: serve
+      executable: thisshouldbelong
+      command: server
       parameters:
         - --level=info
     timeout: 5
