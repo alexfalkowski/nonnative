@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.82.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.1) - 2024-08-12
+
+- [`6be5886`](https://github.com/alexfalkowski/nonnative/commit/6be588625e0d04ce9132d00ef7bfabf9edc720bc) fix(deps): bump concurrent-ruby from 1.3.3 to 1.3.4 (#414)
+- [`3cf27d7`](https://github.com/alexfalkowski/nonnative/commit/3cf27d707c8dea111d879659f7d2aaf99fa23b86) build(deps): bump bin from `44badfa` to `808558f` (#413)
+
 ## [v1.82.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.0) - 2024-08-08
 
 - [`fff293e`](https://github.com/alexfalkowski/nonnative/commit/fff293ed25a062a474913f2fbf7625c4762da245) feat(go): do not truncate after 16 chars (#412)
