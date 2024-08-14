@@ -8,7 +8,7 @@ Given('I configure the system programatically with processes') do
       d.timeout = 5
       d.host = '127.0.0.1'
       d.port = 12_321
-      d.log = 'reports/12_321.log'
+      d.log = 'test/reports/12_321.log'
       d.signal = 'INT'
       d.environment = {
         'STRING' => 'true'
@@ -17,7 +17,7 @@ Given('I configure the system programatically with processes') do
         kind: 'fault_injection',
         host: '127.0.0.1',
         port: 20_005,
-        log: 'reports/proxy_start_1.log',
+        log: 'test/reports/proxy_start_1.log',
         options: {
           delay: 10
         }
@@ -29,7 +29,7 @@ Given('I configure the system programatically with processes') do
       d.command = -> { 'features/support/bin/start 12_322' }
       d.timeout = 5
       d.port = 12_322
-      d.log = 'reports/12_322.log'
+      d.log = 'test/reports/12_322.log'
       d.signal = 'TERM'
     end
   end

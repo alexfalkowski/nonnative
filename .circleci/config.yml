@@ -26,8 +26,7 @@ jobs:
           path: test/reports
       - store_artifacts:
           path: test/reports
-      - codecov/upload:
-          file: reports/coverage.xml
+      - run: make codecov-upload
     resource_class: large
   release:
     docker:

@@ -10,7 +10,7 @@ Given('I configure the system programatically with services') do
         kind: 'fault_injection',
         host: '127.0.0.1',
         port: 30_000,
-        log: 'reports/proxy_service_1.log',
+        log: 'test/reports/proxy_service_1.log',
         options: {
           delay: 7
         }

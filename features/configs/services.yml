@@ -8,4 +8,4 @@ services:
       kind: fault_injection
       host: 127.0.0.1
       port: 30000
-      log: reports/proxy_service_1.log
+      log: test/reports/proxy_service_1.log
