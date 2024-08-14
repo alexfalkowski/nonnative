@@ -3,6 +3,6 @@
 /_yardoc/
 /doc/
 /pkg/
-/reports/
+test/reports/*
 /tmp/
 vendor

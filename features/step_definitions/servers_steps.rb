@@ -7,7 +7,7 @@ Given('I configure the system programatically with servers') do
       s.klass = Nonnative::Features::TCPServer
       s.timeout = 1
       s.port = 12_323
-      s.log = 'reports/tcp_server_1.log'
+      s.log = 'test/reports/tcp_server_1.log'
     end
 
     config.server do |s|
@@ -15,7 +15,7 @@ Given('I configure the system programatically with servers') do
       s.klass = Nonnative::Features::TCPServer
       s.timeout = 1
       s.port = 12_324
-      s.log = 'reports/tcp_server_2.log'
+      s.log = 'test/reports/tcp_server_2.log'
     end
 
     config.server do |s|
@@ -24,12 +24,12 @@ Given('I configure the system programatically with servers') do
       s.timeout = 1
       s.host = '127.0.0.1'
       s.port = 4567
-      s.log = 'reports/http_server_1.log'
+      s.log = 'test/reports/http_server_1.log'
       s.proxy = {
         kind: 'fault_injection',
         host: '127.0.0.1',
         port: 20_001,
-        log: 'reports/proxy_http_server_1.log',
+        log: 'test/reports/proxy_http_server_1.log',
         options: {
           delay: 10
         }
@@ -41,11 +41,11 @@ Given('I configure the system programatically with servers') do
       s.klass = Nonnative::Features::HTTPServer
       s.timeout = 1
       s.port = 4568
-      s.log = 'reports/http_server_2.log'
+      s.log = 'test/reports/http_server_2.log'
       s.proxy = {
         kind: 'fault_injection',
         port: 20_002,
-        log: 'reports/proxy_http_server_2.log',
+        log: 'test/reports/proxy_http_server_2.log',
         options: {
           delay: 2
         }
@@ -57,11 +57,11 @@ Given('I configure the system programatically with servers') do
       s.klass = Nonnative::Features::GRPCServer
       s.timeout = 1
       s.port = 9002
-      s.log = 'reports/grpc_server_1.log'
+      s.log = 'test/reports/grpc_server_1.log'
       s.proxy = {
         kind: 'fault_injection',
         port: 20_003,
-        log: 'reports/proxy_grpc_server_1.log',
+        log: 'test/reports/proxy_grpc_server_1.log',
         options: {
           delay: 5
         }
@@ -73,11 +73,11 @@ Given('I configure the system programatically with servers') do
       s.klass = Nonnative::Features::GRPCServer
       s.timeout = 1
       s.port = 9003
-      s.log = 'reports/grpc_server_2.log'
+      s.log = 'test/reports/grpc_server_2.log'
       s.proxy = {
         kind: 'fault_injection',
         port: 20_004,
-        log: 'reports/proxy_grpc_server_2.log',
+        log: 'test/reports/proxy_grpc_server_2.log',
         options: {
           delay: 7
         }

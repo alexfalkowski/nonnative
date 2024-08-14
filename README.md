@@ -66,7 +66,7 @@ Nonnative.configure do |config|
     p.timeout = 5
     p.wait = 0.1
     p.port = 12_321
-    p.log = 'reports/12_321.log'
+    p.log = '12_321.log'
     p.signal = 'INT' # Possible values are described in Signal.list.keys.
     p.environment = { # Pass environment variables to process.
       'TEST' => 'true'
@@ -79,7 +79,7 @@ Nonnative.configure do |config|
     p.timeout = 0.5
     p.wait = 0.1
     p.port = 12_322
-    p.log = 'reports/12_322.log'
+    p.log = '12_322.log'
   end
 end
 ```
@@ -95,7 +95,7 @@ processes:
     timeout: 5
     wait: 0.1
     port: 12321
-    log: reports/12_321.log
+    log: 12_321.log
     signal: INT # Possible values are described in Signal.list.keys.
     environment: # Pass environment variables to process.
       TEST: true
@@ -105,7 +105,7 @@ processes:
     timeout: 5
     wait: 0.1
     port: 12322
-    log: reports/12_322.log
+    log: 12_322.log
 ```
 
 Then load the file with
@@ -162,7 +162,7 @@ Nonnative.configure do |config|
     s.klass = Nonnative::EchoServer
     s.timeout = 1
     s.port = 12_323
-    s.log = 'reports/server_1.log'
+    s.log = 'server_1.log'
   end
 
   config.server do |s|
@@ -170,7 +170,7 @@ Nonnative.configure do |config|
     s.klass = Nonnative::EchoServer
     s.timeout = 1
     s.port = 12_324
-    s.log = 'reports/server_2.log'
+    s.log = 'server_2.log'
   end
 end
 ```
@@ -185,13 +185,13 @@ servers:
     class: Nonnative::EchoServer
     timeout: 1
     port: 12323
-    log: reports/server_1.log
+    log: server_1.log
   -
     name: server_2
     class: Nonnative::EchoServer
     timeout: 1
     port: 12324
-    log: reports/server_2.log
+    log: server_2.log
 ```
 
 Then load the file with:
@@ -241,7 +241,7 @@ Nonnative.configure do |config|
     s.klass = Nonnative::Features::HTTPServer
     s.timeout = 1
     s.port = 4567
-    s.log = 'reports/http_server_1.log'
+    s.log = 'http_server_1.log'
   end
 end
 ```
@@ -256,7 +256,7 @@ servers:
     class: Nonnative::Features::HTTPServer
     timeout: 1
     port: 4567
-    log: reports/http_server_1.log
+    log: http_server_1.log
 ```
 
 Then load the file with:
@@ -302,7 +302,7 @@ Nonnative.configure do |config|
     s.klass = Nonnative::Features::GRPCServer
     s.timeout = 1
     s.port = 9002
-    s.log = 'reports/grpc_server_1.log'
+    s.log = 'grpc_server_1.log'
   end
 end
 ```
@@ -317,7 +317,7 @@ servers:
     class: Nonnative::Features::GRPCServer
     timeout: 1
     port: 9002
-    log: reports/grpc_server_1.log
+    log: grpc_server_1.log
 ```
 
 Then load the file with:
@@ -393,7 +393,7 @@ Nonnative.configure do |config|
     p.proxy = {
       kind: 'fault_injection',
       port: 20_000,
-      log: 'reports/proxy_server.log',
+      log: 'proxy_server.log',
       options: {
         delay: 5
       }
@@ -411,7 +411,7 @@ processes:
     proxy:
       kind: fault_injection
       port: 20000
-      log: reports/proxy_server.log
+      log: proxy_server.log
       options:
         delay: 5
 ```
@@ -428,7 +428,7 @@ Nonnative.configure do |config|
     s.proxy = {
       kind: 'fault_injection',
       port: 20_000,
-      log: 'reports/proxy_server.log',
+      log: 'proxy_server.log',
       options: {
         delay: 5
       }
@@ -446,7 +446,7 @@ servers:
     proxy:
       kind: fault_injection
       port: 20000
-      log: reports/proxy_server.log
+      log: proxy_server.log
       options:
         delay: 5
 ```
@@ -463,7 +463,7 @@ Nonnative.configure do |config|
     s.proxy = {
       kind: 'fault_injection',
       port: 20_000,
-      log: 'reports/proxy_server.log',
+      log: 'proxy_server.log',
       options: {
         delay: 5
       }
@@ -481,7 +481,7 @@ services:
     proxy:
       kind: fault_injection
       port: 20000
-      log: reports/proxy_server.log
+      log: proxy_server.log
       options:
         delay: 5
 ```
@@ -598,5 +598,5 @@ processes:
         - --config config.yaml
     timeout: 5
     port: 8000
-    log: reports/go.log
+    log: go.log
 ```

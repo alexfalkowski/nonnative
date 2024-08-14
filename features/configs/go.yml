@@ -11,4 +11,4 @@ processes:
         - --level=info
     timeout: 5
     port: 8000
-    log: reports/go.log
+    log: test/reports/go.log

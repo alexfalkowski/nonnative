@@ -7,7 +7,7 @@ processes:
     wait: 0.2
     host: 127.0.0.1
     port: 12321
-    log: reports/12_321.log
+    log: test/reports/12_321.log
     signal: INT
     environment:
       STRING: true
@@ -17,5 +17,5 @@ processes:
     timeout: 5
     wait: 0.2
     port: 12322
-    log: reports/12_322.log
+    log: test/reports/12_322.log
     signal: TERM
