@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  codecov: codecov/codecov@4.0.1
-
 jobs:
   build:
     docker:
@@ -26,9 +23,9 @@ jobs:
       - run: make lint
       - run: make features
       - store_test_results:
-          path: reports
+          path: test/reports
       - store_artifacts:
-          path: reports
+          path: test/reports
       - codecov/upload:
           file: reports/coverage.xml
     resource_class: large

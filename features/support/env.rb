@@ -9,7 +9,7 @@ SimpleCov.start do
   add_filter '/features/'
   add_filter '/test/'
   add_filter 'lib/nonnative/cucumber.rb'
-  coverage_dir 'reports'
+  coverage_dir 'test/reports'
 end
 
 require 'nonnative'
