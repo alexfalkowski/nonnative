@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.82.2](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.2) - 2024-08-15
+
+- [`03912b7`](https://github.com/alexfalkowski/nonnative/commit/03912b77e9a7bd81bfb6904aa50a8b4ab1a03f60) fix(deps): bump ruby-lsp from 0.17.12 to 0.17.13 (#418)
+- [`905aadc`](https://github.com/alexfalkowski/nonnative/commit/905aadcca14bd65b13e4c955a2189996dddf94b6) build(deps): bump bin from `bc89e5f` to `41b7c8b` (#419)
+- [`e2ea08d`](https://github.com/alexfalkowski/nonnative/commit/e2ea08d1bfb02a6c04d4a6be52753d620e462b8f) build(deps): bump bin from `9871d16` to `bc89e5f` (#417)
+- [`062c5d7`](https://github.com/alexfalkowski/nonnative/commit/062c5d7ea58ccdb18e3e2dffb3fd2e2c74580320) build(codecov): add codecov (#415)
+- [`9e9c4ce`](https://github.com/alexfalkowski/nonnative/commit/9e9c4ce7d127bec4d38fc8686a433a848735d510) build(deps): bump bin from `808558f` to `9871d16` (#416)
+
 ## [v1.82.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.1) - 2024-08-12
 
 - [`6be5886`](https://github.com/alexfalkowski/nonnative/commit/6be588625e0d04ce9132d00ef7bfabf9edc720bc) fix(deps): bump concurrent-ruby from 1.3.3 to 1.3.4 (#414)
