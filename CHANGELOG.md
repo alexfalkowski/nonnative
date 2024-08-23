@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.82.6](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.6) - 2024-08-23
+
+- [`cf86bbf`](https://github.com/alexfalkowski/nonnative/commit/cf86bbfba349523e6f4ee7e00d6136c27543c055) fix(deps): bump rexml from 3.3.4 to 3.3.6 (#423)
+
 ## [v1.82.5](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.5) - 2024-08-21
 
 - [`ab539f2`](https://github.com/alexfalkowski/nonnative/commit/ab539f26edfab85be209e4012ed9c4f2dc9441a3) fix(deps): bump rspec-expectations from 3.13.1 to 3.13.2 (#422)
