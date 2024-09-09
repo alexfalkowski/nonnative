@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.82.12](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.12) - 2024-09-09
+
+- [`38b36cf`](https://github.com/alexfalkowski/nonnative/commit/38b36cfca4b4e3237e38cb04adc581d5fd69808f) fix(deps): bump rspec-expectations from 3.13.2 to 3.13.3 (#431)
+
 ## [v1.82.11](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.11) - 2024-09-05
 
 - [`6bf96b3`](https://github.com/alexfalkowski/nonnative/commit/6bf96b3597950ab155f79e3a06ffa19f44fdac96) fix(deps): bump rubocop from 1.66.0 to 1.66.1 (#430)
