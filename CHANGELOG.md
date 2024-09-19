@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.82.13](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.13) - 2024-09-19
+
+- [`de28cfe`](https://github.com/alexfalkowski/nonnative/commit/de28cfebf3d1a80251fe55b42eb001ffdbb0400a) fix(deps): bump google-protobuf from 4.27.3 to 4.27.5 (#434)
+- [`efbbd21`](https://github.com/alexfalkowski/nonnative/commit/efbbd217a51b4685407dffb25055223a8d6364d7) build(deps): bump bin from `b975eab` to `8b87d26` (#433)
+- [`075a229`](https://github.com/alexfalkowski/nonnative/commit/075a22999e5c0d1216260fcd8ed6f8f11bc3d74b) build(deps): bump bin from `1eca781` to `b975eab` (#432)
+
 ## [v1.82.12](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.12) - 2024-09-09
 
 - [`38b36cf`](https://github.com/alexfalkowski/nonnative/commit/38b36cfca4b4e3237e38cb04adc581d5fd69808f) fix(deps): bump rspec-expectations from 3.13.2 to 3.13.3 (#431)
