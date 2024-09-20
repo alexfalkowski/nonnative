@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.82.14](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.14) - 2024-09-20
+
+- [`ecedac6`](https://github.com/alexfalkowski/nonnative/commit/ecedac692a5e208cd84173396670e8bf9661e0d7) fix(deps): bump puma from 6.4.2 to 6.4.3 (#436)
+
 ## [v1.82.13](https://github.com/alexfalkowski/nonnative/releases/tag/v1.82.13) - 2024-09-19
 
 - [`de28cfe`](https://github.com/alexfalkowski/nonnative/commit/de28cfebf3d1a80251fe55b42eb001ffdbb0400a) fix(deps): bump google-protobuf from 4.27.3 to 4.27.5 (#434)
