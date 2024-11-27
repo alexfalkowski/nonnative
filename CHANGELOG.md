@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.83.5](https://github.com/alexfalkowski/nonnative/releases/tag/v1.83.5) - 2024-11-27
+
+- [`4431063`](https://github.com/alexfalkowski/nonnative/commit/44310634ec5a19ea9e60fee9084a31fd8ae1dbf3) fix(deps): bump rubocop from 1.68.0 to 1.69.0 (#461)
+
 ## [v1.83.4](https://github.com/alexfalkowski/nonnative/releases/tag/v1.83.4) - 2024-11-25
 
 - [`85641f3`](https://github.com/alexfalkowski/nonnative/commit/85641f3d31c7b4289a01aa3f9a5e7fc90e546fcf) fix(deps): bump puma from 6.4.3 to 6.5.0 (#460)
