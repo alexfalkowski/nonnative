@@ -26,6 +26,9 @@ Given('I configure the system through configuration with services') do
   Nonnative.configure do |config|
     config.load_file('features/configs/services.yml')
   end
+
+  expect(Nonnative.configuration.version).to eq('1.0')
+  expect(Nonnative.configuration.url).to eq('http://localhost:4567')
 end
 
 When('I connect to the service') do

@@ -13,6 +13,9 @@ module Nonnative
     def load_file(path)
       cfg = Nonnative.configurations(path)
 
+      self.version = cfg.version
+      self.url = cfg.url
+
       add_processes(cfg)
       add_servers(cfg)
       add_services(cfg)

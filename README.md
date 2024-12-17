@@ -92,7 +92,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: "1.0"
 url: http://localhost:4567
 processes:
   -
@@ -187,7 +187,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: "1.0"
 url: http://localhost:4567
 servers:
   -
@@ -262,7 +262,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: "1.0"
 url: http://localhost:4567
 servers:
   -
@@ -327,7 +327,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: "1.0"
 url: http://localhost:4567
 servers:
   -
@@ -376,7 +376,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: "1.0"
 processes:
   -
     name: postgres
@@ -429,7 +429,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: "1.0"
 url: http://localhost:4567
 processes:
   -
@@ -468,7 +468,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: "1.0"
 url: http://localhost:4567
 servers:
   -
@@ -507,7 +507,7 @@ end
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: "1.0"
 url: http://localhost:4567
 services:
   -
@@ -618,7 +618,7 @@ Nonnative.go_executable(tools, 'reports', 'your_binary', 'sub_command', '--confi
 Setup it up through configuration:
 
 ```yaml
-version: 1.0
+version: "1.0"
 url: http://localhost:4567
 processes:
   -

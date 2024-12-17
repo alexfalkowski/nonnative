@@ -93,6 +93,9 @@ Given('I configure the system through configuration with servers') do
   Nonnative.configure do |config|
     config.load_file('features/configs/servers.yml')
   end
+
+  expect(Nonnative.configuration.version).to eq('1.0')
+  expect(Nonnative.configuration.url).to eq('http://localhost:4567')
 end
 
 When('I send a message with the tcp client to the servers') do
