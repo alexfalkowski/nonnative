@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.84.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.84.1) - 2024-12-17
+
+- [`1fb44bd`](https://github.com/alexfalkowski/nonnative/commit/1fb44bdb781b6d5d9f88e3d6565eca848aad189e) fix(config): make sure we set properties (#467)
+
 ## [v1.84.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.84.0) - 2024-12-17
 
 - [`14daed4`](https://github.com/alexfalkowski/nonnative/commit/14daed43ab1d64baa32d004d875409784813590c) feat(cucumber): add ability to control faults (#466)
