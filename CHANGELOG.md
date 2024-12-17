@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.84.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.84.0) - 2024-12-17
+
+- [`14daed4`](https://github.com/alexfalkowski/nonnative/commit/14daed43ab1d64baa32d004d875409784813590c) feat(cucumber): add ability to control faults (#466)
+
 ## [v1.83.8](https://github.com/alexfalkowski/nonnative/releases/tag/v1.83.8) - 2024-12-13
 
 - [`64a5686`](https://github.com/alexfalkowski/nonnative/commit/64a568628ad845cc274c0b5dbe18a9d77c806be7) fix(deps): bump rubocop from 1.69.1 to 1.69.2 (#465)
