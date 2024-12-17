@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-Given('I configure the system programatically with services') do
+Given('I configure the system programmatically with services') do
   Nonnative.configure do |config|
+    config.version = '1.0'
+    config.url = 'http://localhost:4567'
+
     config.service do |s|
       s.name = 'service_1'
       s.host = '127.0.0.1'

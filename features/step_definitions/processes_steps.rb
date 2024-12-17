@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-Given('I configure the system programatically with processes') do
+Given('I configure the system programmatically with processes') do
   Nonnative.configure do |config|
+    config.version = '1.0'
+    config.url = 'http://localhost:4567'
+
     config.process do |d|
       d.name = 'start_1'
       d.command = -> { 'features/support/bin/start 20_005' }

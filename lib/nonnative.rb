@@ -16,6 +16,8 @@ require 'config'
 require 'cucumber'
 require 'get_process_mem'
 require 'rspec-benchmark'
+require 'rspec/expectations'
+require 'rspec/wait'
 
 require 'nonnative/version'
 require 'nonnative/error'
@@ -66,6 +68,10 @@ module Nonnative
 
     def go_executable(tools, output, exec, cmd, *params)
       Nonnative::GoCommand.new(tools, exec, output).executable(cmd, params)
+    end
+
+    def observability
+      @observability ||= Nonnative::Observability.new(configuration.url)
     end
 
     def configuration

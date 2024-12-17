@@ -8,7 +8,7 @@ module Nonnative
       @services = []
     end
 
-    attr_accessor :processes, :servers, :services
+    attr_accessor :version, :url, :processes, :servers, :services
 
     def load_file(path)
       cfg = Nonnative.configurations(path)

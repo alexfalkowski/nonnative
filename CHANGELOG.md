@@ -1379,7 +1379,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - [`787e490`](https://github.com/alexfalkowski/nonnative/commit/787e490b71884c8dcd0920778b88fd94d520dfab) feat: remove logs
 - [`1b3b01c`](https://github.com/alexfalkowski/nonnative/commit/1b3b01c17cb3b634e17a68e8e88404ff66fa6be5) feat: add puma (4.3.3)
 - [`4e0c55d`](https://github.com/alexfalkowski/nonnative/commit/4e0c55d8b4776c0e1142b1fcc66d7816fde6c875) Merge pull request #27 from alexfalkowski/feature/add-tests
-- [`111d81d`](https://github.com/alexfalkowski/nonnative/commit/111d81da298a7203c08fa5725e2310736b613fb9) feat: successfully starting of HTTP servers programatically with not found message
+- [`111d81d`](https://github.com/alexfalkowski/nonnative/commit/111d81da298a7203c08fa5725e2310736b613fb9) feat: successfully starting of HTTP servers programmatically with not found message
 - [`047efaf`](https://github.com/alexfalkowski/nonnative/commit/047efaf9d6e2b721d92ce17fa348326b07705008) test: cover post
 - [`c38d8a3`](https://github.com/alexfalkowski/nonnative/commit/c38d8a34b54f4bf7036d0794fa788015a9de9043) Merge pull request #26 from alexfalkowski/feature/debt
 - [`cb93b23`](https://github.com/alexfalkowski/nonnative/commit/cb93b23a3c8ae463b656fb4a43e2b7dab83db2f5) fix: add comments
@@ -1406,14 +1406,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - [`3719e3c`](https://github.com/alexfalkowski/nonnative/commit/3719e3ce45c44ddfa26da87e41cc1604e2dcd88d) refactor: move to greeter file
 - [`d9f58b2`](https://github.com/alexfalkowski/nonnative/commit/d9f58b212e729f3316b3d790078610d2312e100d) Merge pull request #22 from alexfalkowski/feature/observability
 - [`1df039d`](https://github.com/alexfalkowski/nonnative/commit/1df039d931aa04ce105e91b9bfb6452d9a0ce64a) build: bump to version 1.7.0
-- [`4536904`](https://github.com/alexfalkowski/nonnative/commit/45369041a8d95e240b5533d2132b60fa4d31278f) feat: successfully starting of HTTP servers programatically and getting metrics
-- [`be9ae06`](https://github.com/alexfalkowski/nonnative/commit/be9ae06952e83af666f654a9782b596673709c87) feat: successfully starting of HTTP servers programatically and getting health
+- [`4536904`](https://github.com/alexfalkowski/nonnative/commit/45369041a8d95e240b5533d2132b60fa4d31278f) feat: successfully starting of HTTP servers programmatically and getting metrics
+- [`be9ae06`](https://github.com/alexfalkowski/nonnative/commit/be9ae06952e83af666f654a9782b596673709c87) feat: successfully starting of HTTP servers programmatically and getting health
 - [`fdb61da`](https://github.com/alexfalkowski/nonnative/commit/fdb61da719e6cf3d35db7d8af6acea19481a8ff9) feat: use ruby 2.6.6
 - [`87f6e0f`](https://github.com/alexfalkowski/nonnative/commit/87f6e0feb0c2a504d773bc1d77e5c00a403c6365) Merge pull request #21 from alexfalkowski/feature/fake-servers
 - [`1093f30`](https://github.com/alexfalkowski/nonnative/commit/1093f30717f1891a4644c63c4fea3d0640599578) build: bump to version 1.6.0
 - [`7aa120e`](https://github.com/alexfalkowski/nonnative/commit/7aa120e282eca41384c73f0c233b348f489b7e60) docs: add examples for http and grpc
-- [`cc92276`](https://github.com/alexfalkowski/nonnative/commit/cc9227620ecb8133277871967eb835f67943ccad) feat: successfully starting of grpc servers programatically
-- [`93373f1`](https://github.com/alexfalkowski/nonnative/commit/93373f1b85d50328b54ee49236f55acd2c5c0180) feat: successfully starting of HTTP servers programatically
+- [`cc92276`](https://github.com/alexfalkowski/nonnative/commit/cc9227620ecb8133277871967eb835f67943ccad) feat: successfully starting of grpc servers programmatically
+- [`93373f1`](https://github.com/alexfalkowski/nonnative/commit/93373f1b85d50328b54ee49236f55acd2c5c0180) feat: successfully starting of HTTP servers programmatically
 - [`d27904b`](https://github.com/alexfalkowski/nonnative/commit/d27904b7e6c4c9b510ae860e42a7d10a4cc0035f) test: rename to tcp
 - [`42c10e9`](https://github.com/alexfalkowski/nonnative/commit/42c10e99e951450efce4a529b75f18a0f4f5fd36) test: add grpc-tools (~> 1.28)
 - [`6cabe9e`](https://github.com/alexfalkowski/nonnative/commit/6cabe9e6e6107405459be0cdf93afc9fae742d6e) feat: add grpc (~> 1.28)
