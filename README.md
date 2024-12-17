@@ -35,6 +35,8 @@ Or install it yourself as:
 
 Configure nonnative with the following:
 
+- The version of the configuration (1.0).
+- The URL of the service.
 - Process, Server or Service that you want to start.
 - A timeout value.
 - A time to wait.
@@ -60,6 +62,9 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
+  config.version = '1.0'
+  config.url = 'http://localhost:4567'
+
   config.process do |p|
     p.name = 'start_1'
     p.command = -> { 'features/support/bin/start 12_321' }
@@ -88,6 +93,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
+url: http://localhost:4567
 processes:
   -
     name: start_1
@@ -157,6 +163,9 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
+  config.version = '1.0'
+  config.url = 'http://localhost:4567'
+
   config.server do |s|
     s.name = 'server_1'
     s.klass = Nonnative::EchoServer
@@ -179,6 +188,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
+url: http://localhost:4567
 servers:
   -
     name: server_1
@@ -236,6 +246,9 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
+  config.version = '1.0'
+  config.url = 'http://localhost:4567'
+
   config.server do |s|
     s.name = 'http_server_1'
     s.klass = Nonnative::Features::HTTPServer
@@ -250,6 +263,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
+url: http://localhost:4567
 servers:
   -
     name: http_server_1
@@ -297,6 +311,9 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
+  config.version = '1.0'
+  config.url = 'http://localhost:4567'
+
   config.server do |s|
     s.name = 'grpc_server_1'
     s.klass = Nonnative::Features::GRPCServer
@@ -311,6 +328,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
+url: http://localhost:4567
 servers:
   -
     name: grpc_server_1
@@ -340,6 +358,9 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
+  config.version = '1.0'
+  config.url = 'http://localhost:4567'
+
   config.service do |s|
     s.name = 'postgres'
     p.port = 5432
@@ -389,6 +410,9 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
+  config.version = '1.0'
+  config.url = 'http://localhost:4567'
+
   config.process do |p|
     p.proxy = {
       kind: 'fault_injection',
@@ -406,6 +430,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
+url: http://localhost:4567
 processes:
   -
     proxy:
@@ -424,6 +449,9 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
+  config.version = '1.0'
+  config.url = 'http://localhost:4567'
+
   config.server do |s|
     s.proxy = {
       kind: 'fault_injection',
@@ -441,6 +469,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
+url: http://localhost:4567
 servers:
   -
     proxy:
@@ -459,6 +488,9 @@ Setup it up programmatically:
 require 'nonnative'
 
 Nonnative.configure do |config|
+  config.version = '1.0'
+  config.url = 'http://localhost:4567'
+
   config.service do |s|
     s.proxy = {
       kind: 'fault_injection',
@@ -476,6 +508,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
+url: http://localhost:4567
 services:
   -
     proxy:
@@ -586,6 +619,7 @@ Setup it up through configuration:
 
 ```yaml
 version: 1.0
+url: http://localhost:4567
 processes:
   -
     name: go

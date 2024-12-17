@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-Given('I configure the system programatically with servers') do
+Given('I configure the system programmatically with servers') do
   Nonnative.configure do |config|
+    config.version = '1.0'
+    config.url = 'http://localhost:4567'
+
     config.server do |s|
       s.name = 'tcp_server_1'
       s.klass = Nonnative::Features::TCPServer
@@ -124,7 +127,7 @@ When('I send a message with the grpc client to the servers') do
 end
 
 When('I send a {string} request') do |name|
-  @response = Nonnative::Observability.new('http://localhost:4567').send(name, { headers: { content_type: :json, accept: :json } })
+  @response = Nonnative.observability.send(name, { headers: { content_type: :json, accept: :json } })
 end
 
 When('I send a not found message with the http client to the servers') do
@@ -163,7 +166,7 @@ Then('I should receive a http not found response') do
 end
 
 Then('I should receive a connection error for metrics response with HTTP') do
-  expect { Nonnative::Observability.new('http://localhost:4567').metrics }.to raise_error(StandardError)
+  expect { Nonnative.observability.metrics }.to raise_error(StandardError)
 end
 
 Then('I should receive a delay error for hello response with HTTP') do

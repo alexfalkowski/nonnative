@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 World(RSpec::Benchmark::Matchers)
+World(RSpec::Matchers)
+World(RSpec::Wait)
 
 Before('@startup') do
   Nonnative.start
@@ -35,6 +37,20 @@ end
 
 Given('I start the system') do
   Nonnative.start
+end
+
+Given('I should see {string} as unhealthy') do |service|
+  opts = {
+    headers: { content_type: :json, accept: :json },
+    read_timeout: 10, open_timeout: 10
+  }
+
+  wait_for do
+    @response = Nonnative.observability.health(opts)
+    @response.code
+  end.to eq(503)
+
+  expect(@response.body).to include(service)
 end
 
 Then('I should reset the proxy for process {string}') do |name|
@@ -76,4 +92,18 @@ end
 
 Then('I should see a log entry of {string} in the file {string}') do |message, path|
   expect(Nonnative.log_lines(path, ->(l) { l.include?(message) }).first).to include(message)
+end
+
+Then('I should see {string} as healthy') do |service|
+  opts = {
+    headers: { content_type: :json, accept: :json },
+    read_timeout: 10, open_timeout: 10
+  }
+
+  wait_for do
+    @response = Nonnative.observability.health(opts)
+    @response.code
+  end.to eq(200)
+
+  expect(@response.body).to_not include(service)
 end
