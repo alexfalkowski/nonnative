@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.84.2](https://github.com/alexfalkowski/nonnative/releases/tag/v1.84.2) - 2025-01-07
+
+- [`82194e1`](https://github.com/alexfalkowski/nonnative/commit/82194e14b69691860a3d289448f94711a5d18db7) fix(deps): bump ruby-lsp from 0.22.1 to 0.23.1 (#475)
+- [`66da445`](https://github.com/alexfalkowski/nonnative/commit/66da445e63ff2488594ec3298cde30963f576dcb) build(deps): bump bin from `08600e7` to `a278340` (#474)
+- [`7ca543c`](https://github.com/alexfalkowski/nonnative/commit/7ca543c78f0d61f7357cb1b9d9988a5ea28cec20) build(ci): add make clean-dep (#473)
+- [`982e551`](https://github.com/alexfalkowski/nonnative/commit/982e5514b9f698e53d1a175e717c41192a2987f2) build(deps): bump bin from `bde1e44` to `08600e7` (#472)
+- [`10b1db6`](https://github.com/alexfalkowski/nonnative/commit/10b1db64908e7200d86dfb7f8690d9c673f1227e) test(deps): upgraded bundler to 2.6.1 (#471)
+- [`f5b0c17`](https://github.com/alexfalkowski/nonnative/commit/f5b0c17b33d1af1b58e8f6d5d757a29c89c2bb15) build(deps): bump bin from `a433391` to `bde1e44` (#470)
+- [`e4da404`](https://github.com/alexfalkowski/nonnative/commit/e4da4049682b648351815ecc28820d38d027a661) build(deps): bump bin from `9fa29e2` to `a433391` (#469)
+- [`cd74167`](https://github.com/alexfalkowski/nonnative/commit/cd7416731e9c882b315aac3b5dae9f4f463c2e2b) build(deps): bump bin from `10049eb` to `9fa29e2` (#468)
+
 ## [v1.84.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.84.1) - 2024-12-17
 
 - [`1fb44bd`](https://github.com/alexfalkowski/nonnative/commit/1fb44bdb781b6d5d9f88e3d6565eca848aad189e) fix(config): make sure we set properties (#467)
