@@ -28,7 +28,7 @@ GEM
     config (5.5.2)
       deep_merge (~> 1.2, >= 1.2.1)
       ostruct
-    cucumber (9.2.0)
+    cucumber (9.2.1)
       builder (~> 3.2)
       cucumber-ci-environment (> 9, < 11)
       cucumber-core (> 13, < 14)
