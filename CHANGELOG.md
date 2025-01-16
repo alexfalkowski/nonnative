@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.84.8](https://github.com/alexfalkowski/nonnative/releases/tag/v1.84.8) - 2025-01-16
+
+- [`c9d488a`](https://github.com/alexfalkowski/nonnative/commit/c9d488ae8a73424dfb3125e639ad551c2f7cf2d0) fix(deps): bump concurrent-ruby from 1.3.4 to 1.3.5 (#483)
+- [`2b7f2a9`](https://github.com/alexfalkowski/nonnative/commit/2b7f2a998032196eeabf7a9373d97da0fa831c2e) build(ci): update ruby:1.3 (#482)
+
 ## [v1.84.7](https://github.com/alexfalkowski/nonnative/releases/tag/v1.84.7) - 2025-01-13
 
 - [`af10e51`](https://github.com/alexfalkowski/nonnative/commit/af10e51fd4b2115df69d84c341b5e2c76672484a) fix(deps): bump rubocop from 1.69.2 to 1.70.0 (#480)
