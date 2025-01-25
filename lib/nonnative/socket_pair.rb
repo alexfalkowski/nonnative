@@ -40,7 +40,7 @@ module Nonnative
     end
 
     def read(socket)
-      socket.recv(1024)
+      socket.recv(1024) || ''
     end
 
     def write(socket, data)
