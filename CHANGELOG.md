@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.86.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.86.0) - 2025-01-25
+
+- [`9f3be69`](https://github.com/alexfalkowski/nonnative/commit/9f3be69130570a6842d6559c929fe6cb480dd1df) feat(http_server): use webrick (#490)
+
 ## [v1.85.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.85.1) - 2025-01-25
 
 - [`14b648f`](https://github.com/alexfalkowski/nonnative/commit/14b648f96addc49163e14a22ae904f2fafec79ca) fix(socket_pair): handle nil from recv (#488)
