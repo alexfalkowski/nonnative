@@ -3,9 +3,9 @@ AllCops:
   DisplayCopNames: true
   NewCops: enable
   Exclude:
-    - 'bin/**/*'
-    - 'vendor/**/*'
-    - 'test/grpc/**/*'
+    - "bin/**/*"
+    - "vendor/**/*"
+    - "test/grpc/**/*"
 
 Layout/LineLength:
   Max: 150
@@ -14,7 +14,7 @@ Metrics/MethodLength:
   Max: 20
 
 Metrics/BlockLength:
-  Max: 80
+  Max: 90
 
 Metrics/AbcSize:
   Max: 25
@@ -23,4 +23,7 @@ Style/Documentation:
   Enabled: false
 
 Lint/HashCompareByIdentity:
+  Enabled: false
+
+Style/NumericPredicate:
   Enabled: false

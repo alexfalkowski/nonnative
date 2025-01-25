@@ -37,6 +37,7 @@ Configure nonnative with the following:
 
 - The version of the configuration (1.0).
 - The URL of the service.
+- The time to wait on proxy changes (fault injection).
 - Process, Server or Service that you want to start.
 - A timeout value.
 - A time to wait.
@@ -64,6 +65,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.wait = 2.0
 
   config.process do |p|
     p.name = 'start_1'
@@ -94,6 +96,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+wait: 2.0
 processes:
   -
     name: start_1
