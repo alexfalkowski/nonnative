@@ -1,8 +1,8 @@
 version: "1.0"
 url: http://localhost:4567
+wait: 1.0
 processes:
-  -
-    name: start_1
+  - name: start_1
     command: features/support/bin/start 12_321
     timeout: 5
     wait: 0.2
@@ -12,8 +12,7 @@ processes:
     signal: INT
     environment:
       STRING: true
-  -
-    name: start_2
+  - name: start_2
     command: features/support/bin/start 12_322
     timeout: 5
     wait: 0.2

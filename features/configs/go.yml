@@ -1,8 +1,8 @@
 version: "1.0"
 url: http://localhost:4567
+wait: 1.0
 processes:
-  -
-    name: go
+  - name: go
     go:
       tools: [prof, trace, cover]
       output: reports

@@ -1,8 +1,8 @@
 version: "1.0"
 url: http://localhost:4567
+wait: 1.0
 servers:
-  -
-    name: tcp_server_1
+  - name: tcp_server_1
     class: Nonnative::Features::TCPServer
     timeout: 1
     host: 127.0.0.1
@@ -13,8 +13,7 @@ servers:
       host: 127.0.0.1
       port: 20000
       log: test/reports/proxy_tcp_server_1.log
-  -
-    name: tcp_server_2
+  - name: tcp_server_2
     class: Nonnative::Features::TCPServer
     timeout: 1
     port: 12324
