@@ -4,13 +4,13 @@ module Nonnative
   module Features
     class HTTPServer < Nonnative::HTTPServer
       def app
-        Application.new
+        Application
       end
     end
 
     class Application < Sinatra::Application
       configure do
-        set :server_settings, log_requests: true
+        set :logging, false
       end
 
       get '/hello' do
