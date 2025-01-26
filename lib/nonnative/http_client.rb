@@ -44,7 +44,7 @@ module Nonnative
       yield
     rescue RestClient::Exceptions::ReadTimeout => e
       raise e
-    rescue RestClient::ExceptionWithResponse => e
+    rescue RestClient::Exception => e
       e.response
     end
   end
