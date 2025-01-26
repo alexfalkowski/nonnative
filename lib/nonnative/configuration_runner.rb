@@ -18,6 +18,7 @@ module Nonnative
       proxy.host = value[:host] if value[:host]
       proxy.port = value[:port]
       proxy.log = value[:log]
+      proxy.wait = value[:wait] if value[:wait]
       proxy.options = value[:options]
     end
   end

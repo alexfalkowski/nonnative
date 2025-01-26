@@ -1,6 +1,5 @@
 version: "1.0"
 url: http://localhost:4567
-wait: 1.0
 servers:
   - name: tcp_server_1
     class: Nonnative::Features::TCPServer
@@ -22,3 +21,4 @@ servers:
       kind: fault_injection
       port: 20001
       log: test/reports/proxy_tcp_server_2.log
+      wait: 1

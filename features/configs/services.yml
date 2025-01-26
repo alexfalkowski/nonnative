@@ -1,6 +1,5 @@
 version: "1.0"
 url: http://localhost:4567
-wait: 1.0
 services:
   - name: service_1
     host: 127.0.0.1
@@ -10,3 +9,4 @@ services:
       host: 127.0.0.1
       port: 30000
       log: test/reports/proxy_service_1.log
+      wait: 1

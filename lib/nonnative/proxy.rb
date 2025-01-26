@@ -9,5 +9,9 @@ module Nonnative
     protected
 
     attr_reader :service
+
+    def wait
+      sleep service.proxy.wait
+    end
   end
 end

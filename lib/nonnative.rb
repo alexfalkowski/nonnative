@@ -58,12 +58,6 @@ module Nonnative
   class << self
     attr_reader :pool
 
-    def wait
-      wait = Nonnative.configuration.wait
-
-      sleep wait if wait
-    end
-
     def configurations(*files)
       Config.load_files(files)
     end

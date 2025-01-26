@@ -21,6 +21,7 @@ Given('I configure the system programmatically with processes') do
         host: '127.0.0.1',
         port: 20_005,
         log: 'test/reports/proxy_start_1.log',
+        wait: 1,
         options: {
           delay: 10
         }
