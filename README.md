@@ -65,7 +65,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
-  config.wait = 2.0
+  config.wait = 1
 
   config.process do |p|
     p.name = 'start_1'
@@ -96,7 +96,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
-wait: 2.0
+wait: 1
 processes:
   -
     name: start_1
@@ -141,21 +141,30 @@ Define your server:
 
 ```ruby
 module Nonnative
-  class EchoServer < Nonnative::Server
-    def perform_start
-      @socket_server = TCPServer.new(service.host, service.port)
+  class TCPServer < Nonnative::Server
+    def initialize(service)
+      super
 
+      @socket_server = ::TCPServer.new(proxy.host, proxy.port)
+    end
+
+    def perform_start
       loop do
-        client_socket = @socket_server.accept
+        client_socket = socket_server.accept
         client_socket.puts 'Hello World!'
         client_socket.close
       end
     rescue StandardError
+      socket_server.close
     end
 
     def perform_stop
-      @socket_server.close
+      socket_server.close
     end
+
+    private
+
+    attr_reader :socket_server
   end
 end
 ```
@@ -168,6 +177,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.wait = 1
 
   config.server do |s|
     s.name = 'server_1'
@@ -192,6 +202,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+wait: 1
 servers:
   -
     name: server_1
@@ -226,7 +237,7 @@ module Nonnative
   module Features
     class Application < Sinatra::Application
       configure do
-        set :server_settings, log_requests: true
+        set :logging, false
       end
 
       get '/hello' do
@@ -236,7 +247,7 @@ module Nonnative
 
     class HTTPServer < Nonnative::HTTPServer
       def app
-        Application.new
+        Application
       end
     end
   end
@@ -251,6 +262,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.wait = 1
 
   config.server do |s|
     s.name = 'http_server_1'
@@ -267,6 +279,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+wait: 1
 servers:
   -
     name: http_server_1
@@ -316,6 +329,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.wait = 1
 
   config.server do |s|
     s.name = 'grpc_server_1'
@@ -332,6 +346,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+wait: 1
 servers:
   -
     name: grpc_server_1
@@ -363,6 +378,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.wait = 1
 
   config.service do |s|
     s.name = 'postgres'
@@ -380,6 +396,8 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+url: http://localhost:4567
+wait: 1
 processes:
   -
     name: postgres
@@ -415,6 +433,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.wait = 1
 
   config.process do |p|
     p.proxy = {
@@ -434,6 +453,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+wait: 1
 processes:
   -
     proxy:
@@ -454,6 +474,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.wait = 1
 
   config.server do |s|
     s.proxy = {
@@ -473,6 +494,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+wait: 1
 servers:
   -
     proxy:
@@ -493,6 +515,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.wait = 1
 
   config.service do |s|
     s.proxy = {
@@ -512,6 +535,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+wait: 1
 services:
   -
     proxy:
@@ -623,6 +647,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+wait: 1
 processes:
   -
     name: go
