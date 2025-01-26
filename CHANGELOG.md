@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.87.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.87.0) - 2025-01-26
+
+- [`c370c66`](https://github.com/alexfalkowski/nonnative/commit/c370c664ff1f6f83a8f2afe7075afd1b34bc333a) feat(proxy): add wait to the proxy, not globally (#493)
+- [`39cc986`](https://github.com/alexfalkowski/nonnative/commit/39cc9867157c0d68ac78670e656b0aaa55773cfe) docs(readme): http app is a class not a instance (#492)
+
 ## [v1.86.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.86.0) - 2025-01-25
 
 - [`9f3be69`](https://github.com/alexfalkowski/nonnative/commit/9f3be69130570a6842d6559c929fe6cb480dd1df) feat(http_server): use webrick (#490)
