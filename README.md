@@ -37,7 +37,6 @@ Configure nonnative with the following:
 
 - The version of the configuration (1.0).
 - The URL of the service.
-- The time to wait on proxy changes (fault injection).
 - Process, Server or Service that you want to start.
 - A timeout value.
 - A time to wait.
@@ -65,7 +64,6 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
-  config.wait = 1
 
   config.process do |p|
     p.name = 'start_1'
@@ -96,13 +94,12 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
-wait: 1
 processes:
   -
     name: start_1
     command: features/support/bin/start 12_321
     timeout: 5
-    wait: 0.1
+    wait: 1
     port: 12321
     log: 12_321.log
     signal: INT # Possible values are described in Signal.list.keys.
@@ -112,7 +109,7 @@ processes:
     name: start_2
     command: features/support/bin/start 12_322
     timeout: 5
-    wait: 0.1
+    wait: 1
     port: 12322
     log: 12_322.log
 ```
@@ -177,7 +174,6 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
-  config.wait = 1
 
   config.server do |s|
     s.name = 'server_1'
@@ -202,7 +198,6 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
-wait: 1
 servers:
   -
     name: server_1
@@ -262,7 +257,6 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
-  config.wait = 1
 
   config.server do |s|
     s.name = 'http_server_1'
@@ -279,7 +273,6 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
-wait: 1
 servers:
   -
     name: http_server_1
@@ -329,7 +322,6 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
-  config.wait = 1
 
   config.server do |s|
     s.name = 'grpc_server_1'
@@ -346,7 +338,6 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
-wait: 1
 servers:
   -
     name: grpc_server_1
@@ -378,7 +369,6 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
-  config.wait = 1
 
   config.service do |s|
     s.name = 'postgres'
@@ -397,7 +387,6 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
-wait: 1
 processes:
   -
     name: postgres
@@ -433,13 +422,13 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
-  config.wait = 1
 
   config.process do |p|
     p.proxy = {
       kind: 'fault_injection',
       port: 20_000,
       log: 'proxy_server.log',
+      wait: 1,
       options: {
         delay: 5
       }
@@ -453,13 +442,13 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
-wait: 1
 processes:
   -
     proxy:
       kind: fault_injection
       port: 20000
       log: proxy_server.log
+      wait: 1
       options:
         delay: 5
 ```
@@ -474,13 +463,13 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
-  config.wait = 1
 
   config.server do |s|
     s.proxy = {
       kind: 'fault_injection',
       port: 20_000,
       log: 'proxy_server.log',
+      wait: 1,
       options: {
         delay: 5
       }
@@ -494,13 +483,13 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
-wait: 1
 servers:
   -
     proxy:
       kind: fault_injection
       port: 20000
       log: proxy_server.log
+      wait: 1
       options:
         delay: 5
 ```
@@ -522,6 +511,7 @@ Nonnative.configure do |config|
       kind: 'fault_injection',
       port: 20_000,
       log: 'proxy_server.log',
+      wait: 1,
       options: {
         delay: 5
       }
@@ -542,6 +532,7 @@ services:
       kind: fault_injection
       port: 20000
       log: proxy_server.log
+      wait: 1
       options:
         delay: 5
 ```
@@ -647,7 +638,6 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
-wait: 1
 processes:
   -
     name: go

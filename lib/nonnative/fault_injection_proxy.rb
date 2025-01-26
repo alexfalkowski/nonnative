@@ -91,6 +91,8 @@ module Nonnative
       mutex.synchronize do
         @state = state
         close_connections
+
+        wait
       end
     end
 

@@ -8,14 +8,13 @@ module Nonnative
       @services = []
     end
 
-    attr_accessor :version, :url, :wait, :processes, :servers, :services
+    attr_accessor :version, :url, :processes, :servers, :services
 
     def load_file(path)
       cfg = Nonnative.configurations(path)
 
       self.version = cfg.version
       self.url = cfg.url
-      self.wait = cfg.wait
 
       add_processes(cfg)
       add_servers(cfg)
@@ -122,6 +121,7 @@ module Nonnative
       }
 
       p[:host] = proxy.host if proxy.host
+      p[:wait] = proxy.wait if proxy.wait
 
       runner.proxy = p
     end

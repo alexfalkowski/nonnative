@@ -4,7 +4,6 @@ Given('I configure the system programmatically with servers') do
   Nonnative.configure do |config|
     config.version = '1.0'
     config.url = 'http://localhost:4567'
-    config.wait = 1.0
 
     config.server do |s|
       s.name = 'tcp_server_1'
@@ -34,6 +33,7 @@ Given('I configure the system programmatically with servers') do
         host: '127.0.0.1',
         port: 20_001,
         log: 'test/reports/proxy_http_server_1.log',
+        wait: 1,
         options: {
           delay: 10
         }
@@ -50,6 +50,7 @@ Given('I configure the system programmatically with servers') do
         kind: 'fault_injection',
         port: 20_002,
         log: 'test/reports/proxy_http_server_2.log',
+        wait: 1,
         options: {
           delay: 2
         }
@@ -66,6 +67,7 @@ Given('I configure the system programmatically with servers') do
         kind: 'fault_injection',
         port: 20_003,
         log: 'test/reports/proxy_grpc_server_1.log',
+        wait: 1,
         options: {
           delay: 5
         }
@@ -82,6 +84,7 @@ Given('I configure the system programmatically with servers') do
         kind: 'fault_injection',
         port: 20_004,
         log: 'test/reports/proxy_grpc_server_2.log',
+        wait: 1,
         options: {
           delay: 7
         }
