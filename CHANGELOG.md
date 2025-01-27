@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.89.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.89.0) - 2025-01-27
+
+- [`e31d54e`](https://github.com/alexfalkowski/nonnative/commit/e31d54e2ebeec01a56974897f40679ca86fb2006) feat(http_client): add ability to retry (#496)
+
 ## [v1.88.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.88.0) - 2025-01-26
 
 - [`897e4d4`](https://github.com/alexfalkowski/nonnative/commit/897e4d421cdb72378c9f241d2ecee152b75b7f13) feat(http_client): handle RestClient::Exception (#494)
