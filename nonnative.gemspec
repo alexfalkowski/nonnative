@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'grpc', '>= 1', '< 2'
   spec.add_dependency 'rackup', '>= 2', '< 3'
   spec.add_dependency 'rest-client', '>= 2', '< 3'
+  spec.add_dependency 'retriable', '>= 3', '< 4'
   spec.add_dependency 'rspec-benchmark', '>= 0', '< 1'
   spec.add_dependency 'rspec-expectations', '>= 3', '< 4'
   spec.add_dependency 'rspec-wait', '>= 1', '< 2'
