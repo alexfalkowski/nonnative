@@ -20,6 +20,8 @@ module Nonnative
       client = RestClient::Resource.new(uri, opts)
 
       client.send(verb)
+    rescue RestClient::Exception => e
+      e.response
     end
 
     %w[get post put patch delete].each do |verb|
