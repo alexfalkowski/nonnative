@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.91.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.91.0) - 2025-01-28
+
+- [`f927b97`](https://github.com/alexfalkowski/nonnative/commit/f927b97e2b978ff08a937450c225aadbc1588230) feat(proxy): move to nonnative.rb (#500)
+- [`c9edfdf`](https://github.com/alexfalkowski/nonnative/commit/c9edfdf50903b57691e9e8e1c4e004277fb15b5c) test(features): formatted (#499)
+
 ## [v1.90.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.90.1) - 2025-01-28
 
 - [`1125797`](https://github.com/alexfalkowski/nonnative/commit/11257970a3024bde56322891199a28a9214e3f6e) fix(proxy): handle errors for HTTPProxyApplication (#498)
