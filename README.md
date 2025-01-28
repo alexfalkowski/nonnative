@@ -231,18 +231,20 @@ Define your server:
 module Nonnative
   module Features
     class Application < Sinatra::Application
-      configure do
-        set :logging, false
-      end
-
       get '/hello' do
         'Hello World!'
       end
     end
 
     class HTTPServer < Nonnative::HTTPServer
-      def app
-        Application
+      def initialize(service)
+        app = Sinatra.new(Application) do
+          configure do
+            set :logging, false
+          end
+        end
+
+        super(app, service)
       end
     end
   end
@@ -292,6 +294,67 @@ Nonnative.configure do |config|
 end
 ```
 
+##### Proxy
+
+The system allows you to define a http proxy for external systems, e.g api.github.com
+
+Define your server:
+
+```ruby
+module Nonnative
+  module Features
+    class HTTPProxyServer < Nonnative::HTTPProxyServer
+      def initialize(service)
+        super('www.afalkowski.com', service)
+      end
+    end
+  end
+end
+```
+
+Setup it up programmatically:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.version = '1.0'
+  config.url = 'http://localhost:4567'
+
+  config.server do |s|
+    s.name = 'http_server_proxy'
+    s.klass = Nonnative::Features::HTTPProxyServer
+    s.timeout = 1
+    s.port = 4567
+    s.log = 'http_server_proxy.log'
+  end
+end
+```
+
+Setup it up through configuration:
+
+```yaml
+version: "1.0"
+url: http://localhost:4567
+servers:
+  -
+    name: http_server_proxy
+    class: Nonnative::Features::HTTPProxyServer
+    timeout: 1
+    port: 4567
+    log: http_server_proxy.log
+```
+
+Then load the file with:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.load_file('configuration.yml')
+end
+```
+
 #### gRPC
 
 Define your server:
@@ -306,8 +369,10 @@ module Nonnative
     end
 
     class GRPCServer < Nonnative::GRPCServer
-      def svc
-        Greeter.new
+      def initialize(service)
+        svc = Greeter.new
+
+        super(svc, service)
       end
     end
   end

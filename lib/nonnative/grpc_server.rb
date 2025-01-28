@@ -2,7 +2,7 @@
 
 module Nonnative
   class GRPCServer < Nonnative::Server
-    def initialize(service)
+    def initialize(svc, service)
       @server = GRPC::RpcServer.new
       server.handle(svc)
 
@@ -11,7 +11,7 @@ module Nonnative
         @logger ||= Logger.new(service.log)
       end
 
-      super
+      super(service)
     end
 
     protected

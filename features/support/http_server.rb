@@ -3,8 +3,14 @@
 module Nonnative
   module Features
     class HTTPServer < Nonnative::HTTPServer
-      def app
-        Application
+      def initialize(service)
+        app = Sinatra.new(Application) do
+          configure do
+            set :logging, false
+          end
+        end
+
+        super(app, service)
       end
     end
 

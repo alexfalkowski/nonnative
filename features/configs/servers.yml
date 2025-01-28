@@ -22,3 +22,9 @@ servers:
       port: 20001
       log: test/reports/proxy_tcp_server_2.log
       wait: 1
+      servers:
+  - name: http_proxy_server
+    class: Nonnative::Features::HTTPProxyServer
+    timeout: 3
+    port: 4567
+    log: test/reports/http_proxy_server.log
