@@ -1,6 +1,5 @@
 @manual @clear
 Feature: Processes
-
   Allows us to start a process and use a client to get a response.
 
   Scenario: Successfully starting of processes
