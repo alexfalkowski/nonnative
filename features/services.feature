@@ -1,6 +1,5 @@
 @manual @service @clear
 Feature: Services
-
   Allows us to use an external service and use a client to get a response.
 
   Scenario: Successfully using of services programmatically
