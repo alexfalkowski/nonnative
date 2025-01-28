@@ -64,6 +64,14 @@ module Nonnative
       Config.load_files(files)
     end
 
+    def configuration
+      @configuration ||= Nonnative::Configuration.new
+    end
+
+    def configure
+      yield configuration
+    end
+
     def log_lines(path, predicate)
       File.readlines(path).select { |l| predicate.call(l) }
     end
@@ -76,12 +84,12 @@ module Nonnative
       @observability ||= Nonnative::Observability.new(configuration.url)
     end
 
-    def configuration
-      @configuration ||= Nonnative::Configuration.new
+    def proxies
+      @proxies ||= { 'fault_injection' => Nonnative::FaultInjectionProxy }.freeze
     end
 
-    def configure
-      yield configuration
+    def proxy(kind)
+      Nonnative.proxies[kind] || Nonnative::NoProxy
     end
 
     def start
