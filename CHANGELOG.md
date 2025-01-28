@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.90.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.90.0) - 2025-01-28
+
+- [`3842ebe`](https://github.com/alexfalkowski/nonnative/commit/3842ebe97f00fc7f522a53e7421def15d952e775) feat(proxy): add http proxy server (#497)
+
 ## [v1.89.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.89.0) - 2025-01-27
 
 - [`e31d54e`](https://github.com/alexfalkowski/nonnative/commit/e31d54e2ebeec01a56974897f40679ca86fb2006) feat(http_client): add ability to retry (#496)
