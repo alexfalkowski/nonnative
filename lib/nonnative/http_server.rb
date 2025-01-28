@@ -2,10 +2,11 @@
 
 module Nonnative
   class HTTPServer < Nonnative::Server
-    def initialize(service)
+    def initialize(app, service)
       @server = ::Rackup::Handler.get('webrick')
+      @app = app
 
-      super
+      super(service)
     end
 
     protected
@@ -27,6 +28,6 @@ module Nonnative
 
     private
 
-    attr_reader :queue, :server
+    attr_reader :queue, :server, :app
   end
 end

@@ -1,6 +1,5 @@
 @manual @clear
 Feature: Servers
-
   Allows us to start a server and use a client to get a response.
 
   Scenario: Successfully starting of TCP servers programmatically
@@ -21,6 +20,12 @@ Feature: Servers
     And I start the system
     When I send a message with the http client to the servers
     Then I should receive a http "Hello World!" response
+
+  Scenario: Successfully starting of HTTP proxy servers through configuration
+    Given I configure the system through configuration with servers
+    And I start the system
+    When I send a message to the http proxy erver
+    Then I should receive a successful response from the http proxy server
 
   Scenario: Successfully starting of HTTP servers programmatically with not found message
     Given I configure the system programmatically with servers

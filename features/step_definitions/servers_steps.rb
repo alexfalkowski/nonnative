@@ -151,6 +151,10 @@ Then('I should get a proxy not found error') do
   expect(@error).to be_a_kind_of(Nonnative::NotFoundError)
 end
 
+When('I send a message to the http proxy erver') do
+  @response = RestClient::Resource.new('http://localhost:4567').get
+end
+
 Then('I should receive a http {string} response') do |response|
   @responses.each do |r|
     expect(r.code).to eq(200)
@@ -197,4 +201,8 @@ end
 Then('I should receive a invalid data error for being greeted with gRPC') do
   stub = Nonnative::Features::GreeterService::Stub.new('localhost:9002', :this_channel_is_insecure)
   expect { stub.say_hello(Nonnative::Features::SayHelloRequest.new(name: 'Hello World!')) }.to raise_error(StandardError)
+end
+
+Then('I should receive a successful response from the http proxy server') do
+  expect(@response.code).to eq(200)
 end
