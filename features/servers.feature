@@ -24,8 +24,14 @@ Feature: Servers
   Scenario: Successfully starting of HTTP proxy servers through configuration
     Given I configure the system through configuration with servers
     And I start the system
-    When I send a message to the http proxy erver
+    When I send a succesful message to the http proxy server
     Then I should receive a successful response from the http proxy server
+
+  Scenario: Successfully starting of HTTP proxy servers through configuration with a not found response
+    Given I configure the system through configuration with servers
+    And I start the system
+    When I send a not found message to the http proxy server
+    Then I should receive a not found response from the http proxy server
 
   Scenario: Successfully starting of HTTP servers programmatically with not found message
     Given I configure the system programmatically with servers
