@@ -69,6 +69,7 @@ Feature: Servers
     When I send a "metrics" request
     Then I should receive a successful "metrics" response
 
+  @reset
   Scenario: Successfully starting of HTTP servers programmatically and closing connections while getting metrics
     Given I configure the system programmatically with servers
     And I start the system
@@ -76,6 +77,7 @@ Feature: Servers
     Then I should receive a connection error for metrics response with HTTP
     And I should reset the proxy for server 'http_server_1'
 
+  @reset
   Scenario: Successfully starting of HTTP servers programmatically and delaying connections while getting hello
     Given I configure the system programmatically with servers
     And I start the system
@@ -83,6 +85,7 @@ Feature: Servers
     Then I should receive a delay error for hello response with HTTP
     And I should reset the proxy for server 'http_server_1'
 
+  @reset
   Scenario: Successfully starting of HTTP servers programmatically and sending invalid data while getting hello
     Given I configure the system programmatically with servers
     And I start the system
@@ -90,6 +93,7 @@ Feature: Servers
     Then I should receive a invalid data error for hello response with HTTP
     And I should reset the proxy for server 'http_server_1'
 
+  @reset
   Scenario: Successfully starting of gRPC servers programmatically and closing connections while getting greeted
     Given I configure the system programmatically with servers
     And I start the system
@@ -97,6 +101,7 @@ Feature: Servers
     Then I should receive a connection error for being greeted with gRPC
     And I should reset the proxy for server 'grpc_server_1'
 
+  @reset
   Scenario: Successfully starting of gRCP servers programmatically and delaying connections while getting greeted
     Given I configure the system programmatically with servers
     And I start the system
@@ -104,6 +109,7 @@ Feature: Servers
     Then I should receive a delay error for being greeted with gRPC
     And I should reset the proxy for server 'grpc_server_1'
 
+  @reset
   Scenario: Successfully starting of gRPC servers programmatically and sending invalid data while getting greeted
     Given I configure the system programmatically with servers
     And I start the system
