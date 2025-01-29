@@ -11,6 +11,7 @@ Feature: Processes
     And I should see a log entry of "test" in the file "test/reports/12_321.log"
     And the process 'start_1' should consume less than '40mb' of memory
 
+  @reset
   Scenario: Successfully starting of processes with delay
     Given I configure the system programmatically with processes
     And I start the system
@@ -22,6 +23,7 @@ Feature: Processes
     And the process 'start_1' should consume less than '40mb' of memory
     And I should reset the proxy for process 'start_1'
 
+  @reset
   Scenario: Successfully starting of processes and closing connections
     Given I configure the system programmatically with processes
     And I start the system
@@ -30,6 +32,7 @@ Feature: Processes
     Then I should receive a connection error for client response with TCP
     And I should reset the proxy for process 'start_1'
 
+  @reset
   Scenario: Successfully starting of processes and getting invalid data
     Given I configure the system programmatically with processes
     And I start the system

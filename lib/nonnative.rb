@@ -120,5 +120,9 @@ module Nonnative
       @configuration = nil
       @pool = nil
     end
+
+    def reset
+      Nonnative.pool.reset
+    end
   end
 end

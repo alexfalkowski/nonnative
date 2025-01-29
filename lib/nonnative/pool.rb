@@ -28,6 +28,12 @@ module Nonnative
       services[runner_index(configuration.services, name)]
     end
 
+    def reset
+      services.each { |s| s.proxy.reset }
+      servers.each { |s| s.first.proxy.reset }
+      processes.each { |p| p.first.proxy.reset }
+    end
+
     private
 
     attr_reader :configuration

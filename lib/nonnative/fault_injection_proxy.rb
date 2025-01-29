@@ -89,6 +89,8 @@ module Nonnative
 
     def apply_state(state)
       mutex.synchronize do
+        return if @state == state
+
         @state = state
         close_connections
 

@@ -14,6 +14,7 @@ Feature: Services
     When I connect to the service
     Then I should have a succesful connection
 
+  @reset
   Scenario: Successfully using of services and closing connections
     Given I configure the system programmatically with services
     And I start the system
