@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.92.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.92.0) - 2025-01-29
+
+- [`1bd4cc2`](https://github.com/alexfalkowski/nonnative/commit/1bd4cc2b8837f9fd76680a30780ec9d5e4bfa13f) feat(proxy): add ability to reset proxies (#503)
+
 ## [v1.91.1](https://github.com/alexfalkowski/nonnative/releases/tag/v1.91.1) - 2025-01-29
 
 - [`4fc3075`](https://github.com/alexfalkowski/nonnative/commit/4fc30751a274e3f60a87e02ddb8a16e58eabf33e) fix(deps): bump ruby-lsp from 0.23.6 to 0.23.7 (#502)
