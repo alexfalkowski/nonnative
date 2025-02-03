@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.93.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.93.0) - 2025-02-03
+
+- [`520eed9`](https://github.com/alexfalkowski/nonnative/commit/520eed9b7181064a8bfcf7824165f3ccf8087cab) feat(ruby): update to v3.4.0 (#508)
+- [`d3ba2a4`](https://github.com/alexfalkowski/nonnative/commit/d3ba2a42b3a6d90639f7e29a0282ec6e757297b3) build(deps): bump bin from `cb313fe` to `5b56b0c` (#504)
+
 ## [v1.92.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.92.0) - 2025-01-29
 
 - [`1bd4cc2`](https://github.com/alexfalkowski/nonnative/commit/1bd4cc2b8837f9fd76680a30780ec9d5e4bfa13f) feat(proxy): add ability to reset proxies (#503)
