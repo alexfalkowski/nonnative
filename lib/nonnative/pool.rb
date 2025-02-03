@@ -6,13 +6,13 @@ module Nonnative
       @configuration = configuration
     end
 
-    def start(&block)
+    def start(&)
       services.each(&:start)
-      [servers, processes].each { |t| process(t, :start, :open?, &block) }
+      [servers, processes].each { |t| process(t, :start, :open?, &) }
     end
 
-    def stop(&block)
-      [processes, servers].each { |t| process(t, :stop, :closed?, &block) }
+    def stop(&)
+      [processes, servers].each { |t| process(t, :stop, :closed?, &) }
       services.each(&:stop)
     end
 
