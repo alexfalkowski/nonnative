@@ -151,7 +151,7 @@ Then('I should get a proxy not found error') do
   expect(@error).to be_a_kind_of(Nonnative::NotFoundError)
 end
 
-When('I send a succesful message to the http proxy server') do
+When('I send a successful message to the http proxy server') do
   @response = RestClient::Resource.new('http://localhost:4567').get
 end
 
