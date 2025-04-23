@@ -46,6 +46,6 @@ Then('I should receive a connection error from the service') do
   expect(@service.receive).to be_nil
 end
 
-Then('I should have a succesful connection') do
+Then('I should have a successful connection') do
   expect(@service).not_to be_closed
 end

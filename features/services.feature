@@ -6,13 +6,13 @@ Feature: Services
     Given I configure the system programmatically with services
     And I start the system
     When I connect to the service
-    Then I should have a succesful connection
+    Then I should have a successful connection
 
   Scenario: Successfully using of services through configuration
     Given I configure the system through configuration with services
     And I start the system
     When I connect to the service
-    Then I should have a succesful connection
+    Then I should have a successful connection
 
   @reset
   Scenario: Successfully using of services and closing connections
