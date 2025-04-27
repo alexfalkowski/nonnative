@@ -59,7 +59,11 @@ module Nonnative
         environment[k] = ENV.fetch(k, nil) || environment[k]
       end
 
-      spawn(environment, service.command.call, %i[out err] => [service.log, 'a'])
+      command = service.command.call
+
+      spawn(environment, command, %i[out err] => [service.log, 'a']).tap do |pid|
+        Nonnative.logger.info "started '#{command}' with pid '#{pid}'"
+      end
     end
 
     def process_exists?

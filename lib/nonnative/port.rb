@@ -8,6 +8,8 @@ module Nonnative
     end
 
     def open?
+      Nonnative.logger.info "checking if port '#{process.port}' is open on host '#{process.host}'"
+
       timeout.perform do
         open_socket
         true
@@ -18,6 +20,8 @@ module Nonnative
     end
 
     def closed?
+      Nonnative.logger.info "checking if port '#{process.port}' is closed on host '#{process.host}'"
+
       timeout.perform do
         open_socket
         raise Nonnative::Error
