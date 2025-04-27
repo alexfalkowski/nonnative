@@ -6,6 +6,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.94.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.94.0) - 2025-04-27
+
+- [`d337a15`](https://github.com/alexfalkowski/nonnative/commit/d337a1586bf8eb39f5ceae18f3dc06b852c7a4fc) feat(logger): add logging (#544)
+- [`0e76d4b`](https://github.com/alexfalkowski/nonnative/commit/0e76d4b2ac39bc1373c6cd0830a52becc7c079b2) build(ci): use alexfalkowski/release:3.15 (#543)
+- [`82088dc`](https://github.com/alexfalkowski/nonnative/commit/82088dcef282b442d6319fc9b82a10d8ac066270) build(codecov): add config (#542)
+- [`fe7ef0e`](https://github.com/alexfalkowski/nonnative/commit/fe7ef0e3b1b08a21a6ec75912b775be395218911) test(features): spelling mistake (#541)
+- [`10aea2e`](https://github.com/alexfalkowski/nonnative/commit/10aea2e94b25f1cd953e04cb3cd5089a8f48ca20) build(deps): bump bin from `dbf1984` to `b0fd780` (#540)
+- [`fdbc409`](https://github.com/alexfalkowski/nonnative/commit/fdbc4098aa32df88f081c21ead7283dcf69fe616) build(ci): use alexfalkowski/ruby:1.23 (#539)
+- [`587f2cf`](https://github.com/alexfalkowski/nonnative/commit/587f2cf3306150c0e1b883b04a602d7a95361458) build(deps): bump bin from `68f9c91` to `dbf1984` (#538)
+- [`44f2570`](https://github.com/alexfalkowski/nonnative/commit/44f25700b4ec50aec182a535ffce58e0e67e399a) build(ci): use alexfalkowski/ruby:1.22 (#537)
+- [`26c3109`](https://github.com/alexfalkowski/nonnative/commit/26c3109142407056bd1924eb25f0218943e12de1) build(deps): bump bin from `78af843` to `68f9c91` (#536)
+- [`3488f3e`](https://github.com/alexfalkowski/nonnative/commit/3488f3e991158afbfc212cea2baebb4e4ac8708a) build(ci): use alexfalkowski/ruby:1.21 (#535)
+- [`bf99aac`](https://github.com/alexfalkowski/nonnative/commit/bf99aac8cbee77a65641d698dc20f5917f47fd5d) build(deps): bump bin from `78af843` to `68f9c91` (#534)
+- [`ac6e108`](https://github.com/alexfalkowski/nonnative/commit/ac6e108c22a6ea1d08aeda4f38dac8a2ebd33577) build(ci): use alexfalkowski/ruby:1.20 (#533)
+- [`07ff9d7`](https://github.com/alexfalkowski/nonnative/commit/07ff9d7ee48df3c79bbf2df6c9c68d2ea6e59823) build(deps): bump bin from `16e2296` to `78af843` (#532)
+- [`31e97fd`](https://github.com/alexfalkowski/nonnative/commit/31e97fd6c64986cfe3786e4d7e44c17232e4a890) build(deps): bump bin from `c661929` to `16e2296` (#531)
+- [`d97ba88`](https://github.com/alexfalkowski/nonnative/commit/d97ba88e25eb3ab40a541e35e48879abb704bbe9) build(deps): bump bin from `446c480` to `c661929` (#530)
+- [`34d0190`](https://github.com/alexfalkowski/nonnative/commit/34d0190f6eca0d7856128374adb4a1aeeb083bdf) build(deps): bump bin from `b887116` to `446c480` (#529)
+- [`aeca841`](https://github.com/alexfalkowski/nonnative/commit/aeca8412b40c6d272d19019784e8b9194a59c027) build(deps): bump bin from `8e1a9ac` to `b887116` (#528)
+- [`7bbe128`](https://github.com/alexfalkowski/nonnative/commit/7bbe1288d2c373227a981082e7044fe31c9a034f) build(gems): add arm64-darwin-24 (#527)
+- [`dcf3f26`](https://github.com/alexfalkowski/nonnative/commit/dcf3f2652c771755de326dee0d8262940b9497ec) build(deps): update all (#526)
+- [`4f697a9`](https://github.com/alexfalkowski/nonnative/commit/4f697a9b8d1c6f118eec411734e2fd49b333db5d) build(deps): update all (#525)
+- [`b9b26dc`](https://github.com/alexfalkowski/nonnative/commit/b9b26dc1995bb8fa023b5c995580efce2acad9bd) build(deps): bump bin from `637442f` to `8e1a9ac` (#524)
+- [`cbfedd2`](https://github.com/alexfalkowski/nonnative/commit/cbfedd27eb19eadbdf51e8b45da95290acd2b967) build(ci): update alexfalkowski/ruby:1.16 (#523)
+- [`b1f7ebd`](https://github.com/alexfalkowski/nonnative/commit/b1f7ebdfc7a95e6666e0d5c4dd38110b6e76e8c5) build(deps): update with make update-all-dep (#522)
+- [`259b3c6`](https://github.com/alexfalkowski/nonnative/commit/259b3c6c2f90ac98ebfeb5cb19859ab9b4ad363a) build(deps): bump bin from `c8030a1` to `637442f` (#521)
+- [`b8ec44d`](https://github.com/alexfalkowski/nonnative/commit/b8ec44d6b99a662b9757364e2dbfe088b7a19a8a) build(deps): bundle update (#520)
+- [`4cba661`](https://github.com/alexfalkowski/nonnative/commit/4cba6611423e8632a0dcfb87b552ac76696fd099) build(ci): use test for dependabot (#519)
+- [`2cb62d4`](https://github.com/alexfalkowski/nonnative/commit/2cb62d47c82494db7b79e67eb24f0a0f28c0d299) build(deps): bump bin from `8592a53` to `c8030a1` (#517)
+- [`ddd4ace`](https://github.com/alexfalkowski/nonnative/commit/ddd4ace2c987266acfcd203c447c1a1e01209ad8) build(ci): update alexfalkowski/ruby:1.12 (#516)
+- [`a70ae5c`](https://github.com/alexfalkowski/nonnative/commit/a70ae5c1652b5f96ef17eedf0444e668bc6eaf41) build(deps): bump bin from `dc45d04` to `8592a53` (#515)
+- [`ad63e97`](https://github.com/alexfalkowski/nonnative/commit/ad63e97672fe34da7f7000a4f063d40aaea01143) build(deps): bump bin from `e1bf51d` to `dc45d04` (#514)
+- [`29c424c`](https://github.com/alexfalkowski/nonnative/commit/29c424c54e622a6e9602d65bac375e5b342d35fe) build(deps): bump bin from `3e0336a` to `e1bf51d` (#513)
+- [`887ab8f`](https://github.com/alexfalkowski/nonnative/commit/887ab8f46003809ef0d7ed7c38c7ad55e7a687f5) build(deps): bump bin from `877a42c` to `3e0336a` (#512)
+- [`42574d3`](https://github.com/alexfalkowski/nonnative/commit/42574d351b35c177adf049dda276853eff2ddc37) build(deps): bump bin from `5b56b0c` to `877a42c` (#511)
+- [`84a2a22`](https://github.com/alexfalkowski/nonnative/commit/84a2a22e16e2afcd5040b7f23e626f0431e94cdb) build(ci): add x86_64-darwin-23 (#510)
+- [`f9ecb6b`](https://github.com/alexfalkowski/nonnative/commit/f9ecb6b19cbe7c77131709231d18783477a895f8) test(deps): use bundler version 2.6.3 (#509)
+
 ## [v1.93.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.93.0) - 2025-02-03
 
 - [`520eed9`](https://github.com/alexfalkowski/nonnative/commit/520eed9b7181064a8bfcf7824165f3ccf8087cab) feat(ruby): update to v3.4.0 (#508)
