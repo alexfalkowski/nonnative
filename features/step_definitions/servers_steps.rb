@@ -4,6 +4,7 @@ Given('I configure the system programmatically with servers') do
   Nonnative.configure do |config|
     config.version = '1.0'
     config.url = 'http://localhost:4567'
+    config.log = 'test/reports/nonnative.log'
 
     config.server do |s|
       s.name = 'tcp_server_1'

@@ -72,6 +72,10 @@ module Nonnative
       yield configuration
     end
 
+    def logger
+      @logger ||= Logger.new(configuration.log)
+    end
+
     def log_lines(path, predicate)
       File.readlines(path).select { |l| predicate.call(l) }
     end

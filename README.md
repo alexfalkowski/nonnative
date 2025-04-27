@@ -37,6 +37,7 @@ Configure nonnative with the following:
 
 - The version of the configuration (1.0).
 - The URL of the service.
+- A log file.
 - Process, Server or Service that you want to start.
 - A timeout value.
 - A time to wait.
@@ -64,6 +65,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.log = 'nonnative.log'
 
   config.process do |p|
     p.name = 'start_1'
@@ -94,6 +96,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 processes:
   -
     name: start_1
@@ -174,6 +177,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.log = 'nonnative.log'
 
   config.server do |s|
     s.name = 'server_1'
@@ -198,6 +202,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 servers:
   -
     name: server_1
@@ -275,6 +280,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 servers:
   -
     name: http_server_1
@@ -320,6 +326,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.log = 'nonnative.log'
 
   config.server do |s|
     s.name = 'http_server_proxy'
@@ -336,6 +343,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 servers:
   -
     name: http_server_proxy
@@ -387,6 +395,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.log = 'nonnative.log'
 
   config.server do |s|
     s.name = 'grpc_server_1'
@@ -403,6 +412,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 servers:
   -
     name: grpc_server_1
@@ -434,6 +444,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.log = 'nonnative.log'
 
   config.service do |s|
     s.name = 'postgres'
@@ -452,6 +463,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 processes:
   -
     name: postgres
@@ -487,6 +499,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.log = 'nonnative.log'
 
   config.process do |p|
     p.proxy = {
@@ -507,6 +520,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 processes:
   -
     proxy:
@@ -528,6 +542,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.log = 'nonnative.log'
 
   config.server do |s|
     s.proxy = {
@@ -548,6 +563,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 servers:
   -
     proxy:
@@ -569,6 +585,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.log = 'nonnative.log'
   config.wait = 1
 
   config.service do |s|
@@ -590,6 +607,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 wait: 1
 services:
   -
@@ -703,6 +721,7 @@ Setup it up through configuration:
 ```yaml
 version: "1.0"
 url: http://localhost:4567
+log: nonnative.log
 processes:
   -
     name: go

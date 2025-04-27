@@ -1,5 +1,6 @@
 version: "1.0"
 url: http://localhost:4567
+log: test/reports/nonnative.log
 servers:
   - name: tcp_server_1
     class: Nonnative::Features::TCPServer

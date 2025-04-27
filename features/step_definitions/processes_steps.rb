@@ -4,6 +4,7 @@ Given('I configure the system programmatically with processes') do
   Nonnative.configure do |config|
     config.version = '1.0'
     config.url = 'http://localhost:4567'
+    config.log = 'test/reports/nonnative.log'
 
     config.process do |d|
       d.name = 'start_1'

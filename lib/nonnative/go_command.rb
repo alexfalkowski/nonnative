@@ -10,18 +10,17 @@ module Nonnative
 
     def executable(cmd, *params)
       params = params.join(' ')
-      "#{exec} #{flags(cmd, params).join(' ')} #{cmd} #{params}".strip
+      "#{exec} #{flags(cmd).join(' ')} #{cmd} #{params}".strip
     end
 
     private
 
     attr_reader :tools, :exec, :output
 
-    def flags(cmd, params)
+    def flags(cmd)
       suffix = SecureRandom.alphanumeric(4)
       m = File.basename(exec, File.extname(exec))
-      p = params.gsub(/\W/, '')
-      name = [m, cmd, p].reject(&:empty?).join('-')
+      name = "#{m}-#{cmd}"
       path = "#{output}/#{name}-#{suffix}"
 
       prof(path) + trace(path) + cover(path)
