@@ -3,8 +3,12 @@
 module Nonnative
   class HTTPServer < Nonnative::Server
     def initialize(app, service)
-      @server = ::Rackup::Handler.get('webrick')
-      @app = app
+      log = File.open(service.log, 'a')
+      options = {
+        log_writer: Puma::LogWriter.new(log, log),
+        force_shutdown_after: service.timeout
+      }
+      @server = Puma::Server.new(app, Puma::Events.new, options)
 
       super(service)
     end
@@ -12,22 +16,16 @@ module Nonnative
     protected
 
     def perform_start
-      file = File.open(service.log, 'a')
-      logs = [
-        [Logger.new(file), WEBrick::AccessLog::COMBINED_LOG_FORMAT]
-      ]
-
-      server.run(app, Host: proxy.host, Port: proxy.port,
-                      Logger: WEBrick::Log.new(file),
-                      AccessLog: logs)
+      server.add_tcp_listener proxy.host, proxy.port
+      server.run false
     end
 
     def perform_stop
-      server.shutdown
+      server.graceful_shutdown
     end
 
     private
 
-    attr_reader :queue, :server, :app
+    attr_reader :queue, :server
   end
 end
