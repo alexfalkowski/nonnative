@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.95.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.95.0) - 2025-04-30
+
+- [`5146eb7`](https://github.com/alexfalkowski/nonnative/commit/5146eb76cc7fb0dbe8ad5443d189639a7837f5b2) feat(http): use puma (#547)
+- [`4ee710d`](https://github.com/alexfalkowski/nonnative/commit/4ee710dc56de05b7b6b724705aecfd0921a038ec) build(deps): bump bin from `b0fd780` to `926a71b` (#545)
+
 ## [v1.94.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.94.0) - 2025-04-27
 
 - [`d337a15`](https://github.com/alexfalkowski/nonnative/commit/d337a1586bf8eb39f5ceae18f3dc06b852c7a4fc) feat(logger): add logging (#544)
