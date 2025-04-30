@@ -16,6 +16,8 @@ module Nonnative
         break if pipe(ready, remote_socket, local_socket)
       end
     ensure
+      Nonnative.logger.info "finished connect for local socket '#{local_socket.inspect}' and '#{remote_socket&.inspect}' for 'socket_pair'"
+
       local_socket.close
       remote_socket&.close
     end
