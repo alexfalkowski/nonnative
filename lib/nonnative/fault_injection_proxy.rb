@@ -52,38 +52,45 @@ module Nonnative
     def perform_start
       loop do
         thread = Thread.start(tcp_server.accept) do |local_socket|
-          accept_connection local_socket
+          id = Thread.current.object_id
+
+          accept_connection id, local_socket
         end
 
         connections[thread.object_id] = thread
       end
     end
 
-    def accept_connection(local_socket)
-      id = Thread.current.object_id
-      socket_info = local_socket.inspect
-
-      error = connect(local_socket)
+    def accept_connection(id, socket)
+      error = connect(id, socket)
       if error
-        logger.error "could not handle the connection for '#{id}' with socket '#{socket_info}' and error '#{error}'"
+        logger.error "could not handle the connection for '#{id}' with socket '#{socket.inspect}' and error '#{error}'"
       else
-        logger.info "handled connection for '#{id}' with socket '#{socket_info}'"
+        logger.info "handled connection for '#{id}' with socket '#{socket.inspect}'"
       end
 
       connections.delete(id)
     end
 
-    def connect(local_socket)
-      pair = SocketPairFactory.create(read_state, service.proxy)
-      pair.connect(local_socket)
+    def connect(id, socket)
+      state = read_state
+      Nonnative.logger.info "connecting for '#{id}' with socket '#{socket.inspect}' and state '#{state}' for proxy 'fault_injection'"
+
+      pair = SocketPairFactory.create(state, service.proxy)
+      pair.connect(socket)
     rescue StandardError => e
-      local_socket.close
+      socket.close
 
       e
     end
 
     def close_connections
-      connections.each_value(&:terminate)
+      connections.each do |id, thread|
+        Nonnative.logger.info "closing connection for '#{id}' for proxy 'fault_injection'"
+
+        thread.terminate
+      end
+
       connections.clear
     end
 
