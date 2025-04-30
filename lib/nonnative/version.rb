@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Nonnative
-  VERSION = '1.94.0'
+  VERSION = '1.95.0'
 end
