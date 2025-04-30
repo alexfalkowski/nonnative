@@ -89,6 +89,8 @@ module Nonnative
 
     def apply_state(state)
       mutex.synchronize do
+        Nonnative.logger.info "applying state '#{state}' for proxy 'fault_injection'"
+
         return if @state == state
 
         @state = state
