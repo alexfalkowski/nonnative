@@ -264,6 +264,7 @@ require 'nonnative'
 Nonnative.configure do |config|
   config.version = '1.0'
   config.url = 'http://localhost:4567'
+  config.log = 'nonnative.log'
 
   config.server do |s|
     s.name = 'http_server_1'
