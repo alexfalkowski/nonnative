@@ -235,7 +235,7 @@ Define your server:
 ```ruby
 module Nonnative
   module Features
-    class Application < Sinatra::Application
+    class Hello < Sinatra::Application
       get '/hello' do
         'Hello World!'
       end
@@ -243,13 +243,7 @@ module Nonnative
 
     class HTTPServer < Nonnative::HTTPServer
       def initialize(service)
-        app = Sinatra.new(Application) do
-          configure do
-            set :logging, false
-          end
-        end
-
-        super(app, service)
+        super(Sinatra.new(Hello), service)
       end
     end
   end
@@ -379,9 +373,7 @@ module Nonnative
 
     class GRPCServer < Nonnative::GRPCServer
       def initialize(service)
-        svc = Greeter.new
-
-        super(svc, service)
+        super(Greeter.new, service)
       end
     end
   end
