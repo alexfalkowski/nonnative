@@ -14,11 +14,15 @@ module Nonnative
     def start
       @tcp_server = ::TCPServer.new(service.host, service.port)
       @thread = Thread.new { perform_start }
+
+      Nonnative.logger.info "started with host '#{service.host}' and port '#{service.port}' for proxy 'fault_injection'"
     end
 
     def stop
       thread&.terminate
       tcp_server&.close
+
+      Nonnative.logger.info "stopped with host '#{service.host}' and port '#{service.port}' for proxy 'fault_injection'"
     end
 
     def close_all
