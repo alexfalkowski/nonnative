@@ -2,7 +2,7 @@
 
 # Adapted from https://gist.github.com/RaVbaker/d9ead3c92b915f997dab25c7f0c0ab65
 module Nonnative
-  class HTTPProxyApplication < Sinatra::Application
+  class HTTPProxy < Sinatra::Application
     def retrieve_headers(request)
       headers = request.env.map do |header, value|
         [header[5..].split('_').map(&:capitalize).join('-'), value] if header.start_with?('HTTP_')
@@ -38,9 +38,8 @@ module Nonnative
 
   class HTTPProxyServer < Nonnative::HTTPServer
     def initialize(host, service)
-      app = Sinatra.new(Nonnative::HTTPProxyApplication) do
+      app = Sinatra.new(Nonnative::HTTPProxy) do
         configure do
-          set :logging, false
           set :host, host
         end
       end
