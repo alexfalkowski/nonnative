@@ -120,9 +120,17 @@ module Nonnative
       raise Nonnative::StopError, errors.join("\n") unless errors.empty?
     end
 
-    def clear
+    def clear_configuration
       @configuration = nil
+    end
+
+    def clear_pool
       @pool = nil
+    end
+
+    def clear
+      clear_configuration
+      clear_pool
     end
 
     def reset
