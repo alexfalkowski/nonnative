@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.99.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.99.0) - 2025-05-01
+
+- [`2009830`](https://github.com/alexfalkowski/nonnative/commit/200983099a376da5d769143b00552fc328444584) feat(server): add logging (#552)
+
 ## [v1.98.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.98.0) - 2025-04-30
 
 - [`7b81f58`](https://github.com/alexfalkowski/nonnative/commit/7b81f583b74175d63cc358955ad6033131bb3d73) feat(proxy): add more logs to diagnose (#551)
