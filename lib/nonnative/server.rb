@@ -14,6 +14,8 @@ module Nonnative
         @thread = Thread.new { perform_start }
 
         wait_start
+
+        Nonnative.logger.info "started server '#{service.name}'"
       end
 
       [object_id, true]
@@ -27,6 +29,8 @@ module Nonnative
 
         @thread = nil
         wait_stop
+
+        Nonnative.logger.info "stopped server '#{service.name}'"
       end
 
       object_id
