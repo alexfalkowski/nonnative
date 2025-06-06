@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.103.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.103.0) - 2025-06-06
+
+- [`2e2b7e4`](https://github.com/alexfalkowski/nonnative/commit/2e2b7e46a6005a265bb00baa600bdc0e954486f3) feat(socket): use predicate method (#576)
+- [`8b12b0f`](https://github.com/alexfalkowski/nonnative/commit/8b12b0fe1d2b19d770ca1959d8dcf16d614b913a) test(deps): bump rspec-expectations from 3.13.4 to 3.13.5 (#575)
+- [`cf1a961`](https://github.com/alexfalkowski/nonnative/commit/cf1a96109d52fb37095ae7a7727d04f565e7ebed) test(deps): bump ruby-lsp from 0.23.20 to 0.23.24 (#574)
+- [`bb0c989`](https://github.com/alexfalkowski/nonnative/commit/bb0c9891a8c51dd5c9d3db3c9f15086151aef182) build(deps): bump bin from `9c21752` to `255c12c` (#572)
+- [`588f26c`](https://github.com/alexfalkowski/nonnative/commit/588f26c8d62ae85f81fb79f92b3067f3e5430257) test(deps): bump rack from 3.1.15 to 3.1.16 (#571)
+- [`7b35d07`](https://github.com/alexfalkowski/nonnative/commit/7b35d073f30a62e3c846cd4408849b81f3352cb8) build(ci): use alexfalkowski/ruby:1.33 (#570)
+- [`19378ce`](https://github.com/alexfalkowski/nonnative/commit/19378ceb037f23c7e016394975662e3ae818b19f) build(deps): bump bin from `810b10e` to `9c21752` (#569)
+- [`b83e1f9`](https://github.com/alexfalkowski/nonnative/commit/b83e1f945c8cf2ee67ef35d0d2956d4ad067fd8e) build(ci): use alexfalkowski/ruby:1.31 (#568)
+- [`6e90161`](https://github.com/alexfalkowski/nonnative/commit/6e90161bbab3fa69f743ea239cdc6e2ff8e059fc) build(deps): bump bin from `eeb0425` to `810b10e` (#567)
+- [`97f4bbd`](https://github.com/alexfalkowski/nonnative/commit/97f4bbda48012b906c333a08e59d75ce58f303ce) build(deps): bump bin from `104e349` to `eeb0425` (#566)
+- [`860cf31`](https://github.com/alexfalkowski/nonnative/commit/860cf31e9ba24b6e720dcdb2c687ad0004d4d4f8) build(deps): bump bin from `de214a6` to `104e349` (#565)
+- [`caeb640`](https://github.com/alexfalkowski/nonnative/commit/caeb64039156a18590a2dc27566c98d54422b0ea) build(deps): bump bin from `041892c` to `de214a6` (#564)
+- [`a211e61`](https://github.com/alexfalkowski/nonnative/commit/a211e61a1c8acff21f5c68cbf334aec296def84c) build(ci): use alexfalkowski/ruby:1.29 (#563)
+- [`b475e48`](https://github.com/alexfalkowski/nonnative/commit/b475e48b1cd515fa5bcefca9f4be8147ded2e350) build(deps): bump bin from `c59b166` to `041892c` (#562)
+- [`46412eb`](https://github.com/alexfalkowski/nonnative/commit/46412eb4a4206b0ca0cb94f8e559f41e4e666cc1) build(deps): bump bin from `ac9a5b2` to `c59b166` (#561)
+- [`de82d07`](https://github.com/alexfalkowski/nonnative/commit/de82d070becdafc99f082208069d5fb064f3560e) build(deps): update all (#560)
+- [`b59fbc7`](https://github.com/alexfalkowski/nonnative/commit/b59fbc747f887bfc9bd7b18357d442ecf1b6d4f5) build(deps): bump bin from `652fb33` to `ac9a5b2` (#559)
+- [`8ced4ae`](https://github.com/alexfalkowski/nonnative/commit/8ced4aec80609807626af29061b430b7ee62fdd3) build(deps): bump bin from `7b214f3` to `652fb33` (#558)
+- [`0b749d0`](https://github.com/alexfalkowski/nonnative/commit/0b749d090d020c62ae9f968b93c18b270bc4e2a6) build(deps): bump bin from `926a71b` to `7b214f3` (#557)
+
 ## [v1.102.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.102.0) - 2025-05-01
 
 - [`d2947f6`](https://github.com/alexfalkowski/nonnative/commit/d2947f6626ce77ade0a69007ea388cf14e5d3f67) feat(http): enable logging for proxy (#556)
