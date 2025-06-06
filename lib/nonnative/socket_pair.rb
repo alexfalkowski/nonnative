@@ -12,8 +12,8 @@ module Nonnative
       loop do
         ready = select([local_socket, remote_socket], nil, nil)
 
-        break if pipe(ready, local_socket, remote_socket)
-        break if pipe(ready, remote_socket, local_socket)
+        break if pipe?(ready, local_socket, remote_socket)
+        break if pipe?(ready, remote_socket, local_socket)
       end
     ensure
       Nonnative.logger.info "finished connect for local socket '#{local_socket.inspect}' and '#{remote_socket&.inspect}' for 'socket_pair'"
@@ -30,7 +30,7 @@ module Nonnative
       ::TCPSocket.new(proxy.host, proxy.port)
     end
 
-    def pipe(ready, socket1, socket2)
+    def pipe?(ready, socket1, socket2)
       if ready[0].include?(socket1)
         data = read(socket1)
         return true if data.empty?
