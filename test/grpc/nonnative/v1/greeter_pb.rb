@@ -4,9 +4,10 @@
 
 require 'google/protobuf'
 
+
 descriptor_data = "\n\x1anonnative/v1/greeter.proto\x12\x0cnonnative.v1\"%\n\x0fSayHelloRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\",\n\x10SayHelloResponse\x12\x18\n\x07message\x18\x01 \x01(\tR\x07message2]\n\x0eGreeterService\x12K\n\x08SayHello\x12\x1d.nonnative.v1.SayHelloRequest\x1a\x1e.nonnative.v1.SayHelloResponse\"\x00\x42\x16\xea\x02\x13Nonnative::Featuresb\x06proto3"
 
-pool = Google::Protobuf::DescriptorPool.generated_pool
+pool = ::Google::Protobuf::DescriptorPool.generated_pool
 pool.add_serialized_file(descriptor_data)
 
 module Nonnative

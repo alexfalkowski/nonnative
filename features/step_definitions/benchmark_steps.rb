@@ -3,6 +3,7 @@
 When('I configure the system programmatically with a no op server') do
   Nonnative.configure do |config|
     config.version = '1.0'
+    config.name = 'test'
     config.url = 'http://localhost:4567'
     config.log = 'test/reports/nonnative.log'
 
@@ -17,6 +18,7 @@ end
 When('I configure the system programmatically with a no stop server') do
   Nonnative.configure do |config|
     config.version = '1.0'
+    config.name = 'test'
     config.url = 'http://localhost:4567'
     config.log = 'test/reports/nonnative.log'
 

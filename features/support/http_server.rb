@@ -35,19 +35,19 @@ module Nonnative
         'Hello World!'.to_json
       end
 
-      get '/healthz' do
+      get '/test/healthz' do
         status 200
       end
 
-      get '/livez' do
+      get '/test/livez' do
         status 200
       end
 
-      get '/readyz' do
+      get '/test/readyz' do
         status 200
       end
 
-      get '/metrics' do
+      get '/test/metrics' do
         status 200
       end
     end
