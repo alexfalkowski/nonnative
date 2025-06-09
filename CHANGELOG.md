@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.104.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.104.0) - 2025-06-09
+
+- [`834596d`](https://github.com/alexfalkowski/nonnative/commit/834596d18be24b990238c3abcd0cefbced1132e9) feat(observability): prefix with name (#578)
+- [`e169924`](https://github.com/alexfalkowski/nonnative/commit/e169924fc0a1d31414951dc426bab97bb836f9ea) test(deps): bump ruby-lsp from 0.23.24 to 0.24.1 (#577)
+
 ## [v1.103.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.103.0) - 2025-06-06
 
 - [`2e2b7e4`](https://github.com/alexfalkowski/nonnative/commit/2e2b7e46a6005a265bb00baa600bdc0e954486f3) feat(socket): use predicate method (#576)
