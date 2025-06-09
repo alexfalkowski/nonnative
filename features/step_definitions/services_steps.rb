@@ -3,6 +3,7 @@
 Given('I configure the system programmatically with services') do
   Nonnative.configure do |config|
     config.version = '1.0'
+    config.name = 'test'
     config.url = 'http://localhost:4567'
     config.log = 'test/reports/nonnative.log'
 

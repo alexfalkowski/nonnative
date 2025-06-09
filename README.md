@@ -25,17 +25,22 @@ gem 'nonnative'
 
 And then execute:
 
-    $ bundle
+```bash
+bundle
+```
 
 Or install it yourself as:
 
-    $ gem install nonnative
+```bash
+gem install nonnative
+```
 
 ## Usage
 
 Configure nonnative with the following:
 
 - The version of the configuration (1.0).
+- The name of the service.
 - The URL of the service.
 - A log file.
 - Process, Server or Service that you want to start.
@@ -49,6 +54,7 @@ Configure nonnative with the following:
 ### Strategy
 
 The strategy can be one of the following values:
+
 - startup - When we include `nonnative/startup`, it will start it once.
 - before - When we tag our features with `@startup` it will start and stop after the scenario.
 - manual - When we tag our features with `@manual` it will stop after the scenario.
@@ -64,6 +70,7 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.version = '1.0'
+  config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
 
@@ -95,6 +102,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 processes:
@@ -176,6 +184,7 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.version = '1.0'
+  config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
 
@@ -201,6 +210,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 servers:
@@ -257,6 +267,7 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.version = '1.0'
+  config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
 
@@ -274,6 +285,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 servers:
@@ -320,6 +332,7 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.version = '1.0'
+  config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
 
@@ -337,6 +350,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 servers:
@@ -387,6 +401,7 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.version = '1.0'
+  config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
 
@@ -404,6 +419,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 servers:
@@ -436,6 +452,7 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.version = '1.0'
+  config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
 
@@ -455,6 +472,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 processes:
@@ -479,10 +497,11 @@ end
 #### Proxies
 
 We allow different proxies to be configured. These proxies can be used to simulate all kind of situations. The proxies that can be configured are:
+
 - `none` (this is the default)
 - `fault_injection`
 
-##### Processes
+##### Proxies Processes
 
 Setup it up programmatically:
 
@@ -491,6 +510,7 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.version = '1.0'
+  config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
 
@@ -512,6 +532,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 processes:
@@ -525,7 +546,7 @@ processes:
         delay: 5
 ```
 
-##### Servers
+##### Proxies Servers
 
 Setup it up programmatically:
 
@@ -534,6 +555,7 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.version = '1.0'
+  config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
 
@@ -555,6 +577,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 servers:
@@ -568,7 +591,7 @@ servers:
         delay: 5
 ```
 
-##### Services
+##### Proxies Services
 
 Setup it up programmatically:
 
@@ -577,6 +600,7 @@ require 'nonnative'
 
 Nonnative.configure do |config|
   config.version = '1.0'
+  config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
   config.wait = 1
@@ -599,6 +623,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 wait: 1
@@ -616,11 +641,12 @@ services:
 ##### Fault Injection
 
 The `fault_injection` proxy allows you to simulate failures by injecting them. We currently support the following:
+
 - `close_all` - Closes the socket as soon as it connects.
 - `delay` - This delays the communication between the connection. Default is 2 secs can be configured through options.
 - `invalid_data` - This takes the input and rearranges it to produce invalid data.
 
-###### Processes
+###### Fault Injection Processes
 
 Setup it up programmatically:
 
@@ -639,7 +665,7 @@ Given I set the proxy for process 'process_1' to 'close_all'
 Then I should reset the proxy for process 'process_1'
 ```
 
-###### Servers
+###### Fault Injection Servers
 
 Setup it up programmatically:
 
@@ -658,7 +684,7 @@ Given I set the proxy for server 'server_1' to 'close_all'
 Then I should reset the proxy for server 'server_1'
 ```
 
-###### Services
+###### Fault Injection Services
 
 Setup it up programmatically:
 
@@ -691,7 +717,7 @@ package main
 import "testing"
 
 func TestFeatures(t *testing.T) {
-	main()
+ main()
 }
 ```
 
@@ -713,6 +739,7 @@ Setup it up through configuration:
 
 ```yaml
 version: "1.0"
+name: test
 url: http://localhost:4567
 log: nonnative.log
 processes:

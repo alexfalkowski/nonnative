@@ -3,19 +3,25 @@
 module Nonnative
   class Observability < Nonnative::HTTPClient
     def health(opts = {})
-      get('healthz', opts)
+      get("#{name}/healthz", opts)
     end
 
     def liveness(opts = {})
-      get('livez', opts)
+      get("#{name}/livez", opts)
     end
 
     def readiness(opts = {})
-      get('readyz', opts)
+      get("#{name}/readyz", opts)
     end
 
     def metrics(opts = {})
-      get('metrics', opts)
+      get("#{name}/metrics", opts)
+    end
+
+    protected
+
+    def name
+      Nonnative.configuration.name
     end
   end
 end

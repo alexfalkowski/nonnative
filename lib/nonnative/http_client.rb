@@ -4,7 +4,7 @@ module Nonnative
   class HTTPClient
     def initialize(host)
       @host = host
-      @expections = [
+      @exceptions = [
         RestClient::Exceptions::Timeout,
         RestClient::ServerBrokeConnection
       ]
@@ -13,7 +13,7 @@ module Nonnative
     protected
 
     def with_retry(tries, wait, &)
-      Retriable.retriable(tries: tries, base_interval: wait, on: expections, &)
+      Retriable.retriable(tries: tries, base_interval: wait, on: exceptions, &)
     end
 
     def get(pathname, opts = {})
@@ -46,11 +46,11 @@ module Nonnative
 
     private
 
-    attr_reader :host, :expections
+    attr_reader :host, :exceptions
 
     def with_exception
       yield
-    rescue *expections => e
+    rescue *exceptions => e
       raise e
     rescue RestClient::Exception => e
       e.response
