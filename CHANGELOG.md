@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.105.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.105.0) - 2025-06-16
+
+- [`54850d0`](https://github.com/alexfalkowski/nonnative/commit/54850d088a6d8100ad8fd9b4804d9945f16ede43) feat(cucumber): update to v10.0.0 (#585)
+- [`d77bc43`](https://github.com/alexfalkowski/nonnative/commit/d77bc4377ca2c448734e7f26cd43490e8bdc2452) build(deps): bump bin from `fc61209` to `c9044eb` (#584)
+- [`911a39c`](https://github.com/alexfalkowski/nonnative/commit/911a39c8f00c72321b076a1d59d3077f9652bdbc) build(deps): bump bin from `255c12c` to `fc61209` (#579)
+
 ## [v1.104.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.104.0) - 2025-06-09
 
 - [`834596d`](https://github.com/alexfalkowski/nonnative/commit/834596d18be24b990238c3abcd0cefbced1132e9) feat(observability): prefix with name (#578)
