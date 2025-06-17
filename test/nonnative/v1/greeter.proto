@@ -4,14 +4,14 @@ package nonnative.v1;
 
 option ruby_package = "Nonnative::Features";
 
-service GreeterService {
-  rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {}
-}
-
 message SayHelloRequest {
   string name = 1;
 }
 
 message SayHelloResponse {
   string message = 1;
+}
+
+service GreeterService {
+  rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {}
 }
