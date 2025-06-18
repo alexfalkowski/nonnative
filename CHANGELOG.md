@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.106.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.106.0) - 2025-06-18
+
+- [`c72e047`](https://github.com/alexfalkowski/nonnative/commit/c72e0470a5fdcf2a3cb8c52a7c8f62b0f2b22ec2) feat(deps): update rubocop (1.76.2) (#589)
+- [`6f4b105`](https://github.com/alexfalkowski/nonnative/commit/6f4b105a40b0dd61747ef7ebd1f746e55dd91efc) test(grpc): use buf.build/grpc/ruby:v1.73.0 (#587)
+- [`6ced9a4`](https://github.com/alexfalkowski/nonnative/commit/6ced9a4fcd2ecfc579dd44b3a461d85b4fb914b9) test(deps): bump grpc from 1.72.0 to 1.73.0 (#586)
+
 ## [v1.105.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.105.0) - 2025-06-16
 
 - [`54850d0`](https://github.com/alexfalkowski/nonnative/commit/54850d088a6d8100ad8fd9b4804d9945f16ede43) feat(cucumber): update to v10.0.0 (#585)
