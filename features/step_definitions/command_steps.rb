@@ -27,12 +27,12 @@ Then('I should have a valid go command with:') do |table|
   if params == ''
     expect(parts.last).to eq(cmd)
 
-    parts = parts[1..parts.length - 2]
+    parts = parts[1..(parts.length - 2)]
   else
     expect(parts[parts.length - 2]).to eq(cmd)
     expect(parts.last).to eq(params)
 
-    parts = parts[1..parts.length - 3]
+    parts = parts[1..(parts.length - 3)]
   end
 
   parts.each do |p|
