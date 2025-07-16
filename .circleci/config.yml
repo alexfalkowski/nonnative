@@ -3,22 +3,23 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: alexfalkowski/ruby:1.40
+      - image: alexfalkowski/ruby:1.43
     working_directory: ~/nonnative
     steps:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make source-key
       - restore_cache:
           name: restore deps
           keys:
-            - nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}
+            - nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}-{{ checksum ".source-key" }}
             - nonnative-ruby-cache-
       - run: make dep
       - run: make clean-dep
       - save_cache:
           name: save deps
-          key: nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}
+          key: nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}-{{ checksum ".source-key" }}
           paths:
             - vendor
       - run: make lint
@@ -31,7 +32,7 @@ jobs:
     resource_class: large
   release:
     docker:
-      - image: alexfalkowski/release:3.28
+      - image: alexfalkowski/release:3.32
     working_directory: ~/nonnative
     steps:
       - checkout
