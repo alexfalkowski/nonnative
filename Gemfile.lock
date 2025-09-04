@@ -7,7 +7,7 @@ PATH
       cucumber (>= 7, < 11)
       get_process_mem (>= 1, < 2)
       grpc (>= 1, < 2)
-      puma (>= 6, < 7)
+      puma (>= 6, < 8)
       rest-client (>= 2, < 3)
       retriable (>= 3, < 4)
       rspec-benchmark (>= 0, < 1)
@@ -100,7 +100,7 @@ GEM
       ast (~> 2.4.1)
       racc
     prism (1.4.0)
-    puma (6.6.1)
+    puma (7.0.0)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.16)
