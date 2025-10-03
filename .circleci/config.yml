@@ -6,7 +6,8 @@ jobs:
       - image: alexfalkowski/ruby:1.58
     working_directory: ~/nonnative
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -35,7 +36,8 @@ jobs:
       - image: alexfalkowski/release:5.15
     working_directory: ~/nonnative
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: version
