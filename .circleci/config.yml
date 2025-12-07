@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: alexfalkowski/ruby:1.74
+      - image: alexfalkowski/ruby:1.75
     working_directory: ~/nonnative
     steps:
       - checkout:
