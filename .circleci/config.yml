@@ -33,7 +33,7 @@ jobs:
     resource_class: large
   version:
     docker:
-      - image: alexfalkowski/release:5.40
+      - image: alexfalkowski/release:5.41
     working_directory: ~/nonnative
     steps:
       - checkout:
