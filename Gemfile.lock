@@ -100,7 +100,7 @@ GEM
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
-    prism (1.7.0)
+    prism (1.8.0)
     puma (7.1.0)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -114,7 +114,7 @@ GEM
       rack (>= 3.0.0)
     rainbow (3.1.1)
     rake (13.3.1)
-    rbs (3.9.5)
+    rbs (3.10.2)
       logger
     regexp_parser (2.11.3)
     rest-client (2.1.0)
@@ -158,7 +158,7 @@ GEM
     rubocop-ast (1.48.0)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
-    ruby-lsp (0.26.4)
+    ruby-lsp (0.26.5)
       language_server-protocol (~> 3.17.0)
       prism (>= 1.2, < 2.0)
       rbs (>= 3, < 5)
