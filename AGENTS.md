@@ -4,6 +4,19 @@ This repository is the **`nonnative` Ruby gem**. It provides a Ruby-first harnes
 
 Everything below is based on the files currently in this repo (no assumptions).
 
+## Recent documentation updates (important for future sessions)
+
+- **Public API RDoc pass started**:
+  - Added/expanded RDoc for the module entry point (`Nonnative`) and core configuration/error types.
+  - Goal: document *public APIs only* (gem consumers), not internal/private helpers.
+- **README accuracy pass started**:
+  - Fixed incorrect examples around **services**:
+    - Programmatic example incorrectly used `p.port` inside a `config.service do |s| ... end` block; corrected to `s.host`/`s.port`.
+    - YAML example incorrectly used `processes:` for services; corrected to `services:`.
+  - Removed/avoided implying non-existent config fields (e.g. there is no top-level `config.wait`; `wait` is per-runner).
+
+These changes were made to align docs/examples with the actual runtime/config objects under `lib/nonnative/**/*.rb`.
+
 ## Quick orientation
 
 - **Library code**: `lib/nonnative/**/*.rb`
@@ -108,13 +121,23 @@ make clean-reports
 Cucumber integration lives in `lib/nonnative/cucumber.rb`:
 
 - `@startup`: starts and stops Nonnative around each scenario.
-- `@manual`: only stops after scenario.
+- `@manual`: only stops after scenario (start is expected to be triggered manually in steps).
 - `@clear`: calls `Nonnative.clear` before scenario.
 - `@reset`: resets proxies after scenario.
 
 The “start once per test run” strategy is implemented by requiring `nonnative/startup`:
 
 - `lib/nonnative/startup.rb` calls `Nonnative.start` and registers an `at_exit` stop.
+
+### README gotchas that matter in practice
+
+- **Service vs process YAML keys**:
+  - Services must be declared under `services:` in YAML (not `processes:`). Code reads `cfg.services` and maps them to `Nonnative::ConfigurationService`.
+- **No top-level `wait`**:
+  - `wait` is defined on runner configurations (`ConfigurationRunner#wait`) and is per process/server/service.
+- **Proxy wiring is easy to misunderstand**:
+  - When a proxy kind like `fault_injection` is enabled, the proxy binds to `service.proxy.host`/`service.proxy.port`.
+  - Readiness checks and traffic should typically target the **proxy host/port**, not the underlying service host/port.
 
 ### Feature support code
 
