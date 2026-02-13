@@ -1,13 +1,32 @@
 # frozen_string_literal: true
 
 module Nonnative
+  # Runtime runner that manages an OS-level child process.
+  #
+  # A process runner:
+  # - starts the configured proxy (if any),
+  # - spawns a child process using the configured command and environment,
+  # - waits briefly (via the runner `wait`), and
+  # - participates in readiness/shutdown via TCP port checks orchestrated by {Nonnative::Pool}.
+  #
+  # The underlying configuration is a {Nonnative::ConfigurationProcess}.
+  #
+  # @see Nonnative::ConfigurationProcess
+  # @see Nonnative::Pool
   class Process < Runner
+    # @param service [Nonnative::ConfigurationProcess] process configuration
     def initialize(service)
       super
 
       @timeout = Nonnative::Timeout.new(service.timeout)
     end
 
+    # Starts the proxy (if any) and spawns the configured process if it is not already running.
+    #
+    # @return [Array<(Integer, Boolean)>]
+    #   a tuple of:
+    #   - the spawned process id (pid)
+    #   - whether the process appears to still be running (non-blocking wait result)
     def start
       unless process_exists?
         proxy.start
@@ -18,6 +37,11 @@ module Nonnative
       [pid, ::Process.waitpid2(pid, ::Process::WNOHANG).nil?]
     end
 
+    # Stops the process (if running) and stops the proxy (if any).
+    #
+    # The process is signalled using the configured signal (defaults to `INT` when not set).
+    #
+    # @return [Integer, nil] the pid that was stopped (or `nil` if the process was never started)
     def stop
       if process_exists?
         process_kill
@@ -28,6 +52,11 @@ module Nonnative
       pid
     end
 
+    # Returns a memoized memory reader for the spawned process.
+    #
+    # This is primarily used by acceptance tests to assert memory usage.
+    #
+    # @return [GetProcessMem, nil] a memory reader for the pid, or `nil` if not started
     def memory
       return if pid.nil?
 

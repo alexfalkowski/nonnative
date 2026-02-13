@@ -5,15 +5,15 @@
 
 # Nonnative
 
-Do you love building microservices using different languages?
+Nonnative is a Ruby-first harness for end-to-end testing of systems implemented in other languages.
 
-Do you love testing applications using [cucumber](https://cucumber.io/) with [ruby](https://www.ruby-lang.org/en/)?
+It helps you:
+- start **OS processes** (e.g. your Go/Java/Rust service binary),
+- start **in-process Ruby servers** (e.g. small HTTP/TCP/gRPC fakes for dependencies),
+- optionally start **proxies** in front of processes/servers/services for fault-injection,
+- wait for readiness/shutdown using **TCP port checks**.
 
-Well so do I. The issue is that most languages the cucumber implementation is not always complete or you have to write a lot of code to get it working.
-
-So why not test the way you want and build the microservice how you want. These kind of tests will make sure your application is tested properly by going end-to-end.
-
-The way it works is it spawns processes or servers you configure and waits for it to start. Then you communicate with your microservice however you like (TCP, HTTP, gRPC, etc)
+Once started, you can test however you like (TCP, HTTP, gRPC, etc).
 
 ## Installation
 
@@ -37,27 +37,38 @@ gem install nonnative
 
 ## Usage
 
-Configure nonnative with the following:
+Nonnative is configured via {#Nonnative.configure} (programmatic) or `config.load_file(...)` (YAML).
 
-- The version of the configuration (1.0).
-- The name of the service.
-- The URL of the service.
-- A log file.
-- Process, Server or Service that you want to start.
-- A timeout value.
-- A time to wait.
-- Port to verify.
-- The class for servers.
-- The log for servers/processes
-- The strategy for processes, servers and services.
+High-level configuration fields:
+- `version`: configuration version (example: `"1.0"`).
+- `name`: logical system name (used by `Nonnative.observability` for `/<name>/healthz`, etc).
+- `url`: base URL for observability queries (example: `http://localhost:4567`).
+- `log`: path for the Nonnative logger output.
+- `processes`: child processes to `spawn`.
+- `servers`: in-process Ruby servers started in threads.
+- `services`: external dependencies (proxy-only; no process/thread started by Nonnative).
 
-### Strategy
+Runner fields (process/server/service):
+- `timeout`: max time (seconds) for readiness/shutdown port checks.
+- `wait`: small sleep (seconds) between lifecycle steps.
+- `host`/`port`: address used for port checks; when a proxy is enabled, reads happen via the proxy.
+- `log`: per-runner log file (used by process output redirection or server implementations).
 
-The strategy can be one of the following values:
+### Lifecycle strategies (Cucumber integration)
 
-- startup - When we include `nonnative/startup`, it will start it once.
-- before - When we tag our features with `@startup` it will start and stop after the scenario.
-- manual - When we tag our features with `@manual` it will stop after the scenario.
+Nonnative ships Cucumber hooks (when loaded) that support these tags/strategies:
+- `@startup`: start before scenario; stop after scenario
+- `@manual`: stop after scenario (start is expected to be triggered manually in steps)
+- `@clear`: clears memoized configuration and pool before scenario
+- `@reset`: resets proxies after scenario
+
+If you want “start once per test run”, require:
+
+```ruby
+require 'nonnative/startup'
+```
+
+This calls `Nonnative.start` immediately and registers an `at_exit` stop.
 
 ### Processes
 
@@ -443,9 +454,9 @@ end
 
 ### Services
 
-A service is an external dependency to your system. This is usually an expensive process to start like a DB and you would prefer to be managed externally. Services are not really exciting by themselves, it's when we add proxies that they allow us to do some extra work.
+A service is an external dependency to your system that you **do not** want Nonnative to start (no OS process, no Ruby thread). Services are primarily useful when paired with proxies, because they let you inject failures into dependencies that are managed elsewhere (e.g. a DB running in Docker).
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 require 'nonnative'
@@ -458,33 +469,37 @@ Nonnative.configure do |config|
 
   config.service do |s|
     s.name = 'postgres'
-    p.port = 5432
+    s.host = '127.0.0.1'
+    s.port = 5432
   end
 
   config.service do |s|
     s.name = 'redis'
+    s.host = '127.0.0.1'
     s.port = 6379
   end
 end
 ```
 
-Setup it up through configuration:
+Set it up through configuration (YAML):
 
 ```yaml
 version: "1.0"
 name: test
 url: http://localhost:4567
 log: nonnative.log
-processes:
+services:
   -
     name: postgres
+    host: 127.0.0.1
     port: 5432
   -
     name: redis
+    host: 127.0.0.1
     port: 6379
 ```
 
-Then load the file with
+Then load the file with:
 
 ```ruby
 require 'nonnative'
@@ -593,7 +608,7 @@ servers:
 
 ##### Proxies Services
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 require 'nonnative'
@@ -603,11 +618,15 @@ Nonnative.configure do |config|
   config.name = 'test'
   config.url = 'http://localhost:4567'
   config.log = 'nonnative.log'
-  config.wait = 1
 
   config.service do |s|
+    s.name = 'redis'
+    s.host = '127.0.0.1'
+    s.port = 6379
+
     s.proxy = {
       kind: 'fault_injection',
+      host: '127.0.0.1',
       port: 20_000,
       log: 'proxy_server.log',
       wait: 1,
