@@ -10,6 +10,9 @@ AllCops:
 Layout/LineLength:
   Max: 150
 
+Lint/HashCompareByIdentity:
+  Enabled: false
+
 Metrics/MethodLength:
   Max: 20
 
@@ -25,8 +28,8 @@ Metrics/ClassLength:
 Style/Documentation:
   Enabled: false
 
-Lint/HashCompareByIdentity:
+Style/NumericPredicate:
   Enabled: false
 
-Style/NumericPredicate:
+Style/FileOpen:
   Enabled: false
