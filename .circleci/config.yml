@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: alexfalkowski/ruby:1.95
+      - image: alexfalkowski/ruby:1.96
     working_directory: ~/nonnative
     steps:
       - checkout:
@@ -33,7 +33,7 @@ jobs:
     resource_class: arm.large
   version:
     docker:
-      - image: alexfalkowski/release:5.53
+      - image: alexfalkowski/release:5.54
     working_directory: ~/nonnative
     steps:
       - checkout:
