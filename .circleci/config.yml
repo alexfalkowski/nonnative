@@ -31,6 +31,17 @@ jobs:
           path: test/reports
       - run: make codecov-upload
     resource_class: arm.large
+  sync:
+    docker:
+      - image: alexfalkowski/ruby:1.97
+    working_directory: ~/infraops
+    steps:
+      - checkout:
+          method: blobless
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run: make sync push
+    resource_class: arm.large
   version:
     docker:
       - image: alexfalkowski/release:5.57
@@ -42,11 +53,23 @@ jobs:
       - run: git submodule update --init
       - run: version
     resource_class: arm.large
+  wait-all:
+    docker:
+      - image: alexfalkowski/ruby:1.97
+    steps:
+      - run: echo "all applicable jobs finished"
+    resource_class: arm.large
 
 workflows:
   nonnative:
     jobs:
       - build
+      - sync:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
       - version:
           context: gh
           requires:
@@ -54,3 +77,8 @@ workflows:
           filters:
             branches:
               only: master
+      - wait-all:
+          requires:
+            - build
+            - sync
+            - version
