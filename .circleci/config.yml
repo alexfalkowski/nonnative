@@ -33,8 +33,8 @@ jobs:
     resource_class: arm.large
   sync:
     docker:
-      - image: alexfalkowski/ruby:1.99
-    working_directory: ~/infraops
+      - image: alexfalkowski/release:5.58
+    working_directory: ~/nonnative
     steps:
       - checkout:
           method: blobless
