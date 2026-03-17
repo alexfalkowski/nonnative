@@ -49,12 +49,8 @@ Given('I should see {string} as unhealthy') do |service|
     read_timeout: 10, open_timeout: 10
   }
 
-  wait_for do
-    @response = Nonnative.observability.health(opts)
-    @response.code
-  end.to eq(503)
-
-  expect(@response.body).to include(service)
+  wait_for { Nonnative.observability.health(opts).code }.to eq(503)
+  wait_for { Nonnative.observability.health(opts).body }.to include(service)
 end
 
 Then('I should reset the proxy for process {string}') do |name|
@@ -104,10 +100,6 @@ Then('I should see {string} as healthy') do |service|
     read_timeout: 10, open_timeout: 10
   }
 
-  wait_for do
-    @response = Nonnative.observability.health(opts)
-    @response.code
-  end.to eq(200)
-
-  expect(@response.body).to_not include(service)
+  wait_for { Nonnative.observability.health(opts).code }.to eq(200)
+  wait_for { Nonnative.observability.health(opts).body }.to_not include(service)
 end
