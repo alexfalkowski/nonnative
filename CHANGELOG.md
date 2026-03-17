@@ -6,6 +6,43 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.109.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.109.0) - 2026-03-17
+
+- [`c3d5b01`](https://github.com/alexfalkowski/nonnative/commit/c3d5b0150b76c2f7adbf3df514da4caef48938d1) feat(cucumber): use wait_for for healthy and unhealthy (#781)
+- [`7f96912`](https://github.com/alexfalkowski/nonnative/commit/7f96912122d4c4ec158e2d2a2f80732809e6942e) build(ci): use latest published images (#780)
+- [`f489497`](https://github.com/alexfalkowski/nonnative/commit/f4894979d327283061dbe9ceef79222262d6360f) build(deps): upgraded github.com/alexfalkowski/bin (#779)
+- [`6ff8684`](https://github.com/alexfalkowski/nonnative/commit/6ff8684acb51509df49b164884567c260ef15cad) build(ci): use latest published images (#778)
+- [`f818467`](https://github.com/alexfalkowski/nonnative/commit/f8184677fdb0dcf6741857f5063770031fbcd939) test(deps): bump ruby-lsp from 0.26.7 to 0.26.8 (#776)
+- [`1fc4d36`](https://github.com/alexfalkowski/nonnative/commit/1fc4d36bbc31460038e4bd52f3a0dbf2d4f0b805) build(deps): bump bin from `59b1ab0` to `a7996aa` (#777)
+- [`970ba28`](https://github.com/alexfalkowski/nonnative/commit/970ba283dc50d514c7cb0359d7ccb7e88a07918b) build(ci): use alexfalkowski/release:5.58 (#775)
+- [`a0ac1c9`](https://github.com/alexfalkowski/nonnative/commit/a0ac1c907a8d9f21e55c9311d472e3d994c212fd) test(deps): upgraded bundler to 4.0.8 (#774)
+- [`5778b0f`](https://github.com/alexfalkowski/nonnative/commit/5778b0f92e5bf0bfc4f00083ece8e67b2b14ec13) build(ci): use latest published images (#773)
+- [`7a24b2d`](https://github.com/alexfalkowski/nonnative/commit/7a24b2de00d01d049e2f8ade4c89468317b27739) build(ci): add wait-all (#772)
+- [`be6bede`](https://github.com/alexfalkowski/nonnative/commit/be6bedecb19381b0e8f6c70caf7abf4ac7e426f2) build(ci): use latest published images (#771)
+- [`959fff1`](https://github.com/alexfalkowski/nonnative/commit/959fff1884973ac08a3975eebaa93d91e2f7f10a) build(ci): use latest published images (#770)
+- [`2633d39`](https://github.com/alexfalkowski/nonnative/commit/2633d39c0d41eccaf965fcc3d0358e8930af82a8) test(deps): bump retriable from 3.3.0 to 3.4.1 (#769)
+- [`af83337`](https://github.com/alexfalkowski/nonnative/commit/af83337c8ec5c82532c8f696b12a683851076c64) test(deps): bump retriable from 3.2.1 to 3.3.0 (#767)
+- [`4e0a68b`](https://github.com/alexfalkowski/nonnative/commit/4e0a68b34f41e61391c9858a1706178f23df91c1) build(deps): bump bin from `000304e` to `59b1ab0` (#768)
+- [`0dfec9f`](https://github.com/alexfalkowski/nonnative/commit/0dfec9fc3e459b982f7f2e75c130d058b17b0cdd) build(ci): use latest published images (#766)
+- [`9f69a38`](https://github.com/alexfalkowski/nonnative/commit/9f69a386ad52a68cf72a24d95842ee78d3293188) test(deps): make update-all-dep (#765)
+- [`e71512b`](https://github.com/alexfalkowski/nonnative/commit/e71512b58a7670d94b4e3119aecebdecfaa879ac) test(deps): bump rubocop from 1.85.0 to 1.85.1 (#764)
+- [`8942a9a`](https://github.com/alexfalkowski/nonnative/commit/8942a9a03ce533a40f0e670d0fb2d2a24e4496b4) build(deps): upgraded github.com/alexfalkowski/bin (#763)
+- [`3dc78dd`](https://github.com/alexfalkowski/nonnative/commit/3dc78dd7e54cfb31a095eafc50304521fc266cff) build(ci): use latest published images (#762)
+- [`fc30adc`](https://github.com/alexfalkowski/nonnative/commit/fc30adc4e70a83356558345f231c3cffe8c57332) build(ci): use latest published images (#761)
+- [`7aaeb3d`](https://github.com/alexfalkowski/nonnative/commit/7aaeb3d98dc3ef3e28b166cd5c73ed1dfc16734a) test(deps): bump rubocop from 1.84.2 to 1.85.0 (#760)
+- [`6e3053c`](https://github.com/alexfalkowski/nonnative/commit/6e3053cf3f6ed9becfefd4b0eb991b5f4dc704db) build(ci): use latest published images (#759)
+- [`706939a`](https://github.com/alexfalkowski/nonnative/commit/706939addc59be998ac8893c5beb2a449b11074e) build(ci): use latest published images (#758)
+- [`a5f30ef`](https://github.com/alexfalkowski/nonnative/commit/a5f30efa008c1f7b8e896edfe97b43bb068601f8) build(ci): use latest published images (#754)
+- [`5150df4`](https://github.com/alexfalkowski/nonnative/commit/5150df4ed96e9e371ce25bea889ebb2cbdc69904) build(deps): bump bin from `60f3a4b` to `b165431` (#755)
+- [`ed974ea`](https://github.com/alexfalkowski/nonnative/commit/ed974ea12ed9adfaacce2c89bd4067f99e691a4e) build(ci): use resource_class: large (#756)
+- [`540fc17`](https://github.com/alexfalkowski/nonnative/commit/540fc174b50fb6c3f7d86b6fbcf2f726b4a6f304) test(deps): bump grpc from 1.78.0 to 1.78.1 (#748)
+- [`328cfb8`](https://github.com/alexfalkowski/nonnative/commit/328cfb8ee829ebe3f825d797deed47e003e5540e) test(deps): bump retriable from 3.2.0 to 3.2.1 (#749)
+- [`ff7f0de`](https://github.com/alexfalkowski/nonnative/commit/ff7f0dec49079ce1c628100436613f6faa91122d) test(deps): bump ruby-lsp from 0.26.6 to 0.26.7 (#750)
+- [`8b9f04b`](https://github.com/alexfalkowski/nonnative/commit/8b9f04b6a492646a8f2cec5b6701b1968afda36e) test(deps): bump retriable from 3.1.2 to 3.2.0 (#747)
+- [`004fd69`](https://github.com/alexfalkowski/nonnative/commit/004fd696347bd763ef9b2df9d008cccaae093c39) build(ci): use latest published images (#746)
+- [`e0888ae`](https://github.com/alexfalkowski/nonnative/commit/e0888ae8e714cdf3d2484d83eaa39876f9ed05e9) test(deps): bump rack from 3.2.4 to 3.2.5 (#745)
+- [`c1c3645`](https://github.com/alexfalkowski/nonnative/commit/c1c3645a799b925663b0daf2d161357dea6be413) build(ci): use latest published images (#744)
+
 ## [v1.108.0](https://github.com/alexfalkowski/nonnative/releases/tag/v1.108.0) - 2026-02-13
 
 - [`7683fb1`](https://github.com/alexfalkowski/nonnative/commit/7683fb15b8d68531dd7a309217c0ff6503f1ca51) feat(docs): update to reflect important information (#743)
