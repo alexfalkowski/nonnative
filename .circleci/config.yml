@@ -33,7 +33,7 @@ jobs:
     resource_class: arm.large
   sync:
     docker:
-      - image: alexfalkowski/release:5.59
+      - image: alexfalkowski/release:6.3
     working_directory: ~/nonnative
     steps:
       - checkout:
@@ -44,7 +44,7 @@ jobs:
     resource_class: arm.large
   version:
     docker:
-      - image: alexfalkowski/release:5.59
+      - image: alexfalkowski/release:6.3
     working_directory: ~/nonnative
     steps:
       - checkout:
@@ -52,6 +52,7 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: version
+      - run: package
     resource_class: arm.large
   wait-all:
     docker:
@@ -72,6 +73,7 @@ workflows:
               ignore: master
       - version:
           context: gh
+          serial-group: << pipeline.project.slug >>/version
           requires:
             - build
           filters:
