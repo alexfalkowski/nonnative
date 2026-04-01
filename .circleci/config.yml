@@ -24,6 +24,7 @@ jobs:
           paths:
             - vendor
       - run: make lint
+      - run: make sec
       - run: make features
       - store_test_results:
           path: test/reports
