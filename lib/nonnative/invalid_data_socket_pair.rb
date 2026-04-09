@@ -29,7 +29,35 @@ module Nonnative
     private
 
     def corrupt(data)
-      bytes = data.bytes
+      payload, delimiter = split_trailing_delimiter(data)
+      return "\0#{delimiter}" if payload.empty?
+
+      "#{corrupt_payload(payload)}#{delimiter}"
+    end
+
+    def split_trailing_delimiter(data)
+      index = trailing_delimiter_start(data)
+      payload = data.byteslice(0, index)
+      delimiter = data.byteslice(index, data.bytesize - index) || ''
+
+      [payload, delimiter]
+    end
+
+    def trailing_delimiter_start(data)
+      index = data.bytesize
+
+      while index.positive?
+        byte = data.getbyte(index - 1)
+        break unless [10, 13].include?(byte)
+
+        index -= 1
+      end
+
+      index
+    end
+
+    def corrupt_payload(payload)
+      bytes = payload.bytes
       corrupted = bytes.shuffle
       return corrupted.pack('C*') unless corrupted == bytes
 

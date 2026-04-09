@@ -17,6 +17,22 @@ Feature: Lifecycle
     When I attempt to start the system
     Then starting the system should raise an error containing "Rollback failed with StandardError: boom on rollback"
 
+  Scenario: Pool starts services before servers and processes
+    When I start a pool with ordered services, servers, and processes
+    Then the lifecycle errors should be empty
+    And the lifecycle order should be:
+      | service_1 start |
+      | server_1 start  |
+      | process_1 start |
+
+  Scenario: Pool stops processes and servers before services
+    When I stop a pool with ordered services, servers, and processes
+    Then the lifecycle errors should be empty
+    And the lifecycle order should be:
+      | process_1 stop |
+      | server_1 stop  |
+      | service_1 stop |
+
   Scenario: Pool collects service lifecycle errors for unnamed services
     When I start a pool with a failing unnamed service
     Then the lifecycle errors should include "Start failed for Nonnative::Features::FailingService: StandardError - boom on service start"
@@ -37,3 +53,15 @@ Feature: Lifecycle
     When I clear after memoizing logger and observability
     Then the logger should be recreated for the new configuration
     And the observability client should be recreated for the new configuration
+
+  Scenario: Requiring nonnative outside Cucumber succeeds
+    When I require "nonnative" in a subprocess
+    Then the subprocess should exit successfully
+    And the subprocess output should contain "ok"
+
+  Scenario: Requiring nonnative/startup starts immediately and stops at exit
+    When I require "nonnative/startup" in an instrumented subprocess
+    Then the subprocess should exit successfully
+    And the subprocess output should be:
+      | started |
+      | stopped |

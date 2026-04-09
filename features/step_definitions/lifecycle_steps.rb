@@ -23,6 +23,11 @@ When('I start a pool with a failing unnamed service') do
   ).start
 end
 
+When('I start a pool with ordered services, servers, and processes') do
+  @lifecycle_events = []
+  @lifecycle_errors = build_ordered_pool(@lifecycle_events).start
+end
+
 When('I start a pool with a failing unnamed port check') do
   @lifecycle_errors = build_pool(
     servers: [[Nonnative::Features::FailingRunner.new, Nonnative::Features::FailingPort.new(open_error: 'boom on readiness')]]
@@ -33,6 +38,11 @@ When('I stop a pool with a failing unnamed port check') do
   @lifecycle_errors = build_pool(
     servers: [[Nonnative::Features::FailingRunner.new, Nonnative::Features::FailingPort.new(closed_error: 'boom on shutdown')]]
   ).stop
+end
+
+When('I stop a pool with ordered services, servers, and processes') do
+  @lifecycle_events = []
+  @lifecycle_errors = build_ordered_pool(@lifecycle_events).stop
 end
 
 When('I check whether a reaped process still exists') do
@@ -63,6 +73,33 @@ When('I clear after memoizing logger and observability') do
   @second_observability = Nonnative.observability
 end
 
+When('I require {string} in a subprocess') do |path|
+  run_subprocess(<<~RUBY)
+    require #{path.inspect}
+    puts 'ok'
+  RUBY
+end
+
+When('I require {string} in an instrumented subprocess') do |path|
+  run_subprocess(<<~RUBY)
+    require 'nonnative'
+
+    module Nonnative
+      class << self
+        def start
+          puts 'started'
+        end
+
+        def stop
+          puts 'stopped'
+        end
+      end
+    end
+
+    require #{path.inspect}
+  RUBY
+end
+
 Then('starting the system should raise an error containing {string}') do |message|
   expect(@start_error).to be_a(Nonnative::StartError)
   expect(@start_error.message).to include(message)
@@ -75,6 +112,14 @@ end
 
 Then('the lifecycle errors should include {string}') do |message|
   expect(@lifecycle_errors).to include(message)
+end
+
+Then('the lifecycle errors should be empty') do
+  expect(@lifecycle_errors).to eq([])
+end
+
+Then('the lifecycle order should be:') do |table|
+  expect(@lifecycle_events).to eq(table.raw.flatten)
 end
 
 Then('the process should no longer exist') do
@@ -94,8 +139,34 @@ Then('the observability client should be recreated for the new configuration') d
   expect(observability_host(@second_observability)).to eq(@second_url)
 end
 
+Then('the subprocess should exit successfully') do
+  expect(@subprocess_status.success?).to eq(true), @subprocess_stderr
+end
+
+Then('the subprocess output should contain {string}') do |message|
+  expect(@subprocess_stdout).to include(message)
+end
+
+Then('the subprocess output should be:') do |table|
+  expect(@subprocess_stdout.lines.map(&:chomp).reject(&:empty?)).to eq(table.raw.flatten)
+end
+
 def build_pool(services: [], servers: [], processes: [])
   Nonnative::Features::SeededPool.new(Nonnative::Configuration.new, services:, servers:, processes:)
+end
+
+def build_ordered_pool(events)
+  build_pool(
+    services: [Nonnative::Features::RecordingService.new(name: 'service_1', events:)],
+    servers: [[
+      Nonnative::Features::RecordingRunner.new(name: 'server_1', events:),
+      Nonnative::Features::PassingPort.new
+    ]],
+    processes: [[
+      Nonnative::Features::RecordingRunner.new(name: 'process_1', events:),
+      Nonnative::Features::PassingPort.new
+    ]]
+  )
 end
 
 def configure_for_clear(log:, url:)
@@ -108,4 +179,14 @@ end
 
 def observability_host(client)
   client.send(:host)
+end
+
+def run_subprocess(script)
+  @subprocess_stdout, @subprocess_stderr, @subprocess_status = Open3.capture3(
+    RbConfig.ruby,
+    '-Ilib',
+    '-e',
+    script,
+    chdir: Dir.pwd
+  )
 end
