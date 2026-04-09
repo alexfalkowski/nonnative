@@ -1,4 +1,4 @@
-@manual @clear
+@acceptance @proxy @config @manual @clear
 Feature: Configured HTTP proxy servers
   Proxy requests through the configured HTTP proxy server.
 

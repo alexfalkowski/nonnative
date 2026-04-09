@@ -12,5 +12,6 @@ SimpleCov.start do
   add_filter 'lib/nonnative/cucumber.rb'
   coverage_dir 'test/reports'
 end
+SimpleCov.command_name(ENV.fetch('COVERAGE_NAME', 'Cucumber Features'))
 
 require 'nonnative'

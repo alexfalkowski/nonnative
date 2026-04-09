@@ -1,4 +1,4 @@
-@clear
+@contract @clear
 Feature: Command
   Verify commands are formatted correctly when they run.
 
@@ -26,6 +26,7 @@ Feature: Command
       | command    | server           |
       | parameters |                  |
 
+  @config
   Scenario: Go command from configuration
     When I load the go configuration
     Then I should have a valid go command with:

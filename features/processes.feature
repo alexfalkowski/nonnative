@@ -1,4 +1,4 @@
-@manual @clear
+@acceptance @manual @clear
 Feature: Process runners
   Start managed processes and exercise their client-facing TCP endpoints.
 
@@ -9,8 +9,12 @@ Feature: Process runners
     Then I should receive a TCP "test" response
 
     Examples:
+      | source           |
+      | programmatically |
+
+    @config
+    Examples:
       | source                |
-      | programmatically      |
       | through configuration |
 
   Scenario: Process activity is logged and stays within the memory budget
@@ -22,7 +26,7 @@ Feature: Process runners
     And I should see a log entry of "test" in the file "test/reports/12_321.log"
     And the process 'start_1' should consume less than '40mb' of memory
 
-  @reset
+  @proxy @reset
   Scenario: A delayed process proxy still allows TCP responses
     Given I configure the system programmatically with processes
     And I start the system
@@ -30,7 +34,7 @@ Feature: Process runners
     When I send "test" with the TCP client to the processes
     Then I should receive a TCP "test" response
 
-  @reset
+  @proxy @reset
   Scenario: Closing the process proxy resets the TCP client
     Given I configure the system programmatically with processes
     And I start the system
@@ -38,7 +42,7 @@ Feature: Process runners
     When I send "test" with the TCP client 'start_1' to the process
     Then I should receive a connection error for client response with TCP
 
-  @reset
+  @proxy @reset
   Scenario: Invalid proxy data changes the TCP client response
     Given I configure the system programmatically with processes
     And I start the system
@@ -46,6 +50,7 @@ Feature: Process runners
     When I send "test" with the TCP client 'start_1' to the process
     Then I should receive a invalid data that is not "test" for client response with TCP
 
+  @proxy
   Scenario: Looking up a missing process proxy fails
     Given I configure the system programmatically with processes
     And I start the system

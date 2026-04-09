@@ -1,4 +1,4 @@
-@manual @clear
+@acceptance @manual @clear
 Feature: Server observability
   Expose health and status endpoints for configured servers.
 

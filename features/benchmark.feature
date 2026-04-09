@@ -1,12 +1,14 @@
-@clear
+@benchmark @slow @clear
 Feature: Benchmark
   Allows us to check that start and stop responds in adequate time
 
+  @config
   @manual
   Scenario: Start the system within an adequate time
     Given I configure the system through configuration with processes
     Then starting the system should happen within an adequate time
 
+  @config
   Scenario: Stop the system within an adequate time
     Given I configure the system through configuration with processes
     When I start the system

@@ -1,4 +1,4 @@
-@manual @clear
+@acceptance @proxy @manual @clear
 Feature: Local HTTP proxy servers
   Preserve request bodies and headers when proxying locally.
 

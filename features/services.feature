@@ -1,4 +1,4 @@
-@manual @service @clear
+@acceptance @service @proxy @manual @clear
 Feature: Service proxies
   Connect to externally managed services through nonnative proxies.
 
@@ -9,8 +9,12 @@ Feature: Service proxies
     Then I should have a successful connection
 
     Examples:
+      | source           |
+      | programmatically |
+
+    @config
+    Examples:
       | source                |
-      | programmatically      |
       | through configuration |
 
   @reset

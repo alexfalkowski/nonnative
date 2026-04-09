@@ -25,7 +25,8 @@ jobs:
             - vendor
       - run: make lint
       - run: make sec
-      - run: make features
+      - run: COVERAGE_NAME="Cucumber Features" make features
+      - run: COVERAGE_NAME="Cucumber Benchmarks" make benchmarks
       - store_test_results:
           path: test/reports
       - store_artifacts:

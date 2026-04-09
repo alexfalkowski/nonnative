@@ -1,4 +1,4 @@
-@manual @clear
+@acceptance @manual @clear
 Feature: Server transports
   Start configured servers and serve traffic over each supported protocol.
 
@@ -9,8 +9,12 @@ Feature: Server transports
     Then I should receive a TCP "Hello World!" response
 
     Examples:
+      | source           |
+      | programmatically |
+
+    @config
+    Examples:
       | source                |
-      | programmatically      |
       | through configuration |
 
   Scenario: HTTP servers return hello responses
