@@ -64,6 +64,17 @@ Nonnative ships Cucumber hooks (when loaded) that support these tags/strategies:
 - `@clear`: clears memoized configuration, logger, observability client, and pool before scenario
 - `@reset`: resets proxies after scenario
 
+The repo’s own Cucumber suite also uses taxonomy tags to classify coverage:
+- `@acceptance`: end-to-end behavior across configured runners and clients
+- `@contract`: lower-level contract and lifecycle behavior
+- `@proxy`: proxy-specific behavior and failure injection
+- `@config`: coverage that exercises YAML/config loading
+- `@service`: scenarios centered on externally managed dependencies
+- `@benchmark`: benchmark-only scenarios run by `make benchmarks`
+- `@slow`: slower scenarios, currently used by benchmark coverage
+
+`make features` excludes `@benchmark`, while `make benchmarks` runs only `@benchmark`.
+
 Requiring `nonnative` is enough; the Cucumber hooks and step definitions are installed lazily once Cucumber’s Ruby DSL is ready.
 
 If you want “start once per test run”, require:

@@ -69,6 +69,18 @@ Supported tags:
 - `@clear`: call `Nonnative.clear` before scenario
 - `@reset`: reset proxies after scenario
 
+Repo-owned feature files also use suite taxonomy tags:
+
+- `@acceptance`: end-to-end runner and client flows
+- `@contract`: lower-level lifecycle / command coverage
+- `@proxy`: proxy-specific coverage
+- `@config`: scenarios or example sets that load YAML/configuration
+- `@service`: coverage centered on external services
+- `@benchmark`: benchmark-only scenarios
+- `@slow`: slower-running scenarios, currently benchmarks
+
+`make features` excludes `@benchmark`; `make benchmarks` runs only `@benchmark`.
+
 `Nonnative.clear` now clears:
 
 - configuration

@@ -3,8 +3,8 @@
 module Nonnative
   # Socket-pair variant used by the fault-injection proxy to simulate corrupted/incoherent traffic.
   #
-  # When active, data written to the upstream socket is corrupted by shuffling the characters in the
-  # payload before forwarding.
+  # When active, data written to the upstream socket is corrupted by shuffling the payload bytes
+  # before forwarding.
   #
   # This behavior is enabled by calling {Nonnative::FaultInjectionProxy#invalid_data}.
   #

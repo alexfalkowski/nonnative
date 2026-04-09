@@ -1,4 +1,4 @@
-@manual @clear
+@acceptance @proxy @manual @clear
 Feature: Server proxy control
   Use fault-injection proxies in front of servers.
 

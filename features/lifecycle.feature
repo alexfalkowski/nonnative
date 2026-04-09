@@ -1,4 +1,4 @@
-@clear
+@contract @clear
 Feature: Lifecycle
   Allows us to verify lifecycle error handling and edge cases.
 
