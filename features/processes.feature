@@ -1,8 +1,19 @@
 @manual @clear
-Feature: Processes
-  Allows us to start a process and use a client to get a response.
+Feature: Process runners
+  Start managed processes and exercise their client-facing TCP endpoints.
 
-  Scenario: Successfully starting of processes
+  Scenario Outline: Processes echo TCP messages when configured <source>
+    Given I configure the system <source> with processes
+    And I start the system
+    When I send "test" with the TCP client to the processes
+    Then I should receive a TCP "test" response
+
+    Examples:
+      | source                |
+      | programmatically      |
+      | through configuration |
+
+  Scenario: Process activity is logged and stays within the memory budget
     Given I configure the system programmatically with processes
     And I start the system
     When I send "test" with the TCP client to the processes
@@ -12,18 +23,15 @@ Feature: Processes
     And the process 'start_1' should consume less than '40mb' of memory
 
   @reset
-  Scenario: Successfully starting of processes with delay
+  Scenario: A delayed process proxy still allows TCP responses
     Given I configure the system programmatically with processes
     And I start the system
     And I set the proxy for process 'start_1' to 'delay'
     When I send "test" with the TCP client to the processes
     Then I should receive a TCP "test" response
-    And I should see a log entry of "test" for process 'start_1'
-    And I should see a log entry of "test" in the file "test/reports/12_321.log"
-    And the process 'start_1' should consume less than '40mb' of memory
 
   @reset
-  Scenario: Successfully starting of processes and closing connections
+  Scenario: Closing the process proxy resets the TCP client
     Given I configure the system programmatically with processes
     And I start the system
     And I set the proxy for process 'start_1' to 'close_all'
@@ -31,14 +39,14 @@ Feature: Processes
     Then I should receive a connection error for client response with TCP
 
   @reset
-  Scenario: Successfully starting of processes and getting invalid data
+  Scenario: Invalid proxy data changes the TCP client response
     Given I configure the system programmatically with processes
     And I start the system
     And I set the proxy for process 'start_1' to 'invalid_data'
     When I send "test" with the TCP client 'start_1' to the process
     Then I should receive a invalid data that is not "test" for client response with TCP
 
-  Scenario: Proxy for process is not found
+  Scenario: Looking up a missing process proxy fails
     Given I configure the system programmatically with processes
     And I start the system
     When I try to find the proxy for process 'non_existent'

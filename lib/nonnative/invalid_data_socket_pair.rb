@@ -12,7 +12,10 @@ module Nonnative
   # @see Nonnative::SocketPairFactory
   # @see Nonnative::SocketPair
   class InvalidDataSocketPair < SocketPair
-    # Writes corrupted data to the socket by shuffling characters.
+    # Writes corrupted data to the socket by shuffling bytes.
+    #
+    # The payload must always change, otherwise short or repetitive inputs such as "test" can
+    # occasionally pass through unchanged and make fault-injection scenarios flaky.
     #
     # @param socket [IO] the socket to write to
     # @param data [String] the original payload
@@ -20,9 +23,18 @@ module Nonnative
     def write(socket, data)
       Nonnative.logger.info "shuffling socket data '#{socket.inspect}' for 'invalid_data' pair"
 
-      data = data.chars.shuffle.join
+      super(socket, corrupt(data))
+    end
 
-      super
+    private
+
+    def corrupt(data)
+      bytes = data.bytes
+      corrupted = bytes.shuffle
+      return corrupted.pack('C*') unless corrupted == bytes
+
+      corrupted[0] = (corrupted[0] + 1) % 256
+      corrupted.pack('C*')
     end
   end
 end
