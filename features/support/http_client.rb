@@ -33,9 +33,43 @@ module Nonnative
         end
       end
 
+      def inspect_request(verb, body)
+        with_retry(1, 1) do
+          headers = inspect_headers(verb)
+
+          with_exception do
+            RestClient::Request.execute(
+              method: verb.to_sym,
+              url: URI.join(host, 'inspect').to_s,
+              payload: body,
+              headers:,
+              read_timeout: 1,
+              open_timeout: 1
+            )
+          end
+        end
+      end
+
       def not_found
         with_retry(1, 1) do
           get('notfound', { headers: { content_type: :json, accept: :json }, read_timeout: 1, open_timeout: 1 })
+        end
+      end
+
+      private
+
+      def inspect_headers(verb)
+        headers = { content_type: :json, accept: :json }
+
+        case verb.to_sym
+        when :post
+          Nonnative::Header.auth_basic('test:test').merge(headers)
+        when :put, :delete
+          Nonnative::Header.auth_bearer('token').merge(headers)
+        when :patch
+          Nonnative::Header.http_user_agent('test 1.0').merge(headers)
+        else
+          headers
         end
       end
     end
