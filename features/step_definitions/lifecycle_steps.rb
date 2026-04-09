@@ -44,6 +44,25 @@ When('I check whether a reaped process still exists') do
   @process_exists = process.send(:process_exists?)
 end
 
+When('I clear after memoizing logger and observability') do
+  @first_log_path = "test/reports/#{SecureRandom.hex(4)}-first.log"
+  @second_log_path = "test/reports/#{SecureRandom.hex(4)}-second.log"
+  @first_url = 'http://127.0.0.1:41001'
+  @second_url = 'http://127.0.0.1:41002'
+
+  configure_for_clear(log: @first_log_path, url: @first_url)
+  @first_logger = Nonnative.logger
+  @first_logger.info('before clear')
+  @first_observability = Nonnative.observability
+
+  Nonnative.clear
+
+  configure_for_clear(log: @second_log_path, url: @second_url)
+  @second_logger = Nonnative.logger
+  @second_logger.info('after clear')
+  @second_observability = Nonnative.observability
+end
+
 Then('starting the system should raise an error containing {string}') do |message|
   expect { Nonnative.start }.to raise_error(Nonnative::StartError, /#{Regexp.escape(message)}/)
 end
@@ -60,6 +79,31 @@ Then('the process should no longer exist') do
   expect(@process_exists).to eq(false)
 end
 
+Then('the logger should be recreated for the new configuration') do
+  expect(@second_logger).not_to equal(@first_logger)
+  expect(File.read(@first_log_path)).to include('before clear')
+  expect(File.read(@first_log_path)).not_to include('after clear')
+  expect(File.read(@second_log_path)).to include('after clear')
+end
+
+Then('the observability client should be recreated for the new configuration') do
+  expect(@second_observability).not_to equal(@first_observability)
+  expect(observability_host(@first_observability)).to eq(@first_url)
+  expect(observability_host(@second_observability)).to eq(@second_url)
+end
+
 def build_pool(services: [], servers: [], processes: [])
   Nonnative::Features::SeededPool.new(Nonnative::Configuration.new, services:, servers:, processes:)
+end
+
+def configure_for_clear(log:, url:)
+  Nonnative.configure do |config|
+    config.name = 'test'
+    config.url = url
+    config.log = log
+  end
+end
+
+def observability_host(client)
+  client.send(:host)
 end
