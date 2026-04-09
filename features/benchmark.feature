@@ -17,7 +17,19 @@ Feature: Benchmark
     When I configure the system programmatically with a no op server
     Then starting the system should raise an error
 
+  @manual
+  Scenario: Start nonnative with a start error will rollback started runners
+    When I configure the system programmatically with a start error server
+    Then starting the system should raise an error
+    And the port '14002' should be closed
+
   Scenario: Stop nonnative with a long stopping time server will error
     Given I configure the system programmatically with a no stop server
     When I start the system
     Then stopping the system should raise an error
+
+  Scenario: Stop nonnative with a stop error will still stop later runners
+    Given I configure the system programmatically with a stop error server
+    When I start the system
+    Then stopping the system should raise an error
+    And the port '14005' should be closed

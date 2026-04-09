@@ -53,7 +53,6 @@ require 'rest-client'
 require 'retriable'
 require 'concurrent'
 require 'config'
-require 'cucumber'
 require 'get_process_mem'
 require 'rspec-benchmark'
 require 'rspec/expectations'
@@ -109,10 +108,10 @@ require 'nonnative/header'
 # @see Nonnative::Pool for lifecycle orchestration once started
 module Nonnative
   class << self
-    # Returns the current runner pool (created on {Nonnative.start}).
+    # Returns or overrides the current runner pool (created on {Nonnative.start}).
     #
     # @return [Nonnative::Pool, nil] the pool instance, or `nil` if not started yet
-    attr_reader :pool
+    attr_accessor :pool
 
     # Loads one or more configuration files using the `config` gem.
     #
@@ -210,13 +209,19 @@ module Nonnative
     def start
       @pool ||= Nonnative::Pool.new(configuration)
       errors = []
-
-      @pool.start do |name, values, result|
+      errors.concat(@pool.start do |name, values, result|
         id, started = values
-        errors << "Started #{name} with id #{id}, though did respond in time" if !started || !result
-      end
+        errors << "Started #{name} with id #{id}, though did not respond in time" if !started || !result
+      end)
+      nil
+    rescue StandardError => e
+      errors << unexpected_lifecycle_error(:start, e)
+    ensure
+      if errors.any?
+        errors.concat(rollback_start)
 
-      raise Nonnative::StartError, errors.join("\n") unless errors.empty?
+        raise Nonnative::StartError, errors.join("\n")
+      end
     end
 
     # Stops all configured processes and servers, then services, and waits for shutdown.
@@ -224,14 +229,16 @@ module Nonnative
     # @return [void]
     # @raise [Nonnative::StopError] if one or more runners fail to stop in time
     def stop
+      errors = []
       return if @pool.nil?
 
-      errors = []
-
-      @pool.stop do |name, id, result|
-        errors << "Stopped #{name} with id #{id}, though did respond in time" unless result
-      end
-
+      errors.concat(@pool.stop do |name, id, result|
+        errors << "Stopped #{name} with id #{id}, though did not respond in time" unless result
+      end)
+      nil
+    rescue StandardError => e
+      errors << unexpected_lifecycle_error(:stop, e)
+    ensure
       raise Nonnative::StopError, errors.join("\n") unless errors.empty?
     end
 
@@ -263,6 +270,25 @@ module Nonnative
     # @raise [NoMethodError] if called before {Nonnative.start} (because {Nonnative.pool} is nil)
     def reset
       Nonnative.pool.reset
+    end
+
+    private
+
+    def rollback_start
+      errors = []
+      return errors if @pool.nil?
+
+      errors.concat(@pool.rollback do |name, id, result|
+        errors << "Rollback failed for #{name} with id #{id}, because it did not stop in time" unless result
+      end)
+    rescue StandardError => e
+      errors << unexpected_lifecycle_error(:rollback, e)
+    ensure
+      clear_pool if errors.empty?
+    end
+
+    def unexpected_lifecycle_error(action, error)
+      "#{action.to_s.capitalize} failed with #{error.class}: #{error.message}"
     end
   end
 end

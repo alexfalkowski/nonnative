@@ -173,7 +173,6 @@ module Nonnative
     class << self
       def bootstrap!
         return if @bootstrapped
-        return unless defined?(::Cucumber::Glue::Dsl)
 
         dsl_singleton = ::Cucumber::Glue::Dsl.singleton_class
         dsl_singleton.prepend(LanguageHook) unless dsl_singleton.ancestors.include?(LanguageHook)
@@ -193,8 +192,7 @@ module Nonnative
       private
 
       def ready?
-        defined?(::Cucumber::Glue::Dsl) &&
-          !::Cucumber::Glue::Dsl.instance_variable_get(:@rb_language).nil?
+        !::Cucumber::Glue::Dsl.instance_variable_get(:@rb_language).nil?
       end
     end
   end

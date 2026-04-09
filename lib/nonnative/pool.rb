@@ -18,6 +18,9 @@ module Nonnative
     # @param configuration [Nonnative::Configuration] the configuration to run
     def initialize(configuration)
       @configuration = configuration
+      @services = nil
+      @servers = nil
+      @processes = nil
     end
 
     # Starts all configured runners and yields results for each process/server.
@@ -27,10 +30,14 @@ module Nonnative
     # @yieldparam name [String, nil] runner name
     # @yieldparam values [Object] runner-specific return value from `start` (e.g. `[pid, running]` for processes)
     # @yieldparam result [Boolean] result of the port readiness check (`true` if ready in time)
-    # @return [void]
+    # @return [Array<String>] lifecycle and readiness-check errors collected while starting
     def start(&)
-      services.each(&:start)
-      [servers, processes].each { |t| process(t, :start, :open?, &) }
+      errors = []
+
+      errors.concat(service_lifecycle(services, :start, :start))
+      [servers, processes].each { |t| errors.concat(process(t, :start, :open?, :start, &)) }
+
+      errors
     end
 
     # Stops all configured runners and yields results for each process/server.
@@ -40,10 +47,32 @@ module Nonnative
     # @yieldparam name [String, nil] runner name
     # @yieldparam id [Object] runner-specific identifier returned by `stop` (e.g. pid or object_id)
     # @yieldparam result [Boolean] result of the port shutdown check (`true` if closed in time)
-    # @return [void]
+    # @return [Array<String>] lifecycle and shutdown-check errors collected while stopping
     def stop(&)
-      [processes, servers].each { |t| process(t, :stop, :closed?, &) }
-      services.each(&:stop)
+      errors = []
+
+      [processes, servers].each { |t| errors.concat(process(t, :stop, :closed?, :stop, &)) }
+      errors.concat(service_lifecycle(services, :stop, :stop))
+
+      errors
+    end
+
+    # Stops only runners that have already been instantiated in this pool.
+    #
+    # This is used to rollback partial startup after a failed {#start} without constructing new runner
+    # wrappers as a side effect.
+    #
+    # @yieldparam name [String, nil] runner name
+    # @yieldparam id [Object] runner-specific identifier returned by `stop`
+    # @yieldparam result [Boolean] result of the port shutdown check (`true` if closed in time)
+    # @return [Array<String>] lifecycle and shutdown-check errors collected while rolling back
+    def rollback(&)
+      errors = []
+
+      [existing_processes, existing_servers].each { |t| errors.concat(process(t, :stop, :closed?, :stop, &)) }
+      errors.concat(service_lifecycle(existing_services, :stop, :stop))
+
+      errors
     end
 
     # Finds a running process runner by configured name.
@@ -96,41 +125,103 @@ module Nonnative
     end
 
     def processes
-      @processes ||= configuration.processes.map do |p|
-        [Nonnative::Process.new(p), Nonnative::Port.new(p)]
+      return @processes unless @processes.nil?
+
+      @processes = []
+      configuration.processes.each do |p|
+        @processes << [Nonnative::Process.new(p), Nonnative::Port.new(p)]
       end
+
+      @processes
     end
 
     def servers
-      @servers ||= configuration.servers.map do |s|
-        [s.klass.new(s), Nonnative::Port.new(s)]
+      return @servers unless @servers.nil?
+
+      @servers = []
+      configuration.servers.each do |s|
+        @servers << [s.klass.new(s), Nonnative::Port.new(s)]
       end
+
+      @servers
     end
 
     def services
-      @services ||= configuration.services.map { |s| Nonnative::Service.new(s) }
+      return @services unless @services.nil?
+
+      @services = []
+      configuration.services.each do |s|
+        @services << Nonnative::Service.new(s)
+      end
+
+      @services
     end
 
-    def process(all, type_method, port_method, &)
-      types = []
-      pids = []
-      threads = []
+    def existing_processes
+      @processes || []
+    end
+
+    def existing_servers
+      @servers || []
+    end
+
+    def existing_services
+      @services || []
+    end
+
+    def service_lifecycle(all, type_method, action)
+      all.each_with_object([]) do |service, errors|
+        service.send(type_method)
+      rescue StandardError => e
+        errors << lifecycle_error(action, service, e)
+      end
+    end
+
+    def process(all, type_method, port_method, action, &)
+      checks = []
+      errors = []
 
       all.each do |type, port|
-        types << type
-        pids << type.send(type_method)
-        threads << Thread.new { port.send(port_method) }
+        values = type.send(type_method)
+        checks << [type, values, Thread.new { check_port(port, port_method) }]
+      rescue StandardError => e
+        errors << lifecycle_error(action, type, e)
       end
 
-      ports = threads.map(&:value)
-
-      yield_results(types, pids, ports, &)
+      errors.concat(yield_results(checks, action, &))
     end
 
-    def yield_results(all, pids, ports)
-      all.zip(pids, ports).each do |type, values, result|
-        yield type.name, values, result
+    def check_port(port, port_method)
+      { result: port.send(port_method) }
+    rescue StandardError => e
+      { error: e }
+    end
+
+    def yield_results(checks, action, &)
+      checks.each_with_object([]) do |(type, values, thread), errors|
+        result = thread.value
+        if result[:error]
+          errors << port_error(action, type, result[:error])
+        elsif block_given?
+          yield type.name, values, result[:result]
+        end
       end
+    end
+
+    def lifecycle_error(action, type, error)
+      "#{action.to_s.capitalize} failed for #{runner_name(type)}: #{error.class} - #{error.message}"
+    end
+
+    def port_error(action, type, error)
+      check = action == :start ? 'readiness' : 'shutdown'
+      "#{check.capitalize} check failed for #{runner_name(type)}: #{error.class} - #{error.message}"
+    end
+
+    def runner_name(type)
+      name = type.name
+      return "runner '#{name}'" if name
+
+      type.class.to_s
     end
   end
 end
