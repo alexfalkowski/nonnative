@@ -19,6 +19,17 @@ module Nonnative
         set :logging, false
       end
 
+      helpers do
+        def inspect_request
+          {
+            method: request.request_method,
+            body: request.body.read,
+            content_type: request.media_type,
+            content_length: request.content_length
+          }
+        end
+      end
+
       get '/hello' do
         'Hello World!'.to_json
       end
@@ -31,8 +42,28 @@ module Nonnative
         request.body.read.to_json
       end
 
+      patch '/hello' do
+        request.body.read.to_json
+      end
+
       delete '/hello' do
         'Hello World!'.to_json
+      end
+
+      post '/inspect' do
+        inspect_request.to_json
+      end
+
+      put '/inspect' do
+        inspect_request.to_json
+      end
+
+      patch '/inspect' do
+        inspect_request.to_json
+      end
+
+      delete '/inspect' do
+        inspect_request.to_json
       end
 
       get '/test/healthz' do

@@ -30,10 +30,11 @@ module Nonnative
     # @param request [Sinatra::Request] the incoming request
     # @return [Hash{String=>String}] headers to forward to the upstream
     def retrieve_headers(request)
-      headers = request.env.map do |header, value|
-        [header[5..].split('_').map(&:capitalize).join('-'), value] if header.start_with?('HTTP_')
+      headers = request.env.each_with_object({}) do |(header, value), result|
+        next unless forward_header?(header)
+
+        result[normalized_header_name(header)] = value
       end
-      headers = headers.compact.to_h
 
       headers.except('Host', 'Accept-Encoding', 'Version')
     end
@@ -53,19 +54,45 @@ module Nonnative
     # @param uri [String] upstream URI
     # @param opts [Hash] RestClient options (e.g. headers)
     # @return [RestClient::Response] response for error statuses, otherwise RestClient return value
-    def api_response(verb, uri, opts)
-      client = RestClient::Resource.new(uri, opts)
+    def api_response(method:, url:, headers:, payload: nil)
+      options = { method:, url:, headers: }
+      options[:payload] = payload unless payload.nil?
 
-      client.send(verb)
+      RestClient::Request.execute(options)
     rescue RestClient::Exception => e
       e.response
     end
 
+    # Extracts the request payload for verbs that can carry a body.
+    #
+    # @param request [Sinatra::Request] the incoming request
+    # @param verb [String] HTTP verb name (e.g. `"post"`)
+    # @return [String, nil] request payload for body-carrying verbs
+    def retrieve_payload(request, verb)
+      return unless %w[post put patch delete].include?(verb)
+
+      payload = request.body.read
+      payload unless payload.empty?
+    end
+
+    private
+
+    def forward_header?(header)
+      header.start_with?('HTTP_') || %w[CONTENT_TYPE CONTENT_LENGTH].include?(header)
+    end
+
+    def normalized_header_name(header)
+      header.delete_prefix('HTTP_').split('_').map(&:capitalize).join('-')
+    end
+
     %w[get post put patch delete].each do |verb|
       send(verb, /.*/) do
-        uri = build_url(request, settings)
-        opts = { headers: retrieve_headers(request) }
-        res = api_response(verb, uri, opts)
+        res = api_response(
+          method: verb.to_sym,
+          url: build_url(request, settings),
+          headers: retrieve_headers(request),
+          payload: retrieve_payload(request, verb)
+        )
 
         status res.code
         res.body

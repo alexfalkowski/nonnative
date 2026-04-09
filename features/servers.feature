@@ -33,6 +33,19 @@ Feature: Servers
     When I send a not found message to the http proxy server
     Then I should receive a not found response from the http proxy server
 
+  Scenario Outline: HTTP proxy forwards request bodies and content headers end to end
+    Given I configure the system programmatically with a local http proxy server
+    And I start the system
+    When I send a "<verb>" request with body "Hello World!" to the local http proxy server
+    Then I should receive the "<verb>" request details from the local http proxy server
+
+    Examples:
+      | verb   |
+      | POST   |
+      | PUT    |
+      | PATCH  |
+      | DELETE |
+
   Scenario: Successfully starting of HTTP servers programmatically with not found message
     Given I configure the system programmatically with servers
     And I start the system

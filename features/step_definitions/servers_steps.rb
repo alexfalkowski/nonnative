@@ -107,6 +107,33 @@ Given('I configure the system through configuration with servers') do
   expect(server.proxy.options).to eq({})
 end
 
+Given('I configure the system programmatically with a local http proxy server') do
+  Nonnative.configure do |config|
+    config.version = '1.0'
+    config.name = 'test'
+    config.url = 'http://localhost:4570'
+    config.log = 'test/reports/nonnative.log'
+
+    config.server do |s|
+      s.name = 'http_proxy_target'
+      s.klass = Nonnative::Features::HTTPServer
+      s.timeout = 1
+      s.host = '127.0.0.1'
+      s.port = 4571
+      s.log = 'test/reports/http_proxy_target.log'
+    end
+
+    config.server do |s|
+      s.name = 'local_http_proxy_server'
+      s.klass = Nonnative::Features::LocalHTTPProxyServer
+      s.timeout = 1
+      s.host = '127.0.0.1'
+      s.port = 4570
+      s.log = 'test/reports/local_http_proxy_server.log'
+    end
+  end
+end
+
 When('I send a message with the tcp client to the servers') do
   @responses = []
   @responses << Nonnative::Features::TCPClient.new(12_323).request('')
@@ -164,6 +191,10 @@ When('I send a not found message to the http proxy server') do
   @response = Nonnative::Features::HTTPClient.new('http://localhost:4567').hello_get
 end
 
+When('I send a {string} request with body {string} to the local http proxy server') do |verb, body|
+  @response = Nonnative::Features::HTTPClient.new('http://localhost:4570').inspect_request(verb.downcase, body)
+end
+
 Then('I should receive a http {string} response') do |response|
   @responses.each do |r|
     expect(r.code).to eq(200)
@@ -218,4 +249,16 @@ end
 
 Then('I should receive a not found response from the http proxy server') do
   expect(@response.code).to eq(404)
+end
+
+Then('I should receive the {string} request details from the local http proxy server') do |verb|
+  body = JSON.parse(@response.body)
+
+  expect(@response.code).to eq(200)
+  expect(body).to include(
+    'method' => verb,
+    'body' => 'Hello World!',
+    'content_type' => 'application/json',
+    'content_length' => '12'
+  )
 end
