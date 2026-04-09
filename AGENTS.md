@@ -1,248 +1,132 @@
 # AGENTS.md
 
-This repository is the **`nonnative` Ruby gem**. It provides a Ruby-first harness for end-to-end testing of services implemented in other languages by **starting processes/servers/services**, waiting for readiness (port checks), and optionally running **fault-injection proxies**.
+This repo is the `nonnative` Ruby gem: a Ruby-first harness for end-to-end testing of systems implemented in other languages by starting processes/servers/services, waiting on TCP port readiness, and optionally putting fault-injection proxies in front of them.
 
-Everything below is based on the files currently in this repo (no assumptions).
+## Quick map
 
-## Recent documentation updates (important for future sessions)
+- Library code: `lib/nonnative/**/*.rb`
+- Acceptance tests: `features/**/*.feature`, `features/support/**/*.rb`, `features/step_definitions/**/*.rb`
+- Generated gRPC Ruby stubs for tests: `test/grpc/**/*`
+- Test proto files: `test/nonnative/v1/*.proto`
+- Build wiring: root `Makefile` includes `bin/build/make/*.mak`
 
-- **Public API RDoc pass started**:
-  - Added/expanded RDoc for the module entry point (`Nonnative`) and core configuration/error types.
-  - Goal: document *public APIs only* (gem consumers), not internal/private helpers.
-- **README accuracy pass started**:
-  - Fixed incorrect examples around **services**:
-    - Programmatic example incorrectly used `p.port` inside a `config.service do |s| ... end` block; corrected to `s.host`/`s.port`.
-    - YAML example incorrectly used `processes:` for services; corrected to `services:`.
-  - Removed/avoided implying non-existent config fields (e.g. there is no top-level `config.wait`; `wait` is per-runner).
+## Key repo dependency
 
-These changes were made to align docs/examples with the actual runtime/config objects under `lib/nonnative/**/*.rb`.
+This repo depends on the `bin/` git submodule.
 
-## Quick orientation
+- `.gitmodules` points to `git@github.com:alexfalkowski/bin.git`
+- CI runs `git submodule sync && git submodule update --init`
+- If `bin/` is missing or you do not have SSH access, `make` targets will fail
 
-- **Library code**: `lib/nonnative/**/*.rb`
-- **Acceptance tests**: `features/**/*.feature` + `features/support/**/*.rb` + `features/step_definitions/**/*.rb` (Cucumber)
-- **Generated gRPC Ruby stubs for tests**: `test/grpc/**/*` (excluded from RuboCop)
-- **Proto definitions for test fixtures**: `test/nonnative/v1/*.proto`
-- **Build system**: `Makefile` includes make fragments from the `bin/` submodule (`bin/build/make/*.mak`).
+## Core commands
 
-## Important repo dependency: `bin/` submodule
+- Install deps: `make dep`
+- Lint: `make lint`
+- Run features: `make features`
+- Run benchmarks only: `make benchmarks`
+- Clean deps: `make clean-dep`
+- Clean reports: `make clean-reports`
 
-This repo uses a git submodule at `bin/`:
+## Runtime model
 
-- `.gitmodules` points to `git@github.com:alexfalkowski/bin.git`.
-- CI runs `git submodule sync && git submodule update --init` before running `make` targets (`.circleci/config.yml`).
+Public entry point is `lib/nonnative.rb`.
 
-If you don’t have SSH access to that repo, `make` targets that include `bin/build/make/*.mak` will fail.
+Main module API:
 
-### Submodule commands
+- `configure`
+- `start`
+- `stop`
+- `clear`
+- `reset`
+- `pool`
 
-```sh
-git submodule sync
-git submodule update --init
-```
+Configuration lives in `Nonnative::Configuration` and is built either:
 
-## Essential commands (from Makefiles)
+- programmatically with `config.process`, `config.server`, `config.service`
+- from YAML with `config.load_file(...)`
 
-### Ruby version
+Runtime runners:
 
-- `nonnative.gemspec` requires Ruby `>= 3.4.0` and `< 4.0.0`.
+- `Nonnative::Process`: manages an OS process
+- `Nonnative::Server`: manages an in-process Ruby server thread
+- `Nonnative::Service`: manages only proxy lifecycle for an externally managed dependency
 
-### Install deps
+`Nonnative::Pool` starts services first, then servers/processes, and stops in the reverse direction.
 
-Ruby deps are managed by Bundler and installed into `vendor/bundle`:
+Readiness and shutdown checks are TCP-only via `Nonnative::Port#open?` and `#closed?`.
 
-```sh
-make dep
-```
+## Cucumber integration
 
-Implementation lives in `bin/build/make/ruby.mak` (included by root `Makefile`).
+Cucumber integration lives in `lib/nonnative/cucumber.rb`.
 
-### Lint
+Supported tags:
 
-```sh
-make lint
-```
+- `@startup`: start before scenario, stop after scenario
+- `@manual`: scenario starts manually, stop after scenario
+- `@clear`: call `Nonnative.clear` before scenario
+- `@reset`: reset proxies after scenario
 
-Runs RuboCop:
+`Nonnative.clear` now clears:
 
-- `bundler exec rubocop` (`bin/build/make/ruby.mak:4-5`)
-- Config: `.rubocop.yml` (TargetRubyVersion 3.4; max line length 150)
+- configuration
+- logger
+- observability client
+- pool
 
-Auto-fix:
+`require 'nonnative'` still loads the Cucumber integration, but hook/step registration is lazy, so plain `require 'nonnative'` is safe outside a booted Cucumber runtime.
 
-```sh
-make fix-lint
-# or
-make format
-```
+For “start once per test run”, use `require 'nonnative/startup'`.
 
-### Run acceptance tests (Cucumber)
+## Proxy wiring
 
-```sh
-make features
-```
+This is the easiest thing to get wrong.
 
-This calls `bin/quality/ruby/feature`, which runs:
+- Runner `host` / `port` are the client-facing endpoint and the values used by readiness/shutdown checks
+- For `fault_injection`, nested `proxy.host` / `proxy.port` are the upstream target behind the proxy
+- Clients should connect to the runner `host` / `port` when a proxy is enabled
 
-- `bundler exec cucumber --profile report ... --tags "not @benchmark" ...`
-- Cucumber profile `report` is defined in `.config/cucumber.yml` and writes:
-  - JUnit XML to `test/reports`
-  - HTML report to `test/reports/index.html`
+Available proxy kinds:
 
-Run only benchmarks:
+- `none`
+- `fault_injection`
 
-```sh
-make benchmarks
-```
+Fault injection states:
 
-### Coverage
+- `none`
+- `close_all`
+- `delay`
+- `invalid_data`
 
-Cucumber loads SimpleCov via `features/support/env.rb` and writes coverage output under `test/reports/`.
+## Config gotchas
 
-Codecov config exists in `.codecov.yml` and CI uploads coverage in `.circleci/config.yml`.
-
-Local upload target:
-
-```sh
-make codecov-upload
-```
-
-### Clean deps / reports
-
-```sh
-make clean-dep
-make clean-reports
-```
-
-## Testing patterns and hooks
-
-### Cucumber hooks and tags
-
-Cucumber integration lives in `lib/nonnative/cucumber.rb`:
-
-- `@startup`: starts and stops Nonnative around each scenario.
-- `@manual`: only stops after scenario (start is expected to be triggered manually in steps).
-- `@clear`: calls `Nonnative.clear` before scenario.
-- `@reset`: resets proxies after scenario.
-
-The “start once per test run” strategy is implemented by requiring `nonnative/startup`:
-
-- `lib/nonnative/startup.rb` calls `Nonnative.start` and registers an `at_exit` stop.
-
-### README gotchas that matter in practice
-
-- **Service vs process YAML keys**:
-  - Services must be declared under `services:` in YAML (not `processes:`). Code reads `cfg.services` and maps them to `Nonnative::ConfigurationService`.
-- **No top-level `wait`**:
-  - `wait` is defined on runner configurations (`ConfigurationRunner#wait`) and is per process/server/service.
-- **Proxy wiring is easy to misunderstand**:
-  - When a proxy kind like `fault_injection` is enabled, the proxy binds to `service.proxy.host`/`service.proxy.port`.
-  - Readiness checks and traffic should typically target the **proxy host/port**, not the underlying service host/port.
-
-### Feature support code
-
-`features/support/` contains small servers/clients used by cucumber scenarios (HTTP/TCP/gRPC). Example:
-
-- `features/support/http_server.rb` defines a Sinatra app for `/hello` and health endpoints.
-
-### Process fixture
-
-Scenarios start a local process via `features/support/bin/start` (referenced in step definitions and YAML configs like `features/configs/processes.yml`).
-
-## Library architecture (high level)
-
-### Entry point and global state
-
-- `lib/nonnative.rb` defines the `Nonnative` module singleton API:
-  - `configure { |config| ... }`
-  - `start` / `stop`
-  - `clear`, `reset`
-  - `pool` is created on `start` (`Nonnative::Pool.new(configuration)`).
-
-### Configuration objects
-
-- `Nonnative::Configuration` (`lib/nonnative/configuration.rb`) holds arrays of:
-  - `processes` (`Nonnative::ConfigurationProcess`)
-  - `servers` (`Nonnative::ConfigurationServer`)
-  - `services` (`Nonnative::ConfigurationService`)
-
-It can be populated either:
-
-- programmatically via `config.process { ... }`, `config.server { ... }`, `config.service { ... }`
-- via YAML using `config.load_file(path)` which calls `Config.load_files(...)` (the `config` gem)
-
-Proxies are configured via `ConfigurationProxy` (`lib/nonnative/configuration_proxy.rb`) and attached to runners as a hash.
-
-### Runners and lifecycle
-
-There are three runtime “runner” types, all subclassing `Runner` (`lib/nonnative/runner.rb`):
-
-- `Nonnative::Process` (`lib/nonnative/process.rb`): `spawn(...)` + `Process.kill` / `waitpid2`.
-- `Nonnative::Server` (`lib/nonnative/server.rb`): `Thread.new { perform_start }` + `perform_stop`.
-- `Nonnative::Service` (`lib/nonnative/service.rb`): no process management; proxy only.
-
-`Nonnative::Pool` (`lib/nonnative/pool.rb`) owns collections of runners and orchestrates start/stop:
-
-- starts **services first**, then servers/processes
-- stops **processes/servers first**, then services
-- readiness is determined via `Nonnative::Port#open?` / `#closed?` (`lib/nonnative/port.rb`) which repeatedly tries `TCPSocket.new(host, port)` inside a timeout.
-
-### Proxies
-
-Proxy selection is keyed by `kind`:
-
-- mapping: `Nonnative.proxies` in `lib/nonnative.rb`
-- default proxy config values: `ConfigurationProxy#initialize` sets kind `none`, host `0.0.0.0`, wait `0.1`, etc.
-
-Implemented proxies:
-
-- `Nonnative::NoProxy` (`lib/nonnative/no_proxy.rb`)
-- `Nonnative::FaultInjectionProxy` (`lib/nonnative/fault_injection_proxy.rb`)
-  - states: `:none`, `:close_all`, `:delay`, `:invalid_data`
-  - delegates behavior to socket-pair classes via `SocketPairFactory` (`lib/nonnative/socket_pair_factory.rb`).
-
-### Go executable helper
-
-There is a helper for building a Go *test binary* command line with optional profiling/trace/coverage flags:
-
-- `Nonnative.go_executable` in `lib/nonnative.rb`
-- `Nonnative::GoCommand` in `lib/nonnative/go_command.rb`
-
-This is used when YAML process config has a `go:` section (see `Configuration#command` in `lib/nonnative/configuration.rb`).
-
-## Style and conventions
-
-- Ruby style is enforced by RuboCop (`.rubocop.yml`):
-  - Target Ruby 3.4
-  - Line length 150
-  - `Style/Documentation` disabled
-- `.editorconfig`:
-  - `indent_size = 2` for most files
-  - **Makefiles use tabs**
-- Many Ruby files use `# frozen_string_literal: true`.
-
-## CI notes
-
-CircleCI runs (see `.circleci/config.yml`):
-
-- `make source-key` (defined in `bin/build/make/git.mak`) to generate `.source-key` used for caching
-- `make dep`, `make clean-dep`
-- `make lint`, `make features`
-- uploads `test/reports` artifacts
-
-## Common gotchas
-
-- **Submodule required**: root `Makefile` only includes `bin/...` make fragments; without `bin/` present/updated, `make` won’t work.
-- **SSH-only submodule URL**: `.gitmodules` uses `git@github.com:...`; CI or local environments without SSH keys will fail to init the submodule.
-- **Local Ruby/Bundler mismatch can break native extensions**: on macOS, `make lint`/`bundle exec ...` may fail if the Ruby used to install gems differs from the Ruby used to run them (example error seen: `prism.bundle` missing `libruby.3.4.dylib`).
-- **Requiring `nonnative` loads Cucumber DSL**: `lib/nonnative.rb` requires `lib/nonnative/cucumber.rb`, which calls `World(...)`. Outside a Cucumber runtime this can raise (example error seen: `Cucumber::Glue::Dsl.build_rb_world_factory`).
-- **Reports directory**: Cucumber report profile writes into `test/reports/` and the repo keeps a `test/reports/.keep` file.
-- **Port checks can be flaky if ports are reused**: readiness is purely `TCPSocket`-based (`lib/nonnative/port.rb`), so ensure test fixtures bind expected ports.
-
-## Where to look first when changing behavior
+- Services must be declared under `services:` in YAML, not `processes:`
+- There is no top-level `config.wait`; `wait` is per runner
+- Service configs use `config.service do |s| ... end`, so use `s.host` / `s.port`
+- Proxy examples need both sides of the split:
+  - runner `host` / `port` = proxy endpoint
+  - nested `proxy.host` / `proxy.port` = upstream target
+
+## Test fixtures worth knowing
+
+- Local process fixture: `features/support/bin/start`
+- HTTP fixtures: `features/support/http_server.rb`, `features/support/http_proxy_server.rb`
+- TCP fixture: `features/support/tcp_server.rb`
+- gRPC fixtures: `features/support/grpc_server.rb`, plus generated stubs under `test/grpc/`
+
+## Important limitations / gotchas
+
+- Ruby version is constrained by `nonnative.gemspec` to `>= 3.4.0` and `< 4.0.0`
+- The `grpc` Ruby library uses a global logger; per-server gRPC loggers are not really supported
+- `make` depends on the `bin/` submodule being present
+- Local Ruby/Bundler mismatches can break native extensions on macOS
+- Coverage output and Cucumber reports are written under `test/reports`
+- Port checks can be flaky if tests reuse ports unexpectedly
+
+## Where to look first
 
 - Lifecycle orchestration: `lib/nonnative.rb`, `lib/nonnative/pool.rb`
 - Readiness / timeouts: `lib/nonnative/port.rb`, `lib/nonnative/timeout.rb`
-- Process management: `lib/nonnative/process.rb`
+- Process lifecycle: `lib/nonnative/process.rb`
 - Proxies / fault injection: `lib/nonnative/fault_injection_proxy.rb`, `lib/nonnative/socket_pair_factory.rb`
 - Cucumber integration: `lib/nonnative/cucumber.rb`, `lib/nonnative/startup.rb`, `features/support/env.rb`
+- Config loading: `lib/nonnative/configuration.rb`, `lib/nonnative/configuration_runner.rb`, `lib/nonnative/configuration_proxy.rb`

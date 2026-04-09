@@ -51,16 +51,20 @@ High-level configuration fields:
 Runner fields (process/server/service):
 - `timeout`: max time (seconds) for readiness/shutdown port checks.
 - `wait`: small sleep (seconds) between lifecycle steps.
-- `host`/`port`: address used for port checks; when a proxy is enabled, reads happen via the proxy.
+- `host`/`port`: client-facing address used for readiness/shutdown port checks. When a `fault_injection` proxy is enabled, this is the endpoint your tests/clients should hit.
 - `log`: per-runner log file (used by process output redirection or server implementations).
+
+For `fault_injection`, the nested `proxy.host`/`proxy.port` describe the upstream target behind the proxy. In-process server implementations typically bind there via `proxy.host` / `proxy.port`.
 
 ### Lifecycle strategies (Cucumber integration)
 
 Nonnative ships Cucumber hooks (when loaded) that support these tags/strategies:
 - `@startup`: start before scenario; stop after scenario
 - `@manual`: stop after scenario (start is expected to be triggered manually in steps)
-- `@clear`: clears memoized configuration and pool before scenario
+- `@clear`: clears memoized configuration, logger, observability client, and pool before scenario
 - `@reset`: resets proxies after scenario
+
+Requiring `nonnative` is enough; the Cucumber hooks and step definitions are installed lazily once Cucumber’s Ruby DSL is ready.
 
 If you want “start once per test run”, require:
 
@@ -516,9 +520,11 @@ We allow different proxies to be configured. These proxies can be used to simula
 - `none` (this is the default)
 - `fault_injection`
 
+For `fault_injection`, keep the runner `host`/`port` as the client-facing endpoint and use nested `proxy.host`/`proxy.port` for the upstream target behind the proxy.
+
 ##### Proxies Processes
 
-Setup it up programmatically:
+Add this to an existing process configuration:
 
 ```ruby
 require 'nonnative'
@@ -543,7 +549,7 @@ Nonnative.configure do |config|
 end
 ```
 
-Setup it up through configuration:
+YAML fragment:
 
 ```yaml
 version: "1.0"
@@ -563,7 +569,7 @@ processes:
 
 ##### Proxies Servers
 
-Setup it up programmatically:
+Add this to an existing server configuration:
 
 ```ruby
 require 'nonnative'
@@ -588,7 +594,7 @@ Nonnative.configure do |config|
 end
 ```
 
-Setup it up through configuration:
+YAML fragment:
 
 ```yaml
 version: "1.0"
@@ -608,7 +614,7 @@ servers:
 
 ##### Proxies Services
 
-Set it up programmatically:
+Add this to an existing service configuration:
 
 ```ruby
 require 'nonnative'
@@ -622,12 +628,12 @@ Nonnative.configure do |config|
   config.service do |s|
     s.name = 'redis'
     s.host = '127.0.0.1'
-    s.port = 6379
+    s.port = 16_379
 
     s.proxy = {
       kind: 'fault_injection',
       host: '127.0.0.1',
-      port: 20_000,
+      port: 6379,
       log: 'proxy_server.log',
       wait: 1,
       options: {
@@ -638,19 +644,22 @@ Nonnative.configure do |config|
 end
 ```
 
-Setup it up through configuration:
+YAML fragment:
 
 ```yaml
 version: "1.0"
 name: test
 url: http://localhost:4567
 log: nonnative.log
-wait: 1
 services:
   -
+    name: redis
+    host: 127.0.0.1
+    port: 16379
     proxy:
       kind: fault_injection
-      port: 20000
+      host: 127.0.0.1
+      port: 6379
       log: proxy_server.log
       wait: 1
       options:
