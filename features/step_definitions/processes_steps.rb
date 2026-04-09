@@ -48,6 +48,7 @@ Given('I configure the system through configuration with processes') do
 
   expect(Nonnative.configuration.version).to eq('1.0')
   expect(Nonnative.configuration.url).to eq('http://localhost:4567')
+  expect(Nonnative.configuration.process_by_name('start_1').host).to eq('127.0.0.1')
 end
 
 When('I send {string} with the TCP client to the processes') do |message|

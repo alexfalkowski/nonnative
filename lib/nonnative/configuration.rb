@@ -124,14 +124,10 @@ module Nonnative
       processes = cfg.processes || []
       processes.each do |fd|
         process do |d|
-          d.name = fd.name
           d.command = command(fd)
-          d.timeout = fd.timeout
-          d.wait = fd.wait if fd.wait
-          d.port = fd.port
-          d.log = fd.log
           d.signal = fd.signal
           d.environment = fd.environment
+          runner_attributes(d, fd)
 
           proxy d, fd.proxy
         end
@@ -154,12 +150,8 @@ module Nonnative
       servers = cfg.servers || []
       servers.each do |fd|
         server do |s|
-          s.name = fd.name
           s.klass = Object.const_get(fd.class)
-          s.timeout = fd.timeout
-          s.wait = fd.wait if fd.wait
-          s.port = fd.port
-          s.log = fd.log
+          runner_attributes(s, fd)
 
           proxy s, fd.proxy
         end
@@ -177,6 +169,15 @@ module Nonnative
           proxy s, fd.proxy
         end
       end
+    end
+
+    def runner_attributes(runner, loaded)
+      runner.name = loaded.name
+      runner.timeout = loaded.timeout
+      runner.wait = loaded.wait if loaded.wait
+      runner.host = loaded.host if loaded.host
+      runner.port = loaded.port
+      runner.log = loaded.log if loaded.respond_to?(:log)
     end
 
     def proxy(runner, proxy)
