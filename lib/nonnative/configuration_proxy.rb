@@ -20,7 +20,8 @@ module Nonnative
     # @return [String, nil] path to proxy log file (implementation-dependent)
     # @return [Numeric] wait interval (seconds) after proxy state changes (defaults to `0.1`)
     # @return [Hash] proxy implementation options (implementation-dependent)
-    attr_accessor :kind, :host, :port, :log, :wait, :options
+    attr_accessor :kind, :host, :port, :log, :wait
+    attr_reader :options
 
     # Creates a proxy configuration with defaults.
     #
@@ -38,6 +39,17 @@ module Nonnative
       self.port = 0
       self.wait = 0.1
       self.options = {}
+    end
+
+    # Stores proxy implementation options.
+    #
+    # Nil is normalized to an empty hash so callers loading partial configuration do not erase the
+    # default options container.
+    #
+    # @param value [Hash, nil]
+    # @return [void]
+    def options=(value)
+      @options = value || {}
     end
   end
 end

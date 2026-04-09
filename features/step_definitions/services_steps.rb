@@ -32,6 +32,8 @@ Given('I configure the system through configuration with services') do
 
   expect(Nonnative.configuration.version).to eq('1.0')
   expect(Nonnative.configuration.url).to eq('http://localhost:4567')
+  service = Nonnative.configuration.services.find { |s| s.name == 'service_1' }
+  expect(service.proxy.options).to eq({})
 end
 
 When('I connect to the service') do

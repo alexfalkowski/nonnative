@@ -104,6 +104,7 @@ Given('I configure the system through configuration with servers') do
   expect(Nonnative.configuration.url).to eq('http://localhost:4567')
   server = Nonnative.configuration.servers.find { |s| s.name == 'tcp_server_1' }
   expect(server.host).to eq('127.0.0.1')
+  expect(server.proxy.options).to eq({})
 end
 
 When('I send a message with the tcp client to the servers') do
