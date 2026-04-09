@@ -4,14 +4,17 @@ Feature: Lifecycle
 
   Scenario: Start errors from the pool are normalized
     Given I configure a pool that raises on start
+    When I attempt to start the system
     Then starting the system should raise an error containing "Start failed with StandardError: boom on start"
 
   Scenario: Stop errors from the pool are normalized
     Given I configure a pool that raises on stop
+    When I attempt to stop the system
     Then stopping the system should raise an error containing "Stop failed with StandardError: boom on stop"
 
   Scenario: Rollback errors are included in start failures
     Given I configure a pool that fails to start and raises on rollback
+    When I attempt to start the system
     Then starting the system should raise an error containing "Rollback failed with StandardError: boom on rollback"
 
   Scenario: Pool collects service lifecycle errors for unnamed services

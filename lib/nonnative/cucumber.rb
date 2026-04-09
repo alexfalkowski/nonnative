@@ -75,20 +75,40 @@ module Nonnative
     module LifecycleSteps
       def install_state_steps
         install_start_step
+        install_attempt_start_step
+        install_attempt_stop_step
         install_unhealthy_step
         install_healthy_step
       end
 
       def install_start_step
-        Given('I start the system') do
+        When('I start the system') do
           Nonnative.start
+        end
+      end
+
+      def install_attempt_start_step
+        When('I attempt to start the system') do
+          @start_error = nil
+          Nonnative.start
+        rescue StandardError => e
+          @start_error = e
+        end
+      end
+
+      def install_attempt_stop_step
+        When('I attempt to stop the system') do
+          @stop_error = nil
+          Nonnative.stop
+        rescue StandardError => e
+          @stop_error = e
         end
       end
 
       def install_unhealthy_step
         opts = observability_options
 
-        Given('I should see {string} as unhealthy') do |service|
+        Then('I should see {string} as unhealthy') do |service|
           wait_for { Nonnative.observability.health(opts).code }.to eq(503)
           wait_for { Nonnative.observability.health(opts).body }.to include(service)
         end
@@ -132,11 +152,11 @@ module Nonnative
 
       def install_error_assertion_steps
         Then('starting the system should raise an error') do
-          expect { Nonnative.start }.to raise_error(Nonnative::StartError)
+          expect(@start_error).to be_a(Nonnative::StartError)
         end
 
         Then('stopping the system should raise an error') do
-          expect { Nonnative.stop }.to raise_error(Nonnative::StopError)
+          expect(@stop_error).to be_a(Nonnative::StopError)
         end
       end
 

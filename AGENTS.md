@@ -59,6 +59,9 @@ Readiness and shutdown checks are TCP-only via `Nonnative::Port#open?` and `#clo
 
 Cucumber integration lives in `lib/nonnative/cucumber.rb`.
 
+Treat `lib/nonnative/cucumber.rb` as a public compatibility surface for library consumers.
+Existing hooks and step text should not be removed or renamed unless the user explicitly wants a breaking change.
+
 Supported tags:
 
 - `@startup`: start before scenario, stop after scenario
@@ -115,7 +118,7 @@ Fault injection states:
 
 ## Important limitations / gotchas
 
-- Ruby version is constrained by `nonnative.gemspec` to `>= 3.4.0` and `< 4.0.0`
+- Ruby version is constrained by `nonnative.gemspec` to `>= 4.0.0` and `< 5.0.0`
 - The `grpc` Ruby library uses a global logger; per-server gRPC loggers are not really supported
 - `make` depends on the `bin/` submodule being present
 - Local Ruby/Bundler mismatches can break native extensions on macOS

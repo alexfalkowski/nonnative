@@ -21,7 +21,6 @@ Feature: Processes
     And I should see a log entry of "test" for process 'start_1'
     And I should see a log entry of "test" in the file "test/reports/12_321.log"
     And the process 'start_1' should consume less than '40mb' of memory
-    And I should reset the proxy for process 'start_1'
 
   @reset
   Scenario: Successfully starting of processes and closing connections
@@ -30,7 +29,6 @@ Feature: Processes
     And I set the proxy for process 'start_1' to 'close_all'
     When I send "test" with the TCP client 'start_1' to the process
     Then I should receive a connection error for client response with TCP
-    And I should reset the proxy for process 'start_1'
 
   @reset
   Scenario: Successfully starting of processes and getting invalid data
@@ -39,7 +37,6 @@ Feature: Processes
     And I set the proxy for process 'start_1' to 'invalid_data'
     When I send "test" with the TCP client 'start_1' to the process
     Then I should receive a invalid data that is not "test" for client response with TCP
-    And I should reset the proxy for process 'start_1'
 
   Scenario: Proxy for process is not found
     Given I configure the system programmatically with processes

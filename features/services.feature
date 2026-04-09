@@ -20,8 +20,8 @@ Feature: Services
     And I start the system
     And I set the proxy for service 'service_1' to 'close_all'
     When I connect to the service
+    And I receive data from the service
     Then I should receive a connection error from the service
-    And I should reset the proxy for service 'service_1'
 
   Scenario: Proxy for service is not found
     Given I configure the system programmatically with services

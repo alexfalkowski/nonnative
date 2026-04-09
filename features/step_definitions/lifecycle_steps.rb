@@ -64,11 +64,13 @@ When('I clear after memoizing logger and observability') do
 end
 
 Then('starting the system should raise an error containing {string}') do |message|
-  expect { Nonnative.start }.to raise_error(Nonnative::StartError, /#{Regexp.escape(message)}/)
+  expect(@start_error).to be_a(Nonnative::StartError)
+  expect(@start_error.message).to include(message)
 end
 
 Then('stopping the system should raise an error containing {string}') do |message|
-  expect { Nonnative.stop }.to raise_error(Nonnative::StopError, /#{Regexp.escape(message)}/)
+  expect(@stop_error).to be_a(Nonnative::StopError)
+  expect(@stop_error.message).to include(message)
 end
 
 Then('the lifecycle errors should include {string}') do |message|
