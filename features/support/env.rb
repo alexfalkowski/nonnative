@@ -2,6 +2,7 @@
 
 require 'simplecov'
 require 'simplecov-cobertura'
+require 'rbconfig'
 
 formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::CoberturaFormatter]
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
