@@ -45,11 +45,12 @@ module Nonnative
     def stop
       if process_exists?
         process_kill
-        proxy.stop
         wait_stop
       end
 
       pid
+    ensure
+      proxy.stop
     end
 
     # Returns a memoized memory reader for the spawned process.
