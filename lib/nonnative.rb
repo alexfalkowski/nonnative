@@ -249,6 +249,22 @@ module Nonnative
       @configuration = nil
     end
 
+    # Closes and clears the memoized logger instance.
+    #
+    # @return [void]
+    def clear_logger
+      @logger&.close
+    ensure
+      @logger = nil
+    end
+
+    # Clears the memoized observability client.
+    #
+    # @return [void]
+    def clear_observability
+      @observability = nil
+    end
+
     # Clears the memoized pool instance.
     #
     # @return [void]
@@ -256,10 +272,12 @@ module Nonnative
       @pool = nil
     end
 
-    # Clears memoized configuration and pool.
+    # Clears memoized configuration, logger, observability client, and pool.
     #
     # @return [void]
     def clear
+      clear_logger
+      clear_observability
       clear_configuration
       clear_pool
     end

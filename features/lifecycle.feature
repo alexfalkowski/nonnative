@@ -29,3 +29,8 @@ Feature: Lifecycle
   Scenario: Process existence checks return false for a reaped pid
     When I check whether a reaped process still exists
     Then the process should no longer exist
+
+  Scenario: Clear resets memoized logger and observability clients
+    When I clear after memoizing logger and observability
+    Then the logger should be recreated for the new configuration
+    And the observability client should be recreated for the new configuration
