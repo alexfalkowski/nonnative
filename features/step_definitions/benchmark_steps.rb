@@ -57,6 +57,33 @@ When('I configure the system programmatically with a start error server') do
   end
 end
 
+When('I configure the system programmatically with a fast exiting process') do
+  Nonnative.configure do |config|
+    config.version = '1.0'
+    config.name = 'test'
+    config.url = 'http://localhost:4567'
+    config.log = 'test/reports/nonnative.log'
+
+    config.process do |d|
+      d.name = 'fast_exit_process'
+      d.command = -> { "#{RbConfig.ruby} -e \"exit 0\"" }
+      d.timeout = 1
+      d.wait = 1
+      d.host = '127.0.0.1'
+      d.port = 14_006
+      d.log = 'test/reports/14_006.log'
+      d.signal = 'INT'
+      d.proxy = {
+        kind: 'fault_injection',
+        host: '127.0.0.1',
+        port: 24_006,
+        log: 'test/reports/proxy_14_006.log',
+        wait: 0.1
+      }
+    end
+  end
+end
+
 Given('I configure the system programmatically with a stop error server') do
   Nonnative.configure do |config|
     config.version = '1.0'

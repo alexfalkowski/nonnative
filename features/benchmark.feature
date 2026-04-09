@@ -23,6 +23,12 @@ Feature: Benchmark
     Then starting the system should raise an error
     And the port '14002' should be closed
 
+  @manual
+  Scenario: Start nonnative with a fast exiting process will rollback its proxy
+    When I configure the system programmatically with a fast exiting process
+    Then starting the system should raise an error
+    And the port '14006' should be closed
+
   Scenario: Stop nonnative with a long stopping time server will error
     Given I configure the system programmatically with a no stop server
     When I start the system
