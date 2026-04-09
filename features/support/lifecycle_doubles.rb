@@ -57,6 +57,27 @@ module Nonnative
       end
     end
 
+    class RecordingService
+      attr_reader :name
+
+      def initialize(name:, events:)
+        @name = name
+        @events = events
+      end
+
+      def start
+        events << "#{name} start"
+      end
+
+      def stop
+        events << "#{name} stop"
+      end
+
+      private
+
+      attr_reader :events
+    end
+
     class FailingRunner
       attr_reader :name
 
@@ -81,6 +102,30 @@ module Nonnative
       end
     end
 
+    class RecordingRunner < FailingRunner
+      def initialize(name:, events:, start_values: [123, true], stop_values: 123)
+        super(name:, start_values:, stop_values:)
+
+        @events = events
+      end
+
+      def start
+        events << "#{name} start"
+
+        super
+      end
+
+      def stop
+        events << "#{name} stop"
+
+        super
+      end
+
+      private
+
+      attr_reader :events
+    end
+
     class FailingPort
       def initialize(open_error: nil, closed_error: nil)
         @open_error = open_error
@@ -96,6 +141,16 @@ module Nonnative
       def closed?
         raise StandardError, @closed_error if @closed_error
 
+        true
+      end
+    end
+
+    class PassingPort
+      def open?
+        true
+      end
+
+      def closed?
         true
       end
     end
