@@ -25,8 +25,8 @@ jobs:
             - vendor
       - run: make lint
       - run: make sec
-      - run: COVERAGE_NAME="Features" make features
-      - run: COVERAGE_NAME="Benchmarks" make benchmarks
+      - run: make features
+      - run: make benchmarks
       - store_test_results:
           path: test/reports
       - store_artifacts:
