@@ -28,19 +28,27 @@ module Nonnative
     # @param local_socket [TCPSocket] the accepted client socket
     # @return [void]
     def connect(local_socket)
-      remote_socket = create_remote_socket
+      @local_socket = local_socket
+      @remote_socket = create_remote_socket
 
       loop do
-        ready = select([local_socket, remote_socket], nil, nil)
+        ready = select([@local_socket, @remote_socket], nil, nil)
 
-        break if pipe?(ready, local_socket, remote_socket)
-        break if pipe?(ready, remote_socket, local_socket)
+        break if pipe?(ready, @local_socket, @remote_socket)
+        break if pipe?(ready, @remote_socket, @local_socket)
       end
     ensure
-      Nonnative.logger.info "finished connect for local socket '#{local_socket.inspect}' and '#{remote_socket&.inspect}' for 'socket_pair'"
+      Nonnative.logger.info "finished connect for local socket '#{@local_socket.inspect}' and '#{@remote_socket&.inspect}' for 'socket_pair'"
 
-      local_socket.close
-      remote_socket&.close
+      close
+    end
+
+    # Closes any open sockets managed by this pair.
+    #
+    # @return [void]
+    def close
+      close_socket @local_socket
+      close_socket @remote_socket
     end
 
     protected
@@ -93,6 +101,14 @@ module Nonnative
     # @return [Integer] number of bytes written
     def write(socket, data)
       socket.write(data)
+    end
+
+    def close_socket(socket)
+      return if socket.nil? || socket.closed?
+
+      socket.close
+    rescue IOError
+      nil
     end
   end
 end

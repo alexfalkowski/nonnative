@@ -18,15 +18,15 @@ module Nonnative
   #
   # ## Wiring
   #
-  # When enabled, your test/client should typically connect to {#host}:{#port} (the proxy endpoint),
-  # and the proxy will connect onward to the underlying service.
+  # When enabled, your test/client should connect to the runner `host` / `port` (the proxy endpoint),
+  # and the proxy will forward traffic to the upstream target exposed by {#host}:{#port}.
   #
   # ## Configuration
   #
   # The proxy is configured via the runner’s `proxy` hash:
   #
   # - `kind`: `"fault_injection"`
-  # - `host` / `port`: where the proxy should be reached by clients (exposed via {#host}/{#port})
+  # - `host` / `port`: upstream target behind the proxy (exposed via {#host}/{#port})
   # - `log`: file path used by this proxy’s internal logger
   # - `wait`: sleep interval (seconds) applied after state changes
   # - `options`:
@@ -35,6 +35,21 @@ module Nonnative
   # @see Nonnative::Proxy
   # @see Nonnative::SocketPairFactory
   class FaultInjectionProxy < Nonnative::Proxy
+    class Connection
+      attr_accessor :pair, :thread
+      attr_reader :socket
+
+      def initialize(socket)
+        @socket = socket
+      end
+
+      def close
+        pair&.close
+        socket.close unless socket.closed?
+        thread&.terminate
+      end
+    end
+
     # @param service [Nonnative::ConfigurationRunner] runner configuration with proxy settings
     def initialize(service)
       @connections = Concurrent::Hash.new
@@ -48,7 +63,7 @@ module Nonnative
     # Starts the proxy accept loop in a background thread.
     #
     # This binds a TCP server on the underlying runner’s `service.host` / `service.port`.
-    # Clients should connect to {#host}:{#port}.
+    # Clients connect to that runner endpoint, while upstream traffic is forwarded to {#host}:{#port}.
     #
     # @return [void]
     def start
@@ -58,12 +73,21 @@ module Nonnative
       Nonnative.logger.info "started with host '#{service.host}' and port '#{service.port}' for proxy 'fault_injection'"
     end
 
-    # Stops the proxy and closes its listening socket.
+    # Stops the proxy, closes active connections, and closes its listening socket.
     #
     # @return [void]
     def stop
-      thread&.terminate
-      tcp_server&.close
+      mutex.synchronize do
+        close_connections
+      end
+
+      server = @tcp_server
+      @tcp_server = nil
+      server&.close
+
+      listener_thread = @thread
+      @thread = nil
+      listener_thread&.join
 
       Nonnative.logger.info "stopped with host '#{service.host}' and port '#{service.port}' for proxy 'fault_injection'"
     end
@@ -98,14 +122,14 @@ module Nonnative
       apply_state :none
     end
 
-    # Returns the host clients should connect to when using this proxy.
+    # Returns the upstream host behind this proxy.
     #
     # @return [String]
     def host
       service.proxy.host
     end
 
-    # Returns the port clients should connect to when using this proxy.
+    # Returns the upstream port behind this proxy.
     #
     # @return [Integer]
     def port
@@ -118,14 +142,16 @@ module Nonnative
 
     def perform_start
       loop do
-        thread = Thread.start(tcp_server.accept) do |local_socket|
-          id = Thread.current.object_id
-
-          accept_connection id, local_socket
+        local_socket = tcp_server.accept
+        id = local_socket.object_id
+        register_connection(id, local_socket)
+        connection_thread = Thread.start(local_socket) do |accepted_socket|
+          accept_connection id, accepted_socket
         end
-
-        connections[thread.object_id] = thread
+        attach_connection_thread(id, connection_thread)
       end
+    rescue IOError, Errno::EBADF
+      nil
     end
 
     def accept_connection(id, socket)
@@ -144,6 +170,7 @@ module Nonnative
       Nonnative.logger.info "connecting for '#{id}' with socket '#{socket.inspect}' and state '#{state}' for proxy 'fault_injection'"
 
       pair = SocketPairFactory.create(state, service.proxy)
+      attach_connection_pair(id, pair)
       pair.connect(socket)
     rescue StandardError => e
       socket.close
@@ -152,12 +179,10 @@ module Nonnative
     end
 
     def close_connections
-      connections.each do |id, thread|
-        Nonnative.logger.info "closing connection for '#{id}' for proxy 'fault_injection'"
-
-        thread.terminate
+      connections.each do |id, connection|
+        close_connection(id, connection)
       end
-
+    ensure
       connections.clear
     end
 
@@ -176,6 +201,24 @@ module Nonnative
 
     def read_state
       mutex.synchronize { state }
+    end
+
+    def register_connection(id, socket)
+      connections[id] = Connection.new(socket)
+    end
+
+    def attach_connection_thread(id, thread)
+      connections[id]&.thread = thread
+    end
+
+    def attach_connection_pair(id, pair)
+      connections[id]&.pair = pair
+    end
+
+    def close_connection(id, connection)
+      Nonnative.logger.info "closing connection for '#{id}' for proxy 'fault_injection'"
+
+      connection.close
     end
   end
 end

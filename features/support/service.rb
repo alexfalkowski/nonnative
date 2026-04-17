@@ -24,6 +24,10 @@ module Nonnative
       rescue StandardError => e
         e
       end
+
+      def write(message)
+        @socket.puts(message)
+      end
     end
   end
 end
