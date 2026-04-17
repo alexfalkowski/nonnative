@@ -2,6 +2,13 @@
 
 This repo is the `nonnative` Ruby gem: a Ruby-first harness for end-to-end testing of systems implemented in other languages by starting processes/servers/services, waiting on TCP port readiness, and optionally putting fault-injection proxies in front of them.
 
+## Shared skill
+
+Use the shared `coding-standards` skill from `./bin/skills/coding-standards`
+for cross-repository coding, review, testing, documentation, and PR
+conventions. Treat this `AGENTS.md` as the repo-specific companion to that
+skill.
+
 ## Quick map
 
 - Library code: `lib/nonnative/**/*.rb`
