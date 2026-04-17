@@ -54,6 +54,16 @@ Feature: Lifecycle
     Then the logger should be recreated for the new configuration
     And the observability client should be recreated for the new configuration
 
+  @service
+  Scenario: Stopping a service runner closes active proxy connections
+    Given I configure the system programmatically with services
+    And I start the system
+    When I connect to the service
+    And I send "ping" to the service
+    And I stop the service runner "service_1"
+    And I receive data from the service
+    Then I should receive a connection error from the service
+
   Scenario: Requiring nonnative outside Cucumber succeeds
     When I require "nonnative" in a subprocess
     Then the subprocess should exit successfully

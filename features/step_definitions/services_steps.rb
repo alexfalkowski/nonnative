@@ -12,6 +12,14 @@ When('I connect to the service') do
   @service = Nonnative::Features::Service.new(configured_service('service_1').port)
 end
 
+When('I send {string} to the service') do |message|
+  @service.write(message)
+end
+
+When('I stop the service runner {string}') do |name|
+  Nonnative.pool.service_by_name(name).stop
+end
+
 When('I receive data from the service') do
   @service_response = @service.receive
 end
@@ -21,9 +29,14 @@ When('I try to find the proxy for service {string}') do |name|
 end
 
 Then('I should receive a connection error from the service') do
-  expect(@service_response).to be_nil
+  expect(@service_response).not_to be_a(String)
+  expect(connection_error?(@service_response)).to be(true)
 end
 
 Then('I should have a successful connection') do
   expect(@service).not_to be_closed
+end
+
+def connection_error?(response)
+  response.nil? || response.is_a?(IOError) || response.is_a?(SystemCallError)
 end

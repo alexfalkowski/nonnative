@@ -681,6 +681,8 @@ services:
 
 The `fault_injection` proxy allows you to simulate failures by injecting them. We currently support the following:
 
+Clients connect to the runner `host`/`port`, while the proxy forwards traffic to nested `proxy.host`/`proxy.port`.
+
 - `close_all` - Closes the socket as soon as it connects.
 - `delay` - This delays the communication between the connection. Default is 2 secs can be configured through options.
 - `invalid_data` - This takes the input and rearranges it to produce invalid data.

@@ -48,8 +48,8 @@ module Nonnative
 
     # Binds the Puma server and begins serving.
     #
-    # The listener binds to the proxy host/port so that enabling a proxy results in traffic and
-    # readiness checks consistently targeting the proxy endpoint.
+    # The listener binds to the upstream proxy host/port so the fault-injection proxy can expose the
+    # runner host/port as the client-facing endpoint used by readiness checks.
     #
     # @return [void]
     def perform_start
