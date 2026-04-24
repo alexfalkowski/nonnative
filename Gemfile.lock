@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (2.13.1)
+    nonnative (2.15.0)
       concurrent-ruby (>= 1, < 2)
       config (>= 5, < 6)
       cucumber (>= 7, < 12)
@@ -206,4 +206,4 @@ DEPENDENCIES
   simplecov-cobertura
 
 BUNDLED WITH
-  4.0.8
+  4.0.10
