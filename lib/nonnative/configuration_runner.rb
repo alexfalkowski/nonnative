@@ -51,8 +51,8 @@ module Nonnative
     #
     # @param value [Hash] proxy attributes
     # @option value [String] :kind proxy kind name (for example `"fault_injection"`)
-    # @option value [String] :host proxy bind host (optional)
-    # @option value [Integer] :port proxy bind port
+    # @option value [String] :host upstream host behind the proxy (optional)
+    # @option value [Integer] :port upstream port behind the proxy
     # @option value [String] :log proxy log file path
     # @option value [Numeric] :wait wait interval (seconds) after state changes (optional)
     # @option value [Hash] :options proxy implementation specific options
