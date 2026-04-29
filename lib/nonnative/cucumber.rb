@@ -32,6 +32,13 @@ module Nonnative
     end
 
     module ProxySteps
+      PROXY_OPERATIONS = {
+        'close_all' => :close_all,
+        'delay' => :delay,
+        'invalid_data' => :invalid_data,
+        'reset' => :reset
+      }.freeze
+
       def install_proxy_steps
         install_proxy_mutation_steps
         install_proxy_reset_steps
@@ -40,17 +47,17 @@ module Nonnative
       def install_proxy_mutation_steps
         Given('I set the proxy for process {string} to {string}') do |name, operation|
           process = Nonnative.pool.process_by_name(name)
-          process.proxy.send(operation)
+          Nonnative::Cucumber::Registration.apply_proxy_operation(process.proxy, operation)
         end
 
         Given('I set the proxy for server {string} to {string}') do |name, operation|
           server = Nonnative.pool.server_by_name(name)
-          server.proxy.send(operation)
+          Nonnative::Cucumber::Registration.apply_proxy_operation(server.proxy, operation)
         end
 
         Given('I set the proxy for service {string} to {string}') do |name, operation|
           service = Nonnative.pool.service_by_name(name)
-          service.proxy.send(operation)
+          Nonnative::Cucumber::Registration.apply_proxy_operation(service.proxy, operation)
         end
       end
 
@@ -69,6 +76,14 @@ module Nonnative
           service = Nonnative.pool.service_by_name(name)
           service.proxy.reset
         end
+      end
+
+      def apply_proxy_operation(proxy, operation)
+        method = PROXY_OPERATIONS.fetch(operation) do
+          raise ArgumentError, "Unsupported proxy operation '#{operation}'"
+        end
+
+        proxy.public_send(method)
       end
     end
 

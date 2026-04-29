@@ -189,7 +189,7 @@ module Nonnative
     #
     # @return [Hash{String=>Class}]
     def proxies
-      @proxies ||= { 'fault_injection' => Nonnative::FaultInjectionProxy }.freeze
+      @proxies ||= { 'fault_injection' => Nonnative::FaultInjectionProxy }
     end
 
     # Resolves a proxy implementation for a configured kind.

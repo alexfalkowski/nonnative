@@ -42,8 +42,21 @@ When('I try to find the proxy for server {string}') do |name|
   capture_result(:@server_runner, :@error) { Nonnative.pool.server_by_name(name) }
 end
 
+When('I register a custom proxy kind') do
+  @previous_custom_proxy = Nonnative.proxies['custom']
+  Nonnative.proxies['custom'] = Nonnative::Features::CustomProxy
+end
+
 Then('I should get a proxy not found error') do
   expect(@error).to be_a_kind_of(Nonnative::NotFoundError)
+end
+
+Then('the custom proxy kind should resolve to the custom proxy') do
+  actual = Nonnative.proxy('custom')
+  Nonnative.proxies.delete('custom')
+  Nonnative.proxies['custom'] = @previous_custom_proxy if @previous_custom_proxy
+
+  expect(actual).to eq(Nonnative::Features::CustomProxy)
 end
 
 When('I send a successful message to the http proxy server') do
