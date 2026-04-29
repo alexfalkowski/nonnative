@@ -15,8 +15,8 @@ module Nonnative
   # @see Nonnative.proxies
   class ConfigurationProxy
     # @return [String] proxy kind name (for example `"none"` or `"fault_injection"`)
-    # @return [String] proxy bind host (defaults to `"0.0.0.0"`)
-    # @return [Integer] proxy bind port (defaults to `0`)
+    # @return [String] upstream host used by proxy implementations (defaults to `"0.0.0.0"`)
+    # @return [Integer] upstream port used by proxy implementations (defaults to `0`)
     # @return [String, nil] path to proxy log file (implementation-dependent)
     # @return [Numeric] wait interval (seconds) after proxy state changes (defaults to `0.1`)
     # @return [Hash] proxy implementation options (implementation-dependent)

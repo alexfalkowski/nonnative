@@ -547,9 +547,13 @@ Nonnative.configure do |config|
   config.log = 'nonnative.log'
 
   config.process do |p|
+    p.host = '127.0.0.1'
+    p.port = 20_000
+
     p.proxy = {
       kind: 'fault_injection',
-      port: 20_000,
+      host: '127.0.0.1',
+      port: 12_321,
       log: 'proxy_server.log',
       wait: 1,
       options: {
@@ -569,9 +573,12 @@ url: http://localhost:4567
 log: nonnative.log
 processes:
   -
+    host: 127.0.0.1
+    port: 20000
     proxy:
       kind: fault_injection
-      port: 20000
+      host: 127.0.0.1
+      port: 12321
       log: proxy_server.log
       wait: 1
       options:
@@ -592,9 +599,13 @@ Nonnative.configure do |config|
   config.log = 'nonnative.log'
 
   config.server do |s|
+    s.host = '127.0.0.1'
+    s.port = 20_000
+
     s.proxy = {
       kind: 'fault_injection',
-      port: 20_000,
+      host: '127.0.0.1',
+      port: 12_321,
       log: 'proxy_server.log',
       wait: 1,
       options: {
@@ -614,9 +625,12 @@ url: http://localhost:4567
 log: nonnative.log
 servers:
   -
+    host: 127.0.0.1
+    port: 20000
     proxy:
       kind: fault_injection
-      port: 20000
+      host: 127.0.0.1
+      port: 12321
       log: proxy_server.log
       wait: 1
       options:
