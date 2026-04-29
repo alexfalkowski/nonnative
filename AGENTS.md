@@ -5,8 +5,7 @@ languages. It starts processes, in-process servers, and proxy-only services,
 waits on TCP readiness/shutdown, and can place fault-injection proxies in front
 of dependencies.
 
-Use `./bin/skills/coding-standards` for shared coding, review, testing,
-documentation, and PR conventions. This file only adds repo-specific context.
+Use the shared `coding-standards` skill from `bin/skills/coding-standards` for code changes, bug fixes, refactors, reviews, tests, linting, documentation, PR summaries, commits, Makefile changes, CI validation, and verification.
 
 ## Map And Commands
 
