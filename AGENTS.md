@@ -1,154 +1,107 @@
 # AGENTS.md
 
-This repo is the `nonnative` Ruby gem: a Ruby-first harness for end-to-end testing of systems implemented in other languages by starting processes/servers/services, waiting on TCP port readiness, and optionally putting fault-injection proxies in front of them.
+`nonnative` is a Ruby gem for end-to-end testing systems implemented in other
+languages. It starts processes, in-process servers, and proxy-only services,
+waits on TCP readiness/shutdown, and can place fault-injection proxies in front
+of dependencies.
 
-## Shared skill
+Use `./bin/skills/coding-standards` for shared coding, review, testing,
+documentation, and PR conventions. This file only adds repo-specific context.
 
-Use the shared `coding-standards` skill from `./bin/skills/coding-standards`
-for cross-repository coding, review, testing, documentation, and PR
-conventions. Treat this `AGENTS.md` as the repo-specific companion to that
-skill.
+## Map And Commands
 
-## Quick map
-
-- Library code: `lib/nonnative/**/*.rb`
-- Acceptance tests: `features/**/*.feature`, `features/support/**/*.rb`, `features/step_definitions/**/*.rb`
-- Generated gRPC Ruby stubs for tests: `test/grpc/**/*`
-- Test proto files: `test/nonnative/v1/*.proto`
+- Library: `lib/nonnative/**/*.rb`
+- Cucumber features/support: `features/**/*.feature`, `features/support/**/*.rb`, `features/step_definitions/**/*.rb`
+- Generated gRPC test stubs: `test/grpc/**/*`
+- Test protos: `test/nonnative/v1/*.proto`
 - Build wiring: root `Makefile` includes `bin/build/make/*.mak`
-
-## Key repo dependency
-
-This repo depends on the `bin/` git submodule.
-
-- `.gitmodules` points to `git@github.com:alexfalkowski/bin.git`
-- CI runs `git submodule sync && git submodule update --init`
-- If `bin/` is missing or you do not have SSH access, `make` targets will fail
-
-## Core commands
-
+- Required submodule: `bin/` from `git@github.com:alexfalkowski/bin.git`; missing SSH/submodule setup breaks `make`
 - Install deps: `make dep`
 - Lint: `make lint`
-- Run features: `make features`
-- Run benchmarks only: `make benchmarks`
-- Clean deps: `make clean-dep`
-- Clean reports: `make clean-reports`
+- Features: `make features`
+- Benchmarks only: `make benchmarks`
+- Cleanup: `make clean-dep`, `make clean-reports`
 
-## Runtime model
+## Runtime Model
 
-Public entry point is `lib/nonnative.rb`.
+Public entry point: `lib/nonnative.rb`.
 
-Main module API:
+Main API: `configure`, `start`, `stop`, `clear`, `reset`, `pool`.
 
-- `configure`
-- `start`
-- `stop`
-- `clear`
-- `reset`
-- `pool`
+Configuration is `Nonnative::Configuration`, built with
+`config.process`, `config.server`, `config.service`, or
+`config.load_file(...)`.
 
-Configuration lives in `Nonnative::Configuration` and is built either:
+Runners:
 
-- programmatically with `config.process`, `config.server`, `config.service`
-- from YAML with `config.load_file(...)`
+- `Nonnative::Process`: OS process
+- `Nonnative::Server`: in-process Ruby server thread
+- `Nonnative::Service`: proxy lifecycle for an externally managed dependency
 
-Runtime runners:
+`Nonnative::Pool` starts services first, then servers/processes, and stops in
+reverse. Readiness and shutdown checks are TCP-only via
+`Nonnative::Port#open?` and `#closed?`.
 
-- `Nonnative::Process`: manages an OS process
-- `Nonnative::Server`: manages an in-process Ruby server thread
-- `Nonnative::Service`: manages only proxy lifecycle for an externally managed dependency
+## Cucumber Surface
 
-`Nonnative::Pool` starts services first, then servers/processes, and stops in the reverse direction.
+`lib/nonnative/cucumber.rb` is public compatibility surface. Do not remove or
+rename hooks/step text unless the user explicitly requests a breaking change.
 
-Readiness and shutdown checks are TCP-only via `Nonnative::Port#open?` and `#closed?`.
-
-## Cucumber integration
-
-Cucumber integration lives in `lib/nonnative/cucumber.rb`.
-
-Treat `lib/nonnative/cucumber.rb` as a public compatibility surface for library consumers.
-Existing hooks and step text should not be removed or renamed unless the user explicitly wants a breaking change.
-
-Supported tags:
+Lifecycle tags:
 
 - `@startup`: start before scenario, stop after scenario
 - `@manual`: scenario starts manually, stop after scenario
 - `@clear`: call `Nonnative.clear` before scenario
 - `@reset`: reset proxies after scenario
 
-Repo-owned feature files also use suite taxonomy tags:
+Suite taxonomy tags: `@acceptance`, `@contract`, `@proxy`, `@config`,
+`@service`, `@benchmark`, `@slow`. `make features` excludes `@benchmark`;
+`make benchmarks` runs only `@benchmark`.
 
-- `@acceptance`: end-to-end runner and client flows
-- `@contract`: lower-level lifecycle / command coverage
-- `@proxy`: proxy-specific coverage
-- `@config`: scenarios or example sets that load YAML/configuration
-- `@service`: coverage centered on external services
-- `@benchmark`: benchmark-only scenarios
-- `@slow`: slower-running scenarios, currently benchmarks
+`Nonnative.clear` clears configuration, logger, observability client, and pool.
+`require 'nonnative'` loads Cucumber integration lazily and is safe outside a
+booted Cucumber runtime. For start-once-per-test-run, use
+`require 'nonnative/startup'`.
 
-`make features` excludes `@benchmark`; `make benchmarks` runs only `@benchmark`.
+## Proxy And Config Gotchas
 
-`Nonnative.clear` now clears:
+Proxy wiring is the easiest mistake:
 
-- configuration
-- logger
-- observability client
-- pool
+- Runner `host` / `port` are client-facing and used for readiness/shutdown
+- For `fault_injection`, nested `proxy.host` / `proxy.port` are the upstream target
+- Clients connect to runner `host` / `port` when a proxy is enabled
 
-`require 'nonnative'` still loads the Cucumber integration, but hook/step registration is lazy, so plain `require 'nonnative'` is safe outside a booted Cucumber runtime.
+Proxy kinds: `none`, `fault_injection`.
+Fault-injection states: `none`, `close_all`, `delay`, `invalid_data`.
 
-For “start once per test run”, use `require 'nonnative/startup'`.
+Config rules:
 
-## Proxy wiring
-
-This is the easiest thing to get wrong.
-
-- Runner `host` / `port` are the client-facing endpoint and the values used by readiness/shutdown checks
-- For `fault_injection`, nested `proxy.host` / `proxy.port` are the upstream target behind the proxy
-- Clients should connect to the runner `host` / `port` when a proxy is enabled
-
-Available proxy kinds:
-
-- `none`
-- `fault_injection`
-
-Fault injection states:
-
-- `none`
-- `close_all`
-- `delay`
-- `invalid_data`
-
-## Config gotchas
-
-- Services must be declared under `services:` in YAML, not `processes:`
+- YAML services belong under `services:`, not `processes:`
 - There is no top-level `config.wait`; `wait` is per runner
-- Service configs use `config.service do |s| ... end`, so use `s.host` / `s.port`
-- Proxy examples need both sides of the split:
-  - runner `host` / `port` = proxy endpoint
-  - nested `proxy.host` / `proxy.port` = upstream target
+- Programmatic service config uses `config.service do |s| ... end`, so use `s.host` / `s.port`
+- Proxy examples need both endpoint sides: runner `host` / `port` for the proxy, nested `proxy.host` / `proxy.port` for upstream
 
-## Test fixtures worth knowing
+## Fixtures And Limitations
 
-- Local process fixture: `features/support/bin/start`
-- HTTP fixtures: `features/support/http_server.rb`, `features/support/http_proxy_server.rb`
-- TCP fixture: `features/support/tcp_server.rb`
-- gRPC fixtures: `features/support/grpc_server.rb`, plus generated stubs under `test/grpc/`
+Useful fixtures:
 
-## Important limitations / gotchas
+- Process: `features/support/bin/start`
+- HTTP: `features/support/http_server.rb`, `features/support/http_proxy_server.rb`
+- TCP: `features/support/tcp_server.rb`
+- gRPC: `features/support/grpc_server.rb`, generated stubs in `test/grpc/`
 
-- Ruby version is constrained by `nonnative.gemspec` to `>= 4.0.0` and `< 5.0.0`
+Limitations:
+
 - The `grpc` Ruby library uses a global logger; per-server gRPC loggers are not really supported
-- `make` depends on the `bin/` submodule being present
 - Local Ruby/Bundler mismatches can break native extensions on macOS
-- Coverage output and Cucumber reports are written under `test/reports`
+- Coverage and Cucumber reports go under `test/reports`
 - Port checks can be flaky if tests reuse ports unexpectedly
 
-## Where to look first
+## Look First
 
-- Lifecycle orchestration: `lib/nonnative.rb`, `lib/nonnative/pool.rb`
-- Readiness / timeouts: `lib/nonnative/port.rb`, `lib/nonnative/timeout.rb`
+- Lifecycle: `lib/nonnative.rb`, `lib/nonnative/pool.rb`
+- Readiness/timeouts: `lib/nonnative/port.rb`, `lib/nonnative/timeout.rb`
 - Process lifecycle: `lib/nonnative/process.rb`
-- Proxies / fault injection: `lib/nonnative/fault_injection_proxy.rb`, `lib/nonnative/socket_pair_factory.rb`
-- Cucumber integration: `lib/nonnative/cucumber.rb`, `lib/nonnative/startup.rb`, `features/support/env.rb`
+- Proxies: `lib/nonnative/fault_injection_proxy.rb`, `lib/nonnative/socket_pair_factory.rb`
+- Cucumber: `lib/nonnative/cucumber.rb`, `lib/nonnative/startup.rb`, `features/support/env.rb`
 - Config loading: `lib/nonnative/configuration.rb`, `lib/nonnative/configuration_runner.rb`, `lib/nonnative/configuration_proxy.rb`
