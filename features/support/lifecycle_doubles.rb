@@ -39,6 +39,9 @@ module Nonnative
       end
     end
 
+    class CustomProxy < Nonnative::NoProxy
+    end
+
     class FailingService
       attr_reader :name
 
