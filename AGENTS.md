@@ -1,11 +1,15 @@
 # AGENTS.md
 
+## Shared skills
+
+This repository uses the shared skills from `bin/skills/`. Read
+`bin/AGENTS.md` for the canonical shared skill list and use the smallest
+matching skill for the task.
+
 `nonnative` is a Ruby gem for end-to-end testing systems implemented in other
 languages. It starts processes, in-process servers, and proxy-only services,
 waits on TCP readiness/shutdown, and can place fault-injection proxies in front
 of dependencies.
-
-Use the shared `coding-standards` skill from `bin/skills/coding-standards` for code changes, bug fixes, refactors, reviews, tests, linting, documentation, PR summaries, commits, Makefile changes, CI validation, and verification.
 
 ## Map And Commands
 
