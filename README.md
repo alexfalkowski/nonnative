@@ -56,6 +56,8 @@ Runner fields (process/server/service):
 
 For `fault_injection`, the nested `proxy.host`/`proxy.port` describe the upstream target behind the proxy. In-process server implementations typically bind there via `proxy.host` / `proxy.port`.
 
+Nonnative readiness and shutdown checks are TCP-only. Configure ports that are dedicated to the test run; if another process is already listening on the same `host`/`port`, results are undefined.
+
 ### Lifecycle strategies (Cucumber integration)
 
 Nonnative ships Cucumber hooks (when loaded) that support these tags/strategies:
