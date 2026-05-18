@@ -14,3 +14,12 @@ Feature: Configuration loading
   Scenario: Top-level wait does not override runner wait defaults
     Given I load a temporary configuration with a top-level wait and a process
     Then the configured process "default_wait_process" should have wait 0.1
+
+  Scenario: YAML configuration does not evaluate ERB
+    Given I load a temporary configuration containing ERB
+    Then the ERB side effect should not happen
+    And the configuration name should be the ERB source
+
+  Scenario: YAML configuration rejects arbitrary Ruby objects
+    When I attempt to load a temporary configuration with a Ruby object tag
+    Then loading the configuration should fail with a YAML safety error

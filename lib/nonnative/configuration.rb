@@ -52,13 +52,14 @@ module Nonnative
 
     # Loads a configuration file and appends its runners to this instance.
     #
-    # The file is loaded using the `config` gem via {Nonnative.configurations}. Top-level attributes are
-    # copied onto this object, and runner sections are transformed into configuration runner objects.
+    # The file is loaded using safe YAML parsing. ERB is not evaluated,
+    # arbitrary object deserialization is not allowed, top-level attributes are copied onto this object,
+    # and runner sections are transformed into configuration runner objects.
     #
     # @param path [String] path to a configuration file (typically YAML)
     # @return [void]
     def load_file(path)
-      cfg = Nonnative.configurations(path)
+      cfg = Nonnative::ConfigurationFile.load(path)
 
       self.version = cfg.version
       self.name = cfg.name

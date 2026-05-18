@@ -79,6 +79,7 @@ Fault-injection states: `none`, `close_all`, `delay`, `invalid_data`.
 
 Config rules:
 
+- YAML config is loaded as data only via `Nonnative::ConfigurationFile`; ERB is not evaluated and arbitrary Ruby object tags are rejected
 - YAML services belong under `services:`, not `processes:`
 - There is no top-level `config.wait`; `wait` is per runner
 - Programmatic service config uses `config.service do |s| ... end`, so use `s.host` / `s.port`
@@ -107,4 +108,4 @@ Limitations:
 - Process lifecycle: `lib/nonnative/process.rb`
 - Proxies: `lib/nonnative/fault_injection_proxy.rb`, `lib/nonnative/socket_pair_factory.rb`
 - Cucumber: `lib/nonnative/cucumber.rb`, `lib/nonnative/startup.rb`, `features/support/env.rb`
-- Config loading: `lib/nonnative/configuration.rb`, `lib/nonnative/configuration_runner.rb`, `lib/nonnative/configuration_proxy.rb`
+- Config loading: `lib/nonnative/configuration.rb`, `lib/nonnative/configuration_file.rb`, `lib/nonnative/configuration_runner.rb`, `lib/nonnative/configuration_proxy.rb`

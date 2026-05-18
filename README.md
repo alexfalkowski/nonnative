@@ -38,6 +38,8 @@ gem install nonnative
 ## Usage
 
 Nonnative is configured via {#Nonnative.configure} (programmatic) or `config.load_file(...)` (YAML).
+YAML configuration is loaded as data only: ERB is not evaluated and arbitrary Ruby objects are not
+deserialized.
 
 High-level configuration fields:
 - `version`: configuration version (example: `"1.0"`).
