@@ -53,6 +53,27 @@ Given('I load a temporary configuration with a top-level wait and a process') do
   YAML
 end
 
+Given('I load a temporary configuration containing ERB') do
+  @erb_side_effect_path = "test/reports/#{SecureRandom.hex(4)}"
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: <%= File.write(#{@erb_side_effect_path.inspect}, 'evaluated') %>
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+  YAML
+end
+
+When('I attempt to load a temporary configuration with a Ruby object tag') do
+  @configuration_error = nil
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(<<~YAML)
+      --- !ruby/object:Object
+      version: "1.0"
+      name: test
+    YAML
+  end
+end
+
 Then('the configuration should contain {int} service entry and {int} process entries') do |services, processes|
   expect(Nonnative.configuration.services.size).to eq(services)
   expect(Nonnative.configuration.processes.size).to eq(processes)
@@ -76,6 +97,18 @@ Then('the configured process {string} should have wait {float}') do |name, wait|
   process = configured_process(name)
 
   expect(process.wait).to eq(wait)
+end
+
+Then('the ERB side effect should not happen') do
+  expect(File.exist?(@erb_side_effect_path)).to be(false)
+end
+
+Then('the configuration name should be the ERB source') do
+  expect(Nonnative.configuration.name).to eq("<%= File.write(#{@erb_side_effect_path.inspect}, 'evaluated') %>")
+end
+
+Then('loading the configuration should fail with a YAML safety error') do
+  expect(@configuration_error).to be_a(Psych::DisallowedClass)
 end
 
 def load_temporary_configuration(contents)

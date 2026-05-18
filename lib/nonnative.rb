@@ -67,6 +67,7 @@ require 'nonnative/stop_error'
 require 'nonnative/not_found_error'
 require 'nonnative/timeout'
 require 'nonnative/port'
+require 'nonnative/configuration_file'
 require 'nonnative/configuration'
 require 'nonnative/configuration_runner'
 require 'nonnative/configuration_process'
@@ -112,16 +113,6 @@ module Nonnative
     #
     # @return [Nonnative::Pool, nil] the pool instance, or `nil` if not started yet
     attr_accessor :pool
-
-    # Loads one or more configuration files using the `config` gem.
-    #
-    # This is primarily used by {Nonnative::Configuration#load_file}, but is public for advanced cases.
-    #
-    # @param files [Array<String>] paths to configuration files
-    # @return [Config::Options] the loaded configuration object
-    def configurations(*files)
-      Config.load_files(files)
-    end
 
     # Returns the current configuration (memoized).
     #
