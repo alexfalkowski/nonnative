@@ -11,6 +11,10 @@ Feature: Server observability
     Then I should receive a TCP "Hello World!" response
     And I should see "test" as healthy
 
+  Scenario: The health endpoint reports service unavailable as unhealthy
+    When the health endpoint reports service unavailable
+    Then I should see "test" as unhealthy
+
   Scenario Outline: The <endpoint> endpoint responds successfully
     When I send a "<endpoint>" request
     Then I should receive a successful "<endpoint>" response

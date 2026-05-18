@@ -15,6 +15,13 @@ module Nonnative
     end
 
     class Application < Sinatra::Application
+      class << self
+        attr_accessor :health_body, :health_status
+      end
+
+      self.health_body = ''
+      self.health_status = 200
+
       configure do
         set :logging, false
       end
@@ -67,7 +74,8 @@ module Nonnative
       end
 
       get '/test/healthz' do
-        status 200
+        status Nonnative::Features::Application.health_status
+        Nonnative::Features::Application.health_body
       end
 
       get '/test/livez' do

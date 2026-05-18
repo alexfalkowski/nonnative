@@ -80,6 +80,9 @@ module Nonnative
         ].freeze
 
         def configure_servers_programmatically
+          Nonnative::Features::Application.health_body = ''
+          Nonnative::Features::Application.health_status = 200
+
           configure_with_defaults do |config|
             SERVER_DEFINITIONS.each { |definition| add_server(config, definition) }
           end
