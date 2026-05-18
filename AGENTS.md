@@ -81,6 +81,7 @@ Config rules:
 
 - YAML config is loaded as data only via `Nonnative::ConfigurationFile`; ERB is not evaluated and arbitrary Ruby object tags are rejected
 - Runner `host` and nested `proxy.host` default to `127.0.0.1`; use explicit `0.0.0.0` only when external access is intended
+- Process `command` can be a legacy shell string or an argv array; prefer argv arrays for new config, and `go:` config builds argv internally
 - YAML services belong under `services:`, not `processes:`
 - There is no top-level `config.wait`; `wait` is per runner
 - Programmatic service config uses `config.service do |s| ... end`, so use `s.host` / `s.port`

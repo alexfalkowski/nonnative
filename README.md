@@ -92,6 +92,8 @@ This calls `Nonnative.start` immediately and registers an `at_exit` stop.
 ### Processes
 
 A process is some sort of command that you would run locally.
+Commands can be strings or argv arrays. String commands preserve legacy shell semantics, while argv arrays
+avoid shell interpretation and are preferred for new configuration.
 
 Setup it up programmatically:
 
@@ -106,7 +108,7 @@ Nonnative.configure do |config|
 
   config.process do |p|
     p.name = 'start_1'
-    p.command = -> { 'features/support/bin/start 12_321' }
+    p.command = -> { ['features/support/bin/start', '12_321'] }
     p.timeout = 5
     p.wait = 0.1
     p.port = 12_321
@@ -138,7 +140,9 @@ log: nonnative.log
 processes:
   -
     name: start_1
-    command: features/support/bin/start 12_321
+    command:
+      - features/support/bin/start
+      - "12_321"
     timeout: 5
     wait: 1
     port: 12321
@@ -764,7 +768,7 @@ Then I should reset the proxy for service 'service_1'
 
 ### Go
 
-As we love using go as a language for services we have added support to start binaries with defined parameters. This expects that you build your services in the format of `command sub_command --params`
+As we love using go as a language for services we have added support to start binaries with defined parameters. This expects that you build your services in the format of `command sub_command --params`. YAML `go:` configuration is executed as argv entries, without shell interpretation.
 
 To get this to work you will need to create a `main_test.go` file with these contents:
 
@@ -786,12 +790,16 @@ Then to compile this binary you will need to do the following:
 go test -mod vendor -c -tags features -covermode=count -o your_binary -coverpkg=./... github.com/your_location
 ```
 
-Setup it up programmatically:
+Setup it up programmatically as an argv process command:
 
 ```ruby
-tools = %w[prof trace cover]
-
-Nonnative.go_executable(tools, 'reports', 'your_binary', 'sub_command', '--config config.yaml')
+Nonnative.configure do |config|
+  config.process do |p|
+    p.name = 'go'
+    p.command = -> { ['your_binary', 'sub_command', '--config', 'config.yaml'] }
+    p.port = 12_345
+  end
+end
 ```
 
 Setup it up through configuration:

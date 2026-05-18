@@ -141,7 +141,7 @@ module Nonnative
         params = go.parameters || []
         tools = go.tools || []
 
-        -> { Nonnative.go_executable(tools, go.output, go.executable, go.command, *params) }
+        -> { Nonnative.go_executable_args(tools, go.output, go.executable, go.command, *params) }
       else
         -> { process.command }
       end
