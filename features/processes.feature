@@ -26,6 +26,13 @@ Feature: Process runners
     And I should see a log entry of "test" in the file "test/reports/12_321.log"
     And the process 'start_1' should consume less than '40mb' of memory
 
+  Scenario: Process argv commands do not invoke the shell
+    Given I configure the system programmatically with an argv process
+    And I start the system
+    When I send "test" with the TCP client 'argv_process' to the process
+    Then I should receive a TCP "test" response from the process
+    And the argv process shell side effect should not happen
+
   @proxy @reset
   Scenario: A delayed process proxy still allows TCP responses
     Given I configure the system programmatically with processes

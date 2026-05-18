@@ -89,10 +89,10 @@ module Nonnative
         environment[k] = ENV.fetch(k, nil) || environment[k]
       end
 
-      command = service.command.call
+      command = Array(service.command.call)
 
-      spawn(environment, command, %i[out err] => [service.log, 'a']).tap do |pid|
-        Nonnative.logger.info "started '#{command}' with pid '#{pid}'"
+      spawn(environment, *command, %i[out err] => [service.log, 'a']).tap do |pid|
+        Nonnative.logger.info "started '#{command.join(' ')}' with pid '#{pid}'"
       end
     end
 

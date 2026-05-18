@@ -8,7 +8,7 @@ Feature: Command
       | executable | thisshouldbelong |
       | command    | server           |
       | parameters | --level=info     |
-    Then I should have a valid go command with:
+    Then I should have a valid go command argv with:
       | output     | reports          |
       | executable | thisshouldbelong |
       | command    | server           |
@@ -20,7 +20,7 @@ Feature: Command
       | executable | thisshouldbelong |
       | command    | server           |
       | parameters |                  |
-    Then I should have a valid go command with:
+    Then I should have a valid go command argv with:
       | output     | reports          |
       | executable | thisshouldbelong |
       | command    | server           |
@@ -29,7 +29,7 @@ Feature: Command
   @config
   Scenario: Go command from configuration
     When I load the go configuration
-    Then I should have a valid go command with:
+    Then I should have a valid go command argv with:
       | output     | reports          |
       | executable | thisshouldbelong |
       | command    | server           |

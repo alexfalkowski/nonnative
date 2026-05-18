@@ -153,7 +153,7 @@ module Nonnative
       File.readlines(path).select { |l| predicate.call(l) }
     end
 
-    # Builds a Go test executable command line with optional profiling/trace/coverage flags.
+    # Builds a Go test executable argv array with optional profiling/trace/coverage flags.
     #
     # This is used when process configuration specifies a `go` section.
     #
@@ -162,9 +162,9 @@ module Nonnative
     # @param exec [String] the test binary (or wrapper) to execute
     # @param cmd [String] the command argument passed to the test binary
     # @param params [Array<String>] extra parameters for the command
-    # @return [String] executable command string
-    def go_executable(tools, output, exec, cmd, *params)
-      Nonnative::GoCommand.new(tools, exec, output).executable(cmd, params)
+    # @return [Array<String>] executable argv entries
+    def go_executable_args(tools, output, exec, cmd, *params)
+      Nonnative::GoCommand.new(tools, exec, output).executable_args(cmd, *params)
     end
 
     # Returns an HTTP client for common health/readiness endpoints.
