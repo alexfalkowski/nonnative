@@ -14,7 +14,7 @@ module Nonnative
   # @see Nonnative::ConfigurationService
   class ConfigurationRunner
     # @return [String, nil] runner name used for lookup (for example via `pool.process_by_name`)
-    # @return [String] host to bind/connect to (defaults to `"0.0.0.0"`)
+    # @return [String] host to bind/connect to (defaults to `"127.0.0.1"`)
     # @return [Integer] port to bind/connect to
     # @return [Numeric] wait interval (seconds) used by runners between lifecycle steps
     attr_accessor :name, :host, :port, :wait
@@ -30,14 +30,14 @@ module Nonnative
     # Creates a runner configuration with defaults.
     #
     # Defaults:
-    # - `host`: `"0.0.0.0"`
+    # - `host`: `"127.0.0.1"`
     # - `port`: `0`
     # - `wait`: `0.1`
     # - `proxy`: a new {Nonnative::ConfigurationProxy} with its own defaults
     #
     # @return [void]
     def initialize
-      self.host = '0.0.0.0'
+      self.host = '127.0.0.1'
       self.port = 0
       self.wait = 0.1
 

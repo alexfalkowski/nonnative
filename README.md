@@ -53,10 +53,10 @@ High-level configuration fields:
 Runner fields (process/server/service):
 - `timeout`: max time (seconds) for readiness/shutdown port checks.
 - `wait`: small sleep (seconds) between lifecycle steps.
-- `host`/`port`: client-facing address used for readiness/shutdown port checks. When a `fault_injection` proxy is enabled, this is the endpoint your tests/clients should hit.
+- `host`/`port`: client-facing address used for readiness/shutdown port checks. `host` defaults to `127.0.0.1`. When a `fault_injection` proxy is enabled, this is the endpoint your tests/clients should hit.
 - `log`: per-runner log file (used by process output redirection or server implementations).
 
-For `fault_injection`, the nested `proxy.host`/`proxy.port` describe the upstream target behind the proxy. In-process server implementations typically bind there via `proxy.host` / `proxy.port`.
+For `fault_injection`, the nested `proxy.host`/`proxy.port` describe the upstream target behind the proxy. Nested `proxy.host` also defaults to `127.0.0.1`. In-process server implementations typically bind there via `proxy.host` / `proxy.port`.
 
 Nonnative readiness and shutdown checks are TCP-only. Configure ports that are dedicated to the test run; if another process is already listening on the same `host`/`port`, results are undefined.
 
