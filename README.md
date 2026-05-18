@@ -37,7 +37,7 @@ gem install nonnative
 
 ## Usage
 
-Nonnative is configured via {#Nonnative.configure} (programmatic) or `config.load_file(...)` (YAML).
+Nonnative is configured via `Nonnative.configure` (programmatic) or `config.load_file(...)` (YAML).
 YAML configuration is loaded as data only: ERB is not evaluated and arbitrary Ruby objects are not
 deserialized.
 
@@ -95,7 +95,7 @@ A process is some sort of command that you would run locally.
 Commands can be strings or argv arrays. String commands preserve legacy shell semantics, while argv arrays
 avoid shell interpretation and are preferred for new configuration.
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 require 'nonnative'
@@ -130,7 +130,7 @@ Nonnative.configure do |config|
 end
 ```
 
-Setup it up through configuration:
+Set it up through configuration:
 
 ```yaml
 version: "1.0"
@@ -211,7 +211,7 @@ module Nonnative
 end
 ```
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 require 'nonnative'
@@ -224,7 +224,7 @@ Nonnative.configure do |config|
 
   config.server do |s|
     s.name = 'server_1'
-    s.klass = Nonnative::EchoServer
+    s.klass = Nonnative::TCPServer
     s.timeout = 1
     s.port = 12_323
     s.log = 'server_1.log'
@@ -232,7 +232,7 @@ Nonnative.configure do |config|
 
   config.server do |s|
     s.name = 'server_2'
-    s.klass = Nonnative::EchoServer
+    s.klass = Nonnative::TCPServer
     s.timeout = 1
     s.port = 12_324
     s.log = 'server_2.log'
@@ -240,7 +240,7 @@ Nonnative.configure do |config|
 end
 ```
 
-Setup it up through configuration:
+Set it up through configuration:
 
 ```yaml
 version: "1.0"
@@ -250,13 +250,13 @@ log: nonnative.log
 servers:
   -
     name: server_1
-    class: Nonnative::EchoServer
+    class: Nonnative::TCPServer
     timeout: 1
     port: 12323
     log: server_1.log
   -
     name: server_2
-    class: Nonnative::EchoServer
+    class: Nonnative::TCPServer
     timeout: 1
     port: 12324
     log: server_2.log
@@ -294,7 +294,7 @@ module Nonnative
 end
 ```
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 require 'nonnative'
@@ -315,7 +315,7 @@ Nonnative.configure do |config|
 end
 ```
 
-Setup it up through configuration:
+Set it up through configuration:
 
 ```yaml
 version: "1.0"
@@ -359,7 +359,7 @@ module Nonnative
 end
 ```
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 require 'nonnative'
@@ -380,7 +380,7 @@ Nonnative.configure do |config|
 end
 ```
 
-Setup it up through configuration:
+Set it up through configuration:
 
 ```yaml
 version: "1.0"
@@ -428,7 +428,7 @@ module Nonnative
 end
 ```
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 require 'nonnative'
@@ -449,7 +449,7 @@ Nonnative.configure do |config|
 end
 ```
 
-Setup it up through configuration:
+Set it up through configuration:
 
 ```yaml
 version: "1.0"
@@ -711,7 +711,7 @@ Clients connect to the runner `host`/`port`, while the proxy forwards traffic to
 
 ###### Fault Injection Processes
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 name = 'name of process in configuration'
@@ -730,7 +730,7 @@ Then I should reset the proxy for process 'process_1'
 
 ###### Fault Injection Servers
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 name = 'name of server in configuration'
@@ -749,7 +749,7 @@ Then I should reset the proxy for server 'server_1'
 
 ###### Fault Injection Services
 
-Setup it up programmatically:
+Set it up programmatically:
 
 ```ruby
 name = 'name of service in configuration'
@@ -768,29 +768,9 @@ Then I should reset the proxy for service 'service_1'
 
 ### Go
 
-As we love using go as a language for services we have added support to start binaries with defined parameters. This expects that you build your services in the format of `command sub_command --params`. YAML `go:` configuration is executed as argv entries, without shell interpretation.
+As we love using Go as a language for services we have added support to start binaries with defined parameters.
 
-To get this to work you will need to create a `main_test.go` file with these contents:
-
-```go
-// +build features
-
-package main
-
-import "testing"
-
-func TestFeatures(t *testing.T) {
- main()
-}
-```
-
-Then to compile this binary you will need to do the following:
-
-```sh
-go test -mod vendor -c -tags features -covermode=count -o your_binary -coverpkg=./... github.com/your_location
-```
-
-Setup it up programmatically as an argv process command:
+Programmatic Go binaries can be configured as normal argv process commands:
 
 ```ruby
 Nonnative.configure do |config|
@@ -802,7 +782,30 @@ Nonnative.configure do |config|
 end
 ```
 
-Setup it up through configuration:
+YAML `go:` configuration is for Go test binaries compiled with `go test -c`. It builds argv entries in this order: executable, optional `-test.*` profiling/trace/coverage flags, command, then parameters. The argv entries are executed without shell interpretation.
+
+To get this to work you will need to create a `main_test.go` file with these contents:
+
+```go
+//go:build features
+// +build features
+
+package main
+
+import "testing"
+
+func TestFeatures(t *testing.T) {
+    main()
+}
+```
+
+Then to compile this binary you will need to do the following:
+
+```sh
+go test -mod vendor -c -tags features -covermode=count -o your_binary -coverpkg=./... github.com/your_location
+```
+
+Set it up through configuration:
 
 ```yaml
 version: "1.0"
@@ -818,7 +821,8 @@ processes:
       executable: your_binary
       command: sub_command
       parameters:
-        - --config config.yaml
+        - --config
+        - config.yaml
     timeout: 5
     port: 8000
     log: go.log
