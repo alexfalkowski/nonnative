@@ -50,11 +50,14 @@ High-level configuration fields:
 - `servers`: in-process Ruby servers started in threads.
 - `services`: external dependencies (proxy-only; no process/thread started by Nonnative).
 
-Runner fields (process/server/service):
+Common runner fields:
+- `name`: runner name used for lookup.
+- `host`/`port`: client-facing address. `host` defaults to `127.0.0.1`. For processes and servers, this address is also used for readiness/shutdown port checks. When a `fault_injection` proxy is enabled, this is the endpoint your tests/clients should hit.
+
+Process/server fields:
 - `timeout`: max time (seconds) for readiness/shutdown port checks.
 - `wait`: small sleep (seconds) between lifecycle steps.
-- `host`/`port`: client-facing address used for readiness/shutdown port checks. `host` defaults to `127.0.0.1`. When a `fault_injection` proxy is enabled, this is the endpoint your tests/clients should hit.
-- `log`: per-runner log file (used by process output redirection or server implementations).
+- `log`: per-runner log file used by process output redirection or server implementations.
 
 For `fault_injection`, the nested `proxy.host`/`proxy.port` describe the upstream target behind the proxy. Nested `proxy.host` also defaults to `127.0.0.1`. In-process server implementations typically bind there via `proxy.host` / `proxy.port`.
 
@@ -121,7 +124,7 @@ Nonnative.configure do |config|
 
   config.process do |p|
     p.name = 'start_2'
-    p.command = -> { 'features/support/bin/start 12_322' }
+    p.command = -> { ['features/support/bin/start', '12_322'] }
     p.timeout = 0.5
     p.wait = 0.1
     p.port = 12_322
@@ -152,7 +155,9 @@ processes:
       TEST: true
   -
     name: start_2
-    command: features/support/bin/start 12_322
+    command:
+      - features/support/bin/start
+      - "12_322"
     timeout: 5
     wait: 1
     port: 12322
