@@ -88,6 +88,8 @@ module Nonnative
     end
 
     module LifecycleSteps
+      SERVICE_UNAVAILABLE = 'Service Unavailable'
+
       def install_state_steps
         install_start_step
         install_attempt_start_step
@@ -125,7 +127,11 @@ module Nonnative
 
         Then('I should see {string} as unhealthy') do |service|
           wait_for { Nonnative.observability.health(opts).code }.to eq(503)
-          wait_for { Nonnative.observability.health(opts).body }.to include(service)
+          wait_for { Nonnative.observability.health(opts).body }.to satisfy do |body|
+            body = body.to_s.strip
+
+            body == SERVICE_UNAVAILABLE || body.include?(service)
+          end
         end
       end
 
@@ -134,7 +140,11 @@ module Nonnative
 
         Then('I should see {string} as healthy') do |service|
           wait_for { Nonnative.observability.health(opts).code }.to eq(200)
-          wait_for { Nonnative.observability.health(opts).body }.to_not include(service)
+          wait_for { Nonnative.observability.health(opts).body }.to satisfy do |body|
+            body = body.to_s.strip
+
+            body != SERVICE_UNAVAILABLE && !body.include?(service)
+          end
         end
       end
 

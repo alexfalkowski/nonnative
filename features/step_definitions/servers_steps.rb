@@ -34,6 +34,11 @@ When('I send a {string} request') do |name|
   @response = observability_request(name)
 end
 
+When('the health endpoint reports service unavailable') do
+  Nonnative::Features::Application.health_body = "Service Unavailable\n"
+  Nonnative::Features::Application.health_status = 503
+end
+
 When('I send a not found message with the http client to the servers') do
   @response = http_client_for_server('http_server_1').not_found
 end
