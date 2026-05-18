@@ -63,6 +63,25 @@ Given('I load a temporary configuration containing ERB') do
   YAML
 end
 
+Given('I load a temporary configuration with omitted hosts') do
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: test
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+    processes:
+      - name: default_host_process
+        command: features/support/bin/start 12_400
+        timeout: 1
+        port: 12400
+        log: test/reports/12_400.log
+        proxy:
+          kind: fault_injection
+          port: 30000
+          log: test/reports/proxy_default_host_process.log
+  YAML
+end
+
 When('I attempt to load a temporary configuration with a Ruby object tag') do
   @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
@@ -97,6 +116,18 @@ Then('the configured process {string} should have wait {float}') do |name, wait|
   process = configured_process(name)
 
   expect(process.wait).to eq(wait)
+end
+
+Then('the configured process {string} should use host {string}') do |name, host|
+  process = configured_process(name)
+
+  expect(process.host).to eq(host)
+end
+
+Then('the configured process {string} proxy should use host {string}') do |name, host|
+  process = configured_process(name)
+
+  expect(process.proxy.host).to eq(host)
 end
 
 Then('the ERB side effect should not happen') do

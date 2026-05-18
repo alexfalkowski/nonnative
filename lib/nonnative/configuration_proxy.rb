@@ -15,7 +15,7 @@ module Nonnative
   # @see Nonnative.proxies
   class ConfigurationProxy
     # @return [String] proxy kind name (for example `"none"` or `"fault_injection"`)
-    # @return [String] upstream host used by proxy implementations (defaults to `"0.0.0.0"`)
+    # @return [String] upstream host used by proxy implementations (defaults to `"127.0.0.1"`)
     # @return [Integer] upstream port used by proxy implementations (defaults to `0`)
     # @return [String, nil] path to proxy log file (implementation-dependent)
     # @return [Numeric] wait interval (seconds) after proxy state changes (defaults to `0.1`)
@@ -27,7 +27,7 @@ module Nonnative
     #
     # Defaults:
     # - `kind`: `"none"`
-    # - `host`: `"0.0.0.0"`
+    # - `host`: `"127.0.0.1"`
     # - `port`: `0`
     # - `wait`: `0.1`
     # - `options`: `{}`
@@ -35,7 +35,7 @@ module Nonnative
     # @return [void]
     def initialize
       self.kind = 'none'
-      self.host = '0.0.0.0'
+      self.host = '127.0.0.1'
       self.port = 0
       self.wait = 0.1
       self.options = {}

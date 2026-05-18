@@ -15,6 +15,11 @@ Feature: Configuration loading
     Given I load a temporary configuration with a top-level wait and a process
     Then the configured process "default_wait_process" should have wait 0.1
 
+  Scenario: Missing hosts default to loopback
+    Given I load a temporary configuration with omitted hosts
+    Then the configured process "default_host_process" should use host "127.0.0.1"
+    And the configured process "default_host_process" proxy should use host "127.0.0.1"
+
   Scenario: YAML configuration does not evaluate ERB
     Given I load a temporary configuration containing ERB
     Then the ERB side effect should not happen
