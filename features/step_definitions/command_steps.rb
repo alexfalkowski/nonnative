@@ -37,10 +37,11 @@ end
 def expect_go_command_parts(parts, cmd, params)
   return expect_go_command_without_params(parts, cmd) if params == ''
 
-  expect(parts[-2]).to eq(cmd)
-  expect(parts.last).to eq(params)
+  parameters = params.split(',')
+  expect(parts.last(parameters.length)).to eq(parameters)
+  expect(parts[-(parameters.length + 1)]).to eq(cmd)
 
-  parts[1..-3]
+  parts[1...-(parameters.length + 1)]
 end
 
 def expect_go_command_without_params(parts, cmd)

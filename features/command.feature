@@ -14,6 +14,18 @@ Feature: Command
       | command    | server           |
       | parameters | --level=info     |
 
+  Scenario: Go command with shell-style parameter words
+    When I create a go command with:
+      | output     | reports                    |
+      | executable | thisshouldbelong           |
+      | command    | server                     |
+      | parameters | -i file:.config/server.yml |
+    Then I should have a valid go command argv with:
+      | output     | reports                    |
+      | executable | thisshouldbelong           |
+      | command    | server                     |
+      | parameters | -i,file:.config/server.yml |
+
   Scenario: Go command without parameters
     When I create a go command with:
       | output     | reports          |

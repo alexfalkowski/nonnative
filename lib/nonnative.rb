@@ -46,6 +46,7 @@ require 'timeout'
 require 'yaml'
 require 'open3'
 require 'securerandom'
+require 'shellwords'
 
 require 'grpc'
 require 'sinatra'
@@ -161,7 +162,7 @@ module Nonnative
     # @param output [String] directory where outputs should be written
     # @param exec [String] the test binary (or wrapper) to execute
     # @param cmd [String] the command argument passed to the test binary
-    # @param params [Array<String>] extra parameters for the command
+    # @param params [Array<String>] extra parameter strings for the command
     # @return [Array<String>] executable argv entries
     def go_executable_args(tools, output, exec, cmd, *params)
       Nonnative::GoCommand.new(tools, exec, output).executable_args(cmd, *params)

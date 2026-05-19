@@ -19,6 +19,8 @@ module Nonnative
   #
   # If `tools` is `nil` or empty, all tools (`prof`, `trace`, `cover`) are enabled.
   #
+  # Parameter strings are parsed into argv words using shell-style quoting, then executed without a shell.
+  #
   # @example
   #   cmd = Nonnative::GoCommand.new(%w[prof cover], './svc.test', 'reports')
   #   cmd.executable_args('serve', '--config', 'config.yaml')
@@ -40,15 +42,19 @@ module Nonnative
     # A short random suffix is appended to output filenames to reduce collisions across runs.
     #
     # @param cmd [String] command/sub-command argument passed to the Go test binary
-    # @param params [Array<String>] additional parameters passed after `cmd`
+    # @param params [Array<String>] additional parameter strings passed after `cmd`
     # @return [Array<String>] argv entries to execute
     def executable_args(cmd, *params)
-      [exec, *flags(cmd), cmd, *params.flatten.compact.map(&:to_s)]
+      [exec, *flags(cmd), cmd, *parameter_args(params)]
     end
 
     private
 
     attr_reader :tools, :exec, :output
+
+    def parameter_args(params)
+      params.flatten.compact.flat_map { |p| Shellwords.split(p.to_s) }
+    end
 
     def flags(cmd)
       suffix = SecureRandom.alphanumeric(4)
