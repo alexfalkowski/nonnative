@@ -19,15 +19,16 @@ module Nonnative
   #
   # If `tools` is `nil` or empty, all tools (`prof`, `trace`, `cover`) are enabled.
   #
-  # Parameter strings are parsed into argv words using shell-style quoting, then executed without a shell.
+  # Parameter strings are parsed into argv words using shell-style quoting.
   #
   # @example
-  #   cmd = Nonnative::GoCommand.new(%w[prof cover], './svc.test', 'reports')
-  #   cmd.executable_args('serve', '--config', 'config.yaml')
+  #   executable = Nonnative::GoExecutable.new(%w[prof cover], './svc.test', 'reports')
+  #   executable.argv('serve', '--config', 'config.yaml')
   #   # => ["./svc.test", "-test.cpuprofile=...", "-test.coverprofile=...", "serve", "--config", "config.yaml"]
   #
-  # @see Nonnative.go_executable_args
-  class GoCommand
+  # @see Nonnative.go_command
+  # @see Nonnative.go_argv
+  class GoExecutable
     # @param tools [Array<String>, nil] tool names to enable (see class docs)
     # @param exec [String] path to the compiled Go test binary
     # @param output [String] output directory for generated files
@@ -44,8 +45,17 @@ module Nonnative
     # @param cmd [String] command/sub-command argument passed to the Go test binary
     # @param params [Array<String>] additional parameter strings passed after `cmd`
     # @return [Array<String>] argv entries to execute
-    def executable_args(cmd, *params)
+    def argv(cmd, *params)
       [exec, *flags(cmd), cmd, *parameter_args(params)]
+    end
+
+    # Returns an executable command string including enabled `-test.*` flags.
+    #
+    # @param cmd [String] command/sub-command argument passed to the Go test binary
+    # @param params [Array<String>] additional parameter strings passed after `cmd`
+    # @return [String] the full command to execute
+    def command(cmd, *params)
+      Shellwords.join(argv(cmd, *params))
     end
 
     private

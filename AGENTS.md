@@ -29,7 +29,8 @@ of dependencies.
 
 Public entry point: `lib/nonnative.rb`.
 
-Main API: `configure`, `start`, `stop`, `clear`, `reset`, `pool`.
+Main API: `configure`, `start`, `stop`, `clear`, `reset`, `pool`,
+`go_argv`, `go_command`.
 
 Configuration is `Nonnative::Configuration`, built with
 `config.process`, `config.server`, `config.service`, or
@@ -81,7 +82,8 @@ Config rules:
 
 - YAML config is loaded as data only via `Nonnative::ConfigurationFile`; ERB is not evaluated and arbitrary Ruby object tags are rejected
 - Runner `host` and nested `proxy.host` default to `127.0.0.1`; use explicit `0.0.0.0` only when external access is intended
-- Process `command` can be a legacy shell string or an argv array; prefer argv arrays for new config, and `go:` config builds argv internally
+- Process `command` can be a legacy shell string or an argv array; prefer argv arrays for new config, and `go:` config builds argv internally with `Nonnative.go_argv`
+- Use `Nonnative.go_argv` for no-shell Go executable argv entries and `Nonnative.go_command` only when a caller needs Ruby shell-style command string spawning
 - YAML services belong under `services:`, not `processes:`
 - There is no top-level `config.wait`; `wait` is per runner
 - Programmatic service config uses `config.service do |s| ... end`, so use `s.host` / `s.port`
@@ -108,6 +110,7 @@ Limitations:
 - Lifecycle: `lib/nonnative.rb`, `lib/nonnative/pool.rb`
 - Readiness/timeouts: `lib/nonnative/port.rb`, `lib/nonnative/timeout.rb`
 - Process lifecycle: `lib/nonnative/process.rb`
+- Go executable command/argv building: `lib/nonnative/go_executable.rb`
 - Proxies: `lib/nonnative/fault_injection_proxy.rb`, `lib/nonnative/socket_pair_factory.rb`
 - Cucumber: `lib/nonnative/cucumber.rb`, `lib/nonnative/startup.rb`, `features/support/env.rb`
 - Config loading: `lib/nonnative/configuration.rb`, `lib/nonnative/configuration_file.rb`, `lib/nonnative/configuration_runner.rb`, `lib/nonnative/configuration_proxy.rb`

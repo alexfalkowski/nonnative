@@ -781,11 +781,13 @@ Programmatic Go binaries can be configured as normal argv process commands:
 Nonnative.configure do |config|
   config.process do |p|
     p.name = 'go'
-    p.command = -> { ['your_binary', 'sub_command', '--config', 'config.yaml'] }
+    p.command = -> { Nonnative.go_argv(%w[cover], 'reports', 'your_binary', 'sub_command', '-i file:.config/server.yml') }
     p.port = 12_345
   end
 end
 ```
+
+Use `Nonnative.go_argv(...)` when a process should execute without shell interpretation, and `Nonnative.go_command(...)` when a caller needs a command string for Ruby's shell-style `spawn` behavior.
 
 YAML `go:` configuration is for Go test binaries compiled with `go test -c`. It builds argv entries in this order: executable, optional `-test.*` profiling/trace/coverage flags, command, then parameters. Parameter strings are parsed into argv words with shell-style quoting, but the argv entries are executed without shell interpretation.
 

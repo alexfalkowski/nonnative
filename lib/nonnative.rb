@@ -94,7 +94,7 @@ require 'nonnative/close_all_socket_pair'
 require 'nonnative/delay_socket_pair'
 require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/socket_pair_factory'
-require 'nonnative/go_command'
+require 'nonnative/go_executable'
 require 'nonnative/cucumber'
 require 'nonnative/header'
 
@@ -154,9 +154,23 @@ module Nonnative
       File.readlines(path).select { |l| predicate.call(l) }
     end
 
+    # Builds a Go test executable command string with optional profiling/trace/coverage flags.
+    #
+    # Use this when passing a command string directly to `spawn`.
+    #
+    # @param tools [Array<String>] enabled tool names (e.g. `["prof", "trace", "cover"]`)
+    # @param output [String] directory where outputs should be written
+    # @param exec [String] the test binary (or wrapper) to execute
+    # @param cmd [String] the command argument passed to the test binary
+    # @param params [Array<String>] extra parameter strings for the command
+    # @return [String] executable command string
+    def go_command(tools, output, exec, cmd, *params)
+      Nonnative::GoExecutable.new(tools, exec, output).command(cmd, *params)
+    end
+
     # Builds a Go test executable argv array with optional profiling/trace/coverage flags.
     #
-    # This is used when process configuration specifies a `go` section.
+    # Use this when passing argv entries directly to `spawn`.
     #
     # @param tools [Array<String>] enabled tool names (e.g. `["prof", "trace", "cover"]`)
     # @param output [String] directory where outputs should be written
@@ -164,8 +178,8 @@ module Nonnative
     # @param cmd [String] the command argument passed to the test binary
     # @param params [Array<String>] extra parameter strings for the command
     # @return [Array<String>] executable argv entries
-    def go_executable_args(tools, output, exec, cmd, *params)
-      Nonnative::GoCommand.new(tools, exec, output).executable_args(cmd, *params)
+    def go_argv(tools, output, exec, cmd, *params)
+      Nonnative::GoExecutable.new(tools, exec, output).argv(cmd, *params)
     end
 
     # Returns an HTTP client for common health/readiness endpoints.

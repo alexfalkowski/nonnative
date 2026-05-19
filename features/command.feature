@@ -2,8 +2,8 @@
 Feature: Command
   Verify commands are formatted correctly when they run.
 
-  Scenario: Go command with parameters
-    When I create a go command with:
+  Scenario: Go argv with parameters
+    When I create a go argv with:
       | output     | reports          |
       | executable | thisshouldbelong |
       | command    | server           |
@@ -14,8 +14,8 @@ Feature: Command
       | command    | server           |
       | parameters | --level=info     |
 
-  Scenario: Go command with shell-style parameter words
-    When I create a go command with:
+  Scenario: Go argv with shell-style parameter words
+    When I create a go argv with:
       | output     | reports                    |
       | executable | thisshouldbelong           |
       | command    | server                     |
@@ -26,8 +26,20 @@ Feature: Command
       | command    | server                     |
       | parameters | -i,file:.config/server.yml |
 
-  Scenario: Go command without parameters
-    When I create a go command with:
+  Scenario: Go command string
+    When I create a go command string with:
+      | output     | reports                    |
+      | executable | thisshouldbelong           |
+      | command    | client                     |
+      | parameters | -i,file:.config/client.yml |
+    Then I should have a valid go command string with:
+      | output     | reports                    |
+      | executable | thisshouldbelong           |
+      | command    | client                     |
+      | parameters | -i,file:.config/client.yml |
+
+  Scenario: Go argv without parameters
+    When I create a go argv with:
       | output     | reports          |
       | executable | thisshouldbelong |
       | command    | server           |
