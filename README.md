@@ -787,7 +787,7 @@ Nonnative.configure do |config|
 end
 ```
 
-YAML `go:` configuration is for Go test binaries compiled with `go test -c`. It builds argv entries in this order: executable, optional `-test.*` profiling/trace/coverage flags, command, then parameters. The argv entries are executed without shell interpretation.
+YAML `go:` configuration is for Go test binaries compiled with `go test -c`. It builds argv entries in this order: executable, optional `-test.*` profiling/trace/coverage flags, command, then parameters. Parameter strings are parsed into argv words with shell-style quoting, but the argv entries are executed without shell interpretation.
 
 To get this to work you will need to create a `main_test.go` file with these contents:
 
@@ -826,8 +826,7 @@ processes:
       executable: your_binary
       command: sub_command
       parameters:
-        - --config
-        - config.yaml
+        - "-i file:.config/server.yml"
     timeout: 5
     port: 8000
     log: go.log
