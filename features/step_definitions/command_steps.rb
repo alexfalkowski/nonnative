@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
-When('I create a go command with:') do |table|
+When('I create a go argv with:') do |table|
   rows = table.rows_hash
   params = rows['parameters']
   params = nil if params == ''
 
-  @exec_path = Nonnative.go_executable_args([], rows['output'], rows['executable'], rows['command'], params)
+  @exec_path = Nonnative.go_argv([], rows['output'], rows['executable'], rows['command'], params)
+end
+
+When('I create a go command string with:') do |table|
+  rows = table.rows_hash
+  params = rows['parameters']
+  params = params.split(',') unless params == ''
+
+  @exec_path = Nonnative.go_command([], rows['output'], rows['executable'], rows['command'], *params)
 end
 
 When('I load the go configuration') do
@@ -19,6 +27,11 @@ end
 Then('I should have a valid go command argv with:') do |table|
   expect(@exec_path).to be_an(Array)
   expect_valid_go_command(table, @exec_path)
+end
+
+Then('I should have a valid go command string with:') do |table|
+  expect(@exec_path).to be_a(String)
+  expect_valid_go_command(table, Shellwords.split(@exec_path))
 end
 
 def expect_valid_go_command(table, parts)
