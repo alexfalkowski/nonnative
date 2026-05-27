@@ -25,6 +25,56 @@ of dependencies.
 - Benchmarks only: `make benchmarks`
 - Cleanup: `make clean-dep`, `make clean-reports`
 
+## Intentional Design Choices
+
+- Root `make` compatibility is GNU Make 4+/`gmake` oriented through the shared
+  `bin/build/make/*.mak` fragments. Do not flag GNU Make 3.81 parsing failures
+  as code issues unless the task is explicitly about supporting GNU Make 3.81.
+- The configured HTTP proxy feature intentionally uses the external
+  `www.afalkowski.com` host through `features/support/http_proxy_server.rb`.
+  Do not flag this external dependency as a code issue unless the task is
+  explicitly about making HTTP proxy fixtures fully hermetic.
+- `test/Makefile` intentionally consumes the shared Buf make fragment as-is.
+  Do not flag its inherited `breaking` target's `subdir=api` comparison as a
+  code issue unless the task is explicitly about changing test proto breaking
+  checks.
+- `nonnative` is a test-support gem used across many downstream projects.
+  Do not flag the absence of an isolated gem build/install smoke test as a
+  test gap unless the task is explicitly about release packaging or gem
+  publication validation.
+- The Cucumber `@startup` lifecycle tag is exercised by downstream projects
+  that use this gem. Do not flag missing in-repository `@startup` acceptance
+  coverage as a test gap unless the task is explicitly about changing
+  Cucumber startup hook behavior.
+- `Nonnative.go_argv` and `Nonnative.go_command` flag combinations are checked
+  by external/downstream usage. Do not flag missing in-repository exhaustive
+  `-test.*` flag or tool-filtering assertions as a test gap unless the task is
+  explicitly about changing Go command generation.
+- Generated gRPC test stubs under `test/grpc/` are updated on demand when the
+  test proto changes. Do not flag the absence of an automatic generated-stub
+  freshness check as a test gap unless the task is explicitly about changing
+  test proto generation or generated-file validation.
+- Buf linting for the test-only proto module is intentionally not part of the
+  required local validation surface. Do not flag missing root-level validation
+  for `test/buf.yaml` as a test gap unless the task is explicitly about test
+  proto linting or Buf validation.
+- The public proxy reset Cucumber steps and `@reset` hook are tested by
+  external/downstream suites. Do not flag missing in-repository direct proxy
+  reset step coverage as a test gap unless the task is explicitly about
+  changing proxy reset behavior.
+- `Nonnative.clear` configuration and pool reset behavior is covered by
+  external/downstream suites. Do not flag missing in-repository assertions for
+  configuration or pool clearing as a test gap unless the task is explicitly
+  about changing clear/reset lifecycle behavior.
+- Full repository validation is expected to run both regular features and
+  benchmark-tagged lifecycle scenarios. Do not flag rollback/timeout lifecycle
+  coverage living under `features/benchmark.feature` as a test gap unless the
+  task is explicitly about changing validation target composition.
+- Service proxy round-trip behavior is validated by downstream projects that
+  use `nonnative` against real dependencies. Do not flag the in-repository
+  service proxy success scenario's connection-only assertion as a test gap
+  unless the task is explicitly about changing service proxy forwarding.
+
 ## Runtime Model
 
 Public entry point: `lib/nonnative.rb`.

@@ -160,4 +160,18 @@ Then('I should receive the {string} request details from the local http proxy se
     'content_type' => 'application/json',
     'content_length' => '12'
   )
+  expect(body).to include(expected_inspect_headers(verb))
+end
+
+def expected_inspect_headers(verb)
+  case verb
+  when 'POST'
+    { 'authorization' => Nonnative::Header.auth_basic('test:test').fetch(:authorization) }
+  when 'PUT', 'DELETE'
+    { 'authorization' => Nonnative::Header.auth_bearer('token').fetch(:authorization) }
+  when 'PATCH'
+    { 'user_agent' => Nonnative::Header.http_user_agent('test 1.0').fetch(:user_agent) }
+  else
+    {}
+  end
 end

@@ -238,8 +238,10 @@ module Nonnative
       errors = []
       return if @pool.nil?
 
-      errors.concat(@pool.stop do |name, id, result|
+      errors.concat(@pool.stop do |name, values, result|
+        id, stopped = Array(values).then { |v| [v.first, v.fetch(1, true)] }
         errors << "Stopped #{name} with id #{id}, though did not respond in time" unless result
+        errors << "Stopped #{name} with id #{id}, though the process did not exit in time" unless stopped
       end)
       nil
     rescue StandardError => e
@@ -302,8 +304,10 @@ module Nonnative
       errors = []
       return errors if @pool.nil?
 
-      errors.concat(@pool.rollback do |name, id, result|
+      errors.concat(@pool.rollback do |name, values, result|
+        id, stopped = Array(values).then { |v| [v.first, v.fetch(1, true)] }
         errors << "Rollback failed for #{name} with id #{id}, because it did not stop in time" unless result
+        errors << "Rollback failed for #{name} with id #{id}, because the process did not exit in time" unless stopped
       end)
     rescue StandardError => e
       errors << unexpected_lifecycle_error(:rollback, e)

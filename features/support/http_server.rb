@@ -32,7 +32,9 @@ module Nonnative
             method: request.request_method,
             body: request.body.read,
             content_type: request.media_type,
-            content_length: request.content_length
+            content_length: request.content_length,
+            authorization: request.env['HTTP_AUTHORIZATION'],
+            user_agent: request.env['HTTP_USER_AGENT']
           }
         end
       end

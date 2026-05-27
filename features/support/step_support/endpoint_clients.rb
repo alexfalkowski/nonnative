@@ -17,11 +17,15 @@ module Nonnative
         end
 
         def tcp_client_for_process(name)
-          Nonnative::Features::TCPClient.new(configured_process(name).port)
+          process = configured_process(name)
+
+          Nonnative::Features::TCPClient.new(process.host, process.port)
         end
 
         def tcp_client_for_server(name)
-          Nonnative::Features::TCPClient.new(configured_server(name).port)
+          server = configured_server(name)
+
+          Nonnative::Features::TCPClient.new(server.host, server.port)
         end
 
         def http_client_for_server(name)

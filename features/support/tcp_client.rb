@@ -3,12 +3,13 @@
 module Nonnative
   module Features
     class TCPClient
-      def initialize(port)
+      def initialize(host, port)
+        @host = host || '127.0.0.1'
         @port = port
       end
 
       def request(msg)
-        s = TCPSocket.open('0.0.0.0', @port)
+        s = TCPSocket.open(@host, @port)
         s.puts msg
         response = s.gets.chomp
         s.close

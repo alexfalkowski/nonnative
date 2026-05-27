@@ -151,7 +151,7 @@ module Nonnative
       servers = cfg.servers || []
       servers.each do |fd|
         server do |s|
-          s.klass = Object.const_get(fd.class)
+          s.klass = Object.const_get(server_class_name(fd))
           runner_attributes(s, fd)
 
           proxy s, fd.proxy
@@ -170,6 +170,11 @@ module Nonnative
           proxy s, fd.proxy
         end
       end
+    end
+
+    def server_class_name(server)
+      values = server.to_h
+      values[:class] || values.fetch('class')
     end
 
     def runner_attributes(runner, loaded)
