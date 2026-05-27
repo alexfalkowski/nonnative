@@ -8,12 +8,25 @@ Given('I configure a pool that raises on stop') do
   Nonnative.pool = Nonnative::Features::StubPool.new(stop_error: StandardError.new('boom on stop'))
 end
 
+Given('I configure a pool with a process that does not exit during stop') do
+  Nonnative.pool = Nonnative::Features::StubPool.new(
+    stop_yields: [['process_1', [123, false], true]]
+  )
+end
+
 Given('I configure a pool that fails to start and raises on rollback') do
   Nonnative.pool = (
     Nonnative::Features::StubPool.new(
       start_errors: ['boom on startup'],
       rollback_error: StandardError.new('boom on rollback')
     )
+  )
+end
+
+Given('I configure a pool that fails to start and has a process that does not exit during rollback') do
+  Nonnative.pool = Nonnative::Features::StubPool.new(
+    start_errors: ['boom on startup'],
+    rollback_yields: [['process_1', [123, false], true]]
   )
 end
 

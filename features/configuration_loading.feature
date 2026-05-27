@@ -11,6 +11,10 @@ Feature: Configuration loading
     Then the configured service "service_1" should use host "127.0.0.1" and port 20006
     And the configured service "service_1" proxy should use host "127.0.0.1" and port 30000
 
+  Scenario: Server YAML class entries resolve to server implementations
+    Given I load a temporary configuration with a server entry
+    Then the configured server "server_1" should use class "Nonnative::Features::TCPServer"
+
   Scenario: Top-level wait does not override runner wait defaults
     Given I load a temporary configuration with a top-level wait and a process
     Then the configured process "default_wait_process" should have wait 0.1

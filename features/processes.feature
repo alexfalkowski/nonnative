@@ -33,6 +33,20 @@ Feature: Process runners
     Then I should receive a TCP "test" response from the process
     And the argv process shell side effect should not happen
 
+  Scenario: Explicit process environment overrides the parent environment
+    Given the parent environment variable "STRING" is "parent"
+    When I start a process runner with environment "STRING" set to "configured"
+    Then the process environment output should be "configured"
+
+  @config
+  Scenario: YAML process argv commands and environment are applied
+    Given I configure the system through configuration with a YAML argv process
+    And I start the system
+    When I send "test" with the TCP client "yaml_argv_process" to the process
+    Then I should receive a TCP "test" response from the process
+    And the YAML argv process shell side effect should not happen
+    And the YAML process environment output should be "configured"
+
   @proxy @reset
   Scenario: A delayed process proxy still allows TCP responses
     Given I configure the system programmatically with processes

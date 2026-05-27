@@ -41,14 +41,19 @@ module Nonnative
     #
     # The process is signalled using the configured signal (defaults to `INT` when not set).
     #
-    # @return [Integer, nil] the pid that was stopped (or `nil` if the process was never started)
+    # @return [Array<(Integer, Boolean)>]
+    #   a tuple of:
+    #   - the pid that was stopped (or `nil` if the process was never started)
+    #   - whether the process exited before the configured timeout
     def stop
+      stopped = true
+
       if process_exists?
         process_kill
-        wait_stop
+        stopped = !wait_stop.nil?
       end
 
-      pid
+      [pid, stopped]
     ensure
       proxy.stop
     end
@@ -84,10 +89,6 @@ module Nonnative
     def process_spawn
       environment = service.environment.to_h
       environment = environment.transform_keys(&:to_s).transform_values(&:to_s)
-
-      environment.each_key do |k|
-        environment[k] = ENV.fetch(k, nil) || environment[k]
-      end
 
       command = Array(service.command.call)
 

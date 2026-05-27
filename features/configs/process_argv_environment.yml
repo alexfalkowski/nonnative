@@ -1,0 +1,19 @@
+version: "1.0"
+name: test
+url: http://localhost:4567
+log: test/reports/nonnative.log
+processes:
+  - name: yaml_argv_process
+    command:
+      - features/support/bin/environment_start
+      - "12402; touch test/reports/yaml_argv_side_effect"
+      - test/reports/yaml_environment.txt
+    timeout: 5
+    wait: 0.2
+    host: 127.0.0.1
+    port: 12402
+    log: test/reports/12_402.log
+    signal: INT
+    environment:
+      STRING: configured
+      RUBYOPT: ""

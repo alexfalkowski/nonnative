@@ -36,6 +36,21 @@ Given('I load a temporary configuration with split service and proxy endpoints')
   YAML
 end
 
+Given('I load a temporary configuration with a server entry') do
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: test
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+    servers:
+      - name: server_1
+        class: Nonnative::Features::TCPServer
+        timeout: 1
+        port: 12401
+        log: test/reports/server_1.log
+  YAML
+end
+
 Given('I load a temporary configuration with a top-level wait and a process') do
   load_temporary_configuration(<<~YAML)
     version: "1.0"
@@ -110,6 +125,12 @@ Then('the configured service {string} proxy should use host {string} and port {i
 
   expect(service.proxy.host).to eq(host)
   expect(service.proxy.port).to eq(port)
+end
+
+Then('the configured server {string} should use class {string}') do |name, klass|
+  server = configured_server(name)
+
+  expect(server.klass).to eq(Object.const_get(klass))
 end
 
 Then('the configured process {string} should have wait {float}') do |name, wait|
