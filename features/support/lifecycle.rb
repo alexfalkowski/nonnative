@@ -2,14 +2,12 @@
 
 module Nonnative
   module Features
-    class StubPool
+    class FailingPool
       def initialize(**options)
         @start_error = options.fetch(:start_error, nil)
         @stop_error = options.fetch(:stop_error, nil)
         @rollback_error = options.fetch(:rollback_error, nil)
         @start_errors = options.fetch(:start_errors, [])
-        @stop_yields = options.fetch(:stop_yields, [])
-        @rollback_yields = options.fetch(:rollback_yields, [])
       end
 
       def start
@@ -21,15 +19,11 @@ module Nonnative
       def stop
         raise @stop_error if @stop_error
 
-        @stop_yields.each { |values| yield(*values) } if block_given?
-
         []
       end
 
       def rollback
         raise @rollback_error if @rollback_error
-
-        @rollback_yields.each { |values| yield(*values) } if block_given?
 
         []
       end

@@ -2,9 +2,9 @@
 
 module Nonnative
   module Features
-    module StepSupport
-      module LocalHTTPProxyConfiguration
-        LOCAL_HTTP_PROXY_DEFINITIONS = [
+    module Context
+      module HTTPProxyConfiguration
+        SERVERS = [
           {
             name: 'http_proxy_target',
             klass: 'Nonnative::Features::HTTPServer',
@@ -25,7 +25,7 @@ module Nonnative
 
         def configure_local_http_proxy_server
           configure_with_defaults(url: 'http://localhost:4570') do |config|
-            LOCAL_HTTP_PROXY_DEFINITIONS.each { |definition| add_local_http_proxy_server(config, definition) }
+            SERVERS.each { |definition| add_local_http_proxy_server(config, definition) }
           end
         end
 

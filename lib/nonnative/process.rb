@@ -50,7 +50,7 @@ module Nonnative
 
       if process_exists?
         process_kill
-        stopped = !wait_stop.nil?
+        stopped = wait_stop != false
       end
 
       [pid, stopped]

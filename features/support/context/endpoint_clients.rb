@@ -2,7 +2,7 @@
 
 module Nonnative
   module Features
-    module StepSupport
+    module Context
       module EndpointClients
         def configured_process(name)
           Nonnative.configuration.process_by_name(name)

@@ -2,9 +2,9 @@
 
 module Nonnative
   module Features
-    module StepSupport
+    module Context
       module ServiceConfiguration
-        SERVICE_DEFINITIONS = [
+        SERVICES = [
           {
             name: 'service_1',
             host: '127.0.0.1',
@@ -22,7 +22,7 @@ module Nonnative
 
         def configure_services_programmatically
           configure_with_defaults do |config|
-            SERVICE_DEFINITIONS.each { |definition| add_service(config, definition) }
+            SERVICES.each { |definition| add_service(config, definition) }
           end
         end
 

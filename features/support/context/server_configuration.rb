@@ -2,9 +2,9 @@
 
 module Nonnative
   module Features
-    module StepSupport
+    module Context
       module ServerConfiguration
-        SERVER_DEFINITIONS = [
+        SERVERS = [
           {
             name: 'tcp_server_1',
             klass: 'Nonnative::Features::TCPServer',
@@ -84,7 +84,7 @@ module Nonnative
           Nonnative::Features::Application.health_status = 200
 
           configure_with_defaults do |config|
-            SERVER_DEFINITIONS.each { |definition| add_server(config, definition) }
+            SERVERS.each { |definition| add_server(config, definition) }
           end
         end
 

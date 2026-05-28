@@ -3,28 +3,54 @@
 
 require 'socket'
 
-sleep 1 # Simulate delay
+port = ARGV.fetch(0).to_i
+options = ARGV.drop(1)
+environment_output = options.find { |option| option != 'linger' }
+linger = options.include?('linger')
+closing = false
+
+File.write(environment_output, ENV.fetch('STRING', '')) if environment_output && !environment_output.empty?
 
 Signal.trap 'INT' do
-  exit
+  closing = true
+  exit unless linger
 end
 
 Signal.trap 'TERM' do
-  exit
+  closing = true
+  exit unless linger
 end
+
+sleep 1 # Simulate delay
+
+server = TCPServer.new('0.0.0.0', port)
 
 $stdout.sync = true
 
-Socket.tcp_server_loop('0.0.0.0', ARGV[0].to_i) do |conn, _addr|
-  Thread.new do
-    loop do
-      line = conn.readline.strip
-      puts "Received line: '#{line}'"
-
-      conn.puts(line)
-      puts "Sent line: '#{line}'"
-    end
-  rescue EOFError
-    conn.close
+Thread.new do
+  loop do
+    server.close if closing && !server.closed?
+    sleep 0.01
+  rescue IOError
+    nil
   end
+end
+
+begin
+  loop do
+    conn = server.accept
+    Thread.new(conn) do |socket|
+      loop do
+        line = socket.readline.strip
+        puts "Received line: '#{line}'"
+
+        socket.puts(line)
+        puts "Sent line: '#{line}'"
+      end
+    rescue EOFError
+      socket.close
+    end
+  end
+rescue IOError, Errno::EBADF
+  sleep if linger
 end

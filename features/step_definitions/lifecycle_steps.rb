@@ -1,33 +1,37 @@
 # frozen_string_literal: true
 
 Given('I configure a pool that raises on start') do
-  Nonnative.pool = Nonnative::Features::StubPool.new(start_error: StandardError.new('boom on start'))
+  Nonnative.pool = Nonnative::Features::FailingPool.new(start_error: StandardError.new('boom on start'))
 end
 
 Given('I configure a pool that raises on stop') do
-  Nonnative.pool = Nonnative::Features::StubPool.new(stop_error: StandardError.new('boom on stop'))
+  Nonnative.pool = Nonnative::Features::FailingPool.new(stop_error: StandardError.new('boom on stop'))
 end
 
-Given('I configure a pool with a process that does not exit during stop') do
-  Nonnative.pool = Nonnative::Features::StubPool.new(
-    stop_yields: [['process_1', [123, false], true]]
-  )
+Given('I configure the system with a process that does not exit during stop') do
+  @lingering_processes = ['no_exit_process']
+
+  configure_with_defaults do |config|
+    add_lingering_process(config, 'no_exit_process', 12_410)
+  end
 end
 
 Given('I configure a pool that fails to start and raises on rollback') do
   Nonnative.pool = (
-    Nonnative::Features::StubPool.new(
+    Nonnative::Features::FailingPool.new(
       start_errors: ['boom on startup'],
       rollback_error: StandardError.new('boom on rollback')
     )
   )
 end
 
-Given('I configure a pool that fails to start and has a process that does not exit during rollback') do
-  Nonnative.pool = Nonnative::Features::StubPool.new(
-    start_errors: ['boom on startup'],
-    rollback_yields: [['process_1', [123, false], true]]
-  )
+Given('I configure the system with a process that does not exit during rollback') do
+  @lingering_processes = ['rollback_process']
+
+  configure_with_defaults do |config|
+    add_lingering_process(config, 'rollback_process', 12_411)
+    add_fast_exit_process(config, 'rollback_failure_process', 12_412)
+  end
 end
 
 When('I start a pool with a failing unnamed service') do
@@ -118,9 +122,19 @@ Then('starting the system should raise an error containing {string}') do |messag
   expect(@start_error.message).to include(message)
 end
 
+Then('starting the system should raise an error containing:') do |table|
+  expect(@start_error).to be_a(Nonnative::StartError)
+  table.raw.flatten.each { |message| expect(@start_error.message).to include(message) }
+end
+
 Then('stopping the system should raise an error containing {string}') do |message|
   expect(@stop_error).to be_a(Nonnative::StopError)
   expect(@stop_error.message).to include(message)
+end
+
+Then('stopping the system should raise an error containing:') do |table|
+  expect(@stop_error).to be_a(Nonnative::StopError)
+  table.raw.flatten.each { |message| expect(@stop_error.message).to include(message) }
 end
 
 Then('the lifecycle errors should include {string}') do |message|
@@ -164,8 +178,52 @@ Then('the subprocess output should be:') do |table|
   expect(@subprocess_stdout.lines.map(&:chomp).reject(&:empty?)).to eq(table.raw.flatten)
 end
 
+After do
+  cleanup_lingering_processes
+end
+
 def build_pool(services: [], servers: [], processes: [])
   Nonnative::Features::SeededPool.new(Nonnative::Configuration.new, services:, servers:, processes:)
+end
+
+def add_lingering_process(config, name, port)
+  config.process do |process|
+    process.name = name
+    process.command = -> { ['features/support/bin/start', port.to_s, 'linger'] }
+    process.timeout = 2
+    process.wait = 0.1
+    process.host = '127.0.0.1'
+    process.port = port
+    process.log = "test/reports/#{port}.log"
+    process.signal = 'INT'
+  end
+end
+
+def add_fast_exit_process(config, name, port)
+  config.process do |process|
+    process.name = name
+    process.command = -> { [RbConfig.ruby, '-e', 'exit 0'] }
+    process.timeout = 1
+    process.wait = 0.1
+    process.host = '127.0.0.1'
+    process.port = port
+    process.log = "test/reports/#{port}.log"
+    process.signal = 'INT'
+  end
+end
+
+def cleanup_lingering_processes
+  @lingering_processes&.each { |name| cleanup_lingering_process(name) }
+end
+
+def cleanup_lingering_process(name)
+  pid = Nonnative.pool&.process_by_name(name)&.instance_variable_get(:@pid)
+  return unless pid
+
+  Process.kill('KILL', pid)
+  Process.wait(pid)
+rescue Nonnative::NotFoundError, Errno::ESRCH, Errno::ECHILD
+  nil
 end
 
 def build_ordered_pool(events)
