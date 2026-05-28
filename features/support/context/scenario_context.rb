@@ -2,7 +2,7 @@
 
 module Nonnative
   module Features
-    module StepSupport
+    module Context
       module ScenarioContext
         def configure_with_defaults(url: DEFAULT_URL, log: DEFAULT_LOG)
           Nonnative.configure do |config|

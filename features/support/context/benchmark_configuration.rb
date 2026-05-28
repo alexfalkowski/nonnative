@@ -2,7 +2,7 @@
 
 module Nonnative
   module Features
-    module StepSupport
+    module Context
       module BenchmarkConfiguration
         def configure_no_op_server
           configure_with_defaults do |config|

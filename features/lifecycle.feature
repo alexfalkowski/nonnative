@@ -13,9 +13,12 @@ Feature: Lifecycle
     Then stopping the system should raise an error containing "Stop failed with StandardError: boom on stop"
 
   Scenario: Process stop timeouts are reported even when shutdown ports close
-    Given I configure a pool with a process that does not exit during stop
+    Given I configure the system with a process that does not exit during stop
+    And I start the system
     When I attempt to stop the system
-    Then stopping the system should raise an error containing "Stopped process_1 with id 123, though the process did not exit in time"
+    Then stopping the system should raise an error containing:
+      | Stopped no_exit_process with id       |
+      | though the process did not exit in time |
 
   Scenario: Rollback errors are included in start failures
     Given I configure a pool that fails to start and raises on rollback
@@ -23,9 +26,11 @@ Feature: Lifecycle
     Then starting the system should raise an error containing "Rollback failed with StandardError: boom on rollback"
 
   Scenario: Process rollback timeouts are included in start failures
-    Given I configure a pool that fails to start and has a process that does not exit during rollback
+    Given I configure the system with a process that does not exit during rollback
     When I attempt to start the system
-    Then starting the system should raise an error containing "Rollback failed for process_1 with id 123, because the process did not exit in time"
+    Then starting the system should raise an error containing:
+      | Rollback failed for rollback_process with id |
+      | because the process did not exit in time     |
 
   Scenario: Pool starts services before servers and processes
     When I start a pool with ordered services, servers, and processes

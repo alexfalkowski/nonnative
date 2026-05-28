@@ -2,9 +2,9 @@
 
 module Nonnative
   module Features
-    module StepSupport
+    module Context
       module ProcessConfiguration
-        PROCESS_DEFINITIONS = [
+        PROCESSES = [
           {
             name: 'start_1',
             command: -> { 'features/support/bin/start 20_005' },
@@ -35,7 +35,7 @@ module Nonnative
 
         def configure_processes_programmatically
           configure_with_defaults do |config|
-            PROCESS_DEFINITIONS.each { |definition| add_process(config, definition) }
+            PROCESSES.each { |definition| add_process(config, definition) }
           end
         end
 

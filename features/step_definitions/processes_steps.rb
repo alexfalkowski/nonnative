@@ -17,7 +17,7 @@ Given('I configure the system through configuration with a YAML argv process') d
   FileUtils.rm_f(@yaml_argv_side_effect_path)
   FileUtils.rm_f(@yaml_environment_output_path)
 
-  load_configuration('features/configs/process_argv_environment.yml')
+  load_configuration('features/configs/process_argv.yml')
 end
 
 Given('I configure the system programmatically with an argv process') do

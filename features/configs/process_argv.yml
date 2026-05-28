@@ -5,7 +5,7 @@ log: test/reports/nonnative.log
 processes:
   - name: yaml_argv_process
     command:
-      - features/support/bin/environment_start
+      - features/support/bin/start
       - "12402; touch test/reports/yaml_argv_side_effect"
       - test/reports/yaml_environment.txt
     timeout: 5
