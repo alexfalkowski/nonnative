@@ -36,6 +36,26 @@ Given('I load a temporary configuration with split service and proxy endpoints')
   YAML
 end
 
+Given('I load a temporary configuration with proxy options') do
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: test
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+    services:
+      - name: service_1
+        host: 127.0.0.1
+        port: 20006
+        proxy:
+          kind: fault_injection
+          host: 127.0.0.1
+          port: 30000
+          log: test/reports/proxy_service_1.log
+          options:
+            delay: 5
+  YAML
+end
+
 Given('I load a temporary configuration with a server entry') do
   load_temporary_configuration(<<~YAML)
     version: "1.0"
@@ -108,6 +128,13 @@ When('I attempt to load a temporary configuration with a Ruby object tag') do
   end
 end
 
+When('I attempt to load a temporary configuration with {string} YAML') do |kind|
+  @configuration_error = nil
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(malformed_yaml(kind))
+  end
+end
+
 Then('the configuration should contain {int} service entry and {int} process entries') do |services, processes|
   expect(Nonnative.configuration.services.size).to eq(services)
   expect(Nonnative.configuration.processes.size).to eq(processes)
@@ -125,6 +152,12 @@ Then('the configured service {string} proxy should use host {string} and port {i
 
   expect(service.proxy.host).to eq(host)
   expect(service.proxy.port).to eq(port)
+end
+
+Then('the configured service {string} proxy option {string} should be {int}') do |name, option, value|
+  service = configured_service(name)
+
+  expect(service.proxy.options[option.to_sym]).to eq(value)
 end
 
 Then('the configured server {string} should use class {string}') do |name, klass|
@@ -163,9 +196,25 @@ Then('loading the configuration should fail with a YAML safety error') do
   expect(@configuration_error).to be_a(Psych::DisallowedClass)
 end
 
+Then('loading the configuration should fail with an argument error containing {string}') do |message|
+  expect(@configuration_error).to be_a(ArgumentError)
+  expect(@configuration_error.message).to include(message)
+end
+
 def load_temporary_configuration(contents)
   path = "test/reports/#{SecureRandom.hex(4)}.yml"
   File.write(path, contents)
 
   load_configuration(path)
+end
+
+def malformed_yaml(kind)
+  case kind
+  when 'scalar root'
+    'not a mapping'
+  when 'syntax error'
+    "name: [unterminated\n"
+  else
+    raise ArgumentError, "Unknown malformed YAML kind '#{kind}'"
+  end
 end

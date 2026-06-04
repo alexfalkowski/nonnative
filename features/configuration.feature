@@ -11,6 +11,10 @@ Feature: Configuration loading
     Then the configured service "service_1" should use host "127.0.0.1" and port 20006
     And the configured service "service_1" proxy should use host "127.0.0.1" and port 30000
 
+  Scenario: YAML maps proxy options
+    Given I load a temporary configuration with proxy options
+    Then the configured service "service_1" proxy option "delay" should be 5
+
   Scenario: Server YAML class entries resolve to server implementations
     Given I load a temporary configuration with a server entry
     Then the configured server "server_1" should use class "Nonnative::Features::TCPServer"
@@ -32,3 +36,12 @@ Feature: Configuration loading
   Scenario: YAML configuration rejects arbitrary Ruby objects
     When I attempt to load a temporary configuration with a Ruby object tag
     Then loading the configuration should fail with a YAML safety error
+
+  Scenario Outline: YAML configuration rejects malformed documents
+    When I attempt to load a temporary configuration with "<kind>" YAML
+    Then loading the configuration should fail with an argument error containing "<message>"
+
+    Examples:
+      | kind         | message                     |
+      | scalar root  | must contain a YAML mapping |
+      | syntax error | YAML syntax error occurred  |
