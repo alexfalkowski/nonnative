@@ -155,7 +155,7 @@ After do
   end
 end
 
-Then('I should receive a invalid data that is not {string} for client response with TCP') do |message|
+Then('I should receive an invalid data response that is not {string} with TCP') do |message|
   expect(@response).to be_a(String)
   expect(@response).not_to be_empty
   expect(@response).not_to eq(message)

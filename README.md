@@ -348,7 +348,7 @@ end
 
 ##### Proxy
 
-The system allows you to define a http proxy for external systems, e.g api.github.com
+The system allows you to define an HTTP proxy for external systems, e.g. `api.github.com`.
 
 Define your server:
 
@@ -539,14 +539,14 @@ end
 
 #### Proxies
 
-We allow different proxies to be configured. These proxies can be used to simulate all kind of situations. The proxies that can be configured are:
+These proxies can simulate different situations. Available proxy kinds are:
 
 - `none` (this is the default)
 - `fault_injection`
 
 For `fault_injection`, keep the runner `host`/`port` as the client-facing endpoint and use nested `proxy.host`/`proxy.port` for the upstream target behind the proxy.
 
-##### Proxies Processes
+##### Process Proxies
 
 Add this to an existing process configuration:
 
@@ -598,7 +598,7 @@ processes:
         delay: 5
 ```
 
-##### Proxies Servers
+##### Server Proxies
 
 Add this to an existing server configuration:
 
@@ -650,7 +650,7 @@ servers:
         delay: 5
 ```
 
-##### Proxies Services
+##### Service Proxies
 
 Add this to an existing service configuration:
 
@@ -711,7 +711,7 @@ The `fault_injection` proxy allows you to simulate failures by injecting them. W
 Clients connect to the runner `host`/`port`, while the proxy forwards traffic to nested `proxy.host`/`proxy.port`.
 
 - `close_all` - Closes the socket as soon as it connects.
-- `delay` - This delays the communication between the connection. Default is 2 secs can be configured through options.
+- `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through options.
 - `invalid_data` - This takes the input and rearranges it to produce invalid data.
 
 ###### Fault Injection Processes

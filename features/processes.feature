@@ -83,7 +83,7 @@ Feature: Process runners
     And I start the system
     And I set the proxy for process 'start_1' to 'invalid_data'
     When I send "test" with the TCP client 'start_1' to the process
-    Then I should receive a invalid data that is not "test" for client response with TCP
+    Then I should receive an invalid data response that is not "test" with TCP
     And I should see a log entry of "Received line: 'test'" for process 'start_1'
 
   @proxy

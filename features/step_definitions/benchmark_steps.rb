@@ -29,12 +29,5 @@ Then('stopping the system should happen within an adequate time') do
 end
 
 Then('the port {string} should be closed') do |port|
-  wait_for do
-    socket = TCPSocket.new('127.0.0.1', port.to_i)
-    socket.close
-
-    false
-  rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-    true
-  end.to eq(true)
+  wait_for { port_closed?(port.to_i) }.to eq(true)
 end

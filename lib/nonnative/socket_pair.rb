@@ -65,18 +65,18 @@ module Nonnative
       ::TCPSocket.new(proxy.host, proxy.port)
     end
 
-    # Pipes data from `socket1` to `socket2` if `socket1` is readable.
+    # Pipes data from `source_socket` to `destination_socket` when the source is readable.
     #
     # @param ready [Array<Array<IO>>] the result from `select`
-    # @param socket1 [IO] readable side
-    # @param socket2 [IO] writable side
+    # @param source_socket [IO] readable side
+    # @param destination_socket [IO] writable side
     # @return [Boolean] whether the piping loop should terminate
-    def pipe?(ready, socket1, socket2)
-      if ready[0].include?(socket1)
-        data = read(socket1)
+    def pipe?(ready, source_socket, destination_socket)
+      if ready[0].include?(source_socket)
+        data = read(source_socket)
         return true if data.empty?
 
-        write socket2, data
+        write destination_socket, data
       end
 
       false

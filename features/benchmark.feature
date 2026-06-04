@@ -1,6 +1,6 @@
 @benchmark @slow @clear
 Feature: Benchmark
-  Allows us to check that start and stop responds in adequate time
+  Allows us to check that start and stop complete in adequate time
 
   @config
   @manual

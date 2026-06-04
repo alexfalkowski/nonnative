@@ -8,7 +8,7 @@ Given('I configure the system through configuration with servers') do
   load_configuration('features/configs/servers.yml')
 end
 
-Given('I configure the system programmatically with a local http proxy server') do
+Given('I configure the system programmatically with a local HTTP proxy server') do
   configure_local_http_proxy_server
 end
 
@@ -16,7 +16,7 @@ When('I send a message with the tcp client to the servers') do
   @responses = %w[tcp_server_1 tcp_server_2].map { |name| tcp_client_for_server(name).request('') }
 end
 
-When('I send a message with the http client to the servers') do
+When('I send a message with the HTTP client to the servers') do
   @responses = %w[http_server_1 http_server_2].flat_map do |name|
     client = http_client_for_server(name)
 
@@ -24,7 +24,7 @@ When('I send a message with the http client to the servers') do
   end
 end
 
-When('I send a message with the grpc client to the servers') do
+When('I send a message with the gRPC client to the servers') do
   @responses = %w[grpc_server_1 grpc_server_2].map do |name|
     grpc_client_for_server(name).say_hello(greeter_request)
   end
@@ -39,7 +39,7 @@ When('the health endpoint reports service unavailable') do
   Nonnative::Features::Application.health_status = 503
 end
 
-When('I send a not found message with the http client to the servers') do
+When('I send a not found message with the HTTP client to the servers') do
   @response = http_client_for_server('http_server_1').not_found
 end
 
@@ -53,7 +53,7 @@ When('I register a custom proxy kind') do
 end
 
 Then('I should get a proxy not found error') do
-  expect(@error).to be_a_kind_of(Nonnative::NotFoundError)
+  expect(@error).to be_a(Nonnative::NotFoundError)
 end
 
 Then('the custom proxy kind should resolve to the custom proxy') do
@@ -64,15 +64,15 @@ Then('the custom proxy kind should resolve to the custom proxy') do
   expect(actual).to eq(Nonnative::Features::CustomProxy)
 end
 
-When('I send a successful message to the http proxy server') do
+When('I send a successful message to the HTTP proxy server') do
   @response = RestClient::Resource.new("http://localhost:#{configured_server('http_proxy_server').port}").get
 end
 
-When('I send a not found message to the http proxy server') do
+When('I send a not found message to the HTTP proxy server') do
   @response = http_client_for_server('http_proxy_server').hello_get
 end
 
-When('I send a {string} request with body {string} to the local http proxy server') do |verb, body|
+When('I send a {string} request with body {string} to the local HTTP proxy server') do |verb, body|
   @response = http_client_for_server('local_http_proxy_server').inspect_request(verb.downcase, body)
 end
 
@@ -92,14 +92,14 @@ When('I greet over gRPC with a short deadline') do
   capture_result { grpc_client_for_server('grpc_server_1', timeout: 1).say_hello(greeter_request) }
 end
 
-Then('I should receive a http {string} response') do |response|
+Then('I should receive an HTTP {string} response') do |response|
   @responses.each do |r|
     expect(r.code).to eq(200)
     expect(r.body).to eq(response.to_json)
   end
 end
 
-Then('I should receive a grpc {string} response') do |response|
+Then('I should receive a gRPC {string} response') do |response|
   @responses.each do |r|
     expect(r.message).to eq(response)
   end
@@ -110,7 +110,7 @@ Then('I should receive a successful {string} response') do |_|
   expect(@response.code).to eq(200)
 end
 
-Then('I should receive a http not found response') do
+Then('I should receive an HTTP not found response') do
   expect(@error).to be_nil
   expect(@response.code).to eq(404)
 end
@@ -119,59 +119,40 @@ Then('I should receive a connection error for metrics response with HTTP') do
   expect(@error).to be_a(StandardError)
 end
 
-Then('I should receive a delay error for hello response with HTTP') do
+Then('I should receive the delay error for hello response with HTTP') do
   expect(@error).to be_a(RestClient::Exceptions::ReadTimeout)
 end
 
-Then('I should receive a invalid data error for hello response with HTTP') do
+Then('I should receive the invalid data error for hello response with HTTP') do
   expect(@error).to be_a(Net::HTTPBadResponse)
 end
 
-Then('I should receive a connection error for being greeted with gRPC') do
+Then('I should receive the connection error for being greeted with gRPC') do
   expect(@error).to be_a(GRPC::Unavailable)
 end
 
-Then('I should receive a delay error for being greeted with gRPC') do
+Then('I should receive the delay error for being greeted with gRPC') do
   expect(@error).to be_a(GRPC::DeadlineExceeded)
 end
 
-Then('I should receive a invalid data error for being greeted with gRPC') do
+Then('I should receive the invalid data error for being greeted with gRPC') do
   expect(@error).to be_a(StandardError)
 end
 
-Then('I should receive a successful response from the http proxy server') do
+Then('I should receive a successful response from the HTTP proxy server') do
   expect(@error).to be_nil
   expect(@response.code).to eq(200)
 end
 
-Then('I should receive a not found response from the http proxy server') do
+Then('I should receive a not found response from the HTTP proxy server') do
   expect(@error).to be_nil
   expect(@response.code).to eq(404)
 end
 
-Then('I should receive the {string} request details from the local http proxy server') do |verb|
+Then('I should receive the {string} request details from the local HTTP proxy server') do |verb|
   body = JSON.parse(@response.body)
 
   expect(@error).to be_nil
   expect(@response.code).to eq(200)
-  expect(body).to include(
-    'method' => verb,
-    'body' => 'Hello World!',
-    'content_type' => 'application/json',
-    'content_length' => '12'
-  )
-  expect(body).to include(expected_inspect_headers(verb))
-end
-
-def expected_inspect_headers(verb)
-  case verb
-  when 'POST'
-    { 'authorization' => Nonnative::Header.auth_basic('test:test').fetch(:authorization) }
-  when 'PUT', 'DELETE'
-    { 'authorization' => Nonnative::Header.auth_bearer('token').fetch(:authorization) }
-  when 'PATCH'
-    { 'user_agent' => Nonnative::Header.http_user_agent('test 1.0').fetch(:user_agent) }
-  else
-    {}
-  end
+  expect(body).to match_inspected_proxy_request(verb, 'Hello World!')
 end
