@@ -123,14 +123,14 @@ module Nonnative
 
     def add_processes(cfg)
       processes = cfg.processes || []
-      processes.each do |fd|
-        process do |d|
-          d.command = command(fd)
-          d.signal = fd.signal
-          d.environment = fd.environment
-          runner_attributes(d, fd)
+      processes.each do |loaded_process|
+        process do |process_config|
+          process_config.command = command(loaded_process)
+          process_config.signal = loaded_process.signal
+          process_config.environment = loaded_process.environment
+          runner_attributes(process_config, loaded_process)
 
-          proxy d, fd.proxy
+          assign_proxy(process_config, loaded_process.proxy)
         end
       end
     end
@@ -149,25 +149,25 @@ module Nonnative
 
     def add_servers(cfg)
       servers = cfg.servers || []
-      servers.each do |fd|
-        server do |s|
-          s.klass = Object.const_get(server_class_name(fd))
-          runner_attributes(s, fd)
+      servers.each do |loaded_server|
+        server do |server_config|
+          server_config.klass = Object.const_get(server_class_name(loaded_server))
+          runner_attributes(server_config, loaded_server)
 
-          proxy s, fd.proxy
+          assign_proxy(server_config, loaded_server.proxy)
         end
       end
     end
 
     def add_services(cfg)
       services = cfg.services || []
-      services.each do |fd|
-        service do |s|
-          s.name = fd.name
-          s.host = fd.host if fd.host
-          s.port = fd.port
+      services.each do |loaded_service|
+        service do |service_config|
+          service_config.name = loaded_service.name
+          service_config.host = loaded_service.host if loaded_service.host
+          service_config.port = loaded_service.port
 
-          proxy s, fd.proxy
+          assign_proxy(service_config, loaded_service.proxy)
         end
       end
     end
@@ -186,20 +186,20 @@ module Nonnative
       runner.log = loaded.log if loaded.respond_to?(:log)
     end
 
-    def proxy(runner, proxy)
-      return unless proxy
+    def assign_proxy(runner, loaded_proxy)
+      return unless loaded_proxy
 
-      p = {
-        kind: proxy.kind,
-        port: proxy.port,
-        log: proxy.log,
-        options: proxy.options
+      proxy_attributes = {
+        kind: loaded_proxy.kind,
+        port: loaded_proxy.port,
+        log: loaded_proxy.log,
+        options: loaded_proxy.options
       }
 
-      p[:host] = proxy.host if proxy.host
-      p[:wait] = proxy.wait if proxy.wait
+      proxy_attributes[:host] = loaded_proxy.host if loaded_proxy.host
+      proxy_attributes[:wait] = loaded_proxy.wait if loaded_proxy.wait
 
-      runner.proxy = p
+      runner.proxy = proxy_attributes
     end
   end
 end

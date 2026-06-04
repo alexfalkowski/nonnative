@@ -35,7 +35,7 @@ module Nonnative
       errors = []
 
       errors.concat(service_lifecycle(services, :start, :start))
-      [servers, processes].each { |t| errors.concat(process(t, :start, :open?, :start, &)) }
+      [servers, processes].each { |runners| errors.concat(run_lifecycle_checks(runners, :start, :open?, :start, &)) }
 
       errors
     end
@@ -51,7 +51,7 @@ module Nonnative
     def stop(&)
       errors = []
 
-      [processes, servers].each { |t| errors.concat(process(t, :stop, :closed?, :stop, &)) }
+      [processes, servers].each { |runners| errors.concat(run_lifecycle_checks(runners, :stop, :closed?, :stop, &)) }
       errors.concat(service_lifecycle(services, :stop, :stop))
 
       errors
@@ -69,7 +69,9 @@ module Nonnative
     def rollback(&)
       errors = []
 
-      [existing_processes, existing_servers].each { |t| errors.concat(process(t, :stop, :closed?, :stop, &)) }
+      [existing_processes, existing_servers].each do |runners|
+        errors.concat(run_lifecycle_checks(runners, :stop, :closed?, :stop, &))
+      end
       errors.concat(service_lifecycle(existing_services, :stop, :stop))
 
       errors
@@ -177,15 +179,15 @@ module Nonnative
       end
     end
 
-    def process(all, type_method, port_method, action, &)
+    def run_lifecycle_checks(runners, lifecycle_method, port_method, action, &)
       checks = []
       errors = []
 
-      all.each do |type, port|
-        values = type.send(type_method)
-        checks << [type, values, Thread.new { check_port(port, port_method) }]
+      runners.each do |runner, port|
+        values = runner.send(lifecycle_method)
+        checks << [runner, values, Thread.new { check_port(port, port_method) }]
       rescue StandardError => e
-        errors << lifecycle_error(action, type, e)
+        errors << lifecycle_error(action, runner, e)
       end
 
       errors.concat(yield_results(checks, action, &))

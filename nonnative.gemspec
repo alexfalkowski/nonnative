@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Alejandro Falkowski']
   spec.email         = ['alexrfalkowski@gmail.com']
 
-  spec.summary       = 'Allows you to keep using the power of ruby to test other systems'
+  spec.summary       = 'Allows you to keep using the power of Ruby to test other systems'
   spec.description   = spec.summary
   spec.homepage      = 'https://github.com/alexfalkowski/nonnative'
   spec.license       = 'MIT'

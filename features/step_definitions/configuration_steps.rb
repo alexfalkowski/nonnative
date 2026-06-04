@@ -200,21 +200,3 @@ Then('loading the configuration should fail with an argument error containing {s
   expect(@configuration_error).to be_a(ArgumentError)
   expect(@configuration_error.message).to include(message)
 end
-
-def load_temporary_configuration(contents)
-  path = "test/reports/#{SecureRandom.hex(4)}.yml"
-  File.write(path, contents)
-
-  load_configuration(path)
-end
-
-def malformed_yaml(kind)
-  case kind
-  when 'scalar root'
-    'not a mapping'
-  when 'syntax error'
-    "name: [unterminated\n"
-  else
-    raise ArgumentError, "Unknown malformed YAML kind '#{kind}'"
-  end
-end

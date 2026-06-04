@@ -6,9 +6,7 @@ module Nonnative
   module Features
     class GRPCServer < Nonnative::GRPCServer
       def initialize(service)
-        svc = Greeter.new
-
-        super(svc, service)
+        super(Greeter.new, service)
       end
     end
   end

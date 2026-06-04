@@ -50,9 +50,10 @@ module Nonnative
 
     # Executes the upstream request and returns the response.
     #
-    # @param verb [String] HTTP verb name (e.g. `"get"`)
-    # @param uri [String] upstream URI
-    # @param opts [Hash] RestClient options (e.g. headers)
+    # @param method [Symbol] HTTP verb name (e.g. `:get`)
+    # @param url [String] upstream URL
+    # @param headers [Hash] request headers
+    # @param payload [String, nil] request payload
     # @return [RestClient::Response] response for error statuses, otherwise RestClient return value
     def api_response(method:, url:, headers:, payload: nil)
       options = { method:, url:, headers: }

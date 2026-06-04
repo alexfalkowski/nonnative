@@ -36,7 +36,3 @@ end
 Then('I should have a successful connection') do
   expect(@service).not_to be_closed
 end
-
-def connection_error?(response)
-  response.nil? || response.is_a?(IOError) || response.is_a?(SystemCallError)
-end

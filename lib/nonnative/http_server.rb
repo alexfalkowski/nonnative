@@ -66,6 +66,6 @@ module Nonnative
 
     private
 
-    attr_reader :queue, :server
+    attr_reader :server
   end
 end

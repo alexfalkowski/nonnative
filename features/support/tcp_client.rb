@@ -8,11 +8,11 @@ module Nonnative
         @port = port
       end
 
-      def request(msg)
-        s = TCPSocket.open(@host, @port)
-        s.puts msg
-        response = s.gets.chomp
-        s.close
+      def request(message)
+        socket = TCPSocket.open(@host, @port)
+        socket.puts message
+        response = socket.gets.chomp
+        socket.close
         response
       rescue StandardError => e
         e

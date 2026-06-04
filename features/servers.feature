@@ -20,20 +20,20 @@ Feature: Servers
   Scenario: HTTP servers return hello responses
     Given I configure the system programmatically with servers
     And I start the system
-    When I send a message with the http client to the servers
-    Then I should receive a http "Hello World!" response
+    When I send a message with the HTTP client to the servers
+    Then I should receive an HTTP "Hello World!" response
 
   Scenario: HTTP servers return not found for unknown routes
     Given I configure the system programmatically with servers
     And I start the system
-    When I send a not found message with the http client to the servers
-    Then I should receive a http not found response
+    When I send a not found message with the HTTP client to the servers
+    Then I should receive an HTTP not found response
 
   Scenario: gRPC servers greet clients
     Given I configure the system programmatically with servers
     And I start the system
-    When I send a message with the grpc client to the servers
-    Then I should receive a grpc "Hello World!" response
+    When I send a message with the gRPC client to the servers
+    Then I should receive a gRPC "Hello World!" response
 
   Scenario: The health endpoint reports the servers as healthy
     Given I configure the system programmatically with servers
@@ -79,7 +79,7 @@ Feature: Servers
     And I start the system
     And I set the proxy for server 'http_server_1' to '<state>'
     When I request hello over HTTP
-    Then I should receive a <failure> error for hello response with HTTP
+    Then I should receive the <failure> error for hello response with HTTP
 
     Examples:
       | state        | failure      |
@@ -92,7 +92,7 @@ Feature: Servers
     And I start the system
     And I set the proxy for server 'grpc_server_1' to '<state>'
     When I <request>
-    Then I should receive a <failure> error for being greeted with gRPC
+    Then I should receive the <failure> error for being greeted with gRPC
 
     Examples:
       | state        | request                               | failure      |
