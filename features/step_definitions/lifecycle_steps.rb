@@ -40,6 +40,12 @@ When('I start a pool with a failing unnamed service') do
   ).start
 end
 
+When('I stop a pool with a failing unnamed service') do
+  @lifecycle_errors = build_pool(
+    services: [Nonnative::Features::FailingService.new(stop_error: 'boom on service stop')]
+  ).stop
+end
+
 When('I start a pool with ordered services, servers, and processes') do
   @lifecycle_events = []
   @lifecycle_errors = build_ordered_pool(@lifecycle_events).start
@@ -135,6 +141,10 @@ end
 Then('stopping the system should raise an error containing:') do |table|
   expect(@stop_error).to be_a(Nonnative::StopError)
   table.raw.flatten.each { |message| expect(@stop_error.message).to include(message) }
+end
+
+Then('stopping the system should not raise an error') do
+  expect(@stop_error).to be_nil
 end
 
 Then('the lifecycle errors should include {string}') do |message|

@@ -52,6 +52,10 @@ Feature: Lifecycle
     When I start a pool with a failing unnamed service
     Then the lifecycle errors should include "Start failed for Nonnative::Features::FailingService: StandardError - boom on service start"
 
+  Scenario: Pool collects service stop lifecycle errors for unnamed services
+    When I stop a pool with a failing unnamed service
+    Then the lifecycle errors should include "Stop failed for Nonnative::Features::FailingService: StandardError - boom on service stop"
+
   Scenario: Pool collects readiness errors for unnamed runners
     When I start a pool with a failing unnamed port check
     Then the lifecycle errors should include "Readiness check failed for Nonnative::Features::FailingRunner: StandardError - boom on readiness"

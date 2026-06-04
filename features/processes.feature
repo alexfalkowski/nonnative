@@ -33,6 +33,20 @@ Feature: Process runners
     Then I should receive a TCP "test" response from the process
     And the argv process shell side effect should not happen
 
+  Scenario: Legacy string process commands invoke the shell
+    Given I configure the system programmatically with a shell string process
+    And I start the system
+    When I send "test" with the TCP client "shell_string_process" to the process
+    Then I should receive a TCP "test" response from the process
+    And the shell string process side effect should happen
+
+  Scenario: Processes without a stop signal use the default signal
+    Given I configure the system programmatically with a process that has no stop signal
+    And I start the system
+    When I attempt to stop the system
+    Then stopping the system should not raise an error
+    And the port "12414" should be closed
+
   Scenario: Explicit process environment overrides the parent environment
     Given the parent environment variable "STRING" is "parent"
     When I start a process runner with environment "STRING" set to "configured"
@@ -70,6 +84,7 @@ Feature: Process runners
     And I set the proxy for process 'start_1' to 'invalid_data'
     When I send "test" with the TCP client 'start_1' to the process
     Then I should receive a invalid data that is not "test" for client response with TCP
+    And I should see a log entry of "Received line: 'test'" for process 'start_1'
 
   @proxy
   Scenario: Looking up a missing process proxy fails

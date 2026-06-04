@@ -19,6 +19,7 @@ Feature: Benchmark
     Given I configure the system programmatically with a no op server
     When I attempt to start the system
     Then starting the system should raise an error
+    And starting the system should raise an error containing "though did not respond in time"
 
   @manual
   Scenario: Start nonnative with a start error will rollback started runners
@@ -39,6 +40,7 @@ Feature: Benchmark
     When I start the system
     And I attempt to stop the system
     Then stopping the system should raise an error
+    And stopping the system should raise an error containing "though did not respond in time"
 
   Scenario: Stop nonnative with a stop error will still stop later runners
     Given I configure the system programmatically with a stop error server

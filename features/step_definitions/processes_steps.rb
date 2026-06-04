@@ -36,6 +36,38 @@ Given('I configure the system programmatically with an argv process') do
   end
 end
 
+Given('I configure the system programmatically with a shell string process') do
+  @shell_string_side_effect_path = "test/reports/#{SecureRandom.hex(4)}-shell-string"
+  configure_with_defaults do |config|
+    config.process do |process|
+      process.name = 'shell_string_process'
+      process.command = lambda {
+        "printf configured > #{@shell_string_side_effect_path}; exec features/support/bin/start 12413"
+      }
+      process.timeout = 5
+      process.wait = 0.1
+      process.host = '127.0.0.1'
+      process.port = 12_413
+      process.log = 'test/reports/12_413.log'
+      process.signal = 'INT'
+    end
+  end
+end
+
+Given('I configure the system programmatically with a process that has no stop signal') do
+  configure_with_defaults do |config|
+    config.process do |process|
+      process.name = 'default_signal_process'
+      process.command = -> { ['features/support/bin/start', '12414'] }
+      process.timeout = 5
+      process.wait = 0.1
+      process.host = '127.0.0.1'
+      process.port = 12_414
+      process.log = 'test/reports/12_414.log'
+    end
+  end
+end
+
 Given('the parent environment variable {string} is {string}') do |name, value|
   @previous_environment ||= {}
   @previous_environment[name] = ENV.fetch(name, nil)
@@ -91,6 +123,10 @@ Then('the argv process shell side effect should not happen') do
   expect(File.exist?(@argv_side_effect_path)).to be(false)
 end
 
+Then('the shell string process side effect should happen') do
+  expect(File.read(@shell_string_side_effect_path)).to eq('configured')
+end
+
 Then('the YAML argv process shell side effect should not happen') do
   expect(File.exist?(@yaml_argv_side_effect_path)).to be(false)
 end
@@ -120,5 +156,7 @@ After do
 end
 
 Then('I should receive a invalid data that is not {string} for client response with TCP') do |message|
+  expect(@response).to be_a(String)
+  expect(@response).not_to be_empty
   expect(@response).not_to eq(message)
 end
