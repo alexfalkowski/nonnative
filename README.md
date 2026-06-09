@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/nonnative.svg)](https://badge.fury.io/rb/nonnative)
 [![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
 
-# Nonnative
+# 🧪 Nonnative
 
 Nonnative is a Ruby-first harness for end-to-end testing of systems implemented in other languages.
 
@@ -15,7 +15,10 @@ It helps you:
 
 Once started, you can test however you like (TCP, HTTP, gRPC, etc).
 
-## Installation
+## 📦 Installation
+
+> [!IMPORTANT]
+> Nonnative currently supports Ruby `>= 4.0.0` and `< 5.0.0`.
 
 Add this line to your application's Gemfile:
 
@@ -35,11 +38,14 @@ Or install it yourself as:
 gem install nonnative
 ```
 
-## Usage
+## 🚀 Usage
 
 Nonnative is configured via `Nonnative.configure` (programmatic) or `config.load_file(...)` (YAML).
 YAML configuration is loaded as data only: ERB is not evaluated and arbitrary Ruby objects are not
 deserialized.
+
+> [!CAUTION]
+> Treat YAML configuration as plain data. ERB is not evaluated and arbitrary Ruby object tags are rejected.
 
 High-level configuration fields:
 - `version`: configuration version (example: `"1.0"`).
@@ -61,9 +67,55 @@ Process/server fields:
 
 For `fault_injection`, the nested `proxy.host`/`proxy.port` describe the upstream target behind the proxy. Nested `proxy.host` also defaults to `127.0.0.1`. In-process server implementations typically bind there via `proxy.host` / `proxy.port`.
 
+> [!IMPORTANT]
+> When a proxy is enabled, tests and clients connect to the runner `host`/`port`; the nested `proxy.host`/`proxy.port` is the upstream target behind the proxy.
+
 Nonnative readiness and shutdown checks are TCP-only. Configure ports that are dedicated to the test run; if another process is already listening on the same `host`/`port`, results are undefined.
 
-### Lifecycle strategies (Cucumber integration)
+> [!WARNING]
+> Readiness and shutdown checks only prove that a TCP port opened or closed. They do not verify HTTP status, gRPC health, schema readiness, migrations, or application-specific health.
+
+Start and stop Nonnative around the test scope that should own the configured runners:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.load_file('configuration.yml')
+end
+
+Nonnative.start
+# run tests...
+Nonnative.stop
+```
+
+`Nonnative.start` starts services first, then servers and processes. `Nonnative.stop` stops processes and servers first, then services. If startup fails, Nonnative rolls back runners that already started and raises `Nonnative::StartError`; shutdown failures raise `Nonnative::StopError`.
+
+> [!NOTE]
+> `Nonnative.clear` clears memoized configuration, logger, observability client, and pool. Use it before reconfiguring Nonnative in the same Ruby process.
+
+### 📈 Observability
+
+`Nonnative.observability` is an HTTP client for common service endpoints under the configured `name` and `url`:
+
+- `health(...)`: calls `/<name>/healthz`.
+- `liveness(...)`: calls `/<name>/livez`.
+- `readiness(...)`: calls `/<name>/readyz`.
+- `metrics(...)`: calls `/<name>/metrics`.
+
+Each method accepts RestClient options such as `headers`, `open_timeout`, and `read_timeout`.
+
+```ruby
+response = Nonnative.observability.health(
+  headers: { content_type: :json, accept: :json },
+  open_timeout: 2,
+  read_timeout: 2
+)
+
+expect(response.code).to eq(200)
+```
+
+### 🔁 Lifecycle strategies (Cucumber integration)
 
 Nonnative ships Cucumber hooks (when loaded) that support these tags/strategies:
 - `@startup`: start before scenario; stop after scenario
@@ -84,7 +136,7 @@ The repo’s own Cucumber suite also uses taxonomy tags to classify coverage:
 
 Requiring `nonnative` is enough; the Cucumber hooks and step definitions are installed lazily once Cucumber’s Ruby DSL is ready.
 
-If you want “start once per test run”, require:
+If you want "start once per test run", require:
 
 ```ruby
 require 'nonnative/startup'
@@ -92,11 +144,13 @@ require 'nonnative/startup'
 
 This calls `Nonnative.start` immediately and registers an `at_exit` stop.
 
-### Processes
+### ⚙️ Processes
 
 A process is some sort of command that you would run locally.
-Commands can be strings or argv arrays. String commands preserve legacy shell semantics, while argv arrays
-avoid shell interpretation and are preferred for new configuration.
+Programmatic `p.command` values must be callables that return a shell string or an argv array. YAML `command` values can be scalars or lists and are wrapped internally. String commands preserve legacy shell semantics, while argv arrays avoid shell interpretation and are preferred for new configuration.
+
+> [!TIP]
+> Prefer argv arrays for new process commands. Use shell strings only when you intentionally need shell parsing, expansion, or redirection.
 
 Set it up programmatically:
 
@@ -180,9 +234,9 @@ With cucumber you can also verify how much memory is used by the process:
 Then the process 'start_1' should consume less than '25mb' of memory
 ```
 
-### Servers
+### 🖥️ Servers
 
-A server is a dependency to some external API.
+A server is an in-process Ruby fake or helper server that Nonnative starts in a thread. Use servers for dependencies that are easiest to model inside the test process, such as small TCP, HTTP, or gRPC fakes.
 
 Define your server:
 
@@ -277,7 +331,7 @@ Nonnative.configure do |config|
 end
 ```
 
-#### HTTP
+#### 🌐 HTTP
 
 Define your server:
 
@@ -346,7 +400,7 @@ Nonnative.configure do |config|
 end
 ```
 
-##### Proxy
+##### 🔀 Proxy
 
 The system allows you to define an HTTP proxy for external systems, e.g. `api.github.com`.
 
@@ -411,7 +465,7 @@ Nonnative.configure do |config|
 end
 ```
 
-#### gRPC
+#### 📡 gRPC
 
 Define your server:
 
@@ -480,9 +534,11 @@ Nonnative.configure do |config|
 end
 ```
 
-### Services
+### 🧩 Services
 
 A service is an external dependency to your system that you **do not** want Nonnative to start (no OS process, no Ruby thread). Services are primarily useful when paired with proxies, because they let you inject failures into dependencies that are managed elsewhere (e.g. a DB running in Docker).
+
+Services do not get process lifecycle management or TCP readiness/shutdown checks from Nonnative. They only provide a named runner and optional proxy lifecycle for a dependency that another tool already manages.
 
 Set it up programmatically:
 
@@ -537,16 +593,25 @@ Nonnative.configure do |config|
 end
 ```
 
-#### Proxies
+#### 🕸️ Proxies
 
 These proxies can simulate different situations. Available proxy kinds are:
 
 - `none` (this is the default)
 - `fault_injection`
 
+> [!WARNING]
+> Unknown proxy kinds fall back to `none`. If fault injection is not taking effect, check the `kind` spelling or register the custom kind before loading the configuration.
+
+Custom proxy kinds can be registered through `Nonnative.proxies`:
+
+```ruby
+Nonnative.proxies['custom'] = CustomProxy
+```
+
 For `fault_injection`, keep the runner `host`/`port` as the client-facing endpoint and use nested `proxy.host`/`proxy.port` for the upstream target behind the proxy.
 
-##### Process Proxies
+##### ⚙️ Process Proxies
 
 Add this to an existing process configuration:
 
@@ -598,7 +663,7 @@ processes:
         delay: 5
 ```
 
-##### Server Proxies
+##### 🖥️ Server Proxies
 
 Add this to an existing server configuration:
 
@@ -650,7 +715,7 @@ servers:
         delay: 5
 ```
 
-##### Service Proxies
+##### 🧩 Service Proxies
 
 Add this to an existing service configuration:
 
@@ -704,7 +769,7 @@ services:
         delay: 5
 ```
 
-##### Fault Injection
+##### 🧪 Fault Injection
 
 The `fault_injection` proxy allows you to simulate failures by injecting them. We currently support the following:
 
@@ -712,9 +777,9 @@ Clients connect to the runner `host`/`port`, while the proxy forwards traffic to
 
 - `close_all` - Closes the socket as soon as it connects.
 - `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through options.
-- `invalid_data` - This takes the input and rearranges it to produce invalid data.
+- `invalid_data` - Forwards client requests unchanged, then corrupts upstream responses before they reach the client.
 
-###### Fault Injection Processes
+###### ⚙️ Fault Injection Processes
 
 Set it up programmatically:
 
@@ -733,7 +798,7 @@ Given I set the proxy for process 'process_1' to 'close_all'
 Then I should reset the proxy for process 'process_1'
 ```
 
-###### Fault Injection Servers
+###### 🖥️ Fault Injection Servers
 
 Set it up programmatically:
 
@@ -752,7 +817,7 @@ Given I set the proxy for server 'server_1' to 'close_all'
 Then I should reset the proxy for server 'server_1'
 ```
 
-###### Fault Injection Services
+###### 🧩 Fault Injection Services
 
 Set it up programmatically:
 
@@ -771,7 +836,7 @@ Given I set the proxy for service 'service_1' to 'close_all'
 Then I should reset the proxy for service 'service_1'
 ```
 
-### Go
+### 🐹 Go
 
 As we love using Go as a language for services we have added support to start binaries with defined parameters.
 
@@ -790,6 +855,9 @@ end
 Use `Nonnative.go_argv(...)` when a process should execute without shell interpretation, and `Nonnative.go_command(...)` when a caller needs a command string for Ruby's shell-style `spawn` behavior.
 
 YAML `go:` configuration is for Go test binaries compiled with `go test -c`. It builds argv entries in this order: executable, optional `-test.*` profiling/trace/coverage flags, command, then parameters. Parameter strings are parsed into argv words with shell-style quoting, but the argv entries are executed without shell interpretation.
+
+> [!IMPORTANT]
+> If `tools` is omitted or empty, Nonnative enables all Go tools: `prof`, `trace`, and `cover`. Provide a subset, such as `tools: [cover]`, to limit the generated `-test.*` flags.
 
 To get this to work you will need to create a `main_test.go` file with these contents:
 
