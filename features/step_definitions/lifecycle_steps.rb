@@ -34,6 +34,21 @@ Given('I configure the system with a process that does not exit during rollback'
   end
 end
 
+Given('I configure the system with a process that opens only one configured port') do
+  configure_with_defaults do |config|
+    config.process do |process|
+      process.name = 'partial_ports_process'
+      process.command = -> { ['features/support/bin/start', '12415'] }
+      process.timeout = 1
+      process.wait = 0.1
+      process.host = '127.0.0.1'
+      process.ports = [12_415, 12_416]
+      process.log = 'test/reports/12_415.log'
+      process.signal = 'INT'
+    end
+  end
+end
+
 When('I start a pool with a failing unnamed service') do
   @lifecycle_errors = build_pool(
     services: [Nonnative::Features::FailingService.new(start_error: 'boom on service start')]

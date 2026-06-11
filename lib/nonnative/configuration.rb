@@ -19,7 +19,7 @@ module Nonnative
   #       p.name = 'api'
   #       p.command = -> { './bin/api' }
   #       p.host = '127.0.0.1'
-  #       p.port = 8080
+  #       p.ports = [8080, 9090]
   #       p.timeout = 10
   #       p.log = 'api.log'
   #     end
@@ -165,7 +165,7 @@ module Nonnative
         service do |service_config|
           service_config.name = loaded_service.name
           service_config.host = loaded_service.host if loaded_service.host
-          service_config.port = loaded_service.port
+          assign_ports(service_config, loaded_service)
 
           assign_proxy(service_config, loaded_service.proxy)
         end
@@ -182,8 +182,15 @@ module Nonnative
       runner.timeout = loaded.timeout
       runner.wait = loaded.wait if loaded.wait
       runner.host = loaded.host if loaded.host
-      runner.port = loaded.port
+      assign_ports(runner, loaded)
       runner.log = loaded.log if loaded.respond_to?(:log)
+    end
+
+    def assign_ports(runner, loaded)
+      values = loaded.to_h
+      raise ArgumentError, "Use 'ports' instead of 'port' for runner '#{loaded.name}'" if values.key?(:port) || values.key?('port')
+
+      runner.ports = loaded.ports if loaded.ports
     end
 
     def assign_proxy(runner, loaded_proxy)

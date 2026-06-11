@@ -10,7 +10,7 @@ module Nonnative
             klass: 'Nonnative::Features::HTTPServer',
             timeout: 1,
             host: '127.0.0.1',
-            port: 4571,
+            ports: [4571],
             log: 'test/reports/http_proxy_target.log'
           },
           {
@@ -18,7 +18,7 @@ module Nonnative
             klass: 'Nonnative::Features::LocalHTTPProxyServer',
             timeout: 1,
             host: '127.0.0.1',
-            port: 4570,
+            ports: [4570],
             log: 'test/reports/local_http_proxy_server.log'
           }
         ].freeze
@@ -37,7 +37,7 @@ module Nonnative
             server.klass = Object.const_get(definition[:klass])
             server.timeout = definition[:timeout]
             server.host = definition[:host]
-            server.port = definition[:port]
+            server.ports = definition[:ports]
             server.log = definition[:log]
           end
         end

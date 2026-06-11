@@ -7,7 +7,8 @@ servers:
     class: Nonnative::Features::TCPServer
     timeout: 1
     host: 127.0.0.1
-    port: 12323
+    ports:
+      - 12323
     log: test/reports/tcp_server_1.log
     proxy:
       kind: fault_injection
@@ -17,7 +18,8 @@ servers:
   - name: tcp_server_2
     class: Nonnative::Features::TCPServer
     timeout: 1
-    port: 12324
+    ports:
+      - 12324
     log: test/reports/tcp_server_2.log
     proxy:
       kind: fault_injection
@@ -27,5 +29,6 @@ servers:
   - name: http_proxy_server
     class: Nonnative::Features::HTTPProxyServer
     timeout: 3
-    port: 4567
+    ports:
+      - 4567
     log: test/reports/http_proxy_server.log

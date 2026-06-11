@@ -9,7 +9,7 @@ module Nonnative
   # - On start: services first, then servers/processes (in parallel port-check threads)
   # - On stop: processes/servers first, then services
   #
-  # Readiness and shutdown are determined via TCP port checks ({Nonnative::Port#open?} / {Nonnative::Port#closed?}).
+  # Readiness and shutdown are determined via TCP port checks ({Nonnative::Ports#open?} / {Nonnative::Ports#closed?}).
   #
   # @see Nonnative.start
   # @see Nonnative.stop
@@ -131,7 +131,7 @@ module Nonnative
 
       @processes = []
       configuration.processes.each do |p|
-        @processes << [Nonnative::Process.new(p), Nonnative::Port.new(p)]
+        @processes << [Nonnative::Process.new(p), Nonnative::Ports.new(p)]
       end
 
       @processes
@@ -142,7 +142,7 @@ module Nonnative
 
       @servers = []
       configuration.servers.each do |s|
-        @servers << [s.klass.new(s), Nonnative::Port.new(s)]
+        @servers << [s.klass.new(s), Nonnative::Ports.new(s)]
       end
 
       @servers

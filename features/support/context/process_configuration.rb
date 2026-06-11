@@ -10,7 +10,7 @@ module Nonnative
             command: -> { 'features/support/bin/start 20_005' },
             timeout: 5,
             host: '127.0.0.1',
-            port: 12_321,
+            ports: [12_321],
             log: 'test/reports/12_321.log',
             signal: 'INT',
             environment: { 'STRING' => 'true' },
@@ -25,9 +25,9 @@ module Nonnative
           },
           {
             name: 'start_2',
-            command: -> { 'features/support/bin/start 12_322' },
+            command: -> { 'features/support/bin/start 12_322,12_325' },
             timeout: 5,
-            port: 12_322,
+            ports: [12_322, 12_325],
             log: 'test/reports/12_322.log',
             signal: 'TERM'
           }
@@ -48,7 +48,7 @@ module Nonnative
         end
 
         def apply_process_definition(process, definition)
-          %i[name command timeout wait host port log signal environment proxy].each do |attribute|
+          %i[name command timeout wait host ports log signal environment proxy].each do |attribute|
             assign_process_attribute(process, definition, attribute)
           end
         end

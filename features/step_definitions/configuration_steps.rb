@@ -9,7 +9,8 @@ Given('I load a temporary configuration with a service entry') do
     services:
       - name: service_1
         host: 127.0.0.1
-        port: 20006
+        ports:
+          - 20006
         proxy:
           kind: fault_injection
           host: 127.0.0.1
@@ -27,12 +28,31 @@ Given('I load a temporary configuration with split service and proxy endpoints')
     services:
       - name: service_1
         host: 127.0.0.1
-        port: 20006
+        ports:
+          - 20006
         proxy:
           kind: fault_injection
           host: 127.0.0.1
           port: 30000
           log: test/reports/proxy_service_1.log
+  YAML
+end
+
+Given('I load a temporary configuration with multiple runner ports') do
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: test
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+    processes:
+      - name: multi_port_process
+        command: features/support/bin/start 12_420,12_421
+        timeout: 1
+        host: 127.0.0.1
+        ports:
+          - 12420
+          - 12421
+        log: test/reports/12_420.log
   YAML
 end
 
@@ -45,7 +65,8 @@ Given('I load a temporary configuration with proxy options') do
     services:
       - name: service_1
         host: 127.0.0.1
-        port: 20006
+        ports:
+          - 20006
         proxy:
           kind: fault_injection
           host: 127.0.0.1
@@ -66,7 +87,8 @@ Given('I load a temporary configuration with a server entry') do
       - name: server_1
         class: Nonnative::Features::TCPServer
         timeout: 1
-        port: 12401
+        ports:
+          - 12401
         log: test/reports/server_1.log
   YAML
 end
@@ -83,7 +105,8 @@ Given('I load a temporary configuration with a top-level wait and a process') do
         command: features/support/bin/start 12_399
         timeout: 1
         host: 127.0.0.1
-        port: 12399
+        ports:
+          - 12399
         log: test/reports/12_399.log
   YAML
 end
@@ -108,7 +131,8 @@ Given('I load a temporary configuration with omitted hosts') do
       - name: default_host_process
         command: features/support/bin/start 12_400
         timeout: 1
-        port: 12400
+        ports:
+          - 12400
         log: test/reports/12_400.log
         proxy:
           kind: fault_injection
@@ -128,6 +152,24 @@ When('I attempt to load a temporary configuration with a Ruby object tag') do
   end
 end
 
+When('I attempt to load a temporary configuration with a singular runner port') do
+  @configuration_error = nil
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(<<~YAML)
+      version: "1.0"
+      name: test
+      url: http://localhost:4567
+      log: test/reports/nonnative.log
+      processes:
+        - name: legacy_port_process
+          command: features/support/bin/start 12_400
+          timeout: 1
+          port: 12400
+          log: test/reports/12_400.log
+    YAML
+  end
+end
+
 When('I attempt to load a temporary configuration with {string} YAML') do |kind|
   @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
@@ -140,11 +182,17 @@ Then('the configuration should contain {int} service entry and {int} process ent
   expect(Nonnative.configuration.processes.size).to eq(processes)
 end
 
-Then('the configured service {string} should use host {string} and port {int}') do |name, host, port|
+Then('the configured service {string} should use host {string} and ports:') do |name, host, table|
   service = configured_service(name)
 
   expect(service.host).to eq(host)
-  expect(service.port).to eq(port)
+  expect(service.ports).to eq(table.raw.flatten.map(&:to_i))
+end
+
+Then('the configured process {string} should use ports:') do |name, table|
+  process = configured_process(name)
+
+  expect(process.ports).to eq(table.raw.flatten.map(&:to_i))
 end
 
 Then('the configured service {string} proxy should use host {string} and port {int}') do |name, host, port|

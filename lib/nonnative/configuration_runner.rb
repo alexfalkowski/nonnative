@@ -15,9 +15,12 @@ module Nonnative
   class ConfigurationRunner
     # @return [String, nil] runner name used for lookup (for example via `pool.process_by_name`)
     # @return [String] host to bind/connect to (defaults to `"127.0.0.1"`)
-    # @return [Integer] port to bind/connect to
+    # @return [Array<Integer>] ports to bind/connect to
     # @return [Numeric] wait interval (seconds) used by runners between lifecycle steps
-    attr_accessor :name, :host, :port, :wait
+    attr_accessor :name, :host, :wait
+
+    # @return [Array<Integer>] client-facing ports used for readiness/shutdown checks
+    attr_reader :ports
 
     # Proxy configuration for this runner.
     #
@@ -31,17 +34,35 @@ module Nonnative
     #
     # Defaults:
     # - `host`: `"127.0.0.1"`
-    # - `port`: `0`
+    # - `ports`: `[0]`
     # - `wait`: `0.1`
     # - `proxy`: a new {Nonnative::ConfigurationProxy} with its own defaults
     #
     # @return [void]
     def initialize
       self.host = '127.0.0.1'
-      self.port = 0
+      self.ports = [0]
       self.wait = 0.1
 
       @proxy = Nonnative::ConfigurationProxy.new
+    end
+
+    # Sets the client-facing ports for this runner.
+    #
+    # @param value [Array<Integer>] ports to check for readiness/shutdown
+    # @return [void]
+    def ports=(value)
+      @ports = Array(value)
+    end
+
+    # Returns the primary client-facing port.
+    #
+    # This preserves a single endpoint for proxy binding and client helpers while the public
+    # configuration contract uses {#ports}.
+    #
+    # @return [Integer]
+    def port
+      ports.first
     end
 
     # Sets proxy configuration using a hash-like value.
