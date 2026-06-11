@@ -165,7 +165,7 @@ module Nonnative
         service do |service_config|
           service_config.name = loaded_service.name
           service_config.host = loaded_service.host if loaded_service.host
-          assign_ports(service_config, loaded_service)
+          assign_service_port(service_config, loaded_service)
 
           assign_proxy(service_config, loaded_service.proxy)
         end
@@ -191,6 +191,13 @@ module Nonnative
       raise ArgumentError, "Use 'ports' instead of 'port' for runner '#{loaded.name}'" if values.key?(:port) || values.key?('port')
 
       runner.ports = loaded.ports if loaded.ports
+    end
+
+    def assign_service_port(service, loaded)
+      values = loaded.to_h
+      raise ArgumentError, "Use 'port' instead of 'ports' for service '#{loaded.name}'" if values.key?(:ports) || values.key?('ports')
+
+      service.port = loaded.port if loaded.port
     end
 
     def assign_proxy(runner, loaded_proxy)

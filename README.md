@@ -58,19 +58,23 @@ High-level configuration fields:
 
 Common runner fields:
 - `name`: runner name used for lookup.
-- `host`/`ports`: client-facing address. `host` defaults to `127.0.0.1`. For processes and servers, this address is also used for readiness/shutdown port checks. When a `fault_injection` proxy is enabled, clients should hit the first configured port.
+- `host`: client-facing host. Defaults to `127.0.0.1`.
 
 Process/server fields:
+- `ports`: client-facing ports. These are also used for readiness/shutdown port checks. When a `fault_injection` proxy is enabled, clients should hit the first configured port.
 - `timeout`: max time (seconds) for readiness/shutdown port checks.
 - `wait`: small sleep (seconds) between lifecycle steps.
 - `log`: per-runner log file used by process output redirection or server implementations.
 
+Service fields:
+- `port`: client-facing proxy port. Services do not get TCP readiness/shutdown checks from Nonnative.
+
 For `fault_injection`, the nested `proxy.host`/`proxy.port` describe the upstream target behind the proxy. Nested `proxy.host` also defaults to `127.0.0.1`. In-process server implementations typically bind there via `proxy.host` / `proxy.port`.
 
 > [!IMPORTANT]
-> When a proxy is enabled, tests and clients connect to the runner `host` and first configured `ports` entry; the nested `proxy.host`/`proxy.port` is the upstream target behind the proxy.
+> When a proxy is enabled, tests and clients connect to the runner `host` and client-facing endpoint (`ports` first entry for processes/servers, `port` for services); the nested `proxy.host`/`proxy.port` is the upstream target behind the proxy.
 
-Nonnative readiness and shutdown checks are TCP-only. Configure ports that are dedicated to the test run; if another process is already listening on the same `host`/`ports` endpoint, results are undefined.
+Nonnative readiness and shutdown checks are TCP-only. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined.
 
 > [!WARNING]
 > Readiness and shutdown checks only prove that a TCP port opened or closed. They do not verify HTTP status, gRPC health, schema readiness, migrations, or application-specific health.
@@ -561,13 +565,13 @@ Nonnative.configure do |config|
   config.service do |s|
     s.name = 'postgres'
     s.host = '127.0.0.1'
-    s.ports = [5432]
+    s.port = 5432
   end
 
   config.service do |s|
     s.name = 'redis'
     s.host = '127.0.0.1'
-    s.ports = [6379]
+    s.port = 6379
   end
 end
 ```
@@ -583,13 +587,11 @@ services:
   -
     name: postgres
     host: 127.0.0.1
-    ports:
-      - 5432
+    port: 5432
   -
     name: redis
     host: 127.0.0.1
-    ports:
-      - 6379
+    port: 6379
 ```
 
 Then load the file with:
@@ -742,7 +744,7 @@ Nonnative.configure do |config|
   config.service do |s|
     s.name = 'redis'
     s.host = '127.0.0.1'
-    s.ports = [16_379]
+    s.port = 16_379
 
     s.proxy = {
       kind: 'fault_injection',
@@ -769,8 +771,7 @@ services:
   -
     name: redis
     host: 127.0.0.1
-    ports:
-      - 16379
+    port: 16379
     proxy:
       kind: fault_injection
       host: 127.0.0.1
@@ -785,7 +786,7 @@ services:
 
 The `fault_injection` proxy allows you to simulate failures by injecting them. We currently support the following:
 
-Clients connect to the runner `host` and first configured `ports` entry, while the proxy forwards traffic to nested `proxy.host`/`proxy.port`.
+Clients connect to the runner `host` and client-facing endpoint, while the proxy forwards traffic to nested `proxy.host`/`proxy.port`.
 
 - `close_all` - Closes the socket as soon as it connects.
 - `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through options.

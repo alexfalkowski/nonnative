@@ -8,8 +8,7 @@ Feature: Configuration loading
 
   Scenario: YAML keeps service and proxy endpoints separate
     Given I load a temporary configuration with split service and proxy endpoints
-    Then the configured service "service_1" should use host "127.0.0.1" and ports:
-      | 20006 |
+    Then the configured service "service_1" should use host "127.0.0.1" and port 20006
     And the configured service "service_1" proxy should use host "127.0.0.1" and port 30000
 
   Scenario: YAML maps multiple runner ports
@@ -18,9 +17,17 @@ Feature: Configuration loading
       | 12420 |
       | 12421 |
 
-  Scenario: YAML rejects singular runner ports
+  Scenario: YAML rejects singular process ports
     When I attempt to load a temporary configuration with a singular runner port
     Then loading the configuration should fail with an argument error containing "Use 'ports' instead of 'port'"
+
+  Scenario: YAML rejects plural service ports
+    When I attempt to load a temporary configuration with plural service ports
+    Then loading the configuration should fail with an argument error containing "Use 'port' instead of 'ports'"
+
+  Scenario: Programmatic configuration rejects plural service ports
+    When I attempt to configure a service with plural ports
+    Then loading the configuration should fail with an argument error containing "Use 'port' instead of 'ports'"
 
   Scenario: YAML maps proxy options
     Given I load a temporary configuration with proxy options

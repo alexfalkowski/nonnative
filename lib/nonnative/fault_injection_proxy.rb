@@ -18,8 +18,8 @@ module Nonnative
   #
   # ## Wiring
   #
-  # When enabled, your test/client should connect to the runner `host` and first configured port (the
-  # proxy endpoint), and the proxy will forward traffic to the upstream target exposed by {#host}:{#port}.
+  # When enabled, your test/client should connect to the runner `host` and primary port (the proxy
+  # endpoint), and the proxy will forward traffic to the upstream target exposed by {#host}:{#port}.
   #
   # ## Configuration
   #
@@ -62,7 +62,7 @@ module Nonnative
 
     # Starts the proxy accept loop in a background thread.
     #
-    # This binds a TCP server on the underlying runner’s `service.host` and first configured port.
+    # This binds a TCP server on the underlying runner’s `service.host` and primary port.
     # Clients connect to that runner endpoint, while upstream traffic is forwarded to {#host}:{#port}.
     #
     # @return [void]
