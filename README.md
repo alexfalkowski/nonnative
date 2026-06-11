@@ -10,7 +10,7 @@ Nonnative is a Ruby-first harness for end-to-end testing of systems implemented 
 It helps you:
 - start **OS processes** (e.g. your Go/Java/Rust service binary),
 - start **in-process Ruby servers** (e.g. small HTTP/TCP/gRPC fakes for dependencies),
-- optionally start **proxies** in front of processes/servers/services for fault-injection,
+- optionally start **service proxies** for fault-injection in front of externally managed dependencies,
 - wait for readiness/shutdown using **TCP port checks**.
 
 Once started, you can test however you like (TCP, HTTP, gRPC, etc).
@@ -54,25 +54,20 @@ High-level configuration fields:
 - `log`: path for the Nonnative logger output.
 - `processes`: child processes to `spawn`.
 - `servers`: in-process Ruby servers started in threads.
-- `services`: external dependencies (proxy-only; no process/thread started by Nonnative).
+- `services`: external dependencies (no process/thread started by Nonnative).
 
 Common runner fields:
 - `name`: runner name used for lookup.
 - `host`: client-facing host. Defaults to `127.0.0.1`.
 
 Process/server fields:
-- `ports`: client-facing ports. These are also used for readiness/shutdown port checks. When a `fault_injection` proxy is enabled, clients should hit the first configured port.
+- `ports`: client-facing ports. These are also used for readiness/shutdown port checks.
 - `timeout`: max time (seconds) for readiness/shutdown port checks.
 - `wait`: small sleep (seconds) between lifecycle steps.
 - `log`: per-runner log file used by process output redirection or server implementations.
 
 Service fields:
-- `port`: client-facing proxy port. Services do not get TCP readiness/shutdown checks from Nonnative.
-
-For `fault_injection`, the nested `proxy.host`/`proxy.port` describe the upstream target behind the proxy. Nested `proxy.host` also defaults to `127.0.0.1`. In-process server implementations typically bind there via `proxy.host` / `proxy.port`.
-
-> [!IMPORTANT]
-> When a proxy is enabled, tests and clients connect to the runner `host` and client-facing endpoint (`ports` first entry for processes/servers, `port` for services); the nested `proxy.host`/`proxy.port` is the upstream target behind the proxy.
+- `port`: client-facing service port. Services do not get TCP readiness/shutdown checks from Nonnative.
 
 Nonnative readiness and shutdown checks are TCP-only. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined.
 
@@ -252,7 +247,7 @@ module Nonnative
     def initialize(service)
       super
 
-      @socket_server = ::TCPServer.new(proxy.host, proxy.port)
+      @socket_server = ::TCPServer.new(service.host, service.port)
     end
 
     def perform_start
@@ -409,9 +404,9 @@ Nonnative.configure do |config|
 end
 ```
 
-##### 🔀 Proxy
+##### 🔀 HTTP Forward Proxy
 
-The system allows you to define an HTTP proxy for external systems, e.g. `api.github.com`.
+The system allows you to define an in-process HTTP forward proxy server for external systems, e.g. `api.github.com`. This is a server implementation, not a fault-injection service proxy.
 
 Define your server:
 
@@ -547,9 +542,9 @@ end
 
 ### 🧩 Services
 
-A service is an external dependency to your system that you **do not** want Nonnative to start (no OS process, no Ruby thread). Services are primarily useful when paired with proxies, because they let you inject failures into dependencies that are managed elsewhere (e.g. a DB running in Docker).
+A service is an external dependency to your system that you **do not** want Nonnative to start (no OS process, no Ruby thread).
 
-Services do not get process lifecycle management or TCP readiness/shutdown checks from Nonnative. They only provide a named runner and optional proxy lifecycle for a dependency that another tool already manages.
+Services do not get process lifecycle management or TCP readiness/shutdown checks from Nonnative. They provide a named endpoint for a dependency that another tool already manages.
 
 Set it up programmatically:
 
@@ -620,153 +615,38 @@ Custom proxy kinds can be registered through `Nonnative.proxies`:
 Nonnative.proxies['custom'] = CustomProxy
 ```
 
-For `fault_injection`, keep the runner `host` and first `ports` entry as the client-facing endpoint and use nested `proxy.host`/`proxy.port` for the upstream target behind the proxy.
-
-##### ⚙️ Process Proxies
-
-Add this to an existing process configuration:
-
-```ruby
-require 'nonnative'
-
-Nonnative.configure do |config|
-  config.version = '1.0'
-  config.name = 'test'
-  config.url = 'http://localhost:4567'
-  config.log = 'nonnative.log'
-
-  config.process do |p|
-    p.host = '127.0.0.1'
-    p.ports = [20_000]
-
-    p.proxy = {
-      kind: 'fault_injection',
-      host: '127.0.0.1',
-      port: 12_321,
-      log: 'proxy_server.log',
-      wait: 1,
-      options: {
-        delay: 5
-      }
-    }
-  end
-end
-```
-
-YAML fragment:
-
-```yaml
-version: "1.0"
-name: test
-url: http://localhost:4567
-log: nonnative.log
-processes:
-  -
-    host: 127.0.0.1
-    ports:
-      - 20000
-    proxy:
-      kind: fault_injection
-      host: 127.0.0.1
-      port: 12321
-      log: proxy_server.log
-      wait: 1
-      options:
-        delay: 5
-```
-
-##### 🖥️ Server Proxies
-
-Add this to an existing server configuration:
-
-```ruby
-require 'nonnative'
-
-Nonnative.configure do |config|
-  config.version = '1.0'
-  config.name = 'test'
-  config.url = 'http://localhost:4567'
-  config.log = 'nonnative.log'
-
-  config.server do |s|
-    s.host = '127.0.0.1'
-    s.ports = [20_000]
-
-    s.proxy = {
-      kind: 'fault_injection',
-      host: '127.0.0.1',
-      port: 12_321,
-      log: 'proxy_server.log',
-      wait: 1,
-      options: {
-        delay: 5
-      }
-    }
-  end
-end
-```
-
-YAML fragment:
-
-```yaml
-version: "1.0"
-name: test
-url: http://localhost:4567
-log: nonnative.log
-servers:
-  -
-    host: 127.0.0.1
-    ports:
-      - 20000
-    proxy:
-      kind: fault_injection
-      host: 127.0.0.1
-      port: 12321
-      log: proxy_server.log
-      wait: 1
-      options:
-        delay: 5
-```
+Only services support proxies. For `fault_injection`, keep the service `host`/`port` as the client-facing proxy endpoint and use nested `proxy.host`/`proxy.port` for the upstream target behind the proxy.
 
 ##### 🧩 Service Proxies
 
-Add this to an existing service configuration:
+###### Programmatic Configuration
+
+Add a proxy to a service configuration:
 
 ```ruby
-require 'nonnative'
+config.service do |s|
+  s.name = 'redis'
+  s.host = '127.0.0.1'
+  s.port = 16_379
 
-Nonnative.configure do |config|
-  config.version = '1.0'
-  config.name = 'test'
-  config.url = 'http://localhost:4567'
-  config.log = 'nonnative.log'
-
-  config.service do |s|
-    s.name = 'redis'
-    s.host = '127.0.0.1'
-    s.port = 16_379
-
-    s.proxy = {
-      kind: 'fault_injection',
-      host: '127.0.0.1',
-      port: 6379,
-      log: 'proxy_server.log',
-      wait: 1,
-      options: {
-        delay: 5
-      }
+  s.proxy = {
+    kind: 'fault_injection',
+    host: '127.0.0.1',
+    port: 6379,
+    log: 'proxy_server.log',
+    wait: 1,
+    options: {
+      delay: 5
     }
-  end
+  }
 end
 ```
 
-YAML fragment:
+###### YAML Configuration
+
+Add a proxy to a service YAML entry:
 
 ```yaml
-version: "1.0"
-name: test
-url: http://localhost:4567
-log: nonnative.log
 services:
   -
     name: redis
@@ -786,53 +666,15 @@ services:
 
 The `fault_injection` proxy allows you to simulate failures by injecting them. We currently support the following:
 
-Clients connect to the runner `host` and client-facing endpoint, while the proxy forwards traffic to nested `proxy.host`/`proxy.port`.
+Clients connect to the service `host`/`port`, while the proxy forwards traffic to nested `proxy.host`/`proxy.port`.
 
 - `close_all` - Closes the socket as soon as it connects.
 - `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through options.
 - `invalid_data` - Forwards client requests unchanged, then corrupts upstream responses before they reach the client.
 
-###### ⚙️ Fault Injection Processes
-
-Set it up programmatically:
-
-```ruby
-name = 'name of process in configuration'
-server = Nonnative.pool.process_by_name(name)
-
-server.proxy.close_all # To use close_all.
-server.proxy.reset # To reset it back to a good state.
-```
-
-With cucumber:
-
-```cucumber
-Given I set the proxy for process 'process_1' to 'close_all'
-Then I should reset the proxy for process 'process_1'
-```
-
-###### 🖥️ Fault Injection Servers
-
-Set it up programmatically:
-
-```ruby
-name = 'name of server in configuration'
-server = Nonnative.pool.server_by_name(name)
-
-server.proxy.close_all # To use close_all.
-server.proxy.reset # To reset it back to a good state.
-```
-
-With cucumber:
-
-```cucumber
-Given I set the proxy for server 'server_1' to 'close_all'
-Then I should reset the proxy for server 'server_1'
-```
-
 ###### 🧩 Fault Injection Services
 
-Set it up programmatically:
+Set the proxy state programmatically:
 
 ```ruby
 name = 'name of service in configuration'
@@ -842,7 +684,7 @@ service.proxy.close_all # To use close_all.
 service.proxy.reset # To reset it back to a good state.
 ```
 
-With cucumber:
+Use the Cucumber proxy steps:
 
 ```cucumber
 Given I set the proxy for service 'service_1' to 'close_all'

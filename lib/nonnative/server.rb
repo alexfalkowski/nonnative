@@ -4,7 +4,6 @@ module Nonnative
   # Runtime runner that manages an in-process Ruby server.
   #
   # A server runner:
-  # - starts the configured proxy (if any),
   # - starts a Ruby thread that runs {#perform_start},
   # - waits briefly (via the runner `wait`), and
   # - participates in readiness/shutdown via TCP port checks orchestrated by {Nonnative::Pool}.
@@ -25,7 +24,7 @@ module Nonnative
       @timeout = Nonnative::Timeout.new(service.timeout)
     end
 
-    # Starts the proxy (if any) and starts the server thread if not already started.
+    # Starts the server thread if it is not already started.
     #
     # @return [Array<(Integer, TrueClass)>]
     #   a tuple of:
@@ -33,7 +32,6 @@ module Nonnative
     #   - `true` (thread creation itself is considered started; readiness is checked separately)
     def start
       unless thread
-        proxy.start
         @thread = Thread.new { perform_start }
 
         wait_start
@@ -46,14 +44,13 @@ module Nonnative
 
     # Stops the server if it is running.
     #
-    # Calls {#perform_stop}, terminates the server thread, stops the proxy (if any), and waits briefly.
+    # Calls {#perform_stop}, terminates the server thread, and waits briefly.
     #
     # @return [Integer] the server identifier (`object_id`)
     def stop
       if thread
         perform_stop
         thread.terminate
-        proxy.stop
 
         @thread = nil
         wait_stop

@@ -10,22 +10,12 @@ servers:
     ports:
       - 12323
     log: test/reports/tcp_server_1.log
-    proxy:
-      kind: fault_injection
-      host: 127.0.0.1
-      port: 20000
-      log: test/reports/proxy_tcp_server_1.log
   - name: tcp_server_2
     class: Nonnative::Features::TCPServer
     timeout: 1
     ports:
       - 12324
     log: test/reports/tcp_server_2.log
-    proxy:
-      kind: fault_injection
-      port: 20001
-      log: test/reports/proxy_tcp_server_2.log
-      wait: 1
   - name: http_proxy_server
     class: Nonnative::Features::HTTPProxyServer
     timeout: 3

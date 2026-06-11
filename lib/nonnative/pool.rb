@@ -104,15 +104,13 @@ module Nonnative
       services[runner_index(configuration.services, name)]
     end
 
-    # Resets proxies for all runners in this pool.
+    # Resets service proxies in this pool.
     #
     # This is used by the Cucumber `@reset` hook and is safe to call any time after the pool is created.
     #
     # @return [void]
     def reset
       services.each { |s| s.proxy.reset }
-      servers.each { |s| s.first.proxy.reset }
-      processes.each { |p| p.first.proxy.reset }
     end
 
     private

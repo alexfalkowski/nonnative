@@ -60,35 +60,3 @@ Feature: Process runners
     Then I should receive a TCP "test" response from the process
     And the YAML argv process shell side effect should not happen
     And the YAML process environment output should be "configured"
-
-  @proxy @reset
-  Scenario: A delayed process proxy still allows TCP responses
-    Given I configure the system programmatically with processes
-    And I start the system
-    And I set the proxy for process 'start_1' to 'delay'
-    When I send "test" with the TCP client to the processes
-    Then I should receive a TCP "test" response
-
-  @proxy @reset
-  Scenario: Closing the process proxy resets the TCP client
-    Given I configure the system programmatically with processes
-    And I start the system
-    And I set the proxy for process 'start_1' to 'close_all'
-    When I send "test" with the TCP client 'start_1' to the process
-    Then I should receive a connection error for client response with TCP
-
-  @proxy @reset
-  Scenario: Invalid proxy data changes the TCP client response
-    Given I configure the system programmatically with processes
-    And I start the system
-    And I set the proxy for process 'start_1' to 'invalid_data'
-    When I send "test" with the TCP client 'start_1' to the process
-    Then I should receive an invalid data response that is not "test" with TCP
-    And I should see a log entry of "Received line: 'test'" for process 'start_1'
-
-  @proxy
-  Scenario: Looking up a missing process proxy fails
-    Given I configure the system programmatically with processes
-    And I start the system
-    When I try to find the proxy for process 'non_existent'
-    Then I should get a proxy not found error
