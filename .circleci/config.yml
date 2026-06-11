@@ -35,7 +35,7 @@ jobs:
     resource_class: arm.large
   sync:
     docker:
-      - image: alexfalkowski/release:8.13
+      - image: alexfalkowski/release:8.14
     working_directory: ~/nonnative
     steps:
       - checkout:
@@ -46,7 +46,7 @@ jobs:
     resource_class: arm.large
   version:
     docker:
-      - image: alexfalkowski/release:8.13
+      - image: alexfalkowski/release:8.14
     working_directory: ~/nonnative
     steps:
       - checkout:
