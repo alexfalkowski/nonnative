@@ -41,7 +41,7 @@ module Nonnative
     # @return [void]
     def initialize
       self.host = '127.0.0.1'
-      self.ports = [0]
+      @ports = [0]
       self.wait = 0.1
 
       @proxy = Nonnative::ConfigurationProxy.new

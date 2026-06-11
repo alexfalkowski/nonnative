@@ -8,7 +8,7 @@ module Nonnative
           {
             name: 'service_1',
             host: '127.0.0.1',
-            ports: [20_006],
+            port: 20_006,
             proxy: {
               kind: 'fault_injection',
               host: '127.0.0.1',
@@ -32,7 +32,7 @@ module Nonnative
           config.service do |service|
             service.name = definition[:name]
             service.host = definition[:host]
-            service.ports = definition[:ports]
+            service.port = definition[:port]
             service.proxy = definition[:proxy]
           end
         end

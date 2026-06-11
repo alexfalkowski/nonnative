@@ -9,8 +9,7 @@ Given('I load a temporary configuration with a service entry') do
     services:
       - name: service_1
         host: 127.0.0.1
-        ports:
-          - 20006
+        port: 20006
         proxy:
           kind: fault_injection
           host: 127.0.0.1
@@ -28,8 +27,7 @@ Given('I load a temporary configuration with split service and proxy endpoints')
     services:
       - name: service_1
         host: 127.0.0.1
-        ports:
-          - 20006
+        port: 20006
         proxy:
           kind: fault_injection
           host: 127.0.0.1
@@ -65,8 +63,7 @@ Given('I load a temporary configuration with proxy options') do
     services:
       - name: service_1
         host: 127.0.0.1
-        ports:
-          - 20006
+        port: 20006
         proxy:
           kind: fault_injection
           host: 127.0.0.1
@@ -170,6 +167,40 @@ When('I attempt to load a temporary configuration with a singular runner port') 
   end
 end
 
+When('I attempt to load a temporary configuration with plural service ports') do
+  @configuration_error = nil
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(<<~YAML)
+      version: "1.0"
+      name: test
+      url: http://localhost:4567
+      log: test/reports/nonnative.log
+      services:
+        - name: legacy_ports_service
+          host: 127.0.0.1
+          ports:
+            - 12400
+          proxy:
+            kind: fault_injection
+            host: 127.0.0.1
+            port: 30000
+            log: test/reports/proxy_legacy_ports_service.log
+    YAML
+  end
+end
+
+When('I attempt to configure a service with plural ports') do
+  @configuration_error = nil
+  capture_result(:@configuration_result, :@configuration_error) do
+    Nonnative.configure do |config|
+      config.service do |service|
+        service.name = 'legacy_ports_service'
+        service.ports = [12_400]
+      end
+    end
+  end
+end
+
 When('I attempt to load a temporary configuration with {string} YAML') do |kind|
   @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
@@ -182,11 +213,11 @@ Then('the configuration should contain {int} service entry and {int} process ent
   expect(Nonnative.configuration.processes.size).to eq(processes)
 end
 
-Then('the configured service {string} should use host {string} and ports:') do |name, host, table|
+Then('the configured service {string} should use host {string} and port {int}') do |name, host, port|
   service = configured_service(name)
 
   expect(service.host).to eq(host)
-  expect(service.ports).to eq(table.raw.flatten.map(&:to_i))
+  expect(service.port).to eq(port)
 end
 
 Then('the configured process {string} should use ports:') do |name, table|
