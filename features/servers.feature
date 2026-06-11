@@ -1,6 +1,6 @@
 @acceptance @manual @clear
 Feature: Servers
-  Start configured servers, expose observability endpoints, and control server proxies.
+  Start configured servers and expose observability endpoints.
 
   Scenario Outline: TCP servers respond when configured <source>
     Given I configure the system <source> with servers
@@ -60,49 +60,13 @@ Feature: Servers
       | readiness |
       | metrics   |
 
+  Scenario: Server runners can be looked up by name
+    Given I configure the system programmatically with servers
+    And I start the system
+    When I look up the server runner "tcp_server_1"
+    Then I should find the server runner "tcp_server_1"
+
   @proxy @contract
   Scenario: Custom proxy kinds can be registered
     When I register a custom proxy kind
     Then the custom proxy kind should resolve to the custom proxy
-
-  @proxy @reset
-  Scenario: Closing the HTTP proxy breaks metrics requests
-    Given I configure the system programmatically with servers
-    And I start the system
-    And I set the proxy for server 'http_server_1' to 'close_all'
-    When I request metrics over HTTP
-    Then I should receive a connection error for metrics response with HTTP
-
-  @proxy @reset
-  Scenario Outline: HTTP hello requests fail when the proxy is set to <state>
-    Given I configure the system programmatically with servers
-    And I start the system
-    And I set the proxy for server 'http_server_1' to '<state>'
-    When I request hello over HTTP
-    Then I should receive the <failure> error for hello response with HTTP
-
-    Examples:
-      | state        | failure      |
-      | delay        | delay        |
-      | invalid_data | invalid data |
-
-  @proxy @reset
-  Scenario Outline: gRPC greetings fail when the proxy is set to <state>
-    Given I configure the system programmatically with servers
-    And I start the system
-    And I set the proxy for server 'grpc_server_1' to '<state>'
-    When I <request>
-    Then I should receive the <failure> error for being greeted with gRPC
-
-    Examples:
-      | state        | request                               | failure      |
-      | close_all    | greet over gRPC                       | connection   |
-      | delay        | greet over gRPC with a short deadline | delay        |
-      | invalid_data | greet over gRPC                       | invalid data |
-
-  @proxy
-  Scenario: Looking up a missing server proxy fails
-    Given I configure the system programmatically with servers
-    And I start the system
-    When I try to find the proxy for server 'non_existent'
-    Then I should get a proxy not found error

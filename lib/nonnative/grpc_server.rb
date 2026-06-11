@@ -4,8 +4,7 @@ module Nonnative
   # gRPC server runner implemented using {GRPC::RpcServer}.
   #
   # This is a convenience server implementation for running a gRPC service in-process under
-  # Nonnative's server lifecycle. It binds to the configured proxy `host`/`port` and is started/stopped
-  # by {Nonnative::Server} via {#perform_start} / {#perform_stop}.
+  # Nonnative's server lifecycle. It binds to the configured server `host` and first `ports` entry.
   #
   # Important note about logging: the `grpc` gem uses a global logger. This implementation sets
   # `GRPC.logger` to write to the configured `service.log`, and whichever gRPC server is initialized
@@ -33,12 +32,11 @@ module Nonnative
 
     # Binds the gRPC server and begins serving requests.
     #
-    # The server binds to the upstream proxy host/port so the fault-injection proxy can expose the
-    # runner host and first configured port as the client-facing endpoint used by readiness checks.
+    # The server binds to the configured server host and first configured port.
     #
     # @return [void]
     def perform_start
-      server.add_http2_port("#{proxy.host}:#{proxy.port}", :this_port_is_insecure)
+      server.add_http2_port("#{service.host}:#{service.port}", :this_port_is_insecure)
       server.run
     end
 

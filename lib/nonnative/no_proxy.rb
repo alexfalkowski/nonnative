@@ -7,7 +7,7 @@ module Nonnative
   # It does not bind/listen or alter traffic; it simply exposes the underlying runner's configured
   # `host` and primary `port`.
   #
-  # Runners can always call `start`, `stop`, and `reset` safely on this proxy.
+  # Services can always call `start`, `stop`, and `reset` safely on this proxy.
   #
   # @see Nonnative.proxy
   # @see Nonnative::Proxy

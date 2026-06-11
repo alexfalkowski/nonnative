@@ -43,17 +43,13 @@ When('I send a not found message with the HTTP client to the servers') do
   @response = http_client_for_server('http_server_1').not_found
 end
 
-When('I try to find the proxy for server {string}') do |name|
-  capture_result(:@server_runner, :@error) { Nonnative.pool.server_by_name(name) }
+When('I look up the server runner {string}') do |name|
+  @server_runner = Nonnative.pool.server_by_name(name)
 end
 
 When('I register a custom proxy kind') do
   @previous_custom_proxy = Nonnative.proxies['custom']
   Nonnative.proxies['custom'] = Nonnative::Features::CustomProxy
-end
-
-Then('I should get a proxy not found error') do
-  expect(@error).to be_a(Nonnative::NotFoundError)
 end
 
 Then('the custom proxy kind should resolve to the custom proxy') do
@@ -74,22 +70,6 @@ end
 
 When('I send a {string} request with body {string} to the local HTTP proxy server') do |verb, body|
   @response = http_client_for_server('local_http_proxy_server').inspect_request(verb.downcase, body)
-end
-
-When('I request metrics over HTTP') do
-  capture_result { Nonnative.observability.metrics }
-end
-
-When('I request hello over HTTP') do
-  capture_result { http_client_for_server('http_server_1').hello_get }
-end
-
-When('I greet over gRPC') do
-  capture_result { grpc_client_for_server('grpc_server_1').say_hello(greeter_request) }
-end
-
-When('I greet over gRPC with a short deadline') do
-  capture_result { grpc_client_for_server('grpc_server_1', timeout: 1).say_hello(greeter_request) }
 end
 
 Then('I should receive an HTTP {string} response') do |response|
@@ -115,30 +95,6 @@ Then('I should receive an HTTP not found response') do
   expect(@response.code).to eq(404)
 end
 
-Then('I should receive a connection error for metrics response with HTTP') do
-  expect(@error).to be_a(StandardError)
-end
-
-Then('I should receive the delay error for hello response with HTTP') do
-  expect(@error).to be_a(RestClient::Exceptions::ReadTimeout)
-end
-
-Then('I should receive the invalid data error for hello response with HTTP') do
-  expect(@error).to be_a(Net::HTTPBadResponse)
-end
-
-Then('I should receive the connection error for being greeted with gRPC') do
-  expect(@error).to be_a(GRPC::Unavailable)
-end
-
-Then('I should receive the delay error for being greeted with gRPC') do
-  expect(@error).to be_a(GRPC::DeadlineExceeded)
-end
-
-Then('I should receive the invalid data error for being greeted with gRPC') do
-  expect(@error).to be_a(StandardError)
-end
-
 Then('I should receive a successful response from the HTTP proxy server') do
   expect(@error).to be_nil
   expect(@response.code).to eq(200)
@@ -155,4 +111,8 @@ Then('I should receive the {string} request details from the local HTTP proxy se
   expect(@error).to be_nil
   expect(@response.code).to eq(200)
   expect(body).to match_inspected_proxy_request(verb, 'Hello World!')
+end
+
+Then('I should find the server runner {string}') do |name|
+  expect(@server_runner.name).to eq(name)
 end

@@ -124,13 +124,13 @@ module Nonnative
     def add_processes(cfg)
       processes = cfg.processes || []
       processes.each do |loaded_process|
+        reject_proxy(loaded_process, 'processes')
+
         process do |process_config|
           process_config.command = command(loaded_process)
           process_config.signal = loaded_process.signal
           process_config.environment = loaded_process.environment
           runner_attributes(process_config, loaded_process)
-
-          assign_proxy(process_config, loaded_process.proxy)
         end
       end
     end
@@ -150,11 +150,11 @@ module Nonnative
     def add_servers(cfg)
       servers = cfg.servers || []
       servers.each do |loaded_server|
+        reject_proxy(loaded_server, 'servers')
+
         server do |server_config|
           server_config.klass = Object.const_get(server_class_name(loaded_server))
           runner_attributes(server_config, loaded_server)
-
-          assign_proxy(server_config, loaded_server.proxy)
         end
       end
     end
@@ -200,7 +200,14 @@ module Nonnative
       service.port = loaded.port if loaded.port
     end
 
-    def assign_proxy(runner, loaded_proxy)
+    def reject_proxy(loaded, kind)
+      values = loaded.to_h
+      return unless values.key?(:proxy) || values.key?('proxy')
+
+      raise ArgumentError, "Use 'services' for proxy configuration; #{kind} do not support 'proxy'"
+    end
+
+    def assign_proxy(service, loaded_proxy)
       return unless loaded_proxy
 
       proxy_attributes = {
@@ -213,7 +220,7 @@ module Nonnative
       proxy_attributes[:host] = loaded_proxy.host if loaded_proxy.host
       proxy_attributes[:wait] = loaded_proxy.wait if loaded_proxy.wait
 
-      runner.proxy = proxy_attributes
+      service.proxy = proxy_attributes
     end
   end
 end

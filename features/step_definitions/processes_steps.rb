@@ -107,10 +107,6 @@ When('I send {string} with the TCP client {string} to the process') do |message,
   @response = tcp_client_for_process(name).request(message)
 end
 
-When('I try to find the proxy for process {string}') do |name|
-  capture_result(:@process, :@error) { Nonnative.pool.process_by_name(name) }
-end
-
 Then('I should receive a TCP {string} response') do |response|
   @responses.each { |r| expect(r).to eq(response) }
 end
@@ -141,10 +137,6 @@ Then('the YAML process environment output should be {string}') do |value|
   expect(File.read(@yaml_environment_output_path)).to eq(value)
 end
 
-Then('I should receive a connection error for client response with TCP') do
-  expect(@response).to be_a Errno::ECONNRESET
-end
-
 After do
   @environment_process&.stop
 
@@ -153,10 +145,4 @@ After do
   @previous_environment.each do |name, value|
     value.nil? ? ENV.delete(name) : ENV[name] = value
   end
-end
-
-Then('I should receive an invalid data response that is not {string} with TCP') do |message|
-  expect(@response).to be_a(String)
-  expect(@response).not_to be_empty
-  expect(@response).not_to eq(message)
 end

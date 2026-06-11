@@ -29,9 +29,21 @@ Feature: Configuration loading
     When I attempt to configure a service with plural ports
     Then loading the configuration should fail with an argument error containing "Use 'port' instead of 'ports'"
 
+  Scenario: Programmatic configuration rejects reading plural service ports
+    When I attempt to read plural ports from a configured service
+    Then loading the configuration should fail with an argument error containing "Use 'port' instead of 'ports'"
+
   Scenario: YAML maps proxy options
     Given I load a temporary configuration with proxy options
     Then the configured service "service_1" proxy option "delay" should be 5
+
+  Scenario: YAML rejects process proxies
+    When I attempt to load a temporary configuration with a process proxy
+    Then loading the configuration should fail with an argument error containing "processes do not support 'proxy'"
+
+  Scenario: YAML rejects server proxies
+    When I attempt to load a temporary configuration with a server proxy
+    Then loading the configuration should fail with an argument error containing "servers do not support 'proxy'"
 
   Scenario: Server YAML class entries resolve to server implementations
     Given I load a temporary configuration with a server entry
@@ -44,7 +56,6 @@ Feature: Configuration loading
   Scenario: Missing hosts default to loopback
     Given I load a temporary configuration with omitted hosts
     Then the configured process "default_host_process" should use host "127.0.0.1"
-    And the configured process "default_host_process" proxy should use host "127.0.0.1"
 
   Scenario: YAML configuration does not evaluate ERB
     Given I load a temporary configuration containing ERB

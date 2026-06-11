@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 module Nonnative
-  # Proxy configuration attached to a runner configuration.
+  # Proxy configuration attached to a service configuration.
   #
   # A proxy allows you to interpose behavior between a client and a real service. For example,
   # the built-in `"fault_injection"` proxy can close connections, introduce delays, or corrupt data
   # for resilience testing.
   #
-  # This object is created automatically for each runner via {Nonnative::ConfigurationRunner}.
-  # When `kind` is set to `"none"`, no proxy is started and the runner will use its configured
+  # This object is created automatically for each service via {Nonnative::ConfigurationService}.
+  # When `kind` is set to `"none"`, no proxy is started and the service will use its configured
   # `host`/`port` directly.
   #
-  # @see Nonnative::ConfigurationRunner#proxy
+  # @see Nonnative::ConfigurationService#proxy
   # @see Nonnative.proxies
   class ConfigurationProxy
     # @return [String] proxy kind name (for example `"none"` or `"fault_injection"`)

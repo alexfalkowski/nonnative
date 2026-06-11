@@ -4,8 +4,7 @@ module Nonnative
   # Puma-based HTTP server runner.
   #
   # This is a convenience server implementation for running a Rack/Sinatra application in-process
-  # under Nonnative's server lifecycle. It binds to the configured proxy `host`/`port` (so it works
-  # consistently with proxy configuration) and uses Puma for HTTP serving.
+  # under Nonnative's server lifecycle. It binds to the configured server `host` and first `ports` entry.
   #
   # The server is started and stopped by {Nonnative::Server} via {#perform_start} / {#perform_stop}.
   #
@@ -48,12 +47,11 @@ module Nonnative
 
     # Binds the Puma server and begins serving.
     #
-    # The listener binds to the upstream proxy host/port so the fault-injection proxy can expose the
-    # runner host and first configured port as the client-facing endpoint used by readiness checks.
+    # The listener binds to the configured server host and first configured port.
     #
     # @return [void]
     def perform_start
-      server.add_tcp_listener proxy.host, proxy.port
+      server.add_tcp_listener service.host, service.port
       server.run false
     end
 

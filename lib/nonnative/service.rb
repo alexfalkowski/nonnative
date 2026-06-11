@@ -12,6 +12,18 @@ module Nonnative
   # @see Nonnative::ConfigurationService
   # @see Nonnative::Proxy
   class Service < Runner
+    # Returns the proxy instance for this service.
+    #
+    # @return [Nonnative::Proxy]
+    attr_reader :proxy
+
+    # @param service [Nonnative::ConfigurationService] service configuration
+    def initialize(service)
+      super
+
+      @proxy = Nonnative::ProxyFactory.create(service)
+    end
+
     # Starts the configured proxy (if any).
     #
     # @return [void]

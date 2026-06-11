@@ -6,7 +6,7 @@ module Nonnative
       def initialize(service)
         super
 
-        @socket_server = ::TCPServer.new(proxy.host, proxy.port)
+        @socket_server = ::TCPServer.new(service.host, service.port)
       end
 
       def perform_start

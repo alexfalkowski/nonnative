@@ -50,14 +50,7 @@ module Nonnative
               host: '127.0.0.1',
               ports: [14_006],
               log: 'test/reports/14_006.log',
-              signal: 'INT',
-              proxy: {
-                kind: 'fault_injection',
-                host: '127.0.0.1',
-                port: 24_006,
-                log: 'test/reports/proxy_14_006.log',
-                wait: 0.1
-              }
+              signal: 'INT'
             )
           end
         end

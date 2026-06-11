@@ -44,7 +44,9 @@ module Nonnative
       end
 
       def read_until_closed(socket)
-        socket.gets until socket.eof?
+        while (line = socket.gets)
+          socket.puts(line)
+        end
       rescue IOError, SystemCallError
         nil
       ensure
@@ -81,7 +83,7 @@ module Nonnative
       end
 
       def receive
-        @socket.gets
+        @socket.gets&.chomp
       rescue StandardError => e
         e
       end

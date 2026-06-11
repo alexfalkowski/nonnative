@@ -7,21 +7,13 @@ module Nonnative
         PROCESSES = [
           {
             name: 'start_1',
-            command: -> { 'features/support/bin/start 20_005' },
+            command: -> { 'features/support/bin/start 12_321' },
             timeout: 5,
             host: '127.0.0.1',
             ports: [12_321],
             log: 'test/reports/12_321.log',
             signal: 'INT',
-            environment: { 'STRING' => 'true' },
-            proxy: {
-              kind: 'fault_injection',
-              host: '127.0.0.1',
-              port: 20_005,
-              log: 'test/reports/proxy_start_1.log',
-              wait: 1,
-              options: { delay: 10 }
-            }
+            environment: { 'STRING' => 'true' }
           },
           {
             name: 'start_2',
@@ -48,7 +40,7 @@ module Nonnative
         end
 
         def apply_process_definition(process, definition)
-          %i[name command timeout wait host ports log signal environment proxy].each do |attribute|
+          %i[name command timeout wait host ports log signal environment].each do |attribute|
             assign_process_attribute(process, definition, attribute)
           end
         end

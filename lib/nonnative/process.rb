@@ -4,7 +4,6 @@ module Nonnative
   # Runtime runner that manages an OS-level child process.
   #
   # A process runner:
-  # - starts the configured proxy (if any),
   # - spawns a child process using the configured command and environment,
   # - waits briefly (via the runner `wait`), and
   # - participates in readiness/shutdown via TCP port checks orchestrated by {Nonnative::Pool}.
@@ -21,7 +20,7 @@ module Nonnative
       @timeout = Nonnative::Timeout.new(service.timeout)
     end
 
-    # Starts the proxy (if any) and spawns the configured process if it is not already running.
+    # Spawns the configured process if it is not already running.
     #
     # @return [Array<(Integer, Boolean)>]
     #   a tuple of:
@@ -29,7 +28,6 @@ module Nonnative
     #   - whether the process appears to still be running (non-blocking wait result)
     def start
       unless process_exists?
-        proxy.start
         @pid = process_spawn
         wait_start
       end
@@ -37,7 +35,7 @@ module Nonnative
       [pid, ::Process.waitpid2(pid, ::Process::WNOHANG).nil?]
     end
 
-    # Stops the process (if running) and stops the proxy (if any).
+    # Stops the process if it is running.
     #
     # The process is signalled using the configured signal (defaults to `INT` when not set).
     #
@@ -54,8 +52,6 @@ module Nonnative
       end
 
       [pid, stopped]
-    ensure
-      proxy.stop
     end
 
     # Returns a memoized memory reader for the spawned process.

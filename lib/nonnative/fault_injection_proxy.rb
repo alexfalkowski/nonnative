@@ -18,12 +18,12 @@ module Nonnative
   #
   # ## Wiring
   #
-  # When enabled, your test/client should connect to the runner `host` and primary port (the proxy
+  # When enabled, your test/client should connect to the service `host` and `port` (the proxy
   # endpoint), and the proxy will forward traffic to the upstream target exposed by {#host}:{#port}.
   #
   # ## Configuration
   #
-  # The proxy is configured via the runner’s `proxy` hash:
+  # The proxy is configured via the service's `proxy` hash:
   #
   # - `kind`: `"fault_injection"`
   # - `host` / `port`: upstream target behind the proxy (exposed via {#host}/{#port})
@@ -50,7 +50,7 @@ module Nonnative
       end
     end
 
-    # @param service [Nonnative::ConfigurationRunner] runner configuration with proxy settings
+    # @param service [Nonnative::ConfigurationService] service configuration with proxy settings
     def initialize(service)
       @connections = Concurrent::Hash.new
       @logger = Logger.new(service.proxy.log)
@@ -62,8 +62,8 @@ module Nonnative
 
     # Starts the proxy accept loop in a background thread.
     #
-    # This binds a TCP server on the underlying runner’s `service.host` and primary port.
-    # Clients connect to that runner endpoint, while upstream traffic is forwarded to {#host}:{#port}.
+    # This binds a TCP server on the service `host` and `port`.
+    # Clients connect to that service endpoint, while upstream traffic is forwarded to {#host}:{#port}.
     #
     # @return [void]
     def start
