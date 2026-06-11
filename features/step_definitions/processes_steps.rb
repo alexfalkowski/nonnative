@@ -29,7 +29,7 @@ Given('I configure the system programmatically with an argv process') do
       process.timeout = 5
       process.wait = 0.1
       process.host = '127.0.0.1'
-      process.port = 12_401
+      process.ports = [12_401]
       process.log = 'test/reports/12_401.log'
       process.signal = 'INT'
     end
@@ -47,7 +47,7 @@ Given('I configure the system programmatically with a shell string process') do
       process.timeout = 5
       process.wait = 0.1
       process.host = '127.0.0.1'
-      process.port = 12_413
+      process.ports = [12_413]
       process.log = 'test/reports/12_413.log'
       process.signal = 'INT'
     end
@@ -62,7 +62,7 @@ Given('I configure the system programmatically with a process that has no stop s
       process.timeout = 5
       process.wait = 0.1
       process.host = '127.0.0.1'
-      process.port = 12_414
+      process.ports = [12_414]
       process.log = 'test/reports/12_414.log'
     end
   end

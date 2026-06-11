@@ -12,7 +12,7 @@ module Nonnative
   # @see Nonnative::Server
   class ConfigurationServer < ConfigurationRunner
     # @return [Class] a class that implements `#initialize(service)`, and lifecycle hooks expected by {Nonnative::Server}
-    # @return [Numeric] readiness timeout (seconds) used when waiting for the port to open/close
+    # @return [Numeric] readiness timeout (seconds) used when waiting for ports to open/close
     # @return [String] log file path used by server implementations (for example Puma/gRPC log files)
     attr_accessor :klass, :timeout, :log
   end

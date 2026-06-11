@@ -3,7 +3,7 @@
 
 require 'socket'
 
-port = ARGV.fetch(0).to_i
+ports = ARGV.fetch(0).split(',').map(&:to_i)
 options = ARGV.drop(1)
 environment_output = options.find { |option| option != 'linger' }
 linger = options.include?('linger')
@@ -23,13 +23,13 @@ end
 
 sleep 1 # Simulate delay
 
-server = TCPServer.new('0.0.0.0', port)
+servers = ports.map { |port| TCPServer.new('0.0.0.0', port) }
 
 $stdout.sync = true
 
 Thread.new do
   loop do
-    server.close if closing && !server.closed?
+    servers.each { |server| server.close if closing && !server.closed? }
     sleep 0.01
   rescue IOError
     nil
@@ -37,20 +37,26 @@ Thread.new do
 end
 
 begin
-  loop do
-    conn = server.accept
-    Thread.new(conn) do |socket|
+  servers.each do |server|
+    Thread.new(server) do |tcp_server|
       loop do
-        line = socket.readline.strip
-        puts "Received line: '#{line}'"
+        conn = tcp_server.accept
+        Thread.new(conn) do |socket|
+          loop do
+            line = socket.readline.strip
+            puts "Received line: '#{line}'"
 
-        socket.puts(line)
-        puts "Sent line: '#{line}'"
+            socket.puts(line)
+            puts "Sent line: '#{line}'"
+          end
+        rescue EOFError
+          socket.close
+        end
       end
-    rescue EOFError
-      socket.close
     end
   end
+
+  sleep
 rescue IOError, Errno::EBADF
   sleep if linger
 end

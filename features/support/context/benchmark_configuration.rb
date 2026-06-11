@@ -6,13 +6,13 @@ module Nonnative
       module BenchmarkConfiguration
         def configure_no_op_server
           configure_with_defaults do |config|
-            add_server(config, klass: Nonnative::Features::NoOpServer, timeout: 1, port: 14_000)
+            add_server(config, klass: Nonnative::Features::NoOpServer, timeout: 1, ports: [14_000])
           end
         end
 
         def configure_no_stop_server
           configure_with_defaults do |config|
-            add_server(config, klass: Nonnative::Features::NoStopServer, timeout: 1, port: 14_001)
+            add_server(config, klass: Nonnative::Features::NoStopServer, timeout: 1, ports: [14_001])
           end
         end
 
@@ -24,7 +24,7 @@ module Nonnative
               host: '127.0.0.1',
               klass: Nonnative::Features::TCPServer,
               timeout: 1,
-              port: 14_002,
+              ports: [14_002],
               log: 'test/reports/14_002.log'
             )
             add_server(
@@ -33,7 +33,7 @@ module Nonnative
               host: '127.0.0.1',
               klass: Nonnative::Features::FailStartServer,
               timeout: 1,
-              port: 14_003,
+              ports: [14_003],
               log: 'test/reports/14_003.log'
             )
           end
@@ -48,7 +48,7 @@ module Nonnative
               timeout: 1,
               wait: 1,
               host: '127.0.0.1',
-              port: 14_006,
+              ports: [14_006],
               log: 'test/reports/14_006.log',
               signal: 'INT',
               proxy: {
@@ -70,7 +70,7 @@ module Nonnative
               host: '127.0.0.1',
               klass: Nonnative::Features::FailStopServer,
               timeout: 1,
-              port: 14_004,
+              ports: [14_004],
               log: 'test/reports/14_004.log'
             )
             add_server(
@@ -79,7 +79,7 @@ module Nonnative
               host: '127.0.0.1',
               klass: Nonnative::Features::TCPServer,
               timeout: 1,
-              port: 14_005,
+              ports: [14_005],
               log: 'test/reports/14_005.log'
             )
           end

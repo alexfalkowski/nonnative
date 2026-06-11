@@ -110,7 +110,7 @@ module Nonnative
   #       s.klass = Nonnative::Features::HTTPProxyServer
   #       s.timeout = 2
   #       s.host = '127.0.0.1'
-  #       s.port = 4567
+  #       s.ports = [4567]
   #       s.log = 'proxy.log'
   #     end
   #   end

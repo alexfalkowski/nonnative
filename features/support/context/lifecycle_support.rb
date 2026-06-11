@@ -15,7 +15,7 @@ module Nonnative
             process.timeout = 2
             process.wait = 0.1
             process.host = '127.0.0.1'
-            process.port = port
+            process.ports = [port]
             process.log = "test/reports/#{port}.log"
             process.signal = 'INT'
           end
@@ -28,7 +28,7 @@ module Nonnative
             process.timeout = 1
             process.wait = 0.1
             process.host = '127.0.0.1'
-            process.port = port
+            process.ports = [port]
             process.log = "test/reports/#{port}.log"
             process.signal = 'INT'
           end

@@ -58,7 +58,7 @@ High-level configuration fields:
 
 Common runner fields:
 - `name`: runner name used for lookup.
-- `host`/`port`: client-facing address. `host` defaults to `127.0.0.1`. For processes and servers, this address is also used for readiness/shutdown port checks. When a `fault_injection` proxy is enabled, this is the endpoint your tests/clients should hit.
+- `host`/`ports`: client-facing address. `host` defaults to `127.0.0.1`. For processes and servers, this address is also used for readiness/shutdown port checks. When a `fault_injection` proxy is enabled, clients should hit the first configured port.
 
 Process/server fields:
 - `timeout`: max time (seconds) for readiness/shutdown port checks.
@@ -68,9 +68,9 @@ Process/server fields:
 For `fault_injection`, the nested `proxy.host`/`proxy.port` describe the upstream target behind the proxy. Nested `proxy.host` also defaults to `127.0.0.1`. In-process server implementations typically bind there via `proxy.host` / `proxy.port`.
 
 > [!IMPORTANT]
-> When a proxy is enabled, tests and clients connect to the runner `host`/`port`; the nested `proxy.host`/`proxy.port` is the upstream target behind the proxy.
+> When a proxy is enabled, tests and clients connect to the runner `host` and first configured `ports` entry; the nested `proxy.host`/`proxy.port` is the upstream target behind the proxy.
 
-Nonnative readiness and shutdown checks are TCP-only. Configure ports that are dedicated to the test run; if another process is already listening on the same `host`/`port`, results are undefined.
+Nonnative readiness and shutdown checks are TCP-only. Configure ports that are dedicated to the test run; if another process is already listening on the same `host`/`ports` endpoint, results are undefined.
 
 > [!WARNING]
 > Readiness and shutdown checks only prove that a TCP port opened or closed. They do not verify HTTP status, gRPC health, schema readiness, migrations, or application-specific health.
@@ -168,7 +168,7 @@ Nonnative.configure do |config|
     p.command = -> { ['features/support/bin/start', '12_321'] }
     p.timeout = 5
     p.wait = 0.1
-    p.port = 12_321
+    p.ports = [12_321]
     p.log = '12_321.log'
     p.signal = 'INT' # Possible values are described in Signal.list.keys.
     p.environment = { # Pass environment variables to process.
@@ -181,7 +181,7 @@ Nonnative.configure do |config|
     p.command = -> { ['features/support/bin/start', '12_322'] }
     p.timeout = 0.5
     p.wait = 0.1
-    p.port = 12_322
+    p.ports = [12_322]
     p.log = '12_322.log'
   end
 end
@@ -202,7 +202,8 @@ processes:
       - "12_321"
     timeout: 5
     wait: 1
-    port: 12321
+    ports:
+      - 12321
     log: 12_321.log
     signal: INT # Possible values are described in Signal.list.keys.
     environment: # Pass environment variables to process.
@@ -214,7 +215,8 @@ processes:
       - "12_322"
     timeout: 5
     wait: 1
-    port: 12322
+    ports:
+      - 12322
     log: 12_322.log
 ```
 
@@ -285,7 +287,7 @@ Nonnative.configure do |config|
     s.name = 'server_1'
     s.klass = Nonnative::TCPServer
     s.timeout = 1
-    s.port = 12_323
+    s.ports = [12_323]
     s.log = 'server_1.log'
   end
 
@@ -293,7 +295,7 @@ Nonnative.configure do |config|
     s.name = 'server_2'
     s.klass = Nonnative::TCPServer
     s.timeout = 1
-    s.port = 12_324
+    s.ports = [12_324]
     s.log = 'server_2.log'
   end
 end
@@ -311,13 +313,15 @@ servers:
     name: server_1
     class: Nonnative::TCPServer
     timeout: 1
-    port: 12323
+    ports:
+      - 12323
     log: server_1.log
   -
     name: server_2
     class: Nonnative::TCPServer
     timeout: 1
-    port: 12324
+    ports:
+      - 12324
     log: server_2.log
 ```
 
@@ -368,7 +372,7 @@ Nonnative.configure do |config|
     s.name = 'http_server_1'
     s.klass = Nonnative::Features::HTTPServer
     s.timeout = 1
-    s.port = 4567
+    s.ports = [4567]
     s.log = 'http_server_1.log'
   end
 end
@@ -386,7 +390,8 @@ servers:
     name: http_server_1
     class: Nonnative::Features::HTTPServer
     timeout: 1
-    port: 4567
+    ports:
+      - 4567
     log: http_server_1.log
 ```
 
@@ -433,7 +438,7 @@ Nonnative.configure do |config|
     s.name = 'http_server_proxy'
     s.klass = Nonnative::Features::HTTPProxyServer
     s.timeout = 1
-    s.port = 4567
+    s.ports = [4567]
     s.log = 'http_server_proxy.log'
   end
 end
@@ -451,7 +456,8 @@ servers:
     name: http_server_proxy
     class: Nonnative::Features::HTTPProxyServer
     timeout: 1
-    port: 4567
+    ports:
+      - 4567
     log: http_server_proxy.log
 ```
 
@@ -502,7 +508,7 @@ Nonnative.configure do |config|
     s.name = 'grpc_server_1'
     s.klass = Nonnative::Features::GRPCServer
     s.timeout = 1
-    s.port = 9002
+    s.ports = [9002]
     s.log = 'grpc_server_1.log'
   end
 end
@@ -520,7 +526,8 @@ servers:
     name: grpc_server_1
     class: Nonnative::Features::GRPCServer
     timeout: 1
-    port: 9002
+    ports:
+      - 9002
     log: grpc_server_1.log
 ```
 
@@ -554,13 +561,13 @@ Nonnative.configure do |config|
   config.service do |s|
     s.name = 'postgres'
     s.host = '127.0.0.1'
-    s.port = 5432
+    s.ports = [5432]
   end
 
   config.service do |s|
     s.name = 'redis'
     s.host = '127.0.0.1'
-    s.port = 6379
+    s.ports = [6379]
   end
 end
 ```
@@ -576,11 +583,13 @@ services:
   -
     name: postgres
     host: 127.0.0.1
-    port: 5432
+    ports:
+      - 5432
   -
     name: redis
     host: 127.0.0.1
-    port: 6379
+    ports:
+      - 6379
 ```
 
 Then load the file with:
@@ -609,7 +618,7 @@ Custom proxy kinds can be registered through `Nonnative.proxies`:
 Nonnative.proxies['custom'] = CustomProxy
 ```
 
-For `fault_injection`, keep the runner `host`/`port` as the client-facing endpoint and use nested `proxy.host`/`proxy.port` for the upstream target behind the proxy.
+For `fault_injection`, keep the runner `host` and first `ports` entry as the client-facing endpoint and use nested `proxy.host`/`proxy.port` for the upstream target behind the proxy.
 
 ##### ⚙️ Process Proxies
 
@@ -626,7 +635,7 @@ Nonnative.configure do |config|
 
   config.process do |p|
     p.host = '127.0.0.1'
-    p.port = 20_000
+    p.ports = [20_000]
 
     p.proxy = {
       kind: 'fault_injection',
@@ -652,7 +661,8 @@ log: nonnative.log
 processes:
   -
     host: 127.0.0.1
-    port: 20000
+    ports:
+      - 20000
     proxy:
       kind: fault_injection
       host: 127.0.0.1
@@ -678,7 +688,7 @@ Nonnative.configure do |config|
 
   config.server do |s|
     s.host = '127.0.0.1'
-    s.port = 20_000
+    s.ports = [20_000]
 
     s.proxy = {
       kind: 'fault_injection',
@@ -704,7 +714,8 @@ log: nonnative.log
 servers:
   -
     host: 127.0.0.1
-    port: 20000
+    ports:
+      - 20000
     proxy:
       kind: fault_injection
       host: 127.0.0.1
@@ -731,7 +742,7 @@ Nonnative.configure do |config|
   config.service do |s|
     s.name = 'redis'
     s.host = '127.0.0.1'
-    s.port = 16_379
+    s.ports = [16_379]
 
     s.proxy = {
       kind: 'fault_injection',
@@ -758,7 +769,8 @@ services:
   -
     name: redis
     host: 127.0.0.1
-    port: 16379
+    ports:
+      - 16379
     proxy:
       kind: fault_injection
       host: 127.0.0.1
@@ -773,7 +785,7 @@ services:
 
 The `fault_injection` proxy allows you to simulate failures by injecting them. We currently support the following:
 
-Clients connect to the runner `host`/`port`, while the proxy forwards traffic to nested `proxy.host`/`proxy.port`.
+Clients connect to the runner `host` and first configured `ports` entry, while the proxy forwards traffic to nested `proxy.host`/`proxy.port`.
 
 - `close_all` - Closes the socket as soon as it connects.
 - `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through options.
@@ -847,7 +859,7 @@ Nonnative.configure do |config|
   config.process do |p|
     p.name = 'go'
     p.command = -> { Nonnative.go_argv(%w[cover], 'reports', 'your_binary', 'sub_command', '-i file:.config/server.yml') }
-    p.port = 12_345
+    p.ports = [12_345]
   end
 end
 ```
@@ -898,6 +910,7 @@ processes:
       parameters:
         - "-i file:.config/server.yml"
     timeout: 5
-    port: 8000
+    ports:
+      - 8000
     log: go.log
 ```

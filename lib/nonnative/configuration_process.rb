@@ -19,7 +19,7 @@ module Nonnative
     # @return [String, nil] signal name to use for stopping (defaults to `"INT"` when not set)
     attr_accessor :signal
 
-    # @return [Numeric] readiness timeout (seconds) used when waiting for the port to open/close
+    # @return [Numeric] readiness timeout (seconds) used when waiting for ports to open/close
     attr_accessor :timeout
 
     # @return [String] log file path to append process stdout/stderr to

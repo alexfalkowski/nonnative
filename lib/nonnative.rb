@@ -24,7 +24,7 @@
 #       p.name = 'api'
 #       p.command = -> { './bin/api' }
 #       p.host = '127.0.0.1'
-#       p.port = 8080
+#       p.ports = [8080, 9090]
 #       p.timeout = 10
 #       p.log = 'api.log'
 #     end
@@ -68,6 +68,7 @@ require 'nonnative/stop_error'
 require 'nonnative/not_found_error'
 require 'nonnative/timeout'
 require 'nonnative/port'
+require 'nonnative/ports'
 require 'nonnative/configuration_file'
 require 'nonnative/configuration'
 require 'nonnative/configuration_runner'
@@ -208,7 +209,7 @@ module Nonnative
 
     # Starts all configured services, servers, and processes, and waits for readiness.
     #
-    # Readiness is determined by attempting to connect to each runner's configured host/port.
+    # Readiness is determined by attempting to connect to each runner's configured host/ports.
     #
     # @return [void]
     # @raise [Nonnative::StartError] if one or more runners fail to start or become ready in time

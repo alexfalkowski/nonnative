@@ -5,7 +5,7 @@ module Nonnative
   #
   # This is the default proxy when `service.proxy.kind` is `"none"` (or an unknown kind is provided).
   # It does not bind/listen or alter traffic; it simply exposes the underlying runner's configured
-  # `host` and `port`.
+  # `host` and primary `port`.
   #
   # Runners can always call `start`, `stop`, and `reset` safely on this proxy.
   #
@@ -50,7 +50,7 @@ module Nonnative
 
     # Returns the port clients should connect to.
     #
-    # For {NoProxy}, this is the underlying runner configuration port.
+    # For {NoProxy}, this is the first underlying runner configuration port.
     #
     # @return [Integer]
     def port

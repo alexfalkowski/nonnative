@@ -20,7 +20,7 @@ module Nonnative
   #       s.klass = ->(service) { Nonnative::HTTPServer.new(app, service) }
   #       s.timeout = 2
   #       s.host = '127.0.0.1'
-  #       s.port = 4567
+  #       s.ports = [4567]
   #       s.log = 'http.log'
   #     end
   #   end
@@ -49,7 +49,7 @@ module Nonnative
     # Binds the Puma server and begins serving.
     #
     # The listener binds to the upstream proxy host/port so the fault-injection proxy can expose the
-    # runner host/port as the client-facing endpoint used by readiness checks.
+    # runner host and first configured port as the client-facing endpoint used by readiness checks.
     #
     # @return [void]
     def perform_start

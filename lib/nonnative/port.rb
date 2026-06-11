@@ -3,21 +3,23 @@
 module Nonnative
   # Performs TCP port readiness/shutdown checks for a configured runner.
   #
-  # Nonnative uses this to decide whether a process/server is ready after start, and whether it has
-  # shut down after stop. The checks repeatedly attempt to open a TCP connection to `process.host`
-  # and `process.port` until either:
+  # Nonnative uses this to decide whether a process/server port is ready after start, and whether it
+  # has shut down after stop. The checks repeatedly attempt to open a TCP connection to `process.host`
+  # and the configured `port` until either:
   #
   # - the expected condition is met, or
   # - the configured timeout elapses (in which case the method returns `false`)
   #
   # The `process` argument is a runner configuration object (e.g. {Nonnative::ConfigurationProcess}
-  # or {Nonnative::ConfigurationServer}) that responds to `host`, `port`, and `timeout`.
+  # or {Nonnative::ConfigurationServer}) that responds to `host` and `timeout`.
   #
   # @see Nonnative::Pool for how these checks are orchestrated during start/stop
   class Port
-    # @param process [#host, #port, #timeout] runner configuration providing connection details
-    def initialize(process)
+    # @param process [#host, #timeout] runner configuration providing connection details
+    # @param port [Integer] port to check
+    def initialize(process, port = process.port)
       @process = process
+      @port = port
       @timeout = Nonnative::Timeout.new(process.timeout)
     end
 
@@ -28,7 +30,7 @@ module Nonnative
     #
     # @return [Boolean] `true` if the port opened in time; otherwise `false`
     def open?
-      Nonnative.logger.info "checking if port '#{process.port}' is open on host '#{process.host}'"
+      Nonnative.logger.info "checking if port '#{port}' is open on host '#{process.host}'"
 
       timeout.perform do
         open_socket
@@ -46,7 +48,7 @@ module Nonnative
     #
     # @return [Boolean] `true` if the port closed in time; otherwise `false`
     def closed?
-      Nonnative.logger.info "checking if port '#{process.port}' is closed on host '#{process.host}'"
+      Nonnative.logger.info "checking if port '#{port}' is closed on host '#{process.host}'"
 
       timeout.perform do
         open_socket
@@ -61,10 +63,10 @@ module Nonnative
 
     private
 
-    attr_reader :process, :timeout
+    attr_reader :process, :port, :timeout
 
     def open_socket
-      TCPSocket.new(process.host, process.port).close
+      TCPSocket.new(process.host, port).close
     end
 
     def sleep_interval

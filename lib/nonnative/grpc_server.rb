@@ -34,7 +34,7 @@ module Nonnative
     # Binds the gRPC server and begins serving requests.
     #
     # The server binds to the upstream proxy host/port so the fault-injection proxy can expose the
-    # runner host/port as the client-facing endpoint used by readiness checks.
+    # runner host and first configured port as the client-facing endpoint used by readiness checks.
     #
     # @return [void]
     def perform_start

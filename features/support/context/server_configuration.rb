@@ -9,14 +9,14 @@ module Nonnative
             name: 'tcp_server_1',
             klass: 'Nonnative::Features::TCPServer',
             timeout: 1,
-            port: 12_323,
+            ports: [12_323],
             log: 'test/reports/tcp_server_1.log'
           },
           {
             name: 'tcp_server_2',
             klass: 'Nonnative::Features::TCPServer',
             timeout: 1,
-            port: 12_324,
+            ports: [12_324],
             log: 'test/reports/tcp_server_2.log'
           },
           {
@@ -24,7 +24,7 @@ module Nonnative
             klass: 'Nonnative::Features::HTTPServer',
             timeout: 1,
             host: '127.0.0.1',
-            port: 4567,
+            ports: [4567],
             log: 'test/reports/http_server_1.log',
             proxy: {
               kind: 'fault_injection',
@@ -39,7 +39,7 @@ module Nonnative
             name: 'http_server_2',
             klass: 'Nonnative::Features::HTTPServer',
             timeout: 1,
-            port: 4568,
+            ports: [4568],
             log: 'test/reports/http_server_2.log',
             proxy: {
               kind: 'fault_injection',
@@ -53,7 +53,7 @@ module Nonnative
             name: 'grpc_server_1',
             klass: 'Nonnative::Features::GRPCServer',
             timeout: 1,
-            port: 9002,
+            ports: [9002],
             log: 'test/reports/grpc_server_1.log',
             proxy: {
               kind: 'fault_injection',
@@ -67,7 +67,7 @@ module Nonnative
             name: 'grpc_server_2',
             klass: 'Nonnative::Features::GRPCServer',
             timeout: 1,
-            port: 9003,
+            ports: [9003],
             log: 'test/reports/grpc_server_2.log',
             proxy: {
               kind: 'fault_injection',
@@ -96,7 +96,7 @@ module Nonnative
             server.klass = resolve_klass(definition[:klass])
             server.timeout = definition[:timeout]
             server.host = definition[:host] if definition[:host]
-            server.port = definition[:port]
+            server.ports = definition[:ports]
             server.log = definition[:log]
             server.proxy = definition[:proxy] if definition[:proxy]
           end

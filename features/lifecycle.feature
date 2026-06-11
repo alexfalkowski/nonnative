@@ -32,6 +32,12 @@ Feature: Lifecycle
       | Rollback failed for rollback_process with id |
       | because the process did not exit in time     |
 
+  Scenario: Process readiness requires every configured port to open
+    Given I configure the system with a process that opens only one configured port
+    When I attempt to start the system
+    Then starting the system should raise an error containing "Started partial_ports_process with id"
+    And starting the system should raise an error containing "though did not respond in time"
+
   Scenario: Pool starts services before servers and processes
     When I start a pool with ordered services, servers, and processes
     Then the lifecycle errors should be empty
