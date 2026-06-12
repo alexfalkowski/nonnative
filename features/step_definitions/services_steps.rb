@@ -28,6 +28,19 @@ When('I stop the service runner {string}') do |name|
   Nonnative.pool.service_by_name(name).stop
 end
 
+When('I stop the service runner {string} while clients connect') do |name|
+  service = configured_service(name)
+  runner = Nonnative.pool.service_by_name(name)
+  @stop_error = nil
+
+  20.times do |iteration|
+    runner.start if iteration.positive?
+    stop_service_runner_while_clients_connect(runner, service)
+
+    break if @stop_error
+  end
+end
+
 When('I receive data from the service') do
   @service_response = @service.receive
 end
@@ -53,6 +66,10 @@ end
 
 Then('I should get a proxy not found error') do
   expect(@error).to be_a(Nonnative::NotFoundError)
+end
+
+Then('stopping the service runner should succeed') do
+  expect(@stop_error).to be_nil
 end
 
 Then('the proxy for service {string} should use host {string} and port {int}') do |name, host, port|

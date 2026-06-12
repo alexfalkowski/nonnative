@@ -49,6 +49,12 @@ Feature: Service proxies
     And I receive data from the service
     Then I should receive a connection error from the service
 
+  Scenario: Stopping a service proxy while clients connect succeeds
+    Given I configure the system programmatically with services
+    And I start the system
+    When I stop the service runner "service_1" while clients connect
+    Then stopping the service runner should succeed
+
   @reset
   Scenario: A delayed service proxy still allows responses
     Given I configure the system programmatically with services
