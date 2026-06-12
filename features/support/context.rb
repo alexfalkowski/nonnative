@@ -6,6 +6,7 @@ require_relative 'context/process_configuration'
 require_relative 'context/server_configuration'
 require_relative 'context/http_proxy_configuration'
 require_relative 'context/service_configuration'
+require_relative 'context/service_connections'
 require_relative 'context/benchmark_configuration'
 require_relative 'context/endpoint_clients'
 require_relative 'context/lifecycle_support'
@@ -25,6 +26,7 @@ module Nonnative
       include ServerConfiguration
       include HTTPProxyConfiguration
       include ServiceConfiguration
+      include ServiceConnections
       include BenchmarkConfiguration
       include EndpointClients
       include LifecycleSupport

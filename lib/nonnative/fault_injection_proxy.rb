@@ -77,17 +77,16 @@ module Nonnative
     #
     # @return [void]
     def stop
-      mutex.synchronize do
-        close_connections
-      end
-
-      server = @tcp_server
-      @tcp_server = nil
+      server = tcp_server
       server&.close
 
-      listener_thread = @thread
-      @thread = nil
+      listener_thread = thread
       listener_thread&.join
+
+      @tcp_server = nil
+      @thread = nil
+
+      close_connections
 
       Nonnative.logger.info "stopped with host '#{service.host}' and port '#{service.port}' for proxy 'fault_injection'"
     end
@@ -162,7 +161,7 @@ module Nonnative
         logger.info "handled connection for '#{id}' with socket '#{socket.inspect}'"
       end
 
-      connections.delete(id)
+      delete_connection(id)
     end
 
     def connect(id, socket)
@@ -179,24 +178,26 @@ module Nonnative
     end
 
     def close_connections
-      connections.each do |id, connection|
+      active_connections = mutex.synchronize do
+        connections.to_a.tap { connections.clear }
+      end
+
+      active_connections.each do |id, connection|
         close_connection(id, connection)
       end
-    ensure
-      connections.clear
     end
 
     def apply_state(state)
-      mutex.synchronize do
-        Nonnative.logger.info "applying state '#{state}' for proxy 'fault_injection'"
+      Nonnative.logger.info "applying state '#{state}' for proxy 'fault_injection'"
 
+      mutex.synchronize do
         return if @state == state
 
         @state = state
-        close_connections
-
-        wait
       end
+
+      close_connections
+      wait
     end
 
     def read_state
@@ -204,15 +205,19 @@ module Nonnative
     end
 
     def register_connection(id, socket)
-      connections[id] = Connection.new(socket)
+      mutex.synchronize { connections[id] = Connection.new(socket) }
     end
 
     def attach_connection_thread(id, thread)
-      connections[id]&.thread = thread
+      mutex.synchronize { connections[id]&.thread = thread }
     end
 
     def attach_connection_pair(id, pair)
-      connections[id]&.pair = pair
+      mutex.synchronize { connections[id]&.pair = pair }
+    end
+
+    def delete_connection(id)
+      mutex.synchronize { connections.delete(id) }
     end
 
     def close_connection(id, connection)
