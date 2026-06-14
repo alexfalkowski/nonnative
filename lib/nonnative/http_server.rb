@@ -9,14 +9,20 @@ module Nonnative
   # The server is started and stopped by {Nonnative::Server} via {#perform_start} / {#perform_stop}.
   #
   # @example Running a Sinatra app
-  #   app = Sinatra.new do
-  #     get('/hello') { 'Hello World!' }
+  #   class HelloHTTPServer < Nonnative::HTTPServer
+  #     def initialize(service)
+  #       app = Sinatra.new do
+  #         get('/hello') { 'Hello World!' }
+  #       end
+  #
+  #       super(app, service)
+  #     end
   #   end
   #
   #   Nonnative.configure do |config|
   #     config.server do |s|
   #       s.name = 'http'
-  #       s.klass = ->(service) { Nonnative::HTTPServer.new(app, service) }
+  #       s.klass = HelloHTTPServer
   #       s.timeout = 2
   #       s.host = '127.0.0.1'
   #       s.ports = [4567]
@@ -24,7 +30,7 @@ module Nonnative
   #     end
   #   end
   #
-  # Note: In YAML configuration you typically set `class` to a concrete subclass that calls `super(app, service)`.
+  # YAML configuration uses the same concrete subclass name in its `class` field.
   #
   # @see Nonnative::Server
   class HTTPServer < Nonnative::Server

@@ -6,11 +6,14 @@ module Nonnative
   # A proxy is responsible for interposing behavior between a client and a target service.
   # Runtime services create a proxy instance via {Nonnative::ProxyFactory} based on `service.proxy.kind`.
   #
+  # Service configuration `host` and `port` are the client-facing endpoint. Concrete proxy methods are
+  # implementation-specific; for example {Nonnative::FaultInjectionProxy#host} and
+  # {Nonnative::FaultInjectionProxy#port} return the upstream target behind the proxy.
+  #
   # Concrete proxies typically implement these public methods:
   # - `start`: begin proxying (bind/listen, start threads, etc)
   # - `stop`: stop proxying and release resources
   # - `reset`: return proxy behavior to a healthy/default state
-  # - `host` / `port`: endpoint clients should connect to when the proxy is enabled
   #
   # @see Nonnative::ProxyFactory
   # @see Nonnative::NoProxy

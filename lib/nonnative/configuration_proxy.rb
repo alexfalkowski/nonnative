@@ -15,12 +15,21 @@ module Nonnative
   # @see Nonnative.proxies
   class ConfigurationProxy
     # @return [String] proxy kind name (for example `"none"` or `"fault_injection"`)
+    attr_accessor :kind
+
     # @return [String] upstream host used by proxy implementations (defaults to `"127.0.0.1"`)
+    attr_accessor :host
+
     # @return [Integer] upstream port used by proxy implementations (defaults to `0`)
+    attr_accessor :port
+
     # @return [String, nil] path to proxy log file (implementation-dependent)
+    attr_accessor :log
+
     # @return [Numeric] wait interval (seconds) after proxy state changes (defaults to `0.1`)
+    attr_accessor :wait
+
     # @return [Hash] proxy implementation options (implementation-dependent)
-    attr_accessor :kind, :host, :port, :log, :wait
     attr_reader :options
 
     # Creates a proxy configuration with defaults.

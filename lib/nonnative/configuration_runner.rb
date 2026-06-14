@@ -13,10 +13,13 @@ module Nonnative
   # @see Nonnative::ConfigurationService
   class ConfigurationRunner
     # @return [String, nil] runner name used for lookup (for example via `pool.process_by_name`)
+    attr_accessor :name
+
     # @return [String] host to bind/connect to (defaults to `"127.0.0.1"`)
-    # @return [Array<Integer>] ports to bind/connect to
+    attr_accessor :host
+
     # @return [Numeric] wait interval (seconds) used by runners between lifecycle steps
-    attr_accessor :name, :host, :wait
+    attr_accessor :wait
 
     # @return [Array<Integer>] client-facing ports used for readiness/shutdown checks
     attr_reader :ports
