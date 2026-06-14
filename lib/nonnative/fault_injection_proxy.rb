@@ -11,7 +11,7 @@ module Nonnative
   #
   # - {#close_all}: close connections immediately on accept
   # - {#delay}: delay reads by a configured duration (default: 2 seconds)
-  # - {#invalid_data}: corrupt outbound data by shuffling characters
+  # - {#invalid_data}: forward requests unchanged and mutate upstream responses before they reach clients
   # - {#reset}: return to healthy pass-through behavior
   #
   # State changes terminate any active connections so new connections observe the new behavior.
@@ -107,7 +107,7 @@ module Nonnative
       apply_state :delay
     end
 
-    # Corrupts forwarded data by shuffling characters.
+    # Mutates upstream responses while forwarding client requests unchanged.
     #
     # @return [void]
     def invalid_data

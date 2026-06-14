@@ -36,10 +36,10 @@
 #   # run tests...
 #   Nonnative.stop
 #
-# == Notes
+# == Cucumber integration
 #
-# This file also requires integration helpers used by acceptance tests. If you require `nonnative` outside a
-# Cucumber runtime, loading `nonnative/cucumber` may not be desirable for your environment.
+# Requiring `nonnative` loads the lazy Cucumber integration. It is safe outside a booted Cucumber
+# runtime; hooks and step definitions are installed once Cucumber's Ruby DSL is ready.
 #
 require 'socket'
 require 'timeout'

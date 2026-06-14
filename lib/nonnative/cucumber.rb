@@ -8,6 +8,26 @@ module Nonnative
   # Requiring `nonnative` outside a running Cucumber environment should not fail, but when Cucumber
   # does finish booting its support-code registry this installer still needs to register the hooks
   # and step definitions defined here.
+  #
+  # Supported hooks:
+  # - `@startup`: start before scenario, stop after scenario
+  # - `@manual`: stop after scenario; use `When I start the system` to start manually
+  # - `@clear`: clear memoized Nonnative state before scenario
+  # - `@reset`: reset proxies after scenario
+  #
+  # Installed step definitions:
+  # - `Given I set the proxy for service {string} to {string}`
+  # - `Then I should reset the proxy for service {string}`
+  # - `When I start the system`
+  # - `When I attempt to start the system`
+  # - `When I attempt to stop the system`
+  # - `Then I should see {string} as unhealthy`
+  # - `Then I should see {string} as healthy`
+  # - `Then the process {string} should consume less than {string} of memory`
+  # - `Then starting the system should raise an error`
+  # - `Then stopping the system should raise an error`
+  # - `Then I should see a log entry of {string} for process {string}`
+  # - `Then I should see a log entry of {string} in the file {string}`
   module Cucumber
     module LanguageHook
       def rb_language=(value)

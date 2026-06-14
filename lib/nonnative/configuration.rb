@@ -42,13 +42,25 @@ module Nonnative
     end
 
     # @return [String, nil] logical system name (used for observability endpoints)
+    attr_accessor :name
+
     # @return [String, nil] configuration version
+    attr_accessor :version
+
     # @return [String, nil] base URL for observability queries (for example `"http://127.0.0.1:8080"`)
+    attr_accessor :url
+
     # @return [String, nil] path to the Nonnative log file
+    attr_accessor :log
+
     # @return [Array<Nonnative::ConfigurationProcess>] configured processes
+    attr_accessor :processes
+
     # @return [Array<Nonnative::ConfigurationServer>] configured in-process servers
+    attr_accessor :servers
+
     # @return [Array<Nonnative::ConfigurationService>] configured services (proxy-only)
-    attr_accessor :name, :version, :url, :log, :processes, :servers, :services
+    attr_accessor :services
 
     # Loads a configuration file and appends its runners to this instance.
     #

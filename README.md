@@ -164,7 +164,7 @@ Nonnative.configure do |config|
 
   config.process do |p|
     p.name = 'start_1'
-    p.command = -> { ['features/support/bin/start', '12_321'] }
+    p.command = -> { ['bin/start-test-service', '12_321'] }
     p.timeout = 5
     p.wait = 0.1
     p.ports = [12_321]
@@ -177,7 +177,7 @@ Nonnative.configure do |config|
 
   config.process do |p|
     p.name = 'start_2'
-    p.command = -> { ['features/support/bin/start', '12_322'] }
+    p.command = -> { ['bin/start-test-service', '12_322'] }
     p.timeout = 0.5
     p.wait = 0.1
     p.ports = [12_322]
@@ -197,7 +197,7 @@ processes:
   -
     name: start_1
     command:
-      - features/support/bin/start
+      - bin/start-test-service
       - "12_321"
     timeout: 5
     wait: 1
@@ -210,7 +210,7 @@ processes:
   -
     name: start_2
     command:
-      - features/support/bin/start
+      - bin/start-test-service
       - "12_322"
     timeout: 5
     wait: 1
@@ -474,6 +474,8 @@ end
 
 Define your server:
 
+Assume the gRPC service base class and response types below come from your generated gRPC stubs.
+
 ```ruby
 module Nonnative
   module Features
@@ -529,6 +531,9 @@ servers:
       - 9002
     log: grpc_server_1.log
 ```
+
+The `grpc` gem uses a global logger, so per-server gRPC log files are not independent. The first
+initialized gRPC server sets the logger used by later gRPC servers in the same Ruby process.
 
 Then load the file with:
 
