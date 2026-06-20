@@ -1,10 +1,8 @@
 # AGENTS.md
 
-## Shared skills
+## Shared guidance
 
-This repository uses the shared skills from `bin/skills/`. Read
-`bin/AGENTS.md` for the canonical shared skill list and use the smallest
-matching skill for the task.
+Use `bin/AGENTS.md` for shared skills and cross-repository defaults.
 
 `nonnative` is a Ruby gem for end-to-end testing systems implemented in other
 languages. It starts processes, in-process servers, and proxy-only services,
@@ -18,7 +16,7 @@ of dependencies.
 - Generated gRPC test stubs: `test/grpc/**/*`
 - Test protos: `test/nonnative/v1/*.proto`
 - Build wiring: root `Makefile` includes `bin/build/make/*.mak`
-- Required submodule: `bin/` from `git@github.com:alexfalkowski/bin.git`; missing SSH/submodule setup breaks `make`
+- Required submodule: `bin/`; missing submodule setup breaks `make`
 - Install deps: `make dep`
 - Lint: `make lint`
 - Features: `make features`
