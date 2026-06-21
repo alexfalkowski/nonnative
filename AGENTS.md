@@ -25,9 +25,6 @@ of dependencies.
 
 ## Intentional Design Choices
 
-- Root `make` compatibility is GNU Make 4+/`gmake` oriented through the shared
-  `bin/build/make/*.mak` fragments. Do not flag GNU Make 3.81 parsing failures
-  as code issues unless the task is explicitly about supporting GNU Make 3.81.
 - The configured HTTP proxy feature intentionally uses the external
   `www.afalkowski.com` host through `features/support/http_proxy_server.rb`.
   Do not flag this external dependency as a code issue unless the task is
