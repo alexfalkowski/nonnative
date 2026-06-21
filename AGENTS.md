@@ -19,6 +19,7 @@ of dependencies.
 - Required submodule: `bin/`; missing submodule setup breaks `make`
 - Install deps: `make dep`
 - Lint: `make lint`
+- Security checks: `make sec`
 - Features: `make features`
 - Benchmarks only: `make benchmarks`
 - Cleanup: `make clean-dep`, `make clean-reports`
@@ -49,6 +50,10 @@ of dependencies.
   test proto changes. Do not flag the absence of an automatic generated-stub
   freshness check as a test gap unless the task is explicitly about changing
   test proto generation or generated-file validation.
+- Generated gRPC test stubs may carry manual require-path adjustments after
+  generation. Do not treat `make -C test stale` as a required validation target
+  unless the task is explicitly about changing test proto generation; verify
+  the generated Ruby loads before accepting generator-only rewrites.
 - Buf linting for the test-only proto module is intentionally not part of the
   required local validation surface. Do not flag missing root-level validation
   for `test/buf.yaml` as a test gap unless the task is explicitly about test
