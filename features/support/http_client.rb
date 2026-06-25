@@ -50,6 +50,28 @@ module Nonnative
         end
       end
 
+      def inspect_request_with_proxy_credentials(verb)
+        with_retry(1, 1) do
+          headers = {
+            authorization: 'Bearer app-token',
+            proxy_authorization: 'Basic proxy-secret',
+            content_type: :json,
+            accept: :json
+          }
+
+          with_exception do
+            RestClient::Request.execute(
+              method: verb.to_sym,
+              url: URI.join(host, 'inspect').to_s,
+              payload: 'Hello World!',
+              headers:,
+              read_timeout: 1,
+              open_timeout: 1
+            )
+          end
+        end
+      end
+
       def not_found
         with_retry(1, 1) do
           get('notfound', { headers: { content_type: :json, accept: :json }, read_timeout: 1, open_timeout: 1 })

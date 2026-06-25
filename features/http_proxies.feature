@@ -15,6 +15,12 @@ Feature: HTTP proxies
       | PATCH  |
       | DELETE |
 
+  Scenario: The local HTTP proxy does not forward proxy credentials
+    Given I configure the system programmatically with a local HTTP proxy server
+    And I start the system
+    When I send a "POST" request with proxy credentials to the local HTTP proxy server
+    Then I should receive request details without proxy credentials from the local HTTP proxy server
+
   @config
   Scenario Outline: The configured HTTP proxy returns a <kind> response
     Given I configure the system through configuration with servers

@@ -23,6 +23,14 @@ module Nonnative
   #
   # Supported HTTP verbs: GET, POST, PUT, PATCH, DELETE.
   class HTTPProxy < Sinatra::Application
+    NON_FORWARDABLE_HEADERS = %w[
+      Host
+      Accept-Encoding
+      Version
+      Proxy-Authenticate
+      Proxy-Authorization
+    ].freeze
+
     # Extracts request headers from the Rack environment and normalizes them to standard HTTP names.
     #
     # Certain hop-by-hop or proxy-specific headers are removed.
@@ -36,7 +44,7 @@ module Nonnative
         result[normalized_header_name(header)] = value
       end
 
-      headers.except('Host', 'Accept-Encoding', 'Version')
+      headers.except(*NON_FORWARDABLE_HEADERS)
     end
 
     # Builds the upstream URL for the given request.

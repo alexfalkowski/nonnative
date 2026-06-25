@@ -72,6 +72,10 @@ When('I send a {string} request with body {string} to the local HTTP proxy serve
   @response = http_client_for_server('local_http_proxy_server').inspect_request(verb.downcase, body)
 end
 
+When('I send a {string} request with proxy credentials to the local HTTP proxy server') do |verb|
+  @response = http_client_for_server('local_http_proxy_server').inspect_request_with_proxy_credentials(verb.downcase)
+end
+
 Then('I should receive an HTTP {string} response') do |response|
   @responses.each do |r|
     expect(r.code).to eq(200)
@@ -111,6 +115,15 @@ Then('I should receive the {string} request details from the local HTTP proxy se
   expect(@error).to be_nil
   expect(@response.code).to eq(200)
   expect(body).to match_inspected_proxy_request(verb, 'Hello World!')
+end
+
+Then('I should receive request details without proxy credentials from the local HTTP proxy server') do
+  body = JSON.parse(@response.body)
+
+  expect(@error).to be_nil
+  expect(@response.code).to eq(200)
+  expect(body['authorization']).to eq('Bearer app-token')
+  expect(body['proxy_authorization']).to be_nil
 end
 
 Then('I should find the server runner {string}') do |name|
