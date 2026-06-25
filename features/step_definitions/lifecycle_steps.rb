@@ -178,6 +178,13 @@ Then('the process should no longer exist') do
   expect(@process_exists).to eq(false)
 end
 
+Then('the process {string} should no longer exist') do |name|
+  process = Nonnative.pool.process_by_name(name)
+  pid = process.instance_variable_get(:@pid)
+
+  wait_for { process_alive?(pid) }.to eq(false)
+end
+
 Then('the logger should be recreated for the new configuration') do
   expect(@second_logger).not_to equal(@first_logger)
   expect(File.read(@first_log_path)).to include('before clear')

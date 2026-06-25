@@ -19,6 +19,8 @@ Feature: Lifecycle
     Then stopping the system should raise an error containing:
       | Stopped no_exit_process with id       |
       | though the process did not exit in time |
+    And the process "no_exit_process" should no longer exist
+    And the port "12410" should be closed
 
   Scenario: Rollback errors are included in start failures
     Given I configure a pool that fails to start and raises on rollback
@@ -31,6 +33,8 @@ Feature: Lifecycle
     Then starting the system should raise an error containing:
       | Rollback failed for rollback_process with id |
       | because the process did not exit in time     |
+    And the process "rollback_process" should no longer exist
+    And the port "12411" should be closed
 
   Scenario: Process readiness requires every configured port to open
     Given I configure the system with a process that opens only one configured port

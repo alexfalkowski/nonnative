@@ -49,6 +49,7 @@ module Nonnative
       if process_exists?
         process_kill
         stopped = wait_stop != false
+        force_stop unless stopped
       end
 
       [pid, stopped]
@@ -80,6 +81,13 @@ module Nonnative
     def process_kill
       signal = Signal.list[service.signal || 'INT'] || Signal.list['INT']
       ::Process.kill(signal, pid)
+    end
+
+    def force_stop
+      ::Process.kill('KILL', pid)
+      wait_stop
+    rescue Errno::ESRCH, Errno::ECHILD
+      true
     end
 
     def process_spawn
