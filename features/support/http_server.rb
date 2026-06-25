@@ -34,6 +34,7 @@ module Nonnative
             content_type: request.media_type,
             content_length: request.content_length,
             authorization: request.env['HTTP_AUTHORIZATION'],
+            proxy_authorization: request.env['HTTP_PROXY_AUTHORIZATION'],
             user_agent: request.env['HTTP_USER_AGENT']
           }
         end
