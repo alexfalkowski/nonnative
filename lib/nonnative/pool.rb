@@ -30,6 +30,7 @@ module Nonnative
     # @yieldparam name [String, nil] runner name
     # @yieldparam values [Object] runner-specific return value from `start` (e.g. `[pid, running]` for processes)
     # @yieldparam result [Boolean] result of the port readiness check (`true` if ready in time)
+    # @yieldparam port [Nonnative::Ports] checked port group
     # @return [Array<String>] lifecycle and readiness-check errors collected while starting
     def start(&)
       errors = []
@@ -47,6 +48,7 @@ module Nonnative
     # @yieldparam name [String, nil] runner name
     # @yieldparam id [Object] runner-specific identifier returned by `stop` (e.g. pid or object_id)
     # @yieldparam result [Boolean] result of the port shutdown check (`true` if closed in time)
+    # @yieldparam port [Nonnative::Ports] checked port group
     # @return [Array<String>] lifecycle and shutdown-check errors collected while stopping
     def stop(&)
       errors = []
@@ -65,6 +67,7 @@ module Nonnative
     # @yieldparam name [String, nil] runner name
     # @yieldparam id [Object] runner-specific identifier returned by `stop`
     # @yieldparam result [Boolean] result of the port shutdown check (`true` if closed in time)
+    # @yieldparam port [Nonnative::Ports] checked port group
     # @return [Array<String>] lifecycle and shutdown-check errors collected while rolling back
     def rollback(&)
       errors = []
@@ -183,7 +186,7 @@ module Nonnative
 
       runners.each do |runner, port|
         values = runner.send(lifecycle_method)
-        checks << [runner, values, Thread.new { check_port(port, port_method) }]
+        checks << [runner, values, port, Thread.new { check_port(port, port_method) }]
       rescue StandardError => e
         errors << lifecycle_error(action, runner, e)
       end
@@ -198,12 +201,12 @@ module Nonnative
     end
 
     def yield_results(checks, action, &)
-      checks.each_with_object([]) do |(type, values, thread), errors|
+      checks.each_with_object([]) do |(type, values, port, thread), errors|
         result = thread.value
         if result[:error]
           errors << port_error(action, type, result[:error])
         elsif block_given?
-          yield type.name, values, result[:result]
+          yield type.name, values, result[:result], port
         end
       end
     end

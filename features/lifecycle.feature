@@ -41,6 +41,8 @@ Feature: Lifecycle
     When I attempt to start the system
     Then starting the system should raise an error containing "Started partial_ports_process with id"
     And starting the system should raise an error containing "though did not respond in time"
+    And starting the system should raise an error containing "127.0.0.1:12415, 127.0.0.1:12416"
+    And starting the system should raise an error containing "log: test/reports/12_415.log"
 
   Scenario: Pool starts services before servers and processes
     When I start a pool with ordered services, servers, and processes

@@ -216,9 +216,9 @@ module Nonnative
     def start
       @pool ||= Nonnative::Pool.new(configuration)
       errors = []
-      errors.concat(@pool.start do |name, values, result|
+      errors.concat(@pool.start do |name, values, result, ports|
         id, started = values
-        errors << "Started #{name} with id #{id}, though did not respond in time" if !started || !result
+        errors << "Started #{name} with id #{id}, though did not respond in time for #{ports.description}" if !started || !result
       end)
       nil
     rescue StandardError => e
@@ -239,9 +239,9 @@ module Nonnative
       errors = []
       return if @pool.nil?
 
-      errors.concat(@pool.stop do |name, values, result|
+      errors.concat(@pool.stop do |name, values, result, ports|
         id, stopped = Array(values).then { |v| [v.first, v.fetch(1, true)] }
-        errors << "Stopped #{name} with id #{id}, though did not respond in time" unless result
+        errors << "Stopped #{name} with id #{id}, though did not respond in time for #{ports.description}" unless result
         errors << "Stopped #{name} with id #{id}, though the process did not exit in time" unless stopped
       end)
       nil
@@ -305,9 +305,9 @@ module Nonnative
       errors = []
       return errors if @pool.nil?
 
-      errors.concat(@pool.rollback do |name, values, result|
+      errors.concat(@pool.rollback do |name, values, result, ports|
         id, stopped = Array(values).then { |v| [v.first, v.fetch(1, true)] }
-        errors << "Rollback failed for #{name} with id #{id}, because it did not stop in time" unless result
+        errors << "Rollback failed for #{name} with id #{id}, because it did not stop in time for #{ports.description}" unless result
         errors << "Rollback failed for #{name} with id #{id}, because the process did not exit in time" unless stopped
       end)
     rescue StandardError => e
