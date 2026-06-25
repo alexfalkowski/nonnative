@@ -108,6 +108,50 @@ Given('I load a temporary configuration with a top-level wait and a process') do
   YAML
 end
 
+Given('I load a temporary configuration with omitted runner timeouts') do
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: test
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+    processes:
+      - name: default_timeout_process
+        command: features/support/bin/start 12_398
+        ports:
+          - 12398
+        log: test/reports/12_398.log
+    servers:
+      - name: default_timeout_server
+        class: Nonnative::Features::TCPServer
+        ports:
+          - 12397
+        log: test/reports/default_timeout_server.log
+  YAML
+end
+
+Given('I load a temporary configuration with explicit runner timeouts') do
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: test
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+    processes:
+      - name: explicit_timeout_process
+        command: features/support/bin/start 12_396
+        timeout: 2.5
+        ports:
+          - 12396
+        log: test/reports/12_396.log
+    servers:
+      - name: explicit_timeout_server
+        class: Nonnative::Features::TCPServer
+        timeout: 3.5
+        ports:
+          - 12395
+        log: test/reports/explicit_timeout_server.log
+  YAML
+end
+
 Given('I load a temporary configuration containing ERB') do
   @erb_side_effect_path = "test/reports/#{SecureRandom.hex(4)}"
   load_temporary_configuration(<<~YAML)
@@ -305,6 +349,18 @@ Then('the configured process {string} should have wait {float}') do |name, wait|
   process = configured_process(name)
 
   expect(process.wait).to eq(wait)
+end
+
+Then('the configured process {string} should have timeout {float}') do |name, timeout|
+  process = configured_process(name)
+
+  expect(process.timeout).to eq(timeout)
+end
+
+Then('the configured server {string} should have timeout {float}') do |name, timeout|
+  server = configured_server(name)
+
+  expect(server.timeout).to eq(timeout)
 end
 
 Then('the configured process {string} should use host {string}') do |name, host|

@@ -53,6 +53,16 @@ Feature: Configuration loading
     Given I load a temporary configuration with a top-level wait and a process
     Then the configured process "default_wait_process" should have wait 0.1
 
+  Scenario: Missing runner timeouts default to bounded lifecycle checks
+    Given I load a temporary configuration with omitted runner timeouts
+    Then the configured process "default_timeout_process" should have timeout 1.0
+    And the configured server "default_timeout_server" should have timeout 1.0
+
+  Scenario: YAML preserves explicit runner timeouts
+    Given I load a temporary configuration with explicit runner timeouts
+    Then the configured process "explicit_timeout_process" should have timeout 2.5
+    And the configured server "explicit_timeout_server" should have timeout 3.5
+
   Scenario: Missing hosts default to loopback
     Given I load a temporary configuration with omitted hosts
     Then the configured process "default_host_process" should use host "127.0.0.1"

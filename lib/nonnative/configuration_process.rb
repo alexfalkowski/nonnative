@@ -19,7 +19,7 @@ module Nonnative
     # @return [String, nil] signal name to use for stopping (defaults to `"INT"` when not set)
     attr_accessor :signal
 
-    # @return [Numeric] readiness timeout (seconds) used when waiting for ports to open/close
+    # @return [Numeric] readiness timeout (seconds) used when waiting for ports to open/close (defaults to `1.0`)
     attr_accessor :timeout
 
     # @return [String] log file path to append process stdout/stderr to
@@ -27,5 +27,17 @@ module Nonnative
 
     # @return [Hash, nil] environment variables to pass to the spawned process
     attr_accessor :environment
+
+    # Creates a process configuration with bounded lifecycle defaults.
+    #
+    # Defaults:
+    # - `timeout`: `1.0`
+    #
+    # @return [void]
+    def initialize
+      super
+
+      self.timeout = DEFAULT_TIMEOUT
+    end
   end
 end
