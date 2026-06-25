@@ -28,6 +28,9 @@ module Nonnative
     # @return [Hash, nil] environment variables to pass to the spawned process
     attr_accessor :environment
 
+    # @return [Nonnative::ConfigurationReadiness, nil] optional HTTP readiness check
+    attr_reader :readiness
+
     # Creates a process configuration with bounded lifecycle defaults.
     #
     # Defaults:
@@ -38,6 +41,14 @@ module Nonnative
       super
 
       self.timeout = DEFAULT_TIMEOUT
+    end
+
+    # Sets optional HTTP readiness configuration.
+    #
+    # @param value [Hash, #to_h, nil] readiness attributes with required `port` and `path`
+    # @return [void]
+    def readiness=(value)
+      @readiness = value.nil? ? nil : Nonnative::ConfigurationReadiness.new(value)
     end
   end
 end

@@ -22,6 +22,7 @@ module Nonnative
   #       p.ports = [8080, 9090]
   #       p.timeout = 10
   #       p.log = 'api.log'
+  #       p.readiness = { port: 8080, path: '/example/readyz' }
   #     end
   #   end
   #
@@ -142,6 +143,7 @@ module Nonnative
           process_config.command = command(loaded_process)
           process_config.signal = loaded_process.signal
           process_config.environment = loaded_process.environment
+          process_config.readiness = loaded_process.readiness if loaded_process.readiness
           runner_attributes(process_config, loaded_process)
         end
       end
@@ -163,6 +165,7 @@ module Nonnative
       servers = cfg.servers || []
       servers.each do |loaded_server|
         reject_proxy(loaded_server, 'servers')
+        reject_readiness(loaded_server, 'servers')
 
         server do |server_config|
           server_config.klass = Object.const_get(server_class_name(loaded_server))
@@ -174,6 +177,8 @@ module Nonnative
     def add_services(cfg)
       services = cfg.services || []
       services.each do |loaded_service|
+        reject_readiness(loaded_service, 'services')
+
         service do |service_config|
           service_config.name = loaded_service.name
           service_config.host = loaded_service.host if loaded_service.host
@@ -218,6 +223,13 @@ module Nonnative
       return unless values.key?(:proxy) || values.key?('proxy')
 
       raise ArgumentError, "Use 'services' for proxy configuration; #{kind} do not support 'proxy'"
+    end
+
+    def reject_readiness(loaded, kind)
+      values = loaded.to_h
+      return unless values.key?(:readiness) || values.key?('readiness')
+
+      raise ArgumentError, "Use 'processes' for readiness configuration; #{kind} do not support 'readiness'"
     end
 
     def assign_proxy(service, loaded_proxy)

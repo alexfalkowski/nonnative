@@ -54,6 +54,26 @@ Given('I load a temporary configuration with multiple runner ports') do
   YAML
 end
 
+Given('I load a temporary configuration with process HTTP readiness') do
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: test
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+    processes:
+      - name: ready_process
+        command: features/support/bin/start 12_426
+        timeout: 1
+        host: 127.0.0.1
+        ports:
+          - 12426
+        log: test/reports/12_426.log
+        readiness:
+          port: 12427
+          path: /test/readyz
+  YAML
+end
+
 Given('I load a temporary configuration with proxy options') do
   load_temporary_configuration(<<~YAML)
     version: "1.0"
@@ -179,7 +199,6 @@ Given('I load a temporary configuration with omitted hosts') do
 end
 
 When('I attempt to load a temporary configuration with a process proxy') do
-  @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(<<~YAML)
       version: "1.0"
@@ -202,7 +221,6 @@ When('I attempt to load a temporary configuration with a process proxy') do
 end
 
 When('I attempt to load a temporary configuration with a server proxy') do
-  @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(<<~YAML)
       version: "1.0"
@@ -224,8 +242,68 @@ When('I attempt to load a temporary configuration with a server proxy') do
   end
 end
 
+When('I attempt to load a temporary configuration with server readiness') do
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(<<~YAML)
+      version: "1.0"
+      name: test
+      url: http://localhost:4567
+      log: test/reports/nonnative.log
+      servers:
+        - name: server_readiness
+          class: Nonnative::Features::TCPServer
+          ports:
+            - 12426
+          log: test/reports/server_readiness.log
+          readiness:
+            port: 12427
+            path: /test/readyz
+    YAML
+  end
+end
+
+When('I attempt to load a temporary configuration with service readiness') do
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(<<~YAML)
+      version: "1.0"
+      name: test
+      url: http://localhost:4567
+      log: test/reports/nonnative.log
+      services:
+        - name: service_readiness
+          port: 12426
+          readiness:
+            port: 12427
+            path: /test/readyz
+    YAML
+  end
+end
+
+When('I attempt to load a temporary configuration with process HTTP readiness missing {string}') do |field|
+  readiness = { 'port' => 12_427, 'path' => '/test/readyz' }
+  readiness.delete(field)
+  readiness_yaml = readiness.map { |key, value| "#{key}: #{value}" }.join("\n")
+
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(<<~YAML)
+      version: "1.0"
+      name: test
+      url: http://localhost:4567
+      log: test/reports/nonnative.log
+      processes:
+        - name: incomplete_ready_process
+          command: features/support/bin/start 12_426
+          timeout: 1
+          ports:
+            - 12426
+          log: test/reports/12_426.log
+          readiness:
+            #{readiness_yaml}
+    YAML
+  end
+end
+
 When('I attempt to load a temporary configuration with a Ruby object tag') do
-  @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(<<~YAML)
       --- !ruby/object:Object
@@ -236,7 +314,6 @@ When('I attempt to load a temporary configuration with a Ruby object tag') do
 end
 
 When('I attempt to load a temporary configuration with a singular runner port') do
-  @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(<<~YAML)
       version: "1.0"
@@ -254,7 +331,6 @@ When('I attempt to load a temporary configuration with a singular runner port') 
 end
 
 When('I attempt to load a temporary configuration with plural service ports') do
-  @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(<<~YAML)
       version: "1.0"
@@ -276,7 +352,6 @@ When('I attempt to load a temporary configuration with plural service ports') do
 end
 
 When('I attempt to configure a service with plural ports') do
-  @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
     Nonnative.configure do |config|
       config.service do |service|
@@ -288,7 +363,6 @@ When('I attempt to configure a service with plural ports') do
 end
 
 When('I attempt to read plural ports from a configured service') do
-  @configuration_error = nil
   Nonnative.configure do |config|
     config.service do |service|
       service.name = 'legacy_ports_service'
@@ -302,7 +376,6 @@ When('I attempt to read plural ports from a configured service') do
 end
 
 When('I attempt to load a temporary configuration with {string} YAML') do |kind|
-  @configuration_error = nil
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(malformed_yaml(kind))
   end
@@ -324,6 +397,13 @@ Then('the configured process {string} should use ports:') do |name, table|
   process = configured_process(name)
 
   expect(process.ports).to eq(table.raw.flatten.map(&:to_i))
+end
+
+Then('the configured process {string} readiness should use port {int} and path {string}') do |name, port, path|
+  process = configured_process(name)
+
+  expect(process.readiness.port).to eq(port)
+  expect(process.readiness.path).to eq(path)
 end
 
 Then('the configured service {string} proxy should use host {string} and port {int}') do |name, host, port|

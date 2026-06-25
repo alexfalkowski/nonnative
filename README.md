@@ -66,13 +66,16 @@ Process/server fields:
 - `wait`: small sleep (seconds) between lifecycle steps.
 - `log`: per-runner log file used by process output redirection or server implementations.
 
+Process-only fields:
+- `readiness`: optional HTTP startup readiness check with explicit `port` and `path`.
+
 Service fields:
 - `port`: client-facing service port. Services do not get TCP readiness/shutdown checks from Nonnative.
 
-Nonnative readiness and shutdown checks are TCP-only. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined.
+Nonnative readiness and shutdown checks are TCP port checks by default. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined. Processes can also opt into an HTTP readiness check that runs after TCP readiness succeeds.
 
 > [!WARNING]
-> Readiness and shutdown checks only prove that a TCP port opened or closed. They do not verify HTTP status, gRPC health, schema readiness, migrations, or application-specific health.
+> TCP readiness and shutdown checks only prove that a TCP port opened or closed. HTTP readiness is process-only, checks for a 2xx response, and does not verify gRPC health, schema readiness, migrations, or other application-specific health.
 
 Start and stop Nonnative around the test scope that should own the configured runners:
 
@@ -170,6 +173,7 @@ Nonnative.configure do |config|
     p.ports = [12_321]
     p.log = '12_321.log'
     p.signal = 'INT' # Possible values are described in Signal.list.keys.
+    p.readiness = { port: 12_321, path: '/test/readyz' }
     p.environment = { # Pass environment variables to process.
       'TEST' => 'true'
     }
@@ -205,6 +209,9 @@ processes:
       - 12321
     log: 12_321.log
     signal: INT # Possible values are described in Signal.list.keys.
+    readiness:
+      port: 12321
+      path: /test/readyz
     environment: # Pass environment variables to process.
       TEST: true
   -

@@ -12,13 +12,14 @@ module Nonnative
     def initialize(runner)
       @runner = runner
       @ports = runner.ports.map { |port| Nonnative::Port.new(runner, port) }
+      @readiness = Nonnative::HTTPProbe.new(runner) if runner.respond_to?(:readiness) && runner.readiness
     end
 
     # Returns whether all configured ports become connectable before their timeouts elapse.
     #
     # @return [Boolean]
     def open?
-      ports.all?(&:open?)
+      ports.all?(&:open?) && (readiness.nil? || readiness.ready?)
     end
 
     # Returns whether all configured ports become non-connectable before their timeouts elapse.
@@ -39,12 +40,16 @@ module Nonnative
     #
     # @return [String]
     def description
+      details = []
+      details << "readiness: #{readiness.endpoint}" if readiness
       log = runner.log if runner.respond_to?(:log)
-      log ? "#{endpoints} (log: #{log})" : endpoints
+      details << "log: #{log}" if log
+
+      details.empty? ? endpoints : "#{endpoints} (#{details.join('; ')})"
     end
 
     private
 
-    attr_reader :ports, :runner
+    attr_reader :ports, :readiness, :runner
   end
 end

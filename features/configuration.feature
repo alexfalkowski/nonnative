@@ -17,6 +17,19 @@ Feature: Configuration loading
       | 12420 |
       | 12421 |
 
+  Scenario: YAML maps process HTTP readiness
+    Given I load a temporary configuration with process HTTP readiness
+    Then the configured process "ready_process" readiness should use port 12427 and path "/test/readyz"
+
+  Scenario Outline: YAML rejects incomplete process HTTP readiness
+    When I attempt to load a temporary configuration with process HTTP readiness missing "<field>"
+    Then loading the configuration should fail with an argument error containing "Process readiness requires '<field>'"
+
+    Examples:
+      | field |
+      | port  |
+      | path  |
+
   Scenario: YAML rejects singular process ports
     When I attempt to load a temporary configuration with a singular runner port
     Then loading the configuration should fail with an argument error containing "Use 'ports' instead of 'port'"
@@ -44,6 +57,14 @@ Feature: Configuration loading
   Scenario: YAML rejects server proxies
     When I attempt to load a temporary configuration with a server proxy
     Then loading the configuration should fail with an argument error containing "servers do not support 'proxy'"
+
+  Scenario: YAML rejects server readiness
+    When I attempt to load a temporary configuration with server readiness
+    Then loading the configuration should fail with an argument error containing "servers do not support 'readiness'"
+
+  Scenario: YAML rejects service readiness
+    When I attempt to load a temporary configuration with service readiness
+    Then loading the configuration should fail with an argument error containing "services do not support 'readiness'"
 
   Scenario: Server YAML class entries resolve to server implementations
     Given I load a temporary configuration with a server entry

@@ -68,6 +68,14 @@ Given('I configure the system programmatically with a process that has no stop s
   end
 end
 
+Given('I configure the system programmatically with a process HTTP readiness check') do
+  configure_http_readiness_process(status: 200)
+end
+
+Given('I configure the system programmatically with a failing process HTTP readiness check') do
+  configure_http_readiness_process(status: 503)
+end
+
 Given('the parent environment variable {string} is {string}') do |name, value|
   @previous_environment ||= {}
   @previous_environment[name] = ENV.fetch(name, nil)
