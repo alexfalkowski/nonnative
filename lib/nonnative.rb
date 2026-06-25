@@ -204,7 +204,7 @@ module Nonnative
     # @param kind [String] proxy kind name (for example `"fault_injection"`)
     # @return [Class] a subclass of {Nonnative::Proxy}
     def proxy(kind)
-      Nonnative.proxies[kind] || Nonnative::NoProxy
+      kind.nil? || kind == 'none' ? NoProxy : proxies.fetch(kind) { raise ArgumentError, "Unsupported proxy kind '#{kind}'" }
     end
 
     # Starts all configured services, servers, and processes, and waits for readiness.

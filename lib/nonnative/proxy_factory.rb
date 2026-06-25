@@ -6,7 +6,9 @@ module Nonnative
   # A runtime service constructs a proxy via this factory. The proxy implementation is selected by
   # `service.proxy.kind` and resolved using {Nonnative.proxy}.
   #
-  # If the kind is unknown (or `"none"`), {Nonnative.proxy} returns {Nonnative::NoProxy}.
+  # If the kind is `"none"`, {Nonnative.proxy} returns {Nonnative::NoProxy}.
+  # Unknown non-`"none"` kinds raise an error so proxy configuration typos do not silently disable
+  # fault injection.
   #
   # @see Nonnative.proxy
   # @see Nonnative.proxies
