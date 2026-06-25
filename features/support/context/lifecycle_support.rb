@@ -48,6 +48,13 @@ module Nonnative
           nil
         end
 
+        def process_alive?(pid)
+          ::Process.kill(0, pid)
+          true
+        rescue Errno::ESRCH
+          false
+        end
+
         def build_ordered_pool(events)
           build_pool(
             services: [Nonnative::Features::RecordingService.new(name: 'service_1', events:)],
