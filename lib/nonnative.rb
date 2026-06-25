@@ -6,7 +6,7 @@
 # It can:
 #
 # - start external processes and in-process servers
-# - wait for readiness via port checks
+# - wait for readiness via port checks and optional process HTTP readiness
 # - optionally run fault-injection proxies in front of services
 #
 # The public entry points are exposed as module-level methods on {Nonnative}.
@@ -27,6 +27,7 @@
 #       p.ports = [8080, 9090]
 #       p.timeout = 10
 #       p.log = 'api.log'
+#       p.readiness = { port: 8080, path: '/example/readyz' }
 #     end
 #   end
 #
@@ -72,6 +73,7 @@ require 'nonnative/ports'
 require 'nonnative/configuration_file'
 require 'nonnative/configuration'
 require 'nonnative/configuration_runner'
+require 'nonnative/configuration_readiness'
 require 'nonnative/configuration_process'
 require 'nonnative/configuration_server'
 require 'nonnative/configuration_service'
@@ -82,6 +84,7 @@ require 'nonnative/server'
 require 'nonnative/service'
 require 'nonnative/pool'
 require 'nonnative/http_client'
+require 'nonnative/http_probe'
 require 'nonnative/http_server'
 require 'nonnative/http_proxy_server'
 require 'nonnative/grpc_server'

@@ -1,0 +1,74 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'socket'
+
+tcp_port = ARGV.fetch(0).to_i
+http_port = ARGV.fetch(1).to_i
+readiness_status = ARGV.fetch(2).to_i
+closing = false
+
+Signal.trap 'INT' do
+  closing = true
+end
+
+Signal.trap 'TERM' do
+  closing = true
+end
+
+tcp_server = TCPServer.new('0.0.0.0', tcp_port)
+http_server = TCPServer.new('0.0.0.0', http_port)
+
+Thread.new do
+  loop do
+    [tcp_server, http_server].each { |server| server.close if closing && !server.closed? }
+    exit if closing
+
+    sleep 0.01
+  rescue IOError
+    exit
+  end
+end
+
+Thread.new do
+  loop do
+    socket = tcp_server.accept
+    Thread.new(socket) do |conn|
+      loop do
+        line = conn.readline.strip
+        conn.puts(line)
+      end
+    rescue EOFError
+      conn.close
+    end
+  end
+rescue IOError, Errno::EBADF
+  nil
+end
+
+Thread.new do
+  loop do
+    socket = http_server.accept
+    Thread.new(socket) do |conn|
+      request = conn.gets.to_s
+      loop do
+        line = conn.gets
+        break if line.nil? || line == "\r\n"
+      end
+
+      status = request.include?('/test/readyz') ? readiness_status : 404
+      body = status == 200 ? 'ready' : 'not ready'
+      conn.write "HTTP/1.1 #{status}\r\n"
+      conn.write "Content-Length: #{body.bytesize}\r\n"
+      conn.write "Connection: close\r\n"
+      conn.write "\r\n"
+      conn.write body
+    ensure
+      conn.close
+    end
+  end
+rescue IOError, Errno::EBADF
+  nil
+end
+
+sleep

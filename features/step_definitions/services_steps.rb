@@ -31,7 +31,6 @@ end
 When('I stop the service runner {string} while clients connect') do |name|
   service = configured_service(name)
   runner = Nonnative.pool.service_by_name(name)
-  @stop_error = nil
 
   20.times do |iteration|
     runner.start if iteration.positive?

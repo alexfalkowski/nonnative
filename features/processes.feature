@@ -47,6 +47,17 @@ Feature: Process runners
     Then stopping the system should not raise an error
     And the port "12414" should be closed
 
+  Scenario: Process HTTP readiness gates startup
+    Given I configure the system programmatically with a process HTTP readiness check
+    And I start the system
+    When I send "test" with the TCP client "http_ready_process" to the process
+    Then I should receive a TCP "test" response from the process
+
+  Scenario: Process HTTP readiness failures are reported during startup
+    Given I configure the system programmatically with a failing process HTTP readiness check
+    When I attempt to start the system
+    Then starting the system should raise an error containing "readiness: http://127.0.0.1:12427/test/readyz"
+
   Scenario: Explicit process environment overrides the parent environment
     Given the parent environment variable "STRING" is "parent"
     When I start a process runner with environment "STRING" set to "configured"
