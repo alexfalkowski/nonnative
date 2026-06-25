@@ -39,7 +39,8 @@ module Nonnative
     # @param app [#call] a Rack-compatible application (e.g. Sinatra/Rack app)
     # @param service [Nonnative::ConfigurationServer] server configuration
     def initialize(app, service)
-      log = File.open(service.log, 'a')
+      # Keep the log IO so the server lifecycle can release Puma's file handle on stop.
+      @log = File.open(service.log, 'a')
       options = {
         log_writer: Puma::LogWriter.new(log, log),
         force_shutdown_after: service.timeout
@@ -66,10 +67,16 @@ module Nonnative
     # @return [void]
     def perform_stop
       server.graceful_shutdown
+    ensure
+      close_log
     end
 
     private
 
-    attr_reader :server
+    attr_reader :server, :log
+
+    def close_log
+      log.close unless log.closed?
+    end
   end
 end
