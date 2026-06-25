@@ -61,6 +61,13 @@ module Nonnative
       end
     end
 
+    # Returns a human-readable endpoint for lifecycle diagnostics.
+    #
+    # @return [String]
+    def endpoint
+      "#{process.host}:#{port}"
+    end
+
     private
 
     attr_reader :process, :port, :timeout
