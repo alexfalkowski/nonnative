@@ -70,3 +70,8 @@ Feature: Servers
   Scenario: Custom proxy kinds can be registered
     When I register a custom proxy kind
     Then the custom proxy kind should resolve to the custom proxy
+
+  @proxy @contract
+  Scenario: Unknown proxy kinds are rejected
+    When I try to resolve proxy kind "missing"
+    Then resolving the proxy kind should fail with an argument error containing "Unsupported proxy kind 'missing'"

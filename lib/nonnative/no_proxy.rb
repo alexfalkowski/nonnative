@@ -3,7 +3,7 @@
 module Nonnative
   # No-op proxy implementation.
   #
-  # This is the default proxy when `service.proxy.kind` is `"none"` (or an unknown kind is provided).
+  # This is the default proxy when `service.proxy.kind` is `"none"`.
   # It does not bind/listen or alter traffic; it simply exposes the underlying runner's configured
   # `host` and primary `port`.
   #

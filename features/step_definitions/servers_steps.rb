@@ -52,12 +52,21 @@ When('I register a custom proxy kind') do
   Nonnative.proxies['custom'] = Nonnative::Features::CustomProxy
 end
 
+When('I try to resolve proxy kind {string}') do |kind|
+  capture_result(:@proxy_result, :@proxy_error) { Nonnative.proxy(kind) }
+end
+
 Then('the custom proxy kind should resolve to the custom proxy') do
   actual = Nonnative.proxy('custom')
   Nonnative.proxies.delete('custom')
   Nonnative.proxies['custom'] = @previous_custom_proxy if @previous_custom_proxy
 
   expect(actual).to eq(Nonnative::Features::CustomProxy)
+end
+
+Then('resolving the proxy kind should fail with an argument error containing {string}') do |message|
+  expect(@proxy_error).to be_a(ArgumentError)
+  expect(@proxy_error.message).to include(message)
 end
 
 When('I send a successful message to the HTTP proxy server') do

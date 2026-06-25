@@ -612,7 +612,7 @@ These proxies can simulate different situations. Available proxy kinds are:
 - `fault_injection`
 
 > [!WARNING]
-> Unknown proxy kinds fall back to `none`. If fault injection is not taking effect, check the `kind` spelling or register the custom kind before loading the configuration.
+> Unknown proxy kinds raise an error. If fault injection is not taking effect, check the `kind` spelling or register the custom kind before starting the system.
 
 Custom proxy kinds can be registered through `Nonnative.proxies`:
 
