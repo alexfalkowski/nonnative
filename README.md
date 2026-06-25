@@ -62,7 +62,7 @@ Common runner fields:
 
 Process/server fields:
 - `ports`: client-facing ports. These are also used for readiness/shutdown port checks.
-- `timeout`: max time (seconds) for readiness/shutdown port checks.
+- `timeout`: max time (seconds) for readiness/shutdown port checks. Defaults to `1.0`.
 - `wait`: small sleep (seconds) between lifecycle steps.
 - `log`: per-runner log file used by process output redirection or server implementations.
 

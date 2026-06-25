@@ -191,7 +191,8 @@ module Nonnative
 
     def runner_attributes(runner, loaded)
       runner.name = loaded.name
-      runner.timeout = loaded.timeout
+      timeout = loaded.timeout
+      runner.timeout = timeout unless timeout.nil?
       runner.wait = loaded.wait if loaded.wait
       runner.host = loaded.host if loaded.host
       assign_ports(runner, loaded)
