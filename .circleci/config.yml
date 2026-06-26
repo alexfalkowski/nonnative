@@ -32,13 +32,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}-{{ checksum ".source-key" }}
+            - nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}
             - nonnative-ruby-cache-
       - run: make dep
       - run: make clean-dep
       - save_cache:
           name: save deps
-          key: nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}-{{ checksum ".source-key" }}
+          key: nonnative-ruby-cache-{{ checksum "Gemfile.lock" }}-{{ checksum "~/.ruby-version" }}
           paths:
             - vendor
       - run: make lint
