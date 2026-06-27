@@ -204,8 +204,12 @@ module Nonnative
 
     # Resolves a proxy implementation for a configured kind.
     #
+    # `nil` and `"none"` resolve to {Nonnative::NoProxy}; any other kind must be registered in
+    # {Nonnative.proxies}.
+    #
     # @param kind [String] proxy kind name (for example `"fault_injection"`)
     # @return [Class] a subclass of {Nonnative::Proxy}
+    # @raise [ArgumentError] if the kind is not `"none"` and has not been registered
     def proxy(kind)
       kind.nil? || kind == 'none' ? NoProxy : proxies.fetch(kind) { raise ArgumentError, "Unsupported proxy kind '#{kind}'" }
     end

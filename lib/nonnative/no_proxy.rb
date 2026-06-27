@@ -4,8 +4,8 @@ module Nonnative
   # No-op proxy implementation.
   #
   # This is the default proxy when `service.proxy.kind` is `"none"`.
-  # It does not bind/listen or alter traffic; it simply exposes the underlying runner's configured
-  # `host` and primary `port`.
+  # It does not bind/listen or alter traffic; it simply exposes the service configuration's
+  # client-facing `host` and `port`.
   #
   # Services can always call `start`, `stop`, and `reset` safely on this proxy.
   #
@@ -41,7 +41,7 @@ module Nonnative
 
     # Returns the host clients should connect to.
     #
-    # For {NoProxy}, this is the underlying runner configuration host.
+    # For {NoProxy}, this is the service configuration's client-facing `host`.
     #
     # @return [String]
     def host
@@ -50,7 +50,7 @@ module Nonnative
 
     # Returns the port clients should connect to.
     #
-    # For {NoProxy}, this is the first underlying runner configuration port.
+    # For {NoProxy}, this is the service configuration's client-facing `port`.
     #
     # @return [Integer]
     def port
