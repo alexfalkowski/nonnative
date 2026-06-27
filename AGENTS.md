@@ -74,6 +74,11 @@ of dependencies.
   use `nonnative` against real dependencies. Do not flag the in-repository
   service proxy success scenario's connection-only assertion as a test gap
   unless the task is explicitly about changing service proxy forwarding.
+- `Nonnative::FaultInjectionProxy` owns its listener thread and stops it by
+  closing the owned `TCPServer`, which wakes the accept loop before joining the
+  thread. Do not flag the listener `join` as an unbounded reliability gap unless
+  the task is explicitly about proxy shutdown behavior or there is a normal-use
+  reproducer, failing CI evidence, or platform-specific hang evidence.
 
 ## Runtime Model
 
