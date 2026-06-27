@@ -98,6 +98,37 @@ Nonnative.stop
 > Call `Nonnative.clear` before reconfiguring Nonnative or starting a new lifecycle in the same Ruby process.
 > `Nonnative.clear` clears memoized configuration, logger, observability client, and pool.
 
+### 🧩 Test framework setup
+
+For Cucumber, load and configure Nonnative in `features/support/env.rb`, then use lifecycle tags on scenarios:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.load_file('configuration.yml')
+end
+```
+
+```cucumber
+@startup
+Scenario: run with Nonnative around this scenario
+```
+
+For RSpec or another suite that should start Nonnative once per test run, configure first and then require the startup integration:
+
+```ruby
+require 'nonnative'
+
+Nonnative.configure do |config|
+  config.load_file('configuration.yml')
+end
+
+require 'nonnative/startup'
+```
+
+`nonnative/startup` calls `Nonnative.start` immediately and registers an `at_exit` stop, so load configuration before requiring it.
+
 ### 📈 Observability
 
 `Nonnative.observability` is an HTTP client for common service endpoints under the configured `name` and `url`:
@@ -139,14 +170,6 @@ The repo’s own Cucumber suite also uses taxonomy tags to classify coverage:
 `make features` excludes `@benchmark`, while `make benchmarks` runs only `@benchmark`.
 
 Requiring `nonnative` is enough; the Cucumber hooks and step definitions are installed lazily once Cucumber’s Ruby DSL is ready.
-
-If you want "start once per test run", require:
-
-```ruby
-require 'nonnative/startup'
-```
-
-This calls `Nonnative.start` immediately and registers an `at_exit` stop.
 
 ### ⚙️ Processes
 
