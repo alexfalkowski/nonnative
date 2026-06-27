@@ -38,6 +38,18 @@ Or install it yourself as:
 gem install nonnative
 ```
 
+## 🛠️ Contributor Bootstrap
+
+Fresh clones need the shared `bin/` submodule before Make targets can load:
+
+```bash
+git submodule sync && git submodule update --init
+make help
+```
+
+Use `make dep` before local validation when dependencies are missing. The CI-parity checks are
+`make lint`, `make sec`, `make features`, and `make benchmarks`.
+
 ## 🚀 Usage
 
 Nonnative is configured via `Nonnative.configure` (programmatic) or `config.load_file(...)` (YAML).
@@ -154,7 +166,7 @@ expect(response.code).to eq(200)
 
 Nonnative ships Cucumber hooks (when loaded) that support these tags/strategies:
 - `@startup`: start before scenario; stop after scenario
-- `@manual`: stop after scenario (start is expected to be triggered manually in steps)
+- `@manual`: stop after scenario; use `When I start the system` to start manually
 - `@clear`: clears memoized configuration, logger, observability client, and pool before scenario
 - `@reset`: resets proxies after scenario
 

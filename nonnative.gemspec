@@ -11,8 +11,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Alejandro Falkowski']
   spec.email         = ['alexrfalkowski@gmail.com']
 
-  spec.summary       = 'Allows you to keep using the power of Ruby to test other systems'
-  spec.description   = spec.summary
+  spec.summary       = 'Ruby-first end-to-end harness for testing systems implemented in other languages'
+  spec.description   = 'Starts OS processes, in-process Ruby servers, and proxy-only services with TCP readiness checks and fault-injection proxies.'
   spec.homepage      = 'https://github.com/alexfalkowski/nonnative'
   spec.license       = 'MIT'
   spec.files         = Dir.chdir(File.expand_path(__dir__)) do
