@@ -286,6 +286,9 @@ module Nonnative
 
     # Clears memoized configuration, logger, observability client, and pool.
     #
+    # Call this before reconfiguring Nonnative or starting a new lifecycle in the same Ruby process.
+    # `start`/`stop` are intended to manage one lifecycle for the current pool.
+    #
     # @return [void]
     def clear
       clear_logger

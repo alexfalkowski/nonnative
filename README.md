@@ -94,7 +94,9 @@ Nonnative.stop
 `Nonnative.start` starts services first, then servers and processes. `Nonnative.stop` stops processes and servers first, then services. If startup fails, Nonnative rolls back runners that already started and raises `Nonnative::StartError`; shutdown failures raise `Nonnative::StopError`.
 
 > [!NOTE]
-> `Nonnative.clear` clears memoized configuration, logger, observability client, and pool. Use it before reconfiguring Nonnative in the same Ruby process.
+> `Nonnative.start` / `Nonnative.stop` manage one lifecycle for the current pool.
+> Call `Nonnative.clear` before reconfiguring Nonnative or starting a new lifecycle in the same Ruby process.
+> `Nonnative.clear` clears memoized configuration, logger, observability client, and pool.
 
 ### 📈 Observability
 
