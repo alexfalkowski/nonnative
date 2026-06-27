@@ -20,6 +20,9 @@ module Nonnative
       @timeout = Nonnative::Timeout.new(service.timeout)
     end
 
+    # @return [GetProcessMem, nil] memory reader for the current process lifecycle
+    attr_reader :memory
+
     # Spawns the configured process if it is not already running.
     #
     # @return [Array<(Integer, Boolean)>]
@@ -29,6 +32,8 @@ module Nonnative
     def start
       unless process_exists?
         @pid = process_spawn
+        # Keep memory reads bound to the child spawned for this lifecycle.
+        @memory = GetProcessMem.new(pid)
         wait_start
       end
 
@@ -53,17 +58,8 @@ module Nonnative
       end
 
       [pid, stopped]
-    end
-
-    # Returns a memoized memory reader for the spawned process.
-    #
-    # This is primarily used by acceptance tests to assert memory usage.
-    #
-    # @return [GetProcessMem, nil] a memory reader for the pid, or `nil` if not started
-    def memory
-      return if pid.nil?
-
-      @memory ||= GetProcessMem.new(pid)
+    ensure
+      @memory = nil
     end
 
     protected
