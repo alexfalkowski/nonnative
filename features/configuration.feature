@@ -30,6 +30,16 @@ Feature: Configuration loading
       | port  |
       | path  |
 
+  Scenario Outline: YAML rejects process HTTP readiness paths that are not valid path-only values
+    When I attempt to load a temporary configuration with process HTTP readiness path "<path>"
+    Then loading the configuration should fail with an argument error containing "Process readiness path must be path-only"
+
+    Examples:
+      | path                          |
+      | http://example.invalid/readyz |
+      | /test readyz                  |
+      | //example.invalid/readyz      |
+
   Scenario: YAML rejects singular process ports
     When I attempt to load a temporary configuration with a singular runner port
     Then loading the configuration should fail with an argument error containing "Use 'ports' instead of 'port'"

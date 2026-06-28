@@ -303,6 +303,27 @@ When('I attempt to load a temporary configuration with process HTTP readiness mi
   end
 end
 
+When('I attempt to load a temporary configuration with process HTTP readiness path {string}') do |path|
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(<<~YAML)
+      version: "1.0"
+      name: test
+      url: http://localhost:4567
+      log: test/reports/nonnative.log
+      processes:
+        - name: invalid_ready_process
+          command: features/support/bin/start 12_426
+          timeout: 1
+          ports:
+            - 12426
+          log: test/reports/12_426.log
+          readiness:
+            port: 12427
+            path: #{path}
+    YAML
+  end
+end
+
 When('I attempt to load a temporary configuration with a Ruby object tag') do
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(<<~YAML)

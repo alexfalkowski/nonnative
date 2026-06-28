@@ -43,10 +43,11 @@ module Nonnative
       end
 
       def install_hooks
+        # Register @clear before startup hooks so combined tags reset stale state before creating a pool.
+        Before('@clear') { Nonnative.clear }
         Before('@startup') { Nonnative.start }
         After('@startup') { Nonnative.stop }
         After('@manual') { Nonnative.stop }
-        Before('@clear') { Nonnative.clear }
         After('@reset') { Nonnative.reset }
       end
     end

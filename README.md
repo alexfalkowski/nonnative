@@ -79,12 +79,12 @@ Process/server fields:
 - `log`: per-runner log file used by process output redirection or server implementations.
 
 Process-only fields:
-- `readiness`: optional HTTP startup readiness check with explicit `port` and `path`.
+- `readiness`: optional HTTP startup readiness check with explicit `port` and path-only `path`.
 
 Service fields:
 - `port`: client-facing service port. Services do not get TCP readiness/shutdown checks from Nonnative.
 
-Nonnative readiness and shutdown checks are TCP port checks by default. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined. Processes can also opt into an HTTP readiness check that runs after TCP readiness succeeds.
+Nonnative readiness and shutdown checks are TCP port checks by default. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined. Processes can also opt into an HTTP readiness check that runs after TCP readiness succeeds. HTTP readiness paths must be path-only values, such as `/test/readyz`; absolute URLs and scheme-relative URLs are rejected.
 
 > [!WARNING]
 > TCP readiness and shutdown checks only prove that a TCP port opened or closed. HTTP readiness is process-only, checks for a 2xx response, and does not verify gRPC health, schema readiness, migrations, or other application-specific health.

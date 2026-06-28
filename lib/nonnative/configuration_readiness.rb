@@ -9,7 +9,7 @@ module Nonnative
     # @return [Integer] process HTTP readiness port
     attr_accessor :port
 
-    # @return [String] HTTP readiness path
+    # @return [String] path-only HTTP readiness path
     attr_accessor :path
 
     # @param value [Hash, #to_h] readiness attributes
@@ -30,6 +30,15 @@ module Nonnative
     def validate!
       raise ArgumentError, "Process readiness requires 'port'" if port.nil?
       raise ArgumentError, "Process readiness requires 'path'" if path.nil?
+      raise ArgumentError, 'Process readiness path must be path-only' unless path_only?
+    end
+
+    def path_only?
+      uri = URI.parse(path.to_s)
+
+      uri.scheme.nil? && uri.host.nil?
+    rescue URI::InvalidURIError
+      false
     end
   end
 end
