@@ -28,7 +28,7 @@ module Nonnative
       Nonnative.logger.info "checking if readiness '#{endpoint}' is ready"
 
       timeout.perform do
-        response = get(readiness.path)
+        response = get(path)
         raise Nonnative::Error unless ready_response?(response)
 
         true

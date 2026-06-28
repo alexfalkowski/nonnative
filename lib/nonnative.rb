@@ -48,6 +48,7 @@ require 'yaml'
 require 'open3'
 require 'securerandom'
 require 'shellwords'
+require 'uri'
 
 require 'grpc'
 require 'sinatra'
