@@ -11,7 +11,7 @@ It helps you:
 - start **OS processes** (e.g. your Go/Java/Rust service binary),
 - start **in-process Ruby servers** (e.g. small HTTP/TCP/gRPC fakes for dependencies),
 - optionally start **service proxies** for fault-injection in front of externally managed dependencies,
-- wait for readiness/shutdown using **TCP port checks** and optional process HTTP/gRPC checks.
+- wait for readiness/shutdown using **TCP port checks**, optional process HTTP/gRPC checks, and optional service TCP checks.
 
 Once started, you can test however you like (TCP, HTTP, gRPC, etc).
 
@@ -84,12 +84,15 @@ Process-only fields:
   health `service`.
 
 Service fields:
-- `port`: client-facing service port. Services do not get TCP readiness/shutdown checks from Nonnative.
+- `port`: client-facing service port.
+- `timeout`: max time (seconds) for opt-in service readiness checks. Defaults to `1.0`.
+- `readiness`: optional list of startup readiness checks. Supported kind is `tcp`, which requires
+  explicit `host` and `port`.
 
-Nonnative readiness and shutdown checks are TCP port checks by default. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined. Processes can also opt into HTTP and gRPC readiness checks that run after TCP readiness succeeds. HTTP readiness paths must be path-only values, such as `/test/readyz`; absolute URLs and scheme-relative URLs are rejected.
+Nonnative readiness and shutdown checks are TCP port checks by default. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined. Processes can also opt into HTTP and gRPC readiness checks that run after TCP readiness succeeds. Services do not get automatic TCP readiness/shutdown checks, but can opt into TCP startup readiness for externally managed dependencies. HTTP readiness paths must be path-only values, such as `/test/readyz`; absolute URLs and scheme-relative URLs are rejected.
 
 > [!WARNING]
-> TCP readiness and shutdown checks only prove that a TCP port opened or closed. HTTP and gRPC readiness are process-only. HTTP readiness checks for a 2xx response, and gRPC readiness checks the standard gRPC health service for `SERVING`.
+> TCP readiness and shutdown checks only prove that a TCP port opened or closed. HTTP and gRPC readiness are process-only. Service readiness is TCP-only and should target the dependency endpoint that must be reachable before managed servers/processes start.
 
 Start and stop Nonnative around the test scope that should own the configured runners:
 
@@ -615,7 +618,7 @@ end
 
 A service is an external dependency to your system that you **do not** want Nonnative to start (no OS process, no Ruby thread).
 
-Services do not get process lifecycle management or TCP readiness/shutdown checks from Nonnative. They provide a named endpoint for a dependency that another tool already manages.
+Services do not get process lifecycle management or automatic TCP readiness/shutdown checks from Nonnative. They provide a named endpoint for a dependency that another tool already manages, and can opt into TCP startup readiness when the dependency must be reachable before managed servers/processes start.
 
 Set it up programmatically:
 
@@ -632,6 +635,8 @@ Nonnative.configure do |config|
     s.name = 'postgres'
     s.host = '127.0.0.1'
     s.port = 5432
+    s.timeout = 5
+    s.readiness = [{ kind: 'tcp', host: '127.0.0.1', port: 5432 }]
   end
 
   config.service do |s|
@@ -654,6 +659,11 @@ services:
     name: postgres
     host: 127.0.0.1
     port: 5432
+    timeout: 5
+    readiness:
+      - kind: tcp
+        host: 127.0.0.1
+        port: 5432
   -
     name: redis
     host: 127.0.0.1
@@ -687,6 +697,7 @@ Nonnative.proxies['custom'] = CustomProxy
 ```
 
 Only services support proxies. For `fault_injection`, keep the service `host`/`port` as the client-facing proxy endpoint and use nested `proxy.host`/`proxy.port` for the upstream target behind the proxy.
+When service readiness is configured for a proxied dependency, set the readiness `host`/`port` to the upstream dependency, not the client-facing proxy listener.
 
 ##### 🧩 Service Proxies
 
@@ -710,6 +721,8 @@ config.service do |s|
       delay: 5
     }
   }
+
+  s.readiness = [{ kind: 'tcp', host: '127.0.0.1', port: 6379 }]
 end
 ```
 
@@ -723,6 +736,10 @@ services:
     name: redis
     host: 127.0.0.1
     port: 16379
+    readiness:
+      - kind: tcp
+        host: 127.0.0.1
+        port: 6379
     proxy:
       kind: fault_injection
       host: 127.0.0.1

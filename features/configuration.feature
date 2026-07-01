@@ -11,6 +11,10 @@ Feature: Configuration loading
     Then the configured service "service_1" should use host "127.0.0.1" and port 20006
     And the configured service "service_1" proxy should use host "127.0.0.1" and port 30000
 
+  Scenario: YAML maps service TCP readiness
+    Given I load a temporary configuration with service TCP readiness
+    Then the configured service "service_1" TCP readiness should use host "127.0.0.1" and port 30000
+
   Scenario: YAML maps multiple runner ports
     Given I load a temporary configuration with multiple runner ports
     Then the configured process "multi_port_process" should use ports:
@@ -92,9 +96,18 @@ Feature: Configuration loading
     When I attempt to load a temporary configuration with server readiness
     Then loading the configuration should fail with an argument error containing "servers do not support 'readiness'"
 
-  Scenario: YAML rejects service readiness
-    When I attempt to load a temporary configuration with service readiness
-    Then loading the configuration should fail with an argument error containing "services do not support 'readiness'"
+  Scenario Outline: YAML rejects incomplete service TCP readiness
+    When I attempt to load a temporary configuration with service TCP readiness missing "<field>"
+    Then loading the configuration should fail with an argument error containing "Service readiness requires '<field>'"
+
+    Examples:
+      | field |
+      | host  |
+      | port  |
+
+  Scenario: YAML rejects unsupported service readiness kinds
+    When I attempt to load a temporary configuration with service readiness kind "http"
+    Then loading the configuration should fail with an argument error containing "Service readiness kind must be one of: tcp"
 
   Scenario: Server YAML class entries resolve to server implementations
     Given I load a temporary configuration with a server entry

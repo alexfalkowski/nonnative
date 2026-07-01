@@ -6,7 +6,7 @@
 # It can:
 #
 # - start external processes and in-process servers
-# - wait for readiness via port checks and optional process HTTP/gRPC readiness
+# - wait for readiness via port checks, optional process HTTP/gRPC readiness, and optional service TCP readiness
 # - optionally run fault-injection proxies in front of services
 #
 # The public entry points are exposed as module-level methods on {Nonnative}.
@@ -76,6 +76,7 @@ require 'nonnative/configuration_file'
 require 'nonnative/configuration'
 require 'nonnative/configuration_runner'
 require 'nonnative/configuration_readiness'
+require 'nonnative/configuration_service_readiness'
 require 'nonnative/configuration_process'
 require 'nonnative/configuration_server'
 require 'nonnative/configuration_service'
@@ -86,6 +87,7 @@ require 'nonnative/server'
 require 'nonnative/service'
 require 'nonnative/pool'
 require 'nonnative/http_client'
+require 'nonnative/tcp_probe'
 require 'nonnative/http_probe'
 require 'nonnative/grpc_health'
 require 'nonnative/grpc_probe'

@@ -22,6 +22,23 @@ Feature: Service proxies
     And I start the system
     Then the proxy for service "service_1" should use host "127.0.0.1" and port 30000
 
+  Scenario: Service TCP readiness gates startup
+    Given I configure the system programmatically with service TCP readiness
+    And I start the system
+    When I connect to the service
+    Then I should have a successful connection
+
+  Scenario: Service TCP readiness failures are reported during startup
+    Given I configure the system programmatically with missing service TCP readiness
+    When I attempt to start the system
+    Then starting the system should raise an error containing "readiness: 127.0.0.1:30001"
+
+  Scenario: Service TCP readiness failures stop startup before processes
+    Given I configure the system programmatically with a process and missing service TCP readiness
+    When I attempt to start the system
+    Then starting the system should raise an error containing "readiness: 127.0.0.1:30001"
+    And the service readiness process side effect should not happen
+
   @reset
   Scenario: Services can run without proxies
     Given I configure the system programmatically with services without proxies

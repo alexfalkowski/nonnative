@@ -73,6 +73,8 @@ module Nonnative
             service.name = definition[:name]
             service.host = definition[:host]
             service.port = definition[:port]
+            service.timeout = definition[:timeout] if definition[:timeout]
+            service.readiness = definition[:readiness] if definition[:readiness]
             service.proxy = definition[:proxy] if definition[:proxy]
           end
         end

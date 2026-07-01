@@ -25,7 +25,8 @@ module Nonnative
 
     # Starts all configured runners and yields results for each process/server.
     #
-    # Services are started first (proxy-only), then servers and processes are started and checked for readiness.
+    # Services are started first (proxy-only) and checked for opt-in readiness, then servers and processes are
+    # started and checked for readiness.
     #
     # @yieldparam name [String, nil] runner name
     # @yieldparam values [Object] runner-specific return value from `start` (e.g. `[pid, running]` for processes)
@@ -36,6 +37,10 @@ module Nonnative
       errors = []
 
       errors.concat(service_lifecycle(services, :start, :start))
+      service_readiness_errors = check_service_readiness(services)
+      errors.concat(service_readiness_errors)
+      return errors if service_readiness_errors.any?
+
       [servers, processes].each { |runners| errors.concat(run_lifecycle_checks(runners, :start, :open?, :start, &)) }
 
       errors
@@ -180,6 +185,15 @@ module Nonnative
       end
     end
 
+    def check_service_readiness(all)
+      all.each_with_object([]) do |service, errors|
+        next unless service.respond_to?(:readiness)
+
+        checks = service.readiness.map { |readiness| Nonnative::TCPProbe.new(readiness, timeout: service.timeout) }
+        errors << service_readiness_error(service, checks) unless checks.all?(&:ready?)
+      end
+    end
+
     def run_lifecycle_checks(runners, lifecycle_method, port_method, action, &)
       checks = []
       errors = []
@@ -218,6 +232,10 @@ module Nonnative
     def port_error(action, type, error)
       check = action == :start ? 'readiness' : 'shutdown'
       "#{check.capitalize} check failed for #{runner_name(type)}: #{error.class} - #{error.message}"
+    end
+
+    def service_readiness_error(service, checks)
+      "Started #{runner_name(service)}, though did not respond in time for readiness: #{checks.map(&:endpoint).join(', ')}"
     end
 
     def runner_name(type)

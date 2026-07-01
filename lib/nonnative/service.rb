@@ -24,6 +24,20 @@ module Nonnative
       @proxy = Nonnative::ProxyFactory.create(service)
     end
 
+    # Returns configured service readiness checks.
+    #
+    # @return [Array<Nonnative::ConfigurationServiceReadiness>]
+    def readiness
+      service.readiness
+    end
+
+    # Returns the configured service readiness timeout.
+    #
+    # @return [Numeric]
+    def timeout
+      service.timeout
+    end
+
     # Starts the configured proxy (if any).
     #
     # @return [void]
