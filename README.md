@@ -11,7 +11,7 @@ It helps you:
 - start **OS processes** (e.g. your Go/Java/Rust service binary),
 - start **in-process Ruby servers** (e.g. small HTTP/TCP/gRPC fakes for dependencies),
 - optionally start **service proxies** for fault-injection in front of externally managed dependencies,
-- wait for readiness/shutdown using **TCP port checks**.
+- wait for readiness/shutdown using **TCP port checks** and optional process HTTP/gRPC checks.
 
 Once started, you can test however you like (TCP, HTTP, gRPC, etc).
 
@@ -79,15 +79,17 @@ Process/server fields:
 - `log`: per-runner log file used by process output redirection or server implementations.
 
 Process-only fields:
-- `readiness`: optional HTTP startup readiness check with explicit `port` and path-only `path`.
+- `readiness`: optional list of startup readiness checks. Supported kinds are `http` and `grpc`.
+  HTTP checks require explicit `port` and path-only `path`. gRPC checks require explicit `port` and
+  health `service`.
 
 Service fields:
 - `port`: client-facing service port. Services do not get TCP readiness/shutdown checks from Nonnative.
 
-Nonnative readiness and shutdown checks are TCP port checks by default. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined. Processes can also opt into an HTTP readiness check that runs after TCP readiness succeeds. HTTP readiness paths must be path-only values, such as `/test/readyz`; absolute URLs and scheme-relative URLs are rejected.
+Nonnative readiness and shutdown checks are TCP port checks by default. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined. Processes can also opt into HTTP and gRPC readiness checks that run after TCP readiness succeeds. HTTP readiness paths must be path-only values, such as `/test/readyz`; absolute URLs and scheme-relative URLs are rejected.
 
 > [!WARNING]
-> TCP readiness and shutdown checks only prove that a TCP port opened or closed. HTTP readiness is process-only, checks for a 2xx response, and does not verify gRPC health, schema readiness, migrations, or other application-specific health.
+> TCP readiness and shutdown checks only prove that a TCP port opened or closed. HTTP and gRPC readiness are process-only. HTTP readiness checks for a 2xx response, and gRPC readiness checks the standard gRPC health service for `SERVING`.
 
 Start and stop Nonnative around the test scope that should own the configured runners:
 
@@ -162,6 +164,19 @@ response = Nonnative.observability.health(
 expect(response.code).to eq(200)
 ```
 
+`Nonnative.grpc_health` is a helper for the standard gRPC health checking protocol:
+
+```ruby
+health = Nonnative.grpc_health(
+  host: '127.0.0.1',
+  port: 12_322,
+  service: 'example.v1.ExampleService',
+  timeout: 2
+)
+
+expect(health.serving?).to eq(true)
+```
+
 ### 🔁 Lifecycle strategies (Cucumber integration)
 
 Nonnative ships Cucumber hooks (when loaded) that support these tags/strategies:
@@ -210,7 +225,10 @@ Nonnative.configure do |config|
     p.ports = [12_321]
     p.log = '12_321.log'
     p.signal = 'INT' # Possible values are described in Signal.list.keys.
-    p.readiness = { port: 12_321, path: '/test/readyz' }
+    p.readiness = [
+      { kind: 'http', port: 12_321, path: '/test/readyz' },
+      { kind: 'grpc', port: 12_322, service: 'example.v1.ExampleService' }
+    ]
     p.environment = { # Pass environment variables to process.
       'TEST' => 'true'
     }
@@ -247,8 +265,12 @@ processes:
     log: 12_321.log
     signal: INT # Possible values are described in Signal.list.keys.
     readiness:
-      port: 12321
-      path: /test/readyz
+      - kind: http
+        port: 12321
+        path: /test/readyz
+      - kind: grpc
+        port: 12322
+        service: example.v1.ExampleService
     environment: # Pass environment variables to process.
       TEST: true
   -

@@ -69,8 +69,30 @@ Given('I load a temporary configuration with process HTTP readiness') do
           - 12426
         log: test/reports/12_426.log
         readiness:
-          port: 12427
-          path: /test/readyz
+          - kind: http
+            port: 12427
+            path: /test/readyz
+  YAML
+end
+
+Given('I load a temporary configuration with process gRPC readiness') do
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: test
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+    processes:
+      - name: ready_process
+        command: features/support/bin/start 12_428
+        timeout: 1
+        host: 127.0.0.1
+        ports:
+          - 12428
+        log: test/reports/12_428.log
+        readiness:
+          - kind: grpc
+            port: 12429
+            service: nonnative.v1.GreeterService
   YAML
 end
 
@@ -280,10 +302,92 @@ When('I attempt to load a temporary configuration with service readiness') do
 end
 
 When('I attempt to load a temporary configuration with process HTTP readiness missing {string}') do |field|
-  readiness = { 'port' => 12_427, 'path' => '/test/readyz' }
-  readiness.delete(field)
-  readiness_yaml = readiness.map { |key, value| "#{key}: #{value}" }.join("\n")
+  capture_result(:@configuration_result, :@configuration_error) do
+    case field
+    when 'kind'
+      load_temporary_configuration(<<~YAML)
+        version: "1.0"
+        name: test
+        url: http://localhost:4567
+        log: test/reports/nonnative.log
+        processes:
+          - name: incomplete_ready_process
+            command: features/support/bin/start 12_426
+            timeout: 1
+            ports:
+              - 12426
+            log: test/reports/12_426.log
+            readiness:
+              - port: 12427
+                path: /test/readyz
+      YAML
+    when 'port'
+      load_temporary_configuration(<<~YAML)
+        version: "1.0"
+        name: test
+        url: http://localhost:4567
+        log: test/reports/nonnative.log
+        processes:
+          - name: incomplete_ready_process
+            command: features/support/bin/start 12_426
+            timeout: 1
+            ports:
+              - 12426
+            log: test/reports/12_426.log
+            readiness:
+              - kind: http
+                path: /test/readyz
+      YAML
+    when 'path'
+      load_temporary_configuration(<<~YAML)
+        version: "1.0"
+        name: test
+        url: http://localhost:4567
+        log: test/reports/nonnative.log
+        processes:
+          - name: incomplete_ready_process
+            command: features/support/bin/start 12_426
+            timeout: 1
+            ports:
+              - 12426
+            log: test/reports/12_426.log
+            readiness:
+              - kind: http
+                port: 12427
+      YAML
+    else
+      raise ArgumentError, "Unknown readiness field '#{field}'"
+    end
+  end
+end
 
+When('I attempt to load a temporary configuration with process gRPC readiness missing {string}') do |field|
+  capture_result(:@configuration_result, :@configuration_error) do
+    case field
+    when 'service'
+      load_temporary_configuration(<<~YAML)
+        version: "1.0"
+        name: test
+        url: http://localhost:4567
+        log: test/reports/nonnative.log
+        processes:
+          - name: incomplete_ready_process
+            command: features/support/bin/start 12_428
+            timeout: 1
+            ports:
+              - 12428
+            log: test/reports/12_428.log
+            readiness:
+              - kind: grpc
+                port: 12429
+      YAML
+    else
+      raise ArgumentError, "Unknown readiness field '#{field}'"
+    end
+  end
+end
+
+When('I attempt to load a temporary configuration with map process readiness') do
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(<<~YAML)
       version: "1.0"
@@ -291,14 +395,37 @@ When('I attempt to load a temporary configuration with process HTTP readiness mi
       url: http://localhost:4567
       log: test/reports/nonnative.log
       processes:
-        - name: incomplete_ready_process
+        - name: map_ready_process
           command: features/support/bin/start 12_426
           timeout: 1
           ports:
             - 12426
           log: test/reports/12_426.log
           readiness:
-            #{readiness_yaml}
+            kind: http
+            port: 12427
+            path: /test/readyz
+    YAML
+  end
+end
+
+When('I attempt to load a temporary configuration with process readiness kind {string}') do |kind|
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(<<~YAML)
+      version: "1.0"
+      name: test
+      url: http://localhost:4567
+      log: test/reports/nonnative.log
+      processes:
+        - name: unsupported_ready_process
+          command: features/support/bin/start 12_426
+          timeout: 1
+          ports:
+            - 12426
+          log: test/reports/12_426.log
+          readiness:
+            - kind: #{kind}
+              port: 12427
     YAML
   end
 end
@@ -318,8 +445,9 @@ When('I attempt to load a temporary configuration with process HTTP readiness pa
             - 12426
           log: test/reports/12_426.log
           readiness:
-            port: 12427
-            path: #{path}
+            - kind: http
+              port: 12427
+              path: #{path}
     YAML
   end
 end
@@ -420,11 +548,20 @@ Then('the configured process {string} should use ports:') do |name, table|
   expect(process.ports).to eq(table.raw.flatten.map(&:to_i))
 end
 
-Then('the configured process {string} readiness should use port {int} and path {string}') do |name, port, path|
+Then('the configured process {string} HTTP readiness should use port {int} and path {string}') do |name, port, path|
   process = configured_process(name)
+  readiness = process.readiness.find(&:http?)
 
-  expect(process.readiness.port).to eq(port)
-  expect(process.readiness.path).to eq(path)
+  expect(readiness.port).to eq(port)
+  expect(readiness.path).to eq(path)
+end
+
+Then('the configured process {string} gRPC readiness should use port {int} and service {string}') do |name, port, service|
+  process = configured_process(name)
+  readiness = process.readiness.find(&:grpc?)
+
+  expect(readiness.port).to eq(port)
+  expect(readiness.service).to eq(service)
 end
 
 Then('the configured service {string} proxy should use host {string} and port {int}') do |name, host, port|

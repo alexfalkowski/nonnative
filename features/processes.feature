@@ -58,6 +58,24 @@ Feature: Process runners
     When I attempt to start the system
     Then starting the system should raise an error containing "readiness: http://127.0.0.1:12427/test/readyz"
 
+  Scenario: Process gRPC readiness gates startup
+    Given I configure the system programmatically with a process gRPC readiness check
+    And I start the system
+    When I send "test" with the TCP client "grpc_ready_process" to the process
+    Then I should receive a TCP "test" response from the process
+    And the gRPC health helper should report "nonnative.v1.GreeterService" serving on port 12429
+
+  Scenario: Process gRPC readiness uses the configured timeout
+    Given I configure the system programmatically with a slow process gRPC readiness check
+    And I start the system
+    When I send "test" with the TCP client "grpc_ready_process" to the process
+    Then I should receive a TCP "test" response from the process
+
+  Scenario: Process gRPC readiness failures are reported during startup
+    Given I configure the system programmatically with a failing process gRPC readiness check
+    When I attempt to start the system
+    Then starting the system should raise an error containing "readiness: grpc://127.0.0.1:12429/nonnative.v1.GreeterService"
+
   Scenario: Explicit process environment overrides the parent environment
     Given the parent environment variable "STRING" is "parent"
     When I start a process runner with environment "STRING" set to "configured"

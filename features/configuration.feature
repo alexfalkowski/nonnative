@@ -19,7 +19,15 @@ Feature: Configuration loading
 
   Scenario: YAML maps process HTTP readiness
     Given I load a temporary configuration with process HTTP readiness
-    Then the configured process "ready_process" readiness should use port 12427 and path "/test/readyz"
+    Then the configured process "ready_process" HTTP readiness should use port 12427 and path "/test/readyz"
+
+  Scenario: YAML maps process gRPC readiness
+    Given I load a temporary configuration with process gRPC readiness
+    Then the configured process "ready_process" gRPC readiness should use port 12429 and service "nonnative.v1.GreeterService"
+
+  Scenario: YAML rejects map process readiness
+    When I attempt to load a temporary configuration with map process readiness
+    Then loading the configuration should fail with an argument error containing "Process readiness must be a list of checks"
 
   Scenario Outline: YAML rejects incomplete process HTTP readiness
     When I attempt to load a temporary configuration with process HTTP readiness missing "<field>"
@@ -29,6 +37,18 @@ Feature: Configuration loading
       | field |
       | port  |
       | path  |
+
+  Scenario: YAML rejects incomplete process gRPC readiness
+    When I attempt to load a temporary configuration with process gRPC readiness missing "service"
+    Then loading the configuration should fail with an argument error containing "Process readiness requires 'service'"
+
+  Scenario: YAML rejects process readiness without a kind
+    When I attempt to load a temporary configuration with process HTTP readiness missing "kind"
+    Then loading the configuration should fail with an argument error containing "Process readiness requires 'kind'"
+
+  Scenario: YAML rejects unsupported process readiness kinds
+    When I attempt to load a temporary configuration with process readiness kind "tcp"
+    Then loading the configuration should fail with an argument error containing "Process readiness kind must be one of: http, grpc"
 
   Scenario Outline: YAML rejects process HTTP readiness paths that are not valid path-only values
     When I attempt to load a temporary configuration with process HTTP readiness path "<path>"

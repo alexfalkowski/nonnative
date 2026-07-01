@@ -22,7 +22,7 @@ module Nonnative
   #       p.ports = [8080, 9090]
   #       p.timeout = 10
   #       p.log = 'api.log'
-  #       p.readiness = { port: 8080, path: '/example/readyz' }
+  #       p.readiness = [{ kind: 'http', port: 8080, path: '/example/readyz' }]
   #     end
   #   end
   #

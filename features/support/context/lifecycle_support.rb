@@ -90,6 +90,27 @@ module Nonnative
             chdir: Dir.pwd
           )
         end
+
+        def startup_hook_recording_script(path)
+          # Define observable lifecycle hooks before requiring nonnative/startup.
+          <<~RUBY
+            require 'nonnative'
+
+            module Nonnative
+              class << self
+                def start
+                  puts 'started'
+                end
+
+                def stop
+                  puts 'stopped'
+                end
+              end
+            end
+
+            require #{path.inspect}
+          RUBY
+        end
       end
     end
   end

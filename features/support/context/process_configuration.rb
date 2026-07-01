@@ -37,6 +37,12 @@ module Nonnative
           end
         end
 
+        def configure_grpc_readiness_process(status:, delay: 0)
+          configure_with_defaults do |config|
+            add_process(config, grpc_readiness_process(status, delay))
+          end
+        end
+
         private
 
         def http_readiness_process(status)
@@ -49,8 +55,35 @@ module Nonnative
             ports: [12_426],
             log: 'test/reports/12_426.log',
             signal: 'INT',
-            readiness: { port: 12_427, path: '/test/readyz' }
+            readiness: [{ kind: 'http', port: 12_427, path: '/test/readyz' }]
           }
+        end
+
+        def grpc_readiness_process(status, delay)
+          {
+            name: 'grpc_ready_process',
+            command: -> { grpc_readiness_command(status, delay) },
+            timeout: 2,
+            wait: 0.1,
+            host: '127.0.0.1',
+            ports: [12_428, 12_429],
+            log: 'test/reports/12_428.log',
+            signal: 'INT',
+            readiness: [{ kind: 'grpc', port: 12_429, service: 'nonnative.v1.GreeterService' }]
+          }
+        end
+
+        def grpc_readiness_command(status, delay)
+          [
+            RbConfig.ruby,
+            '-rbundler/setup',
+            'features/support/bin/grpc_readiness',
+            '12428',
+            '12429',
+            'nonnative.v1.GreeterService',
+            status.to_s,
+            delay.to_s
+          ]
         end
 
         def add_process(config, definition)
