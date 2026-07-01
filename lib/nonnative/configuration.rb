@@ -177,11 +177,11 @@ module Nonnative
     def add_services(cfg)
       services = cfg.services || []
       services.each do |loaded_service|
-        reject_readiness(loaded_service, 'services')
-
         service do |service_config|
           service_config.name = loaded_service.name
           service_config.host = loaded_service.host if loaded_service.host
+          service_config.timeout = loaded_service.timeout if loaded_service.timeout
+          service_config.readiness = loaded_service.readiness if loaded_service.readiness
           assign_service_port(service_config, loaded_service)
 
           assign_proxy(service_config, loaded_service.proxy)

@@ -36,6 +36,28 @@ Given('I load a temporary configuration with split service and proxy endpoints')
   YAML
 end
 
+Given('I load a temporary configuration with service TCP readiness') do
+  load_temporary_configuration(<<~YAML)
+    version: "1.0"
+    name: test
+    url: http://localhost:4567
+    log: test/reports/nonnative.log
+    services:
+      - name: service_1
+        host: 127.0.0.1
+        port: 20006
+        readiness:
+          - kind: tcp
+            host: 127.0.0.1
+            port: 30000
+        proxy:
+          kind: fault_injection
+          host: 127.0.0.1
+          port: 30000
+          log: test/reports/proxy_service_1.log
+  YAML
+end
+
 Given('I load a temporary configuration with multiple runner ports') do
   load_temporary_configuration(<<~YAML)
     version: "1.0"
@@ -284,7 +306,42 @@ When('I attempt to load a temporary configuration with server readiness') do
   end
 end
 
-When('I attempt to load a temporary configuration with service readiness') do
+When('I attempt to load a temporary configuration with service TCP readiness missing {string}') do |field|
+  capture_result(:@configuration_result, :@configuration_error) do
+    case field
+    when 'host'
+      load_temporary_configuration(<<~YAML)
+        version: "1.0"
+        name: test
+        url: http://localhost:4567
+        log: test/reports/nonnative.log
+        services:
+          - name: service_readiness
+            port: 12426
+            readiness:
+              - kind: tcp
+                port: 12427
+      YAML
+    when 'port'
+      load_temporary_configuration(<<~YAML)
+        version: "1.0"
+        name: test
+        url: http://localhost:4567
+        log: test/reports/nonnative.log
+        services:
+          - name: service_readiness
+            port: 12426
+            readiness:
+              - kind: tcp
+                host: 127.0.0.1
+      YAML
+    else
+      raise ArgumentError, "Unknown readiness field '#{field}'"
+    end
+  end
+end
+
+When('I attempt to load a temporary configuration with service readiness kind {string}') do |kind|
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(<<~YAML)
       version: "1.0"
@@ -295,8 +352,9 @@ When('I attempt to load a temporary configuration with service readiness') do
         - name: service_readiness
           port: 12426
           readiness:
-            port: 12427
-            path: /test/readyz
+            - kind: #{kind}
+              host: 127.0.0.1
+              port: 12427
     YAML
   end
 end
@@ -562,6 +620,14 @@ Then('the configured process {string} gRPC readiness should use port {int} and s
 
   expect(readiness.port).to eq(port)
   expect(readiness.service).to eq(service)
+end
+
+Then('the configured service {string} TCP readiness should use host {string} and port {int}') do |name, host, port|
+  service = configured_service(name)
+  readiness = service.readiness.find(&:tcp?)
+
+  expect(readiness.host).to eq(host)
+  expect(readiness.port).to eq(port)
 end
 
 Then('the configured service {string} proxy should use host {string} and port {int}') do |name, host, port|

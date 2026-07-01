@@ -14,10 +14,16 @@ module Nonnative
     # @return [Integer] client-facing port used by the service proxy
     attr_accessor :port
 
+    # @return [Numeric] readiness timeout (seconds) used when waiting for service readiness
+    attr_accessor :timeout
+
     # Proxy configuration for this service.
     #
     # @return [Nonnative::ConfigurationProxy]
     attr_reader :proxy
+
+    # @return [Array<Nonnative::ConfigurationServiceReadiness>] optional service readiness checks
+    attr_reader :readiness
 
     # Creates a service configuration with defaults.
     #
@@ -26,7 +32,17 @@ module Nonnative
       super
 
       self.port = 0
+      self.timeout = DEFAULT_TIMEOUT
+      @readiness = []
       @proxy = Nonnative::ConfigurationProxy.new
+    end
+
+    # Sets optional service readiness checks.
+    #
+    # @param value [Array<Hash, #to_h>, nil] readiness checks with required `kind`, `host`, and `port`
+    # @return [void]
+    def readiness=(value)
+      @readiness = value.nil? ? [] : build_readiness(value)
     end
 
     # Sets proxy configuration using a hash-like value.
@@ -66,6 +82,14 @@ module Nonnative
     # @raise [ArgumentError] when plural service ports are assigned
     def ports=(_value)
       raise ArgumentError, "Use 'port' instead of 'ports' for service '#{name}'"
+    end
+
+    private
+
+    def build_readiness(value)
+      raise ArgumentError, 'Service readiness must be a list of checks' unless value.is_a?(Array)
+
+      value.map { |check| Nonnative::ConfigurationServiceReadiness.new(check) }
     end
   end
 end

@@ -6,6 +6,10 @@ services:
   - name: service_1
     host: 127.0.0.1
     port: 20006
+    readiness:
+      - kind: tcp
+        host: 127.0.0.1
+        port: 30000
     proxy:
       kind: fault_injection
       host: 127.0.0.1
