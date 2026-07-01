@@ -6,7 +6,7 @@
 # It can:
 #
 # - start external processes and in-process servers
-# - wait for readiness via port checks and optional process HTTP readiness
+# - wait for readiness via port checks and optional process HTTP/gRPC readiness
 # - optionally run fault-injection proxies in front of services
 #
 # The public entry points are exposed as module-level methods on {Nonnative}.
@@ -27,7 +27,7 @@
 #       p.ports = [8080, 9090]
 #       p.timeout = 10
 #       p.log = 'api.log'
-#       p.readiness = { port: 8080, path: '/example/readyz' }
+#       p.readiness = [{ kind: 'http', port: 8080, path: '/example/readyz' }]
 #     end
 #   end
 #
@@ -51,6 +51,7 @@ require 'shellwords'
 require 'uri'
 
 require 'grpc'
+require 'grpc/health/v1/health_services_pb'
 require 'sinatra'
 require 'rest-client'
 require 'retriable'
@@ -86,6 +87,8 @@ require 'nonnative/service'
 require 'nonnative/pool'
 require 'nonnative/http_client'
 require 'nonnative/http_probe'
+require 'nonnative/grpc_health'
+require 'nonnative/grpc_probe'
 require 'nonnative/http_server'
 require 'nonnative/http_proxy_server'
 require 'nonnative/grpc_server'
@@ -190,9 +193,16 @@ module Nonnative
     # Returns an HTTP client for common health/readiness endpoints.
     #
     # @return [Nonnative::Observability]
-    def observability
-      @observability ||= Nonnative::Observability.new(configuration.url)
-    end
+    def observability = (@observability ||= Nonnative::Observability.new(configuration.url))
+
+    # Returns a client helper for the standard gRPC health checking protocol.
+    #
+    # @param host [String] gRPC server host
+    # @param port [Integer] gRPC server port
+    # @param service [String] gRPC health service name
+    # @param timeout [Numeric] default call timeout in seconds
+    # @return [Nonnative::GRPCHealth]
+    def grpc_health(host:, port:, service:, timeout: 1) = Nonnative::GRPCHealth.new(host: host, port: port, service: service, timeout: timeout)
 
     # Returns the configured proxy kinds mapped to proxy classes.
     #

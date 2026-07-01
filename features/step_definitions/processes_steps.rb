@@ -76,6 +76,18 @@ Given('I configure the system programmatically with a failing process HTTP readi
   configure_http_readiness_process(status: 503)
 end
 
+Given('I configure the system programmatically with a process gRPC readiness check') do
+  configure_grpc_readiness_process(status: :SERVING)
+end
+
+Given('I configure the system programmatically with a slow process gRPC readiness check') do
+  configure_grpc_readiness_process(status: :SERVING, delay: 0.2)
+end
+
+Given('I configure the system programmatically with a failing process gRPC readiness check') do
+  configure_grpc_readiness_process(status: :NOT_SERVING)
+end
+
 Given('the parent environment variable {string} is {string}') do |name, value|
   @previous_environment ||= {}
   @previous_environment[name] = ENV.fetch(name, nil)
@@ -121,6 +133,12 @@ end
 
 Then('I should receive a TCP {string} response from the process') do |response|
   expect(@response).to eq(response)
+end
+
+Then('the gRPC health helper should report {string} serving on port {int}') do |service, port|
+  health = Nonnative.grpc_health(host: '127.0.0.1', port: port, service: service, timeout: 1)
+
+  expect(health.serving?).to be(true)
 end
 
 Then('the argv process shell side effect should not happen') do

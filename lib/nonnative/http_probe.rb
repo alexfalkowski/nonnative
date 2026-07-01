@@ -12,9 +12,10 @@ module Nonnative
       RestClient::ServerBrokeConnection
     ].freeze
 
-    # @param process [Nonnative::ConfigurationProcess] process configuration with readiness attributes
-    def initialize(process)
-      @readiness = process.readiness
+    # @param process [Nonnative::ConfigurationProcess] process configuration
+    # @param readiness [Nonnative::ConfigurationReadiness] HTTP readiness attributes
+    def initialize(process, readiness)
+      @readiness = readiness
       @base_url = "http://#{process.host}:#{readiness.port}"
       @timeout = Nonnative::Timeout.new(process.timeout)
 

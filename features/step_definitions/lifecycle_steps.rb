@@ -119,23 +119,7 @@ When('I require {string} in a subprocess') do |path|
 end
 
 When('I require {string} in an instrumented subprocess') do |path|
-  run_subprocess(<<~RUBY)
-    require 'nonnative'
-
-    module Nonnative
-      class << self
-        def start
-          puts 'started'
-        end
-
-        def stop
-          puts 'stopped'
-        end
-      end
-    end
-
-    require #{path.inspect}
-  RUBY
+  run_subprocess(startup_hook_recording_script(path))
 end
 
 Then('starting the system should raise an error containing {string}') do |message|

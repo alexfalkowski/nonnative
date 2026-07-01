@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'socket'
+require 'grpc'
+require 'grpc/health/v1/health_services_pb'
+
+tcp_port = ARGV.fetch(0).to_i
+grpc_port = ARGV.fetch(1).to_i
+service = ARGV.fetch(2)
+status = ARGV.fetch(3).to_sym
+delay = ARGV.fetch(4, '0').to_f
+
+class HealthService < Grpc::Health::V1::Health::Service
+  def initialize(service, status, delay)
+    super()
+
+    @service = service
+    @status = status
+    @delay = delay
+  end
+
+  def check(request, _call)
+    sleep delay
+
+    response_status = request.service == service ? status : :SERVICE_UNKNOWN
+
+    Grpc::Health::V1::HealthCheckResponse.new(status: response_status)
+  end
+
+  private
+
+  attr_reader :delay, :service, :status
+end
+
+closing = false
+tcp_server = TCPServer.new('0.0.0.0', tcp_port)
+grpc_server = GRPC::RpcServer.new
+grpc_server.add_http2_port("0.0.0.0:#{grpc_port}", :this_port_is_insecure)
+grpc_server.handle(HealthService.new(service, status, delay))
+
+Signal.trap 'INT' do
+  closing = true
+end
+
+Signal.trap 'TERM' do
+  closing = true
+end
+
+Thread.new do
+  grpc_server.run_till_terminated
+end
+
+Thread.new do
+  loop do
+    tcp_server.close if closing && !tcp_server.closed?
+    grpc_server.stop if closing
+    exit if closing
+
+    sleep 0.01
+  rescue IOError
+    exit
+  end
+end
+
+Thread.new do
+  loop do
+    socket = tcp_server.accept
+    Thread.new(socket) do |conn|
+      loop do
+        line = conn.readline.strip
+        conn.puts(line)
+      end
+    rescue EOFError
+      conn.close
+    end
+  end
+rescue IOError, Errno::EBADF
+  nil
+end
+
+sleep
