@@ -94,6 +94,17 @@ of dependencies.
   Cucumber helpers. Do not flag their absence from `lib/nonnative/cucumber.rb`
   as a feature gap unless downstream usage evidence exists or the task is
   explicitly about expanding public lifecycle assertion steps.
+- Liveness, readiness, and metrics endpoint assertion steps in
+  `features/step_definitions/servers_steps.rb` are repository-local Cucumber
+  helpers for testing nonnative's own framework assumptions. Do not flag their
+  absence from `lib/nonnative/cucumber.rb` as a feature gap unless downstream
+  usage evidence exists or the task is explicitly about expanding public
+  observability assertion steps.
+- `Nonnative::Configuration` intentionally exposes `process_by_name` without
+  matching `server_by_name` or `service_by_name` helpers. Do not flag missing
+  server/service configuration lookup helpers as a feature gap unless downstream
+  usage evidence exists or the task is explicitly about changing the
+  pre-start configuration lookup API.
 
 ## Runtime Model
 
