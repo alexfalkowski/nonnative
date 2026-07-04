@@ -16,6 +16,7 @@ module Nonnative
   # @see Nonnative::SocketPairFactory
   # @see Nonnative::CloseAllSocketPair
   # @see Nonnative::DelaySocketPair
+  # @see Nonnative::TimeoutSocketPair
   # @see Nonnative::InvalidDataSocketPair
   class SocketPair
     # @param proxy [#host, #port, #options] proxy configuration used to connect upstream

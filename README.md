@@ -758,6 +758,7 @@ Clients connect to the service `host`/`port`, while the proxy forwards traffic t
 
 - `close_all` - Closes the socket as soon as it connects.
 - `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through options.
+- `timeout` - Accepts the connection and stalls traffic until reset or stop closes the connection, so clients exercise their own read timeout behavior.
 - `invalid_data` - Forwards client requests unchanged, then corrupts upstream responses before they reach the client.
 
 ###### 🧩 Fault Injection Services
@@ -769,6 +770,7 @@ name = 'name of service in configuration'
 service = Nonnative.pool.service_by_name(name)
 
 service.proxy.close_all # To use close_all.
+service.proxy.timeout # To stall traffic until reset or stop.
 service.proxy.reset # To reset it back to a good state.
 ```
 
@@ -776,6 +778,7 @@ Use the Cucumber proxy steps:
 
 ```cucumber
 Given I set the proxy for service 'service_1' to 'close_all'
+Given I set the proxy for service 'service_1' to 'timeout'
 Then I should reset the proxy for service 'service_1'
 ```
 

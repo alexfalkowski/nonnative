@@ -56,6 +56,12 @@ When('I receive data from the service') do
   @service_response = @service.receive
 end
 
+When('I receive data from the service with a {float} second timeout') do |duration|
+  @service_response = Timeout.timeout(duration) { @service.receive }
+rescue Timeout::Error => e
+  @service_response = e
+end
+
 When('I try to find the proxy for service {string}') do |name|
   capture_result(:@service_runner, :@error) { Nonnative.pool.service_by_name(name) }
 end
@@ -73,6 +79,10 @@ Then('I should receive an invalid service response that is not {string}') do |me
   expect(@service_response).to be_a(String)
   expect(@service_response).not_to be_empty
   expect(@service_response).not_to eq(message)
+end
+
+Then('I should receive a timeout from the service') do
+  expect(@service_response).to be_a(Timeout::Error)
 end
 
 Then('I should get a proxy not found error') do
