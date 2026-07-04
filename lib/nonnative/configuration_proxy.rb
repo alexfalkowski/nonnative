@@ -4,8 +4,8 @@ module Nonnative
   # Proxy configuration attached to a service configuration.
   #
   # A proxy allows you to interpose behavior between a client and a real service. For example,
-  # the built-in `"fault_injection"` proxy can close connections, introduce delays, or corrupt data
-  # for resilience testing.
+  # the built-in `"fault_injection"` proxy can close connections, introduce delays, stall traffic,
+  # or corrupt data for resilience testing.
   #
   # This object is created automatically for each service via {Nonnative::ConfigurationService}.
   # When `kind` is set to `"none"`, no proxy is started and the service will use its configured

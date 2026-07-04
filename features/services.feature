@@ -83,6 +83,16 @@ Feature: Service proxies
     Then I should receive "test" from the service
 
   @reset
+  Scenario: A timed-out service proxy stalls responses
+    Given I configure the system programmatically with services
+    And I start the system
+    And I set the proxy for service 'service_1' to 'timeout'
+    When I connect to the service
+    And I send "test" to the service
+    And I receive data from the service with a 0.1 second timeout
+    Then I should receive a timeout from the service
+
+  @reset
   Scenario: Invalid proxy data changes the service response
     Given I configure the system programmatically with services
     And I start the system

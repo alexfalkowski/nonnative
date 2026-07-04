@@ -56,6 +56,7 @@ module Nonnative
       PROXY_OPERATIONS = {
         'close_all' => :close_all,
         'delay' => :delay,
+        'timeout' => :timeout,
         'invalid_data' => :invalid_data,
         'reset' => :reset
       }.freeze

@@ -10,18 +10,20 @@ module Nonnative
   # - `:none` (or any unknown value) -> {Nonnative::SocketPair} (pass-through)
   # - `:close_all` -> {Nonnative::CloseAllSocketPair}
   # - `:delay` -> {Nonnative::DelaySocketPair}
+  # - `:timeout` -> {Nonnative::TimeoutSocketPair}
   # - `:invalid_data` -> {Nonnative::InvalidDataSocketPair}
   #
   # @see Nonnative::FaultInjectionProxy
   # @see Nonnative::SocketPair
   # @see Nonnative::CloseAllSocketPair
   # @see Nonnative::DelaySocketPair
+  # @see Nonnative::TimeoutSocketPair
   # @see Nonnative::InvalidDataSocketPair
   class SocketPairFactory
     class << self
       # Creates a socket-pair instance for the given proxy state.
       #
-      # @param kind [Symbol] proxy state (e.g. `:none`, `:close_all`, `:delay`, `:invalid_data`)
+      # @param kind [Symbol] proxy state (e.g. `:none`, `:close_all`, `:delay`, `:timeout`, `:invalid_data`)
       # @param proxy [Nonnative::ConfigurationProxy] proxy configuration (host/port/options)
       # @return [Nonnative::SocketPair] a socket-pair implementation instance
       def create(kind, proxy)
@@ -30,6 +32,8 @@ module Nonnative
                  CloseAllSocketPair
                when :delay
                  DelaySocketPair
+               when :timeout
+                 TimeoutSocketPair
                when :invalid_data
                  InvalidDataSocketPair
                else

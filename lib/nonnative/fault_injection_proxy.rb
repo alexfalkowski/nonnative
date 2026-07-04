@@ -11,6 +11,7 @@ module Nonnative
   #
   # - {#close_all}: close connections immediately on accept
   # - {#delay}: delay reads by a configured duration (default: 2 seconds)
+  # - {#timeout}: accept connections and keep them silent until clients time out
   # - {#invalid_data}: forward requests unchanged and mutate upstream responses before they reach clients
   # - {#reset}: return to healthy pass-through behavior
   #
@@ -105,6 +106,17 @@ module Nonnative
     # @return [void]
     def delay
       apply_state :delay
+    end
+
+    # Accepts connections and stalls without forwarding bytes.
+    #
+    # This simulates a dependency that accepts a TCP connection but leaves clients waiting until
+    # their own read timeout fires. The proxy keeps the connection silent until reset or stop closes
+    # active connections.
+    #
+    # @return [void]
+    def timeout
+      apply_state :timeout
     end
 
     # Mutates upstream responses while forwarding client requests unchanged.
