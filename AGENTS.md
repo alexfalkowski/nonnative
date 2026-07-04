@@ -79,6 +79,21 @@ of dependencies.
   thread. Do not flag the listener `join` as an unbounded reliability gap unless
   the task is explicitly about proxy shutdown behavior or there is a normal-use
   reproducer, failing CI evidence, or platform-specific hang evidence.
+- Service readiness is intentionally TCP-only for externally managed
+  dependencies. Do not flag missing HTTP/gRPC service readiness as a feature gap
+  unless the task is explicitly about changing the `Nonnative::Service`
+  readiness model. HTTP/gRPC readiness belongs to managed processes, where the
+  user explicitly models the application health endpoints.
+- Process runners intentionally inherit the parent working directory. Nonnative
+  is normally run from the test folder that owns `test/nonnative.yml`, relative
+  config paths, logs, and reports. Do not flag missing process cwd/chdir support
+  as a feature gap unless the task is explicitly about changing process working
+  directory behavior.
+- Message-specific start/stop assertions and attempted-stop success assertions
+  in `features/step_definitions/lifecycle_steps.rb` are repository-local
+  Cucumber helpers. Do not flag their absence from `lib/nonnative/cucumber.rb`
+  as a feature gap unless downstream usage evidence exists or the task is
+  explicitly about expanding public lifecycle assertion steps.
 
 ## Runtime Model
 
