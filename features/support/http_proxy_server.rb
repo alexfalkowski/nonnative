@@ -24,14 +24,12 @@ module Nonnative
 
     class LocalHTTPProxyServer < Nonnative::HTTPServer
       def initialize(service)
-        app = Sinatra.new(LocalHTTPProxy) do
-          configure do
-            set :upstream_host, '127.0.0.1'
-            set :upstream_port, 4571
-          end
+        http_service = Class.new(LocalHTTPProxy) do
+          set :upstream_host, '127.0.0.1'
+          set :upstream_port, 4571
         end
 
-        super(app, service)
+        super(http_service.new, service)
       end
     end
   end

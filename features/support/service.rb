@@ -72,25 +72,5 @@ module Nonnative
         nil
       end
     end
-
-    class Service
-      def initialize(port)
-        @socket = TCPSocket.open('localhost', port)
-      end
-
-      def closed?
-        @socket.closed?
-      end
-
-      def receive
-        @socket.gets&.chomp
-      rescue StandardError => e
-        e
-      end
-
-      def write(message)
-        @socket.puts(message)
-      end
-    end
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  # Base class for all Nonnative errors.
+  # Parent error for all Nonnative errors.
   #
   # Catch this error type if you want to handle any exception raised by this gem.
   #

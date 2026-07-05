@@ -29,7 +29,7 @@ Given('I configure the system through configuration with services') do
 end
 
 When('I connect to the service') do
-  @service = Nonnative::Features::Service.new(configured_service('service_1').port)
+  @service = Nonnative::Features::TCPClient.new('localhost', configured_service('service_1').port).connect
 end
 
 When('I send {string} to the service') do |message|
