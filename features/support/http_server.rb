@@ -4,17 +4,11 @@ module Nonnative
   module Features
     class HTTPServer < Nonnative::HTTPServer
       def initialize(service)
-        app = Sinatra.new(Application) do
-          configure do
-            set :logging, false
-          end
-        end
-
-        super(app, service)
+        super(Service.new, service)
       end
     end
 
-    class Application < Sinatra::Application
+    class Service < Nonnative::HTTPService
       class << self
         attr_accessor :health_body, :health_status
       end
@@ -77,8 +71,8 @@ module Nonnative
       end
 
       get '/test/healthz' do
-        status Nonnative::Features::Application.health_status
-        Nonnative::Features::Application.health_body
+        status Nonnative::Features::Service.health_status
+        Nonnative::Features::Service.health_body
       end
 
       get '/test/livez' do

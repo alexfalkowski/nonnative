@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  # Base class for proxy implementations.
+  # Parent type for proxy implementations.
   #
   # A proxy is responsible for interposing behavior between a client and a target service.
   # Runtime services create a proxy instance via {Nonnative::ProxyFactory} based on `service.proxy.kind`.

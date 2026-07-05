@@ -3,19 +3,19 @@
 module Nonnative
   # Puma-based HTTP server runner.
   #
-  # This is a convenience server implementation for running a Rack/Sinatra application in-process
-  # under Nonnative's server lifecycle. It binds to the configured server `host` and first `ports` entry.
+  # This is a convenience server implementation for running an HTTP service in-process under
+  # Nonnative's server lifecycle. It binds to the configured server `host` and first `ports` entry.
   #
   # The server is started and stopped by {Nonnative::Server} via {#perform_start} / {#perform_stop}.
   #
-  # @example Running a Sinatra app
+  # @example Running an HTTP service
+  #   class HelloHTTPService < Nonnative::HTTPService
+  #     get('/hello') { 'Hello World!' }
+  #   end
+  #
   #   class HelloHTTPServer < Nonnative::HTTPServer
   #     def initialize(service)
-  #       app = Sinatra.new do
-  #         get('/hello') { 'Hello World!' }
-  #       end
-  #
-  #       super(app, service)
+  #       super(HelloHTTPService.new, service)
   #     end
   #   end
   #
@@ -34,18 +34,18 @@ module Nonnative
   #
   # @see Nonnative::Server
   class HTTPServer < Nonnative::Server
-    # Creates a Puma server for the given Rack app and runner configuration.
+    # Creates a Puma server for the given HTTP service and runner configuration.
     #
-    # @param app [#call] a Rack-compatible application (e.g. Sinatra/Rack app)
+    # @param http_service [#call] an HTTP service instance
     # @param service [Nonnative::ConfigurationServer] server configuration
-    def initialize(app, service)
+    def initialize(http_service, service)
       # Keep the log IO so the server lifecycle can release Puma's file handle on stop.
       @log = File.open(service.log, 'a')
       options = {
         log_writer: Puma::LogWriter.new(log, log),
         force_shutdown_after: service.timeout
       }
-      @server = Puma::Server.new(app, Puma::Events.new, options)
+      @server = Puma::Server.new(http_service, Puma::Events.new, options)
 
       super(service)
     end

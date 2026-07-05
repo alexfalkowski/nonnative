@@ -7,7 +7,7 @@
 #
 # This file defines two classes:
 #
-# - {Nonnative::HTTPProxy}: a Sinatra application that implements the proxying behavior.
+# - {Nonnative::HTTPProxy}: an HTTP service that implements the proxying behavior.
 # - {Nonnative::HTTPProxyServer}: a {Nonnative::HTTPServer} wrapper that runs the proxy app under Puma.
 #
 # Notes:
@@ -17,12 +17,12 @@
 # @see Nonnative::HTTPServer
 # @see Nonnative::Server
 module Nonnative
-  # Sinatra application implementing a simple forward proxy.
+  # HTTP service implementing a simple forward proxy.
   #
-  # The upstream host is configured via Sinatra settings (see {Nonnative::HTTPProxyServer}).
+  # The upstream host is configured via service settings (see {Nonnative::HTTPProxyServer}).
   #
   # Supported HTTP verbs: GET, POST, PUT, PATCH, DELETE.
-  class HTTPProxy < Sinatra::Application
+  class HTTPProxy < Nonnative::HTTPService
     NON_FORWARDABLE_HEADERS = %w[
       Host
       Accept-Encoding
@@ -135,13 +135,11 @@ module Nonnative
     # @param host [String] upstream host to proxy to (HTTPS)
     # @param service [Nonnative::ConfigurationServer] server configuration
     def initialize(host, service)
-      app = Sinatra.new(Nonnative::HTTPProxy) do
-        configure do
-          set :host, host
-        end
+      http_service = Class.new(Nonnative::HTTPProxy) do
+        set :host, host
       end
 
-      super(app, service)
+      super(http_service.new, service)
     end
   end
 end

@@ -35,8 +35,8 @@ When('I send a {string} request') do |name|
 end
 
 When('the health endpoint reports service unavailable') do
-  Nonnative::Features::Application.health_body = "http: service unavailable\n"
-  Nonnative::Features::Application.health_status = 503
+  Nonnative::Features::Service.health_body = "http: service unavailable\n"
+  Nonnative::Features::Service.health_status = 503
 end
 
 When('I send a not found message with the HTTP client to the servers') do

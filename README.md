@@ -410,7 +410,7 @@ Define your server:
 ```ruby
 module Nonnative
   module Features
-    class Hello < Sinatra::Application
+    class HelloService < Nonnative::HTTPService
       get '/hello' do
         'Hello World!'
       end
@@ -418,7 +418,7 @@ module Nonnative
 
     class HTTPServer < Nonnative::HTTPServer
       def initialize(service)
-        super(Sinatra.new(Hello), service)
+        super(HelloService.new, service)
       end
     end
   end
@@ -543,7 +543,7 @@ end
 
 Define your server:
 
-Assume the gRPC service base class and response types below come from your generated gRPC stubs.
+Assume the gRPC service type and response types below come from your generated gRPC stubs.
 
 ```ruby
 module Nonnative

@@ -8,14 +8,41 @@ module Nonnative
         @port = port
       end
 
+      def connect
+        socket
+        self
+      end
+
+      def closed?
+        @socket.nil? || @socket.closed?
+      end
+
+      def receive
+        socket.gets&.chomp
+      rescue StandardError => e
+        e
+      end
+
       def request(message)
-        socket = TCPSocket.open(@host, @port)
-        socket.puts message
-        response = socket.gets.chomp
-        socket.close
+        client = TCPSocket.open(@host, @port)
+        client.puts message
+        response = client.gets.chomp
+        client.close
         response
       rescue StandardError => e
         e
+      end
+
+      def write(message)
+        socket.puts(message)
+      end
+
+      private
+
+      attr_reader :host, :port
+
+      def socket
+        @socket ||= TCPSocket.open(host, port)
       end
     end
   end
