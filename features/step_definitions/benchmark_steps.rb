@@ -1,23 +1,77 @@
 # frozen_string_literal: true
 
 Given('I configure the system programmatically with a no op server') do
-  configure_no_op_server
+  configure_with_defaults do |config|
+    add_server(config, klass: Nonnative::Features::NoOpServer, timeout: 1, ports: [14_000])
+  end
 end
 
 Given('I configure the system programmatically with a no stop server') do
-  configure_no_stop_server
+  configure_with_defaults do |config|
+    add_server(config, klass: Nonnative::Features::NoStopServer, timeout: 1, ports: [14_001])
+  end
 end
 
 Given('I configure the system programmatically with a start error server') do
-  configure_start_error_server
+  configure_with_defaults do |config|
+    add_server(
+      config,
+      name: 'rollback_server',
+      host: '127.0.0.1',
+      klass: Nonnative::Features::TCPServer,
+      timeout: 1,
+      ports: [14_002],
+      log: 'test/reports/14_002.log'
+    )
+    add_server(
+      config,
+      name: 'fail_start_server',
+      host: '127.0.0.1',
+      klass: Nonnative::Features::FailStartServer,
+      timeout: 1,
+      ports: [14_003],
+      log: 'test/reports/14_003.log'
+    )
+  end
 end
 
 Given('I configure the system programmatically with a fast exiting process') do
-  configure_fast_exiting_process
+  configure_with_defaults do |config|
+    add_process(
+      config,
+      name: 'fast_exit_process',
+      command: -> { "#{RbConfig.ruby} -e \"exit 0\"" },
+      timeout: 1,
+      wait: 1,
+      host: '127.0.0.1',
+      ports: [14_006],
+      log: 'test/reports/14_006.log',
+      signal: 'INT'
+    )
+  end
 end
 
 Given('I configure the system programmatically with a stop error server') do
-  configure_stop_error_server
+  configure_with_defaults do |config|
+    add_server(
+      config,
+      name: 'fail_stop_server',
+      host: '127.0.0.1',
+      klass: Nonnative::Features::FailStopServer,
+      timeout: 1,
+      ports: [14_004],
+      log: 'test/reports/14_004.log'
+    )
+    add_server(
+      config,
+      name: 'cleanup_server',
+      host: '127.0.0.1',
+      klass: Nonnative::Features::TCPServer,
+      timeout: 1,
+      ports: [14_005],
+      log: 'test/reports/14_005.log'
+    )
+  end
 end
 
 Then('starting the system should happen within an adequate time') do

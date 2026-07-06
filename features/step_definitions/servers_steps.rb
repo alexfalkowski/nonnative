@@ -1,7 +1,28 @@
 # frozen_string_literal: true
 
 Given('I configure the system programmatically with servers') do
-  configure_servers_programmatically
+  Nonnative::Features::Service.health_body = ''
+  Nonnative::Features::Service.health_status = 200
+
+  configure_with_defaults do |config|
+    add_server(config, name: 'tcp_server_1', klass: Nonnative::Features::TCPServer, timeout: 1, ports: [12_323], log: 'test/reports/tcp_server_1.log')
+    add_server(config, name: 'tcp_server_2', klass: Nonnative::Features::TCPServer, timeout: 1, ports: [12_324], log: 'test/reports/tcp_server_2.log')
+    add_server(
+      config,
+      name: 'http_server_1',
+      klass: Nonnative::Features::HTTPServer,
+      timeout: 1,
+      host: '127.0.0.1',
+      ports: [4567],
+      log: 'test/reports/http_server_1.log'
+    )
+    add_server(config, name: 'http_server_2', klass: Nonnative::Features::HTTPServer, timeout: 1, ports: [4568],
+                       log: 'test/reports/http_server_2.log')
+    add_server(config, name: 'grpc_server_1', klass: Nonnative::Features::GRPCServer, timeout: 1, ports: [9002],
+                       log: 'test/reports/grpc_server_1.log')
+    add_server(config, name: 'grpc_server_2', klass: Nonnative::Features::GRPCServer, timeout: 1, ports: [9003],
+                       log: 'test/reports/grpc_server_2.log')
+  end
 end
 
 Given('I configure the system through configuration with servers') do
@@ -9,7 +30,12 @@ Given('I configure the system through configuration with servers') do
 end
 
 Given('I configure the system programmatically with a local HTTP proxy server') do
-  configure_local_http_proxy_server
+  configure_with_defaults(url: 'http://localhost:4570') do |config|
+    add_server(config, name: 'http_proxy_target', klass: Nonnative::Features::HTTPServer, timeout: 1, host: '127.0.0.1', ports: [4571],
+                       log: 'test/reports/http_proxy_target.log')
+    add_server(config, name: 'local_http_proxy_server', klass: Nonnative::Features::LocalHTTPProxyServer, timeout: 1, host: '127.0.0.1',
+                       ports: [4570], log: 'test/reports/local_http_proxy_server.log')
+  end
 end
 
 When('I send a message with the tcp client to the servers') do

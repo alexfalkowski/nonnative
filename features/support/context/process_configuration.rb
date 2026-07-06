@@ -4,33 +4,6 @@ module Nonnative
   module Features
     module Context
       module ProcessConfiguration
-        PROCESSES = [
-          {
-            name: 'start_1',
-            command: -> { 'features/support/bin/start 12_321' },
-            timeout: 5,
-            host: '127.0.0.1',
-            ports: [12_321],
-            log: 'test/reports/12_321.log',
-            signal: 'INT',
-            environment: { 'STRING' => 'true' }
-          },
-          {
-            name: 'start_2',
-            command: -> { 'features/support/bin/start 12_322,12_325' },
-            timeout: 5,
-            ports: [12_322, 12_325],
-            log: 'test/reports/12_322.log',
-            signal: 'TERM'
-          }
-        ].freeze
-
-        def configure_processes_programmatically
-          configure_with_defaults do |config|
-            PROCESSES.each { |definition| add_process(config, definition) }
-          end
-        end
-
         def configure_http_readiness_process(status:)
           configure_with_defaults do |config|
             add_process(config, http_readiness_process(status))
