@@ -102,6 +102,16 @@ Feature: Service proxies
     And I receive data from the service
     Then I should receive an invalid service response that is not "test"
 
+  @reset
+  Scenario: Invalid proxy data corrupts a delimiter-only service response
+    Given I configure the system programmatically with services
+    And I start the system
+    And I set the proxy for service 'service_1' to 'invalid_data'
+    When I connect to the service
+    And I send "" to the service
+    And I receive data from the service
+    Then I should receive an invalid service response that is not ""
+
   Scenario: Looking up a missing service proxy fails
     Given I configure the system programmatically with services
     And I start the system

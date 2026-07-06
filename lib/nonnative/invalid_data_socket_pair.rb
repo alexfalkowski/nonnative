@@ -46,7 +46,8 @@ module Nonnative
       payload = data.delete_suffix(delimiter)
 
       # A delimiter-only response still needs one byte we can corrupt without losing the terminator.
-      payload = "\0" if payload.empty?
+      # Use a mutable buffer: the frozen string literal cannot be mutated by #setbyte below.
+      payload = +"\0" if payload.empty?
 
       # Flip the first byte so the payload is definitely wrong without mangling the whole
       # response structure and turning an invalid response into a timeout.
