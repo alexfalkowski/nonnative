@@ -24,6 +24,10 @@ Given('I configure the system programmatically with a process and missing servic
   configure_process_with_missing_service_tcp_readiness_programmatically
 end
 
+Given('I configure the system programmatically with unresolvable service TCP readiness') do
+  configure_services_with_unresolvable_tcp_readiness_programmatically
+end
+
 Given('I configure the system through configuration with services') do
   load_configuration('features/configs/services.yml')
 end

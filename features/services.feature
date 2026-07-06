@@ -39,6 +39,11 @@ Feature: Service proxies
     Then starting the system should raise an error containing "readiness: 127.0.0.1:30001"
     And the service readiness process side effect should not happen
 
+  Scenario: Service TCP readiness resolution failures are reported during startup
+    Given I configure the system programmatically with unresolvable service TCP readiness
+    When I attempt to start the system
+    Then starting the system should raise an error containing "Readiness check failed for runner 'service_1': Socket::ResolutionError"
+
   @reset
   Scenario: Services can run without proxies
     Given I configure the system programmatically with services without proxies

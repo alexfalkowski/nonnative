@@ -191,6 +191,8 @@ module Nonnative
 
         checks = service.readiness.map { |readiness| Nonnative::TCPProbe.new(readiness, timeout: service.timeout) }
         errors << service_readiness_error(service, checks) unless checks.all?(&:ready?)
+      rescue StandardError => e
+        errors << port_error(:start, service, e)
       end
     end
 
