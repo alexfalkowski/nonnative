@@ -1,31 +1,106 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 Given('I configure the system programmatically with services') do
-  configure_services_programmatically
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1, options: { delay: 0.1 } }
+    )
+  end
 end
 
 Given('I configure the system programmatically with services without proxies') do
-  configure_services_without_proxies_programmatically
+  configure_with_defaults do |config|
+    add_service(config, name: 'service_1', host: '127.0.0.1', port: 30_000)
+  end
 end
 
 Given('I configure the system programmatically with services and missing upstreams') do
-  configure_services_with_missing_upstreams_programmatically
+  FileUtils.rm_f('test/reports/proxy_service_1.log')
+
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_001, log: 'test/reports/proxy_service_1.log', wait: 0.1, options: { delay: 0.1 } }
+    )
+  end
 end
 
 Given('I configure the system programmatically with service TCP readiness') do
-  configure_services_with_tcp_readiness_programmatically
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      readiness: [{ kind: 'tcp', host: '127.0.0.1', port: 30_000 }],
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1, options: { delay: 0.1 } }
+    )
+  end
 end
 
 Given('I configure the system programmatically with missing service TCP readiness') do
-  configure_services_with_missing_tcp_readiness_programmatically
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      timeout: 0.1,
+      readiness: [{ kind: 'tcp', host: '127.0.0.1', port: 30_001 }],
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1, options: { delay: 0.1 } }
+    )
+  end
 end
 
 Given('I configure the system programmatically with a process and missing service TCP readiness') do
-  configure_process_with_missing_service_tcp_readiness_programmatically
+  @service_readiness_process_output = 'test/reports/service_readiness_process_output'
+  FileUtils.rm_f(@service_readiness_process_output)
+
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      timeout: 0.1,
+      readiness: [{ kind: 'tcp', host: '127.0.0.1', port: 30_001 }],
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1, options: { delay: 0.1 } }
+    )
+    add_process(
+      config,
+      name: 'service_readiness_process',
+      command: -> { [RbConfig.ruby, 'features/support/bin/start', '12418', @service_readiness_process_output] },
+      timeout: 2,
+      wait: 0.1,
+      host: '127.0.0.1',
+      ports: [12_418],
+      log: 'test/reports/12_418.log',
+      signal: 'INT'
+    )
+  end
 end
 
 Given('I configure the system programmatically with unresolvable service TCP readiness') do
-  configure_services_with_unresolvable_tcp_readiness_programmatically
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      timeout: 0.1,
+      readiness: [{ kind: 'tcp', host: 'nonnative.invalid', port: 30_001 }],
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1, options: { delay: 0.1 } }
+    )
+  end
 end
 
 Given('I configure the system through configuration with services') do
