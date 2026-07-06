@@ -48,9 +48,33 @@ module Nonnative
           end
         end
 
+        UNRESOLVABLE_TCP_READINESS = [
+          {
+            name: 'service_1',
+            host: '127.0.0.1',
+            port: 20_006,
+            timeout: 0.1,
+            readiness: [{ kind: 'tcp', host: 'nonnative.invalid', port: 30_001 }],
+            proxy: {
+              kind: 'fault_injection',
+              host: '127.0.0.1',
+              port: 30_000,
+              log: 'test/reports/proxy_service_1.log',
+              wait: 0.1,
+              options: { delay: 0.1 }
+            }
+          }
+        ].freeze
+
         def configure_services_with_missing_tcp_readiness_programmatically
           configure_with_defaults do |config|
             MISSING_TCP_READINESS.each { |definition| add_service(config, definition) }
+          end
+        end
+
+        def configure_services_with_unresolvable_tcp_readiness_programmatically
+          configure_with_defaults do |config|
+            UNRESOLVABLE_TCP_READINESS.each { |definition| add_service(config, definition) }
           end
         end
 
