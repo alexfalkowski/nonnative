@@ -49,6 +49,10 @@ require 'open3'
 require 'securerandom'
 require 'shellwords'
 require 'uri'
+require 'openssl'
+require 'json'
+require 'time'
+require 'singleton' # ruby-paseto depends on this stdlib, which Ruby no longer auto-loads
 
 require 'grpc'
 require 'grpc/health/v1/health_services_pb'
@@ -63,6 +67,11 @@ require 'rspec/expectations'
 require 'rspec/wait'
 require 'puma'
 require 'puma/server'
+
+# jwt-eddsa (with the ed25519 gem) and ssh_data are pure Ruby and need no system library, so they load
+# here. PASETO's rbnacl needs system libsodium, so Nonnative::PasetoToken requires it lazily instead.
+require 'jwt/eddsa'
+require 'ssh_data'
 
 require 'nonnative/version'
 require 'nonnative/error'
@@ -109,6 +118,11 @@ require 'nonnative/socket_pair_factory'
 require 'nonnative/go_executable'
 require 'nonnative/cucumber'
 require 'nonnative/header'
+require 'nonnative/ed25519_key'
+require 'nonnative/jwt_token'
+require 'nonnative/paseto_token'
+require 'nonnative/ssh_token'
+require 'nonnative/token'
 
 # The main namespace for the gem.
 #
@@ -193,6 +207,23 @@ module Nonnative
     def go_argv(tools, output, exec, cmd, *params)
       Nonnative::GoExecutable.new(tools, exec, output).argv(cmd, *params)
     end
+
+    # Builds a token generator for authenticating against a service under test.
+    #
+    # The signing parameters are passed in directly; this is not coupled to any service's
+    # configuration format. The generated token string is ready for {Nonnative::Header.auth_bearer}.
+    #
+    # @param kind [String] token kind, one of `"jwt"`, `"paseto"`, or `"ssh"`
+    # @param issuer [String] the `iss` claim (unused by the `ssh` kind)
+    # @param key [String] the key id (JWT `kid` header, PASETO `kid` footer, or SSH `kid` claim)
+    # @param private_key [String] path to the Ed25519 private key file (PKCS#8 PEM for `jwt`/`paseto`, OpenSSH format for `ssh`)
+    # @param expiration [Integer] token lifetime in seconds (drives `exp`)
+    # @return [Nonnative::Token]
+    #
+    # @example
+    #   token = Nonnative.token(kind: 'jwt', issuer: 'iss', key: 'key-1', private_key: 'config/ed25519.pem', expiration: 3600)
+    #   Nonnative::Header.auth_bearer(token.generate(aud: 'GET /v1/things', sub: 'user-1'))
+    def token(kind:, issuer:, key:, private_key:, expiration:) = Nonnative::Token.new(kind:, issuer:, key:, private_key:, expiration:)
 
     # Returns an HTTP client for common health/readiness endpoints.
     #

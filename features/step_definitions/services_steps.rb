@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'fileutils'
-
 Given('I configure the system programmatically with services') do
   configure_with_defaults do |config|
     add_service(
