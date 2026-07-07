@@ -180,6 +180,37 @@ health = Nonnative.grpc_health(
 expect(health.serving?).to eq(true)
 ```
 
+### 🔑 Tokens
+
+`Nonnative.token` builds a signer for authenticating requests against a service under test. You pass the signing parameters directly (parsed from your own configuration); it is not coupled to any service's config format. The generated string is ready for `Nonnative::Header.auth_bearer`.
+
+```ruby
+token = Nonnative.token(
+  kind: 'jwt',
+  issuer: 'iss',
+  key: 'key-1',
+  private_key: 'config/ed25519.pem',
+  expiration: 3600
+)
+
+headers = Nonnative::Header.auth_bearer(
+  token.generate(aud: Nonnative::Token.http_audience('GET', '/v1/things'), sub: 'user-1')
+)
+```
+
+Supported `kind` values (all Ed25519, generation only):
+
+- `jwt`: EdDSA JWT with the key id in the `kid` header. `private_key` is a PKCS#8 PEM file.
+- `paseto`: PASETO v4.public with the key id in a `{"kid":"..."}` footer. `private_key` is a PKCS#8 PEM file. Requires system **libsodium** (via `rbnacl`); it loads lazily, so `require 'nonnative'` works without libsodium until you generate a PASETO token.
+- `ssh`: go-service style `base64(claims).base64(signature)` with a raw Ed25519 signature over `v1` claims. `private_key` is an **OpenSSH-format** key. `issuer` and `sub` are ignored (the subject is the key id).
+
+The audience is endpoint-scoped; build it with the helpers:
+
+```ruby
+Nonnative::Token.http_audience('GET', '/v1/things')        # => "GET /v1/things"
+Nonnative::Token.grpc_audience('/health.v1.Health/Check')  # => "/health.v1.Health/Check"
+```
+
 ### 🔁 Lifecycle strategies (Cucumber integration)
 
 Nonnative ships Cucumber hooks (when loaded) that support these tags/strategies:
