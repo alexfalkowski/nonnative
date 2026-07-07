@@ -3,6 +3,9 @@
 require 'simplecov'
 require 'simplecov-cobertura'
 require 'rbconfig'
+require 'fileutils'
+require 'tempfile'
+require 'tmpdir'
 
 formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::CoberturaFormatter]
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)

@@ -9,6 +9,7 @@ require_relative 'context/service_connections'
 require_relative 'context/endpoint_clients'
 require_relative 'context/lifecycle_support'
 require_relative 'context/network_checks'
+require_relative 'context/token_verification'
 
 module Nonnative
   module Features
@@ -27,6 +28,7 @@ module Nonnative
       include EndpointClients
       include LifecycleSupport
       include NetworkChecks
+      include TokenVerification
     end
   end
 end

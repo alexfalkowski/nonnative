@@ -1,20 +1,26 @@
 PATH
   remote: .
   specs:
-    nonnative (3.17.0)
+    nonnative (3.18.0)
       concurrent-ruby (>= 1, < 2)
       config (>= 5, < 6)
       cucumber (>= 7, < 12)
       cucumber-cucumber-expressions (< 19)
+      ed25519 (>= 1, < 2)
       get_process_mem (>= 1, < 2)
       grpc (>= 1, < 2)
+      jwt (>= 3, < 4)
+      jwt-eddsa (>= 0, < 1)
       puma (>= 7, < 8)
+      rbnacl (>= 7, < 8)
       rest-client (>= 2, < 3)
       retriable (>= 3, < 4)
       rspec-benchmark (>= 0, < 1)
       rspec-expectations (>= 3, < 4)
       rspec-wait (>= 1, < 2)
+      ruby-paseto (>= 0, < 1)
       sinatra (>= 4, < 5)
+      ssh_data (>= 1, < 2)
 
 GEM
   remote: https://rubygems.org/
@@ -59,6 +65,7 @@ GEM
     diff-lcs (1.6.2)
     docile (1.4.1)
     domain_name (0.6.20240107)
+    ed25519 (1.4.0)
     ffi (1.17.4-x86_64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
     get_process_mem (1.0.0)
@@ -82,6 +89,12 @@ GEM
     http-cookie (1.1.6)
       domain_name (~> 0.5)
     json (2.20.0)
+    jwt (3.2.0)
+      base64
+    jwt-eddsa (0.9.0)
+      base64
+      ed25519
+      jwt (>= 2.9.0)
     language_server-protocol (3.17.0.6)
     lint_roller (1.1.0)
     logger (1.7.0)
@@ -91,10 +104,12 @@ GEM
       mime-types-data (~> 3.2025, >= 3.2025.0507)
     mime-types-data (3.2026.0701)
     mini_mime (1.1.5)
+    multi_json (1.15.0)
     multi_test (1.1.0)
     mustermann (3.1.1)
     netrc (0.11.0)
     nio4r (2.7.5)
+    openssl (3.3.3)
     ostruct (0.6.3)
     parallel (2.1.0)
     parser (3.3.11.1)
@@ -114,6 +129,8 @@ GEM
       rack (>= 3.0.0)
     rainbow (3.1.1)
     rake (13.4.2)
+    rbnacl (7.1.2)
+      ffi (~> 1)
     rbs (4.0.3)
       logger
       prism (>= 1.6.0)
@@ -164,6 +181,11 @@ GEM
       language_server-protocol (~> 3.17.0)
       prism (>= 1.2, < 2.0)
       rbs (>= 3, < 5)
+    ruby-paseto (0.2.0)
+      multi_json (~> 1.15.0)
+      openssl (~> 3.3)
+      sorbet-runtime
+      zeitwerk
     ruby-progressbar (1.13.0)
     simplecov (0.22.0)
       docile (~> 1.1)
@@ -181,6 +203,8 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
+    sorbet-runtime (0.6.13323)
+    ssh_data (1.3.0)
     sys-uname (1.5.1)
       ffi (~> 1.1)
       memoist3 (~> 1.0.0)
@@ -189,6 +213,7 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
+    zeitwerk (2.8.2)
 
 PLATFORMS
   x86_64-darwin-21
