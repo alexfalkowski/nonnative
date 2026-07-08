@@ -55,6 +55,7 @@ module Nonnative
     module ProxySteps
       PROXY_OPERATIONS = {
         'close_all' => :close_all,
+        'reset_peer' => :reset_peer,
         'delay' => :delay,
         'timeout' => :timeout,
         'invalid_data' => :invalid_data,

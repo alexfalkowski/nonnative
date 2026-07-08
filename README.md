@@ -788,6 +788,7 @@ The `fault_injection` proxy allows you to simulate failures by injecting them. W
 Clients connect to the service `host`/`port`, while the proxy forwards traffic to nested `proxy.host`/`proxy.port`.
 
 - `close_all` - Closes the socket as soon as it connects.
+- `reset_peer` - Resets the socket as soon as it connects, so clients observe a TCP reset (`Errno::ECONNRESET`) rather than the graceful close performed by `close_all`.
 - `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through options.
 - `timeout` - Accepts the connection and stalls traffic until reset or stop closes the connection, so clients exercise their own read timeout behavior.
 - `invalid_data` - Forwards client requests unchanged, then corrupts upstream responses before they reach the client.
@@ -801,6 +802,7 @@ name = 'name of service in configuration'
 service = Nonnative.pool.service_by_name(name)
 
 service.proxy.close_all # To use close_all.
+service.proxy.reset_peer # To reset (RST) client connections.
 service.proxy.timeout # To stall traffic until reset or stop.
 service.proxy.reset # To reset it back to a good state.
 ```
@@ -809,6 +811,7 @@ Use the Cucumber proxy steps:
 
 ```cucumber
 Given I set the proxy for service 'service_1' to 'close_all'
+Given I set the proxy for service 'service_1' to 'reset_peer'
 Given I set the proxy for service 'service_1' to 'timeout'
 Then I should reset the proxy for service 'service_1'
 ```

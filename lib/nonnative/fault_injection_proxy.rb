@@ -10,6 +10,7 @@ module Nonnative
   # This class exposes a small public control surface for tests:
   #
   # - {#close_all}: close connections immediately on accept
+  # - {#reset_peer}: reset connections immediately on accept (TCP RST rather than a graceful close)
   # - {#delay}: delay reads by a configured duration (default: 2 seconds)
   # - {#timeout}: accept connections and keep them silent until clients time out
   # - {#invalid_data}: forward requests unchanged and mutate upstream responses before they reach clients
@@ -97,6 +98,16 @@ module Nonnative
     # @return [void]
     def close_all
       apply_state :close_all
+    end
+
+    # Forces new connections to be reset immediately.
+    #
+    # Unlike {#close_all}, which closes the socket gracefully (FIN), this closes the accepted socket
+    # with a zero linger timeout so clients observe a TCP reset (`Errno::ECONNRESET`).
+    #
+    # @return [void]
+    def reset_peer
+      apply_state :reset_peer
     end
 
     # Delays reads before forwarding.
