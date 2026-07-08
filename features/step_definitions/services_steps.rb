@@ -148,6 +148,10 @@ Then('I should receive a connection error from the service') do
   expect(connection_error?(@service_response)).to be(true)
 end
 
+Then('I should receive a connection reset from the service') do
+  expect(@service_response).to be_a(Errno::ECONNRESET)
+end
+
 Then('I should receive {string} from the service') do |response|
   expect(@service_response).to eq(response)
 end

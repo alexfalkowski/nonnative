@@ -9,6 +9,7 @@ module Nonnative
   # Proxy states are mapped as follows:
   # - `:none` (or any unknown value) -> {Nonnative::SocketPair} (pass-through)
   # - `:close_all` -> {Nonnative::CloseAllSocketPair}
+  # - `:reset_peer` -> {Nonnative::ResetPeerSocketPair}
   # - `:delay` -> {Nonnative::DelaySocketPair}
   # - `:timeout` -> {Nonnative::TimeoutSocketPair}
   # - `:invalid_data` -> {Nonnative::InvalidDataSocketPair}
@@ -16,6 +17,7 @@ module Nonnative
   # @see Nonnative::FaultInjectionProxy
   # @see Nonnative::SocketPair
   # @see Nonnative::CloseAllSocketPair
+  # @see Nonnative::ResetPeerSocketPair
   # @see Nonnative::DelaySocketPair
   # @see Nonnative::TimeoutSocketPair
   # @see Nonnative::InvalidDataSocketPair
@@ -23,13 +25,15 @@ module Nonnative
     class << self
       # Creates a socket-pair instance for the given proxy state.
       #
-      # @param kind [Symbol] proxy state (e.g. `:none`, `:close_all`, `:delay`, `:timeout`, `:invalid_data`)
+      # @param kind [Symbol] proxy state (e.g. `:none`, `:close_all`, `:reset_peer`, `:delay`, `:timeout`, `:invalid_data`)
       # @param proxy [Nonnative::ConfigurationProxy] proxy configuration (host/port/options)
       # @return [Nonnative::SocketPair] a socket-pair implementation instance
       def create(kind, proxy)
         pair = case kind
                when :close_all
                  CloseAllSocketPair
+               when :reset_peer
+                 ResetPeerSocketPair
                when :delay
                  DelaySocketPair
                when :timeout
