@@ -211,6 +211,15 @@ Nonnative::Token.http_audience('GET', '/v1/things')        # => "GET /v1/things"
 Nonnative::Token.grpc_audience('/health.v1.Health/Check')  # => "/health.v1.Health/Check"
 ```
 
+By default the time claims are pinned to the current time (`iat`/`nbf` at now, `exp` at `now + expiration`). To write negative auth tests, `generate` accepts optional absolute `Time` overrides — `issued_at`, `not_before`, and `expires_at` — for minting not-yet-valid or clock-skewed tokens:
+
+```ruby
+# a token that is not valid until an hour from now
+token.generate(aud: 'GET /v1/things', sub: 'user-1', not_before: Time.now + 3600)
+```
+
+`ssh` tokens have no `nbf` claim, so passing `not_before` for the `ssh` kind raises `ArgumentError`.
+
 ### 🔁 Lifecycle strategies (Cucumber integration)
 
 Nonnative ships Cucumber hooks (when loaded) that support these tags/strategies:

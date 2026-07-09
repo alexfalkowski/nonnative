@@ -28,18 +28,21 @@ module Nonnative
     #
     # @param aud [String] the `aud` claim (for example `"GET /v1/things"` or a gRPC full method)
     # @param sub [String] the `sub` claim
+    # @param issued_at [Time, nil] overrides the `iat` claim (default: now)
+    # @param not_before [Time, nil] overrides the `nbf` claim (default: `issued_at`)
+    # @param expires_at [Time, nil] overrides the `exp` claim (default: `issued_at` plus `expiration`)
     # @return [String] the signed PASETO token
-    def generate(aud:, sub:)
+    def generate(aud:, sub:, issued_at: nil, not_before: nil, expires_at: nil)
       load_dependencies!
 
-      now = Time.now.utc
+      now = (issued_at || Time.now).utc
       claims = {
         'iss' => @issuer,
         'aud' => aud,
         'sub' => sub,
         'iat' => now.iso8601,
-        'nbf' => now.iso8601,
-        'exp' => (now + @expiration).iso8601,
+        'nbf' => (not_before || now).utc.iso8601,
+        'exp' => (expires_at || (now + @expiration)).utc.iso8601,
         'jti' => SecureRandom.uuid
       }
 

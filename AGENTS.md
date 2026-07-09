@@ -84,6 +84,15 @@ of dependencies.
   unless the task is explicitly about changing the `Nonnative::Service`
   readiness model. HTTP/gRPC readiness belongs to managed processes, where the
   user explicitly models the application health endpoints.
+- Managed-process readiness intentionally supports only TCP-port-open plus the
+  optional `http`/`grpc` health probes in `Nonnative::ConfigurationReadiness`.
+  A log-line/log-message readiness kind (`kind: 'log'`) is intentionally not
+  supported: systems tested with nonnative are typically deployed in container
+  environments where readiness is modeled through probes that are usually
+  HTTP-based, so the application already exposes an HTTP (or gRPC) health
+  endpoint the existing readiness kinds cover. Do not flag the absence of a
+  log-message readiness kind as a feature gap unless the task is explicitly
+  about changing the process readiness model.
 - Process runners intentionally inherit the parent working directory. Nonnative
   is normally run from the test folder that owns `test/nonnative.yml`, relative
   config paths, logs, and reports. Do not flag missing process cwd/chdir support

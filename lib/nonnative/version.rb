@@ -4,5 +4,5 @@ module Nonnative
   # The current gem version.
   #
   # @return [String]
-  VERSION = '3.19.0'
+  VERSION = '3.20.0'
 end

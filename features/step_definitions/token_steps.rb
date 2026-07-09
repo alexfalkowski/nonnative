@@ -22,10 +22,33 @@ When('I generate a {string} token for the {string} method as {string}') do |kind
   generate_token(kind, Nonnative::Token.grpc_audience(full_method), sub)
 end
 
+When('I generate a {string} token with:') do |kind, table|
+  generate_token_with(kind, **token_options(table))
+end
+
+When('I try to generate a {string} token with:') do |kind, table|
+  generate_token_with(kind, **token_options(table))
+rescue ArgumentError => e
+  @error = e
+end
+
 Then('the token should be verifiable with:') do |table|
   claims, kid = decoded_token(@kind, @token, @signing_material)
 
   table.rows_hash.each do |field, expected|
     expect(field == 'kid' ? kid : claims[field]).to eq(expected)
   end
+end
+
+Then('the token time claims should be:') do |table|
+  claims = token_time_claims(@kind, @token, @signing_material)
+
+  table.rows_hash.each do |field, expected|
+    expect(claims[field]).to eq(Integer(expected))
+  end
+end
+
+Then('token generation should fail with {string}') do |message|
+  expect(@error).to be_a(ArgumentError)
+  expect(@error.message).to include(message)
 end
