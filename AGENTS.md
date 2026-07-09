@@ -114,6 +114,28 @@ of dependencies.
   server/service configuration lookup helpers as a feature gap unless downstream
   usage evidence exists or the task is explicitly about changing the
   pre-start configuration lookup API.
+- `Nonnative::Observability#metrics` intentionally returns the raw Prometheus
+  exposition body. Parsing it into samples or asserting a specific metric value
+  is the caller's responsibility (use a dedicated Prometheus-parsing gem if
+  needed), matching the thin, raw-response posture of the whole observability
+  client. Do not flag the absence of a built-in Prometheus text-format parser
+  (for example `Nonnative::Metrics.parse`) as a feature gap unless the task is
+  explicitly about adding metric-value parsing to the observability client.
+- YAML configuration is intentionally loaded as pure data with no evaluation or
+  substitution: no ERB, no arbitrary object tags, and no `${VAR}` /
+  environment-variable interpolation. Values that must vary between environments
+  belong in programmatic Ruby config (`config.load_file` plus
+  `config.process`/`server`/`service`), which already has full `ENV` access. Do
+  not flag the absence of in-YAML `${VAR}` interpolation as a feature gap unless
+  the task is explicitly about adding environment-variable substitution to
+  `Nonnative::ConfigurationFile`.
+- `Nonnative::GRPCHealth#check` intentionally returns the full
+  `HealthCheckResponse`, so tests assert any serving status directly (for
+  example `check.status == :NOT_SERVING`), mirroring how the HTTP observability
+  client exposes the raw response code; `serving?` is a convenience boolean on
+  top. Do not flag the absence of a `not_serving?` / `status:` helper or a
+  streaming `Watch` wrapper as a feature gap unless the task is explicitly about
+  expanding the gRPC health assertion surface.
 
 ## Runtime Model
 
