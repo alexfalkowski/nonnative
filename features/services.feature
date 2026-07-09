@@ -107,6 +107,16 @@ Feature: Service proxies
     And the round trip should take between 0.2 and 1.5 seconds
 
   @reset
+  Scenario: A bandwidth-limited service proxy throttles transfer
+    Given I configure the system programmatically with services with a bandwidth limit
+    And I start the system
+    And I set the proxy for service 'service_1' to 'bandwidth'
+    When I connect to the service
+    And I send a 4096 byte payload to the service and receive the response
+    Then I should receive the payload back
+    And the transfer should take at least 0.8 seconds
+
+  @reset
   Scenario: A timed-out service proxy stalls responses
     Given I configure the system programmatically with services
     And I start the system

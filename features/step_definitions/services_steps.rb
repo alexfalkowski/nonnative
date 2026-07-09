@@ -25,6 +25,19 @@ Given('I configure the system programmatically with services with jitter') do
   end
 end
 
+Given('I configure the system programmatically with services with a bandwidth limit') do
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1,
+               options: { rate: 8 } }
+    )
+  end
+end
+
 Given('I configure the system programmatically with services without proxies') do
   configure_with_defaults do |config|
     add_service(config, name: 'service_1', host: '127.0.0.1', port: 30_000)
@@ -153,6 +166,14 @@ When('I send {string} to the service and receive the response') do |message|
   @elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
 end
 
+When('I send a {int} byte payload to the service and receive the response') do |size|
+  @payload = 'a' * size
+  started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+  @service.write(@payload)
+  @service_response = @service.receive
+  @elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+end
+
 When('I receive data from the service with a {float} second timeout') do |duration|
   @service_response = Timeout.timeout(duration) { @service.receive }
 rescue Timeout::Error => e
@@ -178,6 +199,14 @@ end
 
 Then('the round trip should take between {float} and {float} seconds') do |low, high|
   expect(@elapsed).to be_between(low, high)
+end
+
+Then('I should receive the payload back') do
+  expect(@service_response).to eq(@payload)
+end
+
+Then('the transfer should take at least {float} seconds') do |minimum|
+  expect(@elapsed).to be >= minimum
 end
 
 Then('I should receive an invalid service response that is not {string}') do |message|

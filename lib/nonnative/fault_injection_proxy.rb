@@ -14,6 +14,7 @@ module Nonnative
   # - {#delay}: delay reads by a configured duration (default: 2 seconds)
   # - {#timeout}: accept connections and keep them silent until clients time out
   # - {#invalid_data}: forward requests unchanged and mutate upstream responses before they reach clients
+  # - {#bandwidth}: throttle forwarded throughput to a configured rate (KB/s)
   # - {#reset}: return to healthy pass-through behavior
   #
   # State changes terminate any active connections so new connections observe the new behavior.
@@ -137,6 +138,16 @@ module Nonnative
     # @return [void]
     def invalid_data
       apply_state :invalid_data
+    end
+
+    # Throttles forwarded throughput to a configured rate.
+    #
+    # The rate is controlled by `service.proxy.options[:rate]` (kilobytes per second); when it is
+    # absent or not positive the connection forwards at full speed.
+    #
+    # @return [void]
+    def bandwidth
+      apply_state :bandwidth
     end
 
     # Resets the proxy back to healthy pass-through behavior.

@@ -59,6 +59,7 @@ module Nonnative
         'delay' => :delay,
         'timeout' => :timeout,
         'invalid_data' => :invalid_data,
+        'bandwidth' => :bandwidth,
         'reset' => :reset
       }.freeze
 

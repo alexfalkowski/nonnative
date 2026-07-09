@@ -801,6 +801,7 @@ Clients connect to the service `host`/`port`, while the proxy forwards traffic t
 - `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through `options.delay`. An optional `options.jitter` (seconds) adds a random offset in `-jitter..jitter` to each delay (a negative value uses its magnitude), so clients see variable, tail-latency-like timing instead of a flat value.
 - `timeout` - Accepts the connection and stalls traffic until reset or stop closes the connection, so clients exercise their own read timeout behavior.
 - `invalid_data` - Forwards client requests unchanged, then corrupts upstream responses before they reach the client.
+- `bandwidth` - Throttles forwarded throughput to `options.rate` kilobytes per second (1 KB = 1024 bytes) by sleeping in proportion to the bytes read, in both directions, so clients see a slow-but-alive dependency. When `rate` is absent or not positive, traffic forwards at full speed.
 
 ###### 🧩 Fault Injection Services
 
