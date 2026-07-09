@@ -33,6 +33,8 @@ module Nonnative
   # - `wait`: sleep interval (seconds) applied after state changes
   # - `options`:
   #   - `delay`: delay duration in seconds used by {#delay}
+  #   - `jitter`: optional random offset (seconds) added in `-jitter..jitter` to each `delay` (a
+  #     negative value uses its magnitude), so clients see variable latency instead of a flat value
   #
   # @see Nonnative::Proxy
   # @see Nonnative::SocketPairFactory

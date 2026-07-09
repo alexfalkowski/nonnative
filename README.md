@@ -798,7 +798,7 @@ Clients connect to the service `host`/`port`, while the proxy forwards traffic t
 
 - `close_all` - Closes the socket as soon as it connects.
 - `reset_peer` - Resets the socket as soon as it connects, so clients observe a TCP reset (`Errno::ECONNRESET`) rather than the graceful close performed by `close_all`.
-- `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through options.
+- `delay` - Delays traffic on the connection. Defaults to 2 seconds and can be configured through `options.delay`. An optional `options.jitter` (seconds) adds a random offset in `-jitter..jitter` to each delay (a negative value uses its magnitude), so clients see variable, tail-latency-like timing instead of a flat value.
 - `timeout` - Accepts the connection and stalls traffic until reset or stop closes the connection, so clients exercise their own read timeout behavior.
 - `invalid_data` - Forwards client requests unchanged, then corrupts upstream responses before they reach the client.
 

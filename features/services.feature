@@ -97,6 +97,16 @@ Feature: Service proxies
     Then I should receive "test" from the service
 
   @reset
+  Scenario: A jittered delay proxy keeps latency within the jitter envelope
+    Given I configure the system programmatically with services with jitter
+    And I start the system
+    And I set the proxy for service 'service_1' to 'delay'
+    When I connect to the service
+    And I send "test" to the service and receive the response
+    Then I should receive "test" from the service
+    And the round trip should take between 0.2 and 1.5 seconds
+
+  @reset
   Scenario: A timed-out service proxy stalls responses
     Given I configure the system programmatically with services
     And I start the system
