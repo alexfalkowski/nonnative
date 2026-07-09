@@ -27,16 +27,19 @@ module Nonnative
     #
     # @param aud [String] the `aud` claim (for example `"GET /v1/things"` or a gRPC full method)
     # @param sub [String] the `sub` claim
+    # @param issued_at [Time, nil] overrides the `iat` claim (default: now)
+    # @param not_before [Time, nil] overrides the `nbf` claim (default: `issued_at`)
+    # @param expires_at [Time, nil] overrides the `exp` claim (default: `issued_at` plus `expiration`)
     # @return [String] the signed JWT
-    def generate(aud:, sub:)
-      now = Time.now.to_i
+    def generate(aud:, sub:, issued_at: nil, not_before: nil, expires_at: nil)
+      now = issued_at || Time.now
       payload = {
         iss: @issuer,
         aud: aud,
         sub: sub,
-        iat: now,
-        nbf: now,
-        exp: now + @expiration,
+        iat: now.to_i,
+        nbf: (not_before || now).to_i,
+        exp: (expires_at || (now + @expiration)).to_i,
         jti: SecureRandom.uuid
       }
 

@@ -30,18 +30,25 @@ module Nonnative
 
     # Generates a signed SSH token.
     #
+    # SSH tokens carry only `iat`/`exp` (in Unix nanoseconds); there is no `nbf` claim, so
+    # `not_before` is rejected.
+    #
     # @param aud [String] the `aud` claim (for example `"GET /v1/things"` or a gRPC full method)
+    # @param issued_at [Time, nil] overrides the `iat` claim (default: now)
+    # @param expires_at [Time, nil] overrides the `exp` claim (default: `issued_at` plus `expiration`)
+    # @raise [ArgumentError] if `not_before` is given (SSH tokens have no `nbf` claim)
     # @return [String] the token, `"<base64(claims)>.<base64(signature)>"`
-    def generate(aud:, **)
-      now = Time.now
-      issued_at = (now.to_i * 1_000_000_000) + now.nsec
+    def generate(aud:, issued_at: nil, expires_at: nil, not_before: nil, **)
+      raise ArgumentError, "ssh tokens do not support 'not_before' (no nbf claim)" unless not_before.nil?
+
+      iat = nanoseconds(issued_at || Time.now)
       claims = {
         ver: TOKEN_VERSION,
         kid: @key,
         sub: @key,
         aud: aud,
-        iat: issued_at,
-        exp: issued_at + (@expiration * 1_000_000_000)
+        iat: iat,
+        exp: expires_at ? nanoseconds(expires_at) : iat + (@expiration * 1_000_000_000)
       }.to_json
 
       signature = Ed25519::SigningKey.new(seed).sign(claims)
@@ -50,6 +57,10 @@ module Nonnative
     end
 
     private
+
+    def nanoseconds(time)
+      (time.to_i * 1_000_000_000) + time.nsec
+    end
 
     def seed
       SSHData::PrivateKey.parse_openssh(File.read(@private_key)).first.sk[0, 32]

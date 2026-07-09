@@ -9,16 +9,49 @@ module Nonnative
           OpenSSL::PKey.new_raw_private_key('ED25519', SecureRandom.bytes(32)).private_to_pem
         end
 
+        # Default generation options; scenarios override or extend them through the token table.
+        TOKEN_DEFAULTS = { aud: 'GET /v1/things', sub: 'user-1' }.freeze
+
+        # Generation options whose table values are Unix seconds and become Time objects.
+        TOKEN_TIME_CLAIMS = %i[issued_at not_before expires_at].freeze
+
         def generate_token(kind, aud, sub)
+          generate_token_with(kind, aud: aud, sub: sub)
+        end
+
+        def generate_token_with(kind, **)
           @kind = kind
           @token = Nonnative.token(kind: kind, issuer: 'iss', key: 'key-1', private_key: @private_key_path, expiration: 3600)
-                            .generate(aud: aud, sub: sub)
+                            .generate(**TOKEN_DEFAULTS, **)
+        end
+
+        # Builds generate options from a Cucumber table so the generation step can be extended with
+        # new claims by adding rows. Time-claim rows are Unix seconds and become Time objects.
+        def token_options(table)
+          table.rows_hash.each_with_object({}) do |(key, value), options|
+            name = key.to_sym
+            options[name] = TOKEN_TIME_CLAIMS.include?(name) ? Time.at(Integer(value)) : value
+          end
+        end
+
+        # Returns the token's time claims normalised to Unix seconds, keyed by claim name. Absent
+        # claims (for example ssh has no nbf) are omitted.
+        def token_time_claims(kind, token, material)
+          claims, = decoded_token(kind, token, material)
+
+          %w[iat nbf exp].each_with_object({}) do |field, result|
+            value = claims[field]
+            result[field] = time_claim_seconds(kind, value) unless value.nil?
+          end
         end
 
         def write_key_file(content)
           file = Tempfile.new(['ed25519', '.pem'])
           file.write(content)
           file.close
+          # Keep a reference for the lifetime of the scenario; otherwise the Tempfile can be
+          # garbage-collected and its finalizer unlinks the file before the key is read.
+          (@key_files ||= []) << file
 
           file.path
         end
@@ -31,6 +64,14 @@ module Nonnative
           path
         end
 
+        def time_claim_seconds(kind, value)
+          case kind
+          when 'paseto' then Time.iso8601(value).to_i
+          when 'ssh' then value / 1_000_000_000
+          else value
+          end
+        end
+
         def decoded_token(kind, token, material)
           case kind
           when 'jwt' then decoded_jwt(token, material)
@@ -41,7 +82,10 @@ module Nonnative
 
         def decoded_jwt(token, pem)
           verify_key = Ed25519::SigningKey.new(OpenSSL::PKey.read(pem).raw_private_key).verify_key
-          payload, header = JWT.decode(token, verify_key, true, algorithm: 'EdDSA')
+          # Verify the signature but skip time-claim validation so deliberately not-yet-valid or
+          # expired tokens (generated with time overrides) can be decoded and inspected.
+          payload, header = JWT.decode(token, verify_key, true,
+                                       algorithm: 'EdDSA', verify_expiration: false, verify_not_before: false)
 
           [payload, header['kid']]
         end

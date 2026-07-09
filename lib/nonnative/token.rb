@@ -54,11 +54,20 @@ module Nonnative
 
     # Generates a signed token.
     #
+    # The optional time claims default to the current time (and the constructor `expiration`), so
+    # omitting them reproduces the token's normal claims. Supply them to mint tokens with specific
+    # time claims for negative auth tests, such as a not-yet-valid (future `not_before`) or
+    # clock-skewed token. Times are absolute; the `ssh` kind has no `nbf` claim and rejects
+    # `not_before`.
+    #
     # @param aud [String] the `aud` claim
     # @param sub [String] the `sub` claim
+    # @param issued_at [Time, nil] overrides the `iat` claim (default: now)
+    # @param not_before [Time, nil] overrides the `nbf` claim (default: `issued_at`); unsupported by `ssh`
+    # @param expires_at [Time, nil] overrides the `exp` claim (default: `issued_at` plus `expiration`)
     # @return [String] the signed token
-    def generate(aud:, sub:)
-      @token.generate(aud: aud, sub: sub)
+    def generate(aud:, sub:, issued_at: nil, not_before: nil, expires_at: nil)
+      @token.generate(aud: aud, sub: sub, issued_at: issued_at, not_before: not_before, expires_at: expires_at)
     end
   end
 end
