@@ -40,12 +40,28 @@ Given('I configure the system programmatically with a fast exiting process') do
     add_process(
       config,
       name: 'fast_exit_process',
-      command: -> { "#{RbConfig.ruby} -e \"exit 0\"" },
+      command: -> { "#{RbConfig.ruby} -e \"exit 23\"" },
       timeout: 1,
       wait: 1,
       host: '127.0.0.1',
       ports: [14_006],
       log: 'test/reports/14_006.log',
+      signal: 'INT'
+    )
+  end
+end
+
+Given('I configure the system programmatically with a signal terminated process') do
+  configure_with_defaults do |config|
+    add_process(
+      config,
+      name: 'signal_exit_process',
+      command: -> { [RbConfig.ruby, '-e', 'Process.kill("KILL", Process.pid)'] },
+      timeout: 1,
+      wait: 1,
+      host: '127.0.0.1',
+      ports: [14_007],
+      log: 'test/reports/14_007.log',
       signal: 'INT'
     )
   end

@@ -23,17 +23,14 @@ module Nonnative
       @processes = nil
     end
 
-    # Starts all configured runners and yields results for each process/server.
+    # Starts all configured runners and collects lifecycle and readiness errors.
     #
     # Services are started first (proxy-only) and checked for opt-in readiness, then servers and processes are
-    # started and checked for readiness.
+    # started and checked for readiness. Each readiness failure is described with the runner and, for a process
+    # that exited early, its termination detail.
     #
-    # @yieldparam name [String, nil] runner name
-    # @yieldparam values [Object] runner-specific return value from `start` (e.g. `[pid, running]` for processes)
-    # @yieldparam result [Boolean] result of the port readiness check (`true` if ready in time)
-    # @yieldparam port [Nonnative::Ports] checked port group
     # @return [Array<String>] lifecycle and readiness-check errors collected while starting
-    def start(&)
+    def start
       errors = []
 
       errors.concat(service_lifecycle(services, :start, :start))
@@ -41,24 +38,20 @@ module Nonnative
       errors.concat(service_readiness_errors)
       return errors if service_readiness_errors.any?
 
-      [servers, processes].each { |runners| errors.concat(run_lifecycle_checks(runners, :start, :open?, :start, &)) }
+      [servers, processes].each { |runners| errors.concat(run_lifecycle_checks(runners, :start, :open?, :start)) }
 
       errors
     end
 
-    # Stops all configured runners and yields results for each process/server.
+    # Stops all configured runners and collects lifecycle and shutdown errors.
     #
     # Processes and servers are stopped first and checked for shutdown, then services are stopped (proxy-only).
     #
-    # @yieldparam name [String, nil] runner name
-    # @yieldparam id [Object] runner-specific identifier returned by `stop` (e.g. pid or object_id)
-    # @yieldparam result [Boolean] result of the port shutdown check (`true` if closed in time)
-    # @yieldparam port [Nonnative::Ports] checked port group
     # @return [Array<String>] lifecycle and shutdown-check errors collected while stopping
-    def stop(&)
+    def stop
       errors = []
 
-      [processes, servers].each { |runners| errors.concat(run_lifecycle_checks(runners, :stop, :closed?, :stop, &)) }
+      [processes, servers].each { |runners| errors.concat(run_lifecycle_checks(runners, :stop, :closed?, :stop)) }
       errors.concat(service_lifecycle(services, :stop, :stop))
 
       errors
@@ -69,16 +62,12 @@ module Nonnative
     # This is used to rollback partial startup after a failed {#start} without constructing new runner
     # wrappers as a side effect.
     #
-    # @yieldparam name [String, nil] runner name
-    # @yieldparam id [Object] runner-specific identifier returned by `stop`
-    # @yieldparam result [Boolean] result of the port shutdown check (`true` if closed in time)
-    # @yieldparam port [Nonnative::Ports] checked port group
     # @return [Array<String>] lifecycle and shutdown-check errors collected while rolling back
-    def rollback(&)
+    def rollback
       errors = []
 
       [existing_processes, existing_servers].each do |runners|
-        errors.concat(run_lifecycle_checks(runners, :stop, :closed?, :stop, &))
+        errors.concat(run_lifecycle_checks(runners, :stop, :closed?, :rollback))
       end
       errors.concat(service_lifecycle(existing_services, :stop, :stop))
 
@@ -196,7 +185,8 @@ module Nonnative
       end
     end
 
-    def run_lifecycle_checks(runners, lifecycle_method, port_method, action, &)
+    def run_lifecycle_checks(runners, lifecycle_method, port_method, phase)
+      action = phase == :start ? :start : :stop
       checks = []
       errors = []
 
@@ -207,7 +197,7 @@ module Nonnative
         errors << lifecycle_error(action, runner, e)
       end
 
-      errors.concat(yield_results(checks, action, &))
+      errors.concat(lifecycle_results(checks, phase, action))
     end
 
     def check_port(port, port_method)
@@ -216,15 +206,48 @@ module Nonnative
       { error: e }
     end
 
-    def yield_results(checks, action, &)
-      checks.each_with_object([]) do |(type, values, port, thread), errors|
+    def lifecycle_results(checks, phase, action)
+      checks.each_with_object([]) do |(runner, values, port, thread), errors|
         result = thread.value
         if result[:error]
-          errors << port_error(action, type, result[:error])
-        elsif block_given?
-          yield type.name, values, result[:result], port
+          errors << port_error(action, runner, result[:error])
+        else
+          errors.concat(readiness_errors(phase, runner, values, result[:result], port))
         end
       end
+    end
+
+    def readiness_errors(phase, runner, values, ready, port)
+      case phase
+      when :start then start_errors(runner, values, ready, port)
+      when :stop then stop_errors(runner, values, ready, port)
+      else rollback_errors(runner, values, ready, port)
+      end
+    end
+
+    def start_errors(runner, values, ready, port)
+      id, started = values
+      return [] if started && ready
+
+      message = "Started #{runner.name} with id #{id}, though did not respond in time for #{port.description}"
+      detail = runner.termination
+      [detail ? "#{message}; #{detail}" : message]
+    end
+
+    def stop_errors(runner, values, ready, port)
+      id, stopped = Array(values).then { |v| [v.first, v.fetch(1, true)] }
+      errors = []
+      errors << "Stopped #{runner.name} with id #{id}, though did not respond in time for #{port.description}" unless ready
+      errors << "Stopped #{runner.name} with id #{id}, though the process did not exit in time" unless stopped
+      errors
+    end
+
+    def rollback_errors(runner, values, ready, port)
+      id, stopped = Array(values).then { |v| [v.first, v.fetch(1, true)] }
+      errors = []
+      errors << "Rollback failed for #{runner.name} with id #{id}, because it did not stop in time for #{port.description}" unless ready
+      errors << "Rollback failed for #{runner.name} with id #{id}, because the process did not exit in time" unless stopped
+      errors
     end
 
     def lifecycle_error(action, type, error)
