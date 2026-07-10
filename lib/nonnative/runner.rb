@@ -26,6 +26,15 @@ module Nonnative
       service.name
     end
 
+    # Describes how the runner terminated before becoming ready, for lifecycle diagnostics.
+    #
+    # Base runners report nothing; {Nonnative::Process} overrides this to describe an early exit.
+    #
+    # @return [String, nil]
+    def termination
+      nil
+    end
+
     protected
 
     # Returns the underlying configuration object.

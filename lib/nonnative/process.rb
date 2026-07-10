@@ -37,7 +37,10 @@ module Nonnative
         wait_start
       end
 
-      [pid, ::Process.waitpid2(pid, ::Process::WNOHANG).nil?]
+      # Retain the reaped status for this lifecycle so startup diagnostics can report it.
+      status = ::Process.waitpid2(pid, ::Process::WNOHANG)
+      @status = status&.last
+      [pid, status.nil?]
     end
 
     # Stops the process if it is running.
@@ -62,6 +65,20 @@ module Nonnative
       @memory = nil
     end
 
+    # Describes how the process terminated when it exited before becoming ready.
+    #
+    # Returns `nil` while the process is still running, so callers can distinguish an early exit
+    # from a live process that merely missed its readiness window. The check is non-blocking and
+    # reuses the status captured during {#start} when available.
+    #
+    # @return [String, nil] termination detail (exit status or terminating signal), or `nil`
+    def termination
+      status = captured_status
+      return if status.nil?
+
+      terminated_description(status)
+    end
+
     protected
 
     def wait_stop
@@ -73,6 +90,28 @@ module Nonnative
     private
 
     attr_reader :pid, :timeout
+
+    def captured_status
+      return @status unless @status.nil?
+      return if pid.nil?
+
+      # A process that exited during the readiness window has not been reaped yet.
+      @status = ::Process.waitpid2(pid, ::Process::WNOHANG)&.last
+    rescue Errno::ECHILD, Errno::ESRCH
+      nil
+    end
+
+    def terminated_description(status)
+      return "process exited before readiness with exit status #{status.exitstatus}" if status.exited?
+      return "process exited before readiness after being killed by signal #{signal_description(status.termsig)}" if status.signaled?
+
+      "process exited before readiness (#{status})"
+    end
+
+    def signal_description(signal)
+      name = Signal.signame(signal)
+      name ? "SIG#{name} (#{signal})" : signal.to_s
+    end
 
     def process_kill
       signal = Signal.list[service.signal || 'INT'] || Signal.list['INT']

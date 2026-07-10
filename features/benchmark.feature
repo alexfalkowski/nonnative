@@ -33,7 +33,16 @@ Feature: Benchmark
     Given I configure the system programmatically with a fast exiting process
     When I attempt to start the system
     Then starting the system should raise an error
+    And starting the system should raise an error containing "exit status 23"
     And the port '14006' should be closed
+
+  @manual
+  Scenario: Start nonnative with a signal terminated process reports the signal
+    Given I configure the system programmatically with a signal terminated process
+    When I attempt to start the system
+    Then starting the system should raise an error
+    And starting the system should raise an error containing "SIGKILL"
+    And the port '14007' should be closed
 
   Scenario: Stop nonnative with a long stopping time server will error
     Given I configure the system programmatically with a no stop server
