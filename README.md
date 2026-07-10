@@ -465,6 +465,30 @@ module Nonnative
 end
 ```
 
+To run multiple Rack services on one managed port, pass a non-empty mount map. Each key must start
+with `/`, and the mounted application receives the remaining `PATH_INFO`:
+
+```ruby
+module Nonnative
+  module Features
+    class HealthService < Nonnative::HTTPService
+      get '/' do
+        'ok'
+      end
+    end
+
+    class HTTPServer < Nonnative::HTTPServer
+      def initialize(service)
+        super({ '/api' => HelloService.new, '/health' => HealthService.new }, service)
+      end
+    end
+  end
+end
+```
+
+The existing single-service form remains supported. Nonnative converts a mount map to a
+`Rack::URLMap` and keeps one server lifecycle and port. An empty mount map raises `ArgumentError`.
+
 Set it up programmatically:
 
 ```ruby
@@ -602,6 +626,30 @@ module Nonnative
   end
 end
 ```
+
+To serve multiple gRPC services on one managed port, pass a non-empty array of handler classes or
+instances:
+
+```ruby
+module Nonnative
+  module Features
+    class HealthService < Grpc::Health::V1::Health::Service
+      def check(_request, _call)
+        Grpc::Health::V1::HealthCheckResponse.new(status: :SERVING)
+      end
+    end
+
+    class GRPCServer < Nonnative::GRPCServer
+      def initialize(service)
+        super([Greeter.new, HealthService.new], service)
+      end
+    end
+  end
+end
+```
+
+The existing single-handler form remains supported. Nonnative registers each handler before the
+server starts, so application and standard health handlers can share one lifecycle and endpoint.
 
 Set it up programmatically:
 

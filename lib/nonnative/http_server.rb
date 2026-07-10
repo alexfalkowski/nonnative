@@ -36,9 +36,16 @@ module Nonnative
   class HTTPServer < Nonnative::Server
     # Creates a Puma server for the given HTTP service and runner configuration.
     #
-    # @param http_service [#call] an HTTP service instance
+    # @param http_service [#call, Hash<String, #call>] an HTTP service instance or mount map
     # @param service [Nonnative::ConfigurationServer] server configuration
+    # @raise [ArgumentError] if `http_service` is an empty mount map
     def initialize(http_service, service)
+      if http_service.is_a?(Hash)
+        raise ArgumentError, 'HTTP server requires at least one service mount' if http_service.empty?
+
+        http_service = Rack::URLMap.new(http_service)
+      end
+
       # Keep the log IO so the server lifecycle can release Puma's file handle on stop.
       @log = File.open(service.log, 'a')
       options = {

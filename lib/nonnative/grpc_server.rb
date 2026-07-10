@@ -12,13 +12,18 @@ module Nonnative
   #
   # @see Nonnative::Server
   class GRPCServer < Nonnative::Server
-    # Creates a gRPC server and registers the provided service handler.
+    # Creates a gRPC server and registers the provided service handler(s).
     #
-    # @param svc [Object] a gRPC service implementation (typically a `...::Service` subclass instance)
+    # @param svc [Object, Array<Object>] a gRPC service implementation or a non-empty array of
+    #   implementations (typically `...::Service` subclasses or instances)
     # @param service [Nonnative::ConfigurationServer] server configuration
+    # @raise [ArgumentError] if `svc` is an empty array
     def initialize(svc, service)
       @server = GRPC::RpcServer.new
-      server.handle(svc)
+      handlers = svc.is_a?(Array) ? svc : [svc]
+      raise ArgumentError, 'gRPC server requires at least one service handler' if handlers.empty?
+
+      handlers.each { |handler| server.handle(handler) }
 
       # Unfortunately gRPC has only one logger so the first server wins.
       GRPC.define_singleton_method(:logger) do
