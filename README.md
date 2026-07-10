@@ -541,6 +541,8 @@ end
 
 The system allows you to define an in-process HTTP forward proxy server for external systems, e.g. `api.github.com`. This is a server implementation, not a fault-injection service proxy.
 
+The proxy preserves the upstream status, body, and safe end-to-end response headers such as `Content-Type`, `ETag`, and application-specific metadata. It removes hop-by-hop, connection-nominated, proxy-authentication, and framing headers; `Set-Cookie`, `Location`, and `Content-Encoding` are not forwarded.
+
 Define your server:
 
 ```ruby

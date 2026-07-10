@@ -155,6 +155,10 @@ When('I send a {string} request with proxy credentials to the local HTTP proxy s
   @response = http_client_for_server('local_http_proxy_server').inspect_request_with_proxy_credentials(verb.downcase)
 end
 
+When('I request response metadata through the local HTTP proxy server') do
+  @response = http_client_for_server('local_http_proxy_server').response_metadata
+end
+
 Then('I should receive an HTTP {string} response') do |response|
   @responses.each do |r|
     expect(r.code).to eq(200)
@@ -203,6 +207,18 @@ Then('I should receive request details without proxy credentials from the local 
   expect(@response.code).to eq(200)
   expect(body['authorization']).to eq('Bearer app-token')
   expect(body['proxy_authorization']).to be_nil
+end
+
+Then('I should receive preserved response metadata from the local HTTP proxy server') do
+  expect(@error).to be_nil
+  expect(@response.code).to eq(201)
+  expect(@response.body).to eq('upstream response body')
+  expect(@response.headers[:content_type]).to eq('application/problem+json')
+  expect(@response.headers[:etag]).to eq('"response-v1"')
+  expect(@response.headers[:x_end_to_end]).to eq('preserved')
+  expect(@response.headers[:www_authenticate]).to eq('Bearer realm="response-test"')
+  expect(@response.headers[:proxy_authenticate]).to be_nil
+  expect(@response.headers[:x_upstream_only]).to be_nil
 end
 
 Then('I should find the server runner {string}') do |name|

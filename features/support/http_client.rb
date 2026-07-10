@@ -11,6 +11,12 @@ module Nonnative
         end
       end
 
+      def response_metadata
+        with_retry(1, 1) do
+          get('response-metadata', { read_timeout: 1, open_timeout: 1 })
+        end
+      end
+
       def mounted_get
         with_retry(1, 1) do
           get('mounted/hello', { headers: { content_type: :json, accept: :json }, read_timeout: 1, open_timeout: 1 })
