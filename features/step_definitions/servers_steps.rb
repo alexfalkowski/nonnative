@@ -25,6 +25,34 @@ Given('I configure the system programmatically with servers') do
   end
 end
 
+Given('I configure the system programmatically with a composed HTTP server') do
+  configure_with_defaults(url: 'http://localhost:4567') do |config|
+    add_server(config, name: 'http_server_1', klass: Nonnative::Features::ComposedHTTPServer, timeout: 1,
+                       host: '127.0.0.1', ports: [4567], log: 'test/reports/composed_http_server.log')
+  end
+end
+
+Given('I configure the system programmatically with an empty HTTP server') do
+  configure_with_defaults(url: 'http://localhost:4567') do |config|
+    add_server(config, name: 'http_server_1', klass: Nonnative::Features::EmptyHTTPServer, timeout: 1,
+                       host: '127.0.0.1', ports: [4567], log: 'test/reports/empty_http_server.log')
+  end
+end
+
+Given('I configure the system programmatically with a composed gRPC server') do
+  configure_with_defaults do |config|
+    add_server(config, name: 'grpc_server_1', klass: Nonnative::Features::ComposedGRPCServer, timeout: 1,
+                       host: '127.0.0.1', ports: [9002], log: 'test/reports/composed_grpc_server.log')
+  end
+end
+
+Given('I configure the system programmatically with an empty gRPC server') do
+  configure_with_defaults do |config|
+    add_server(config, name: 'grpc_server_1', klass: Nonnative::Features::EmptyGRPCServer, timeout: 1,
+                       host: '127.0.0.1', ports: [9002], log: 'test/reports/empty_grpc_server.log')
+  end
+end
+
 Given('I configure the system through configuration with servers') do
   load_configuration('features/configs/servers.yml')
 end
@@ -50,10 +78,22 @@ When('I send a message with the HTTP client to the servers') do
   end
 end
 
+When('I send a mounted message with the HTTP client to the server') do
+  @responses = [http_client_for_server('http_server_1').mounted_get]
+end
+
+When('I send a root message with the HTTP client to the server') do
+  @responses = [http_client_for_server('http_server_1').hello_get]
+end
+
 When('I send a message with the gRPC client to the servers') do
   @responses = %w[grpc_server_1 grpc_server_2].map do |name|
     grpc_client_for_server(name).say_hello(greeter_request)
   end
+end
+
+When('I send a message with the gRPC client to the server') do
+  @responses = [grpc_client_for_server('grpc_server_1').say_hello(greeter_request)]
 end
 
 When('I send a {string} request') do |name|

@@ -23,6 +23,19 @@ Feature: Servers
     When I send a message with the HTTP client to the servers
     Then I should receive an HTTP "Hello World!" response
 
+  Scenario: HTTP servers compose mounted services
+    Given I configure the system programmatically with a composed HTTP server
+    And I start the system
+    When I send a root message with the HTTP client to the server
+    Then I should receive an HTTP "Hello World!" response
+    When I send a mounted message with the HTTP client to the server
+    Then I should receive an HTTP "Mounted World!" response
+
+  Scenario: HTTP servers reject empty mount maps
+    Given I configure the system programmatically with an empty HTTP server
+    When I attempt to start the system
+    Then starting the system should raise an error containing "HTTP server requires at least one service mount"
+
   Scenario: HTTP servers return not found for unknown routes
     Given I configure the system programmatically with servers
     And I start the system
@@ -40,6 +53,18 @@ Feature: Servers
     And I start the system
     When I send a message with the gRPC client to the servers
     Then I should receive a gRPC "Hello World!" response
+
+  Scenario: gRPC servers compose application and health handlers
+    Given I configure the system programmatically with a composed gRPC server
+    And I start the system
+    When I send a message with the gRPC client to the server
+    Then I should receive a gRPC "Hello World!" response
+    And the gRPC health helper should report "test" serving on port 9002
+
+  Scenario: gRPC servers reject empty handler lists
+    Given I configure the system programmatically with an empty gRPC server
+    When I attempt to start the system
+    Then starting the system should raise an error containing "gRPC server requires at least one service handler"
 
   Scenario: The health endpoint reports the servers as healthy
     Given I configure the system programmatically with servers

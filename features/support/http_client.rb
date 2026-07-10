@@ -11,6 +11,12 @@ module Nonnative
         end
       end
 
+      def mounted_get
+        with_retry(1, 1) do
+          get('mounted/hello', { headers: { content_type: :json, accept: :json }, read_timeout: 1, open_timeout: 1 })
+        end
+      end
+
       def hello_post
         with_retry(1, 1) do
           headers = Nonnative::Header.auth_basic('test:test').merge({ content_type: :json, accept: :json })

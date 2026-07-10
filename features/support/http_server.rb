@@ -8,6 +8,24 @@ module Nonnative
       end
     end
 
+    class ComposedHTTPServer < Nonnative::HTTPServer
+      def initialize(service)
+        super({ '/mounted' => MountedService.new, '/' => Service.new }, service)
+      end
+    end
+
+    class EmptyHTTPServer < Nonnative::HTTPServer
+      def initialize(service)
+        super({}, service)
+      end
+    end
+
+    class MountedService < Nonnative::HTTPService
+      get '/hello' do
+        'Mounted World!'.to_json
+      end
+    end
+
     class Service < Nonnative::HTTPService
       class << self
         attr_accessor :health_body, :health_status
