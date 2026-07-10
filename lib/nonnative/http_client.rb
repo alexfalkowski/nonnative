@@ -80,6 +80,18 @@ module Nonnative
       end
     end
 
+    # Performs a PATCH request.
+    #
+    # @param pathname [String] path relative to `host`
+    # @param payload [Object] request payload
+    # @param opts [Hash] RestClient request options
+    # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
+    def patch(pathname, payload, opts = {})
+      with_exception do
+        resource(pathname, opts).patch(payload)
+      end
+    end
+
     # Creates a RestClient resource for a relative path.
     #
     # @param pathname [String] path relative to `host`

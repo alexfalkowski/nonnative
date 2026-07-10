@@ -46,7 +46,7 @@ When('I send a message with the HTTP client to the servers') do
   @responses = %w[http_server_1 http_server_2].flat_map do |name|
     client = http_client_for_server(name)
 
-    [client.hello_get, client.hello_post, client.hello_put, client.hello_delete]
+    [client.hello_get, client.hello_post, client.hello_put, client.hello_patch, client.hello_delete]
   end
 end
 
@@ -67,6 +67,10 @@ end
 
 When('I send a not found message with the HTTP client to the servers') do
   @response = http_client_for_server('http_server_1').not_found
+end
+
+When('I send a not found PATCH message with the HTTP client to the servers') do
+  @response = http_client_for_server('http_server_1').patch_not_found
 end
 
 When('I look up the server runner {string}') do |name|
