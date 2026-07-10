@@ -27,6 +27,20 @@ module Nonnative
         end
       end
 
+      def hello_patch
+        with_retry(1, 1) do
+          headers = Nonnative::Header.http_user_agent('test 1.0').merge({ content_type: :json, accept: :json })
+
+          patch('hello', 'Hello World!', { headers:, read_timeout: 1, open_timeout: 1 })
+        end
+      end
+
+      def patch_not_found
+        with_retry(1, 1) do
+          patch('notfound', 'Hello World!', { headers: { content_type: :json, accept: :json }, read_timeout: 1, open_timeout: 1 })
+        end
+      end
+
       def hello_delete
         with_retry(1, 1) do
           delete('hello', { headers: { content_type: :json, accept: :json }, read_timeout: 1, open_timeout: 1 })

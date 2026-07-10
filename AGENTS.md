@@ -129,6 +129,11 @@ of dependencies.
   not flag the absence of in-YAML `${VAR}` interpolation as a feature gap unless
   the task is explicitly about adding environment-variable substitution to
   `Nonnative::ConfigurationFile`.
+- YAML configuration intentionally does not validate unknown structural keys or
+  provide a strict configuration-lint mode. Unknown fields may be ignored while
+  syntax, safety, and supported value shapes are still validated. Do not flag
+  the absence of strict unknown-key diagnostics or config linting as a feature
+  gap unless the task is explicitly about changing YAML validation behavior.
 - `Nonnative::GRPCHealth#check` intentionally returns the full
   `HealthCheckResponse`, so tests assert any serving status directly (for
   example `check.status == :NOT_SERVING`), mirroring how the HTTP observability

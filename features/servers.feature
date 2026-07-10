@@ -29,6 +29,12 @@ Feature: Servers
     When I send a not found message with the HTTP client to the servers
     Then I should receive an HTTP not found response
 
+  Scenario: HTTP PATCH returns not found for unknown routes
+    Given I configure the system programmatically with servers
+    And I start the system
+    When I send a not found PATCH message with the HTTP client to the servers
+    Then I should receive an HTTP not found response
+
   Scenario: gRPC servers greet clients
     Given I configure the system programmatically with servers
     And I start the system
