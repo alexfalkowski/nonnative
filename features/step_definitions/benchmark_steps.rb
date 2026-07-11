@@ -6,6 +6,12 @@ Given('I configure the system programmatically with a no op server') do
   end
 end
 
+Given('I configure the system programmatically with a server that raises before readiness') do
+  configure_with_defaults do |config|
+    add_server(config, klass: Nonnative::Features::RaiseStartServer, timeout: 1, ports: [14_008])
+  end
+end
+
 Given('I configure the system programmatically with a no stop server') do
   configure_with_defaults do |config|
     add_server(config, klass: Nonnative::Features::NoStopServer, timeout: 1, ports: [14_001])
