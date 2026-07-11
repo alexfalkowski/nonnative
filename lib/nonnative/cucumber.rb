@@ -60,6 +60,7 @@ module Nonnative
         'timeout' => :timeout,
         'invalid_data' => :invalid_data,
         'bandwidth' => :bandwidth,
+        'limit_data' => :limit_data,
         'reset' => :reset
       }.freeze
 

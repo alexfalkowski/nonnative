@@ -14,6 +14,7 @@ module Nonnative
   # - `:timeout` -> {Nonnative::TimeoutSocketPair}
   # - `:invalid_data` -> {Nonnative::InvalidDataSocketPair}
   # - `:bandwidth` -> {Nonnative::BandwidthSocketPair}
+  # - `:limit_data` -> {Nonnative::LimitDataSocketPair}
   #
   # @see Nonnative::FaultInjectionProxy
   # @see Nonnative::SocketPair
@@ -23,30 +24,28 @@ module Nonnative
   # @see Nonnative::TimeoutSocketPair
   # @see Nonnative::InvalidDataSocketPair
   # @see Nonnative::BandwidthSocketPair
+  # @see Nonnative::LimitDataSocketPair
   class SocketPairFactory
+    PAIR_BY_STATE = {
+      close_all: CloseAllSocketPair,
+      reset_peer: ResetPeerSocketPair,
+      delay: DelaySocketPair,
+      timeout: TimeoutSocketPair,
+      invalid_data: InvalidDataSocketPair,
+      bandwidth: BandwidthSocketPair,
+      limit_data: LimitDataSocketPair
+    }.freeze
+    private_constant :PAIR_BY_STATE
+
     class << self
       # Creates a socket-pair instance for the given proxy state.
       #
-      # @param kind [Symbol] proxy state (e.g. `:none`, `:close_all`, `:reset_peer`, `:delay`, `:timeout`, `:invalid_data`, `:bandwidth`)
+      # @param kind [Symbol] proxy state (e.g. `:none`, `:close_all`, `:reset_peer`, `:delay`, `:timeout`,
+      #   `:invalid_data`, `:bandwidth`, `:limit_data`)
       # @param proxy [Nonnative::ConfigurationProxy] proxy configuration (host/port/options)
       # @return [Nonnative::SocketPair] a socket-pair implementation instance
       def create(kind, proxy)
-        pair = case kind
-               when :close_all
-                 CloseAllSocketPair
-               when :reset_peer
-                 ResetPeerSocketPair
-               when :delay
-                 DelaySocketPair
-               when :timeout
-                 TimeoutSocketPair
-               when :invalid_data
-                 InvalidDataSocketPair
-               when :bandwidth
-                 BandwidthSocketPair
-               else
-                 SocketPair
-               end
+        pair = PAIR_BY_STATE.fetch(kind, SocketPair)
 
         pair.new(proxy)
       end

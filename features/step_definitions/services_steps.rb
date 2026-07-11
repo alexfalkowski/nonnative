@@ -38,6 +38,32 @@ Given('I configure the system programmatically with services with a bandwidth li
   end
 end
 
+Given('I configure the system programmatically with services with a response byte limit') do
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1,
+               options: { bytes: 128 } }
+    )
+  end
+end
+
+Given('I configure the system programmatically with services with a zero response byte limit') do
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1,
+               options: { bytes: 0 } }
+    )
+  end
+end
+
 Given('I configure the system programmatically with services without proxies') do
   configure_with_defaults do |config|
     add_service(config, name: 'service_1', host: '127.0.0.1', port: 30_000)
@@ -203,6 +229,10 @@ end
 
 Then('I should receive the payload back') do
   expect(@service_response).to eq(@payload)
+end
+
+Then('I should receive the first {int} bytes of the payload') do |size|
+  expect(@service_response).to eq(@payload.byteslice(0, size))
 end
 
 Then('the transfer should take at least {float} seconds') do |minimum|

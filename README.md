@@ -852,6 +852,7 @@ Clients connect to the service `host`/`port`, while the proxy forwards traffic t
 - `timeout` - Accepts the connection and stalls traffic until reset or stop closes the connection, so clients exercise their own read timeout behavior.
 - `invalid_data` - Forwards client requests unchanged, then corrupts upstream responses before they reach the client.
 - `bandwidth` - Throttles forwarded throughput to `options.rate` kilobytes per second (1 KB = 1024 bytes) by sleeping in proportion to the bytes read, in both directions, so clients see a slow-but-alive dependency. When `rate` is absent or not positive, traffic forwards at full speed.
+- `limit_data` - Forwards client requests unchanged, then sends the first `options.bytes` bytes of the upstream byte stream on each connection and gracefully closes the connection. When `bytes` is absent or not positive, traffic forwards at full speed.
 
 ###### 🧩 Fault Injection Services
 
@@ -864,6 +865,7 @@ service = Nonnative.pool.service_by_name(name)
 service.proxy.close_all # To use close_all.
 service.proxy.reset_peer # To reset (RST) client connections.
 service.proxy.timeout # To stall traffic until reset or stop.
+service.proxy.limit_data # To truncate the upstream byte stream at options.bytes.
 service.proxy.reset # To reset it back to a good state.
 ```
 
@@ -873,6 +875,7 @@ Use the Cucumber proxy steps:
 Given I set the proxy for service 'service_1' to 'close_all'
 Given I set the proxy for service 'service_1' to 'reset_peer'
 Given I set the proxy for service 'service_1' to 'timeout'
+Given I set the proxy for service 'service_1' to 'limit_data'
 Then I should reset the proxy for service 'service_1'
 ```
 
