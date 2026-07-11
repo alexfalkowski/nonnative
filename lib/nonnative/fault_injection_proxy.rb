@@ -15,6 +15,7 @@ module Nonnative
   # - {#timeout}: accept connections and keep them silent until clients time out
   # - {#invalid_data}: forward requests unchanged and mutate upstream responses before they reach clients
   # - {#bandwidth}: throttle forwarded throughput to a configured rate (KB/s)
+  # - {#limit_data}: forward a configured number of response bytes, then gracefully close
   # - {#reset}: return to healthy pass-through behavior
   #
   # State changes terminate any active connections so new connections observe the new behavior.
@@ -36,6 +37,8 @@ module Nonnative
   #   - `delay`: delay duration in seconds used by {#delay}
   #   - `jitter`: optional random offset (seconds) added in `-jitter..jitter` to each `delay` (a
   #     negative value uses its magnitude), so clients see variable latency instead of a flat value
+  #   - `bytes`: positive response byte limit used by {#limit_data}; absent or non-positive values
+  #     use pass-through behavior
   #
   # @see Nonnative::Proxy
   # @see Nonnative::SocketPairFactory
@@ -148,6 +151,17 @@ module Nonnative
     # @return [void]
     def bandwidth
       apply_state :bandwidth
+    end
+
+    # Truncates the upstream byte stream after a configured number of bytes.
+    #
+    # Client requests are forwarded unchanged. The response byte limit is read from
+    # `service.proxy.options[:bytes]`; when it is absent or not positive, the connection forwards at
+    # full speed without truncation.
+    #
+    # @return [void]
+    def limit_data
+      apply_state :limit_data
     end
 
     # Resets the proxy back to healthy pass-through behavior.

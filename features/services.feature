@@ -117,6 +117,25 @@ Feature: Service proxies
     And the transfer should take at least 0.8 seconds
 
   @reset
+  Scenario: A service proxy truncates responses after a byte limit
+    Given I configure the system programmatically with services with a response byte limit
+    And I start the system
+    And I set the proxy for service 'service_1' to 'limit_data'
+    When I connect to the service
+    And I send a 512 byte payload to the service and receive the response
+    Then I should receive the first 128 bytes of the payload
+
+  @reset
+  Scenario: A non-positive response byte limit preserves pass-through
+    Given I configure the system programmatically with services with a zero response byte limit
+    And I start the system
+    And I set the proxy for service 'service_1' to 'limit_data'
+    When I connect to the service
+    And I send "test" to the service
+    And I receive data from the service
+    Then I should receive "test" from the service
+
+  @reset
   Scenario: A timed-out service proxy stalls responses
     Given I configure the system programmatically with services
     And I start the system
