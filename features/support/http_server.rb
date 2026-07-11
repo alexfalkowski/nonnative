@@ -50,6 +50,20 @@ module Nonnative
             user_agent: request.env['HTTP_USER_AGENT']
           }
         end
+
+        def preserved_metadata_response
+          headers(
+            'Content-Type' => 'application/problem+json',
+            'ETag' => '"response-v1"',
+            'X-End-To-End' => 'preserved',
+            'WWW-Authenticate' => 'Bearer realm="response-test"',
+            'Proxy-Authenticate' => 'Basic realm="proxy"',
+            'Connection' => 'X-Upstream-Only',
+            'X-Upstream-Only' => 'not-forwarded'
+          )
+          status 201
+          'upstream response body'
+        end
       end
 
       get '/hello' do
@@ -72,18 +86,16 @@ module Nonnative
         'Hello World!'.to_json
       end
 
+      options '/hello' do
+        status 200
+      end
+
       get '/response-metadata' do
-        headers(
-          'Content-Type' => 'application/problem+json',
-          'ETag' => '"response-v1"',
-          'X-End-To-End' => 'preserved',
-          'WWW-Authenticate' => 'Bearer realm="response-test"',
-          'Proxy-Authenticate' => 'Basic realm="proxy"',
-          'Connection' => 'X-Upstream-Only',
-          'X-Upstream-Only' => 'not-forwarded'
-        )
-        status 201
-        'upstream response body'
+        preserved_metadata_response
+      end
+
+      options '/response-metadata' do
+        preserved_metadata_response
       end
 
       post '/inspect' do
@@ -100,6 +112,10 @@ module Nonnative
 
       delete '/inspect' do
         inspect_request.to_json
+      end
+
+      head '/inspect' do
+        status 200
       end
 
       get '/test/healthz' do

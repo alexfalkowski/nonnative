@@ -22,7 +22,7 @@ module Nonnative
   #
   # The upstream host is configured via service settings (see {Nonnative::HTTPProxyServer}).
   #
-  # Supported HTTP verbs: GET, POST, PUT, PATCH, DELETE.
+  # Supported HTTP verbs: GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS.
   class HTTPProxy < Nonnative::HTTPService
     NON_FORWARDABLE_RESPONSE_HEADERS = %w[
       connection
@@ -145,7 +145,16 @@ module Nonnative
       header.delete_prefix('HTTP_').split('_').map(&:capitalize).join('-')
     end
 
-    %w[get post put patch delete].each do |verb|
+    # Registered before `get` so it takes precedence over Sinatra's GET-generated HEAD route,
+    # which would otherwise forward HEAD requests upstream as GET.
+    head(/.*/) do
+      res = api_response(method: :head, url: build_url(request, settings), headers: forward_request_headers(request))
+
+      headers(forward_response_headers(res))
+      status res.code
+    end
+
+    %w[get post put patch delete options].each do |verb|
       send(verb, /.*/) do
         res = api_response(
           method: verb.to_sym,
