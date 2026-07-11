@@ -32,7 +32,14 @@ module Nonnative
     #   - `true` (thread creation itself is considered started; readiness is checked separately)
     def start
       unless thread
-        @thread = Thread.new { perform_start }
+        @error = nil
+        @thread = Thread.new do
+          perform_start
+        rescue StandardError => e
+          @error = e
+          raise
+        end
+        @thread.report_on_exception = true
 
         wait_start
 
@@ -61,8 +68,22 @@ module Nonnative
       object_id
     end
 
+    # Describes how the server thread terminated before becoming ready, for lifecycle diagnostics.
+    #
+    # Returns `nil` while the thread is still alive, so callers can distinguish a dead thread from a
+    # live server that merely missed its readiness window.
+    #
+    # @return [String, nil] termination detail (clean early return or uncaught exception), or `nil`
+    def termination
+      return if thread.nil? || thread.alive?
+
+      return "server thread raised #{error.class}: #{error.message}" if error
+
+      'server thread exited before readiness'
+    end
+
     private
 
-    attr_reader :thread, :timeout
+    attr_reader :thread, :timeout, :error
   end
 end

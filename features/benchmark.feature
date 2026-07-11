@@ -20,6 +20,14 @@ Feature: Benchmark
     When I attempt to start the system
     Then starting the system should raise an error
     And starting the system should raise an error containing "though did not respond in time"
+    And starting the system should raise an error containing "server thread exited before readiness"
+
+  @manual
+  Scenario: Start nonnative with a server that raises before readiness reports the exception
+    Given I configure the system programmatically with a server that raises before readiness
+    When I attempt to start the system
+    Then starting the system should raise an error
+    And starting the system should raise an error containing "StandardError: boom on perform_start"
 
   @manual
   Scenario: Start nonnative with a start error will rollback started runners

@@ -84,6 +84,13 @@ of dependencies.
   unless the task is explicitly about changing the `Nonnative::Service`
   readiness model. HTTP/gRPC readiness belongs to managed processes, where the
   user explicitly models the application health endpoints.
+- Multiple managed processes remain supported, but the pool's service -> server
+  -> process startup order is the intentional dependency model: typical suites
+  manage one system process and model its dependencies as externally managed
+  services or in-process servers, which become ready first. Do not flag the
+  absence of process-to-process `depends_on`, dependency graphs, or topological
+  process startup as a feature gap unless downstream usage evidence exists or
+  the task is explicitly about changing the lifecycle model.
 - Managed-process readiness intentionally supports only TCP-port-open plus the
   optional `http`/`grpc` health probes in `Nonnative::ConfigurationReadiness`.
   A log-line/log-message readiness kind (`kind: 'log'`) is intentionally not
