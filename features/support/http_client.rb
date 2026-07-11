@@ -59,6 +59,30 @@ module Nonnative
         end
       end
 
+      def hello_head
+        with_retry(1, 1) do
+          head('hello', { read_timeout: 1, open_timeout: 1 })
+        end
+      end
+
+      def hello_options
+        with_retry(1, 1) do
+          options('hello', { read_timeout: 1, open_timeout: 1 })
+        end
+      end
+
+      def inspect_head
+        with_retry(1, 1) do
+          head('inspect', { read_timeout: 1, open_timeout: 1 })
+        end
+      end
+
+      def response_metadata_options
+        with_retry(1, 1) do
+          options('response-metadata', { read_timeout: 1, open_timeout: 1 })
+        end
+      end
+
       def inspect_request(verb, body)
         with_retry(1, 1) do
           headers = inspect_headers(verb)

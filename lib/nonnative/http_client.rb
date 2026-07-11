@@ -92,18 +92,44 @@ module Nonnative
       end
     end
 
+    # Performs a HEAD request.
+    #
+    # @param pathname [String] path relative to `host`
+    # @param opts [Hash] RestClient request options (e.g. `headers`, `read_timeout`, `open_timeout`)
+    # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
+    def head(pathname, opts = {})
+      with_exception do
+        resource(pathname, opts).head
+      end
+    end
+
+    # Performs an OPTIONS request.
+    #
+    # @param pathname [String] path relative to `host`
+    # @param opts [Hash] RestClient request options (e.g. `headers`, `read_timeout`, `open_timeout`)
+    # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
+    def options(pathname, opts = {})
+      with_exception do
+        RestClient::Request.execute(opts.merge(method: :options, url: request_url(pathname)))
+      end
+    end
+
     # Creates a RestClient resource for a relative path.
     #
     # @param pathname [String] path relative to `host`
     # @param opts [Hash] RestClient request options
     # @return [RestClient::Resource]
     def resource(pathname, opts)
-      RestClient::Resource.new(URI.join(host, pathname).to_s, opts)
+      RestClient::Resource.new(request_url(pathname), opts)
     end
 
     private
 
     attr_reader :host, :exceptions
+
+    def request_url(pathname)
+      URI.join(host, pathname).to_s
+    end
 
     def with_exception
       yield

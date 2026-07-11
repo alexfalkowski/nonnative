@@ -159,11 +159,32 @@ When('I request response metadata through the local HTTP proxy server') do
   @response = http_client_for_server('local_http_proxy_server').response_metadata
 end
 
+When('I request response metadata with an OPTIONS request through the local HTTP proxy server') do
+  @response = http_client_for_server('local_http_proxy_server').response_metadata_options
+end
+
+When('I send a HEAD request to the local HTTP proxy server') do
+  @response = http_client_for_server('local_http_proxy_server').inspect_head
+end
+
+When('I send a HEAD message with the HTTP client to the server') do
+  @response = http_client_for_server('http_server_1').hello_head
+end
+
+When('I send an OPTIONS message with the HTTP client to the server') do
+  @response = http_client_for_server('http_server_1').hello_options
+end
+
 Then('I should receive an HTTP {string} response') do |response|
   @responses.each do |r|
     expect(r.code).to eq(200)
     expect(r.body).to eq(response.to_json)
   end
+end
+
+Then('I should receive an HTTP response with an empty body and status {int}') do |status|
+  expect(@response.code).to eq(status)
+  expect(@response.body).to be_nil.or eq('')
 end
 
 Then('I should receive a gRPC {string} response') do |response|
@@ -190,6 +211,11 @@ end
 Then('I should receive a not found response from the HTTP proxy server') do
   expect(@error).to be_nil
   expect(@response.code).to eq(404)
+end
+
+Then('I should receive a successful response from the local HTTP proxy server') do
+  expect(@error).to be_nil
+  expect(@response.code).to eq(200)
 end
 
 Then('I should receive the {string} request details from the local HTTP proxy server') do |verb|

@@ -27,6 +27,18 @@ Feature: HTTP proxies
     When I request response metadata through the local HTTP proxy server
     Then I should receive preserved response metadata from the local HTTP proxy server
 
+  Scenario: The local HTTP proxy forwards HEAD requests as HEAD
+    Given I configure the system programmatically with a local HTTP proxy server
+    And I start the system
+    When I send a HEAD request to the local HTTP proxy server
+    Then I should receive a successful response from the local HTTP proxy server
+
+  Scenario: The local HTTP proxy preserves safe upstream response headers for OPTIONS requests
+    Given I configure the system programmatically with a local HTTP proxy server
+    And I start the system
+    When I request response metadata with an OPTIONS request through the local HTTP proxy server
+    Then I should receive preserved response metadata from the local HTTP proxy server
+
   @config
   Scenario Outline: The configured HTTP proxy returns a <kind> response
     Given I configure the system through configuration with servers

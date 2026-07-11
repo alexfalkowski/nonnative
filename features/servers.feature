@@ -23,6 +23,14 @@ Feature: Servers
     When I send a message with the HTTP client to the servers
     Then I should receive an HTTP "Hello World!" response
 
+  Scenario: HTTP client supports HEAD and OPTIONS requests
+    Given I configure the system programmatically with servers
+    And I start the system
+    When I send a HEAD message with the HTTP client to the server
+    Then I should receive an HTTP response with an empty body and status 200
+    When I send an OPTIONS message with the HTTP client to the server
+    Then I should receive an HTTP response with an empty body and status 200
+
   Scenario: HTTP servers compose mounted services
     Given I configure the system programmatically with a composed HTTP server
     And I start the system
