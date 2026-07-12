@@ -12,7 +12,7 @@ module Nonnative
   # @see Nonnative::ConfigurationServer
   # @see Nonnative::ConfigurationService
   class ConfigurationRunner
-    # Default bounded readiness/shutdown timeout for process and server runners.
+    # Default bounded lifecycle/readiness timeout for configured runners.
     DEFAULT_TIMEOUT = 1.0
 
     # @return [String, nil] runner name used for lookup (for example via `pool.process_by_name`)

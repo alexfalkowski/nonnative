@@ -4,7 +4,9 @@ module Nonnative
   # Readiness check configuration for a managed process.
   #
   # Readiness is optional. When present, each check declares a `kind` and explicit endpoint details
-  # to poll after TCP readiness succeeds.
+  # to poll after TCP readiness succeeds. HTTP checks issue a plain unauthenticated GET and accept a
+  # final 2xx response. gRPC checks use the standard health Check over an insecure channel and accept
+  # only SERVING. Non-ready results are retried until the process timeout elapses.
   class ConfigurationReadiness
     KINDS = %w[http grpc].freeze
 

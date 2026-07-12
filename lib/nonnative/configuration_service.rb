@@ -3,15 +3,15 @@
 module Nonnative
   # Service-specific configuration.
   #
-  # A "service" is proxy-only: it does not start a Ruby thread or OS process. It exists so Nonnative can
-  # start and control a proxy in front of an external dependency.
+  # A "service" represents an externally managed dependency. It does not start a Ruby thread or OS
+  # process. It can wait for TCP readiness and can optionally run a proxy in front of the dependency.
   #
   # Instances are usually created through {Nonnative::Configuration#service}.
   #
   # @see Nonnative::Configuration
   # @see Nonnative::Service
   class ConfigurationService < ConfigurationRunner
-    # @return [Integer] client-facing port used by the service proxy
+    # @return [Integer] client-facing dependency port, used as the listener when a proxy is enabled
     attr_accessor :port
 
     # @return [Numeric] readiness timeout (seconds) used when waiting for service readiness

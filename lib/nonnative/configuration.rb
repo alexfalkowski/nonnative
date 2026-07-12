@@ -60,14 +60,15 @@ module Nonnative
     # @return [Array<Nonnative::ConfigurationServer>] configured in-process servers
     attr_accessor :servers
 
-    # @return [Array<Nonnative::ConfigurationService>] configured services (proxy-only)
+    # @return [Array<Nonnative::ConfigurationService>] configured external dependencies
     attr_accessor :services
 
     # Loads a configuration file and appends its runners to this instance.
     #
-    # The file is loaded using safe YAML parsing. ERB is not evaluated,
-    # arbitrary object deserialization is not allowed, top-level attributes are copied onto this object,
-    # and runner sections are transformed into configuration runner objects.
+    # The file is loaded using safe YAML parsing. ERB and environment placeholders are not evaluated,
+    # arbitrary object deserialization is not allowed, and unknown structural keys may be ignored.
+    # Top-level supported attributes are copied onto this object, and runner sections are transformed
+    # into configuration runner objects.
     #
     # @param path [String] path to a configuration file (typically YAML)
     # @return [void]
@@ -108,8 +109,8 @@ module Nonnative
 
     # Adds a service configuration entry.
     #
-    # A "service" does not manage a Ruby thread or OS process; it exists so that a proxy can be started
-    # and controlled for an external dependency.
+    # A "service" represents an externally managed dependency. It does not manage a Ruby thread or OS
+    # process, but it can wait for TCP readiness and optionally control a proxy for the dependency.
     #
     # @yieldparam service [Nonnative::ConfigurationService]
     # @return [void]

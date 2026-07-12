@@ -8,7 +8,7 @@ module Nonnative
   #
   # - {Nonnative::Process} for OS-level child processes
   # - {Nonnative::Server} for in-process Ruby servers (threads)
-  # - {Nonnative::Service} for proxy-only external dependencies
+  # - {Nonnative::Service} for externally managed dependencies with optional readiness/proxying
   #
   # @see Nonnative::Process
   # @see Nonnative::Server

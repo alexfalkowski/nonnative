@@ -6,7 +6,8 @@ module Nonnative
   # A process runner:
   # - spawns a child process using the configured command and environment,
   # - waits briefly (via the runner `wait`), and
-  # - participates in readiness/shutdown via TCP port checks orchestrated by {Nonnative::Pool}.
+  # - participates in TCP readiness/shutdown checks plus optional HTTP/gRPC readiness probes
+  #   orchestrated by {Nonnative::Pool}.
   #
   # The underlying configuration is a {Nonnative::ConfigurationProcess}.
   #
@@ -46,6 +47,8 @@ module Nonnative
     # Stops the process if it is running.
     #
     # The process is signalled using the configured signal (defaults to `INT` when not set).
+    # If it does not exit before the configured timeout, it is killed and the returned success value
+    # is `false`; {Nonnative.stop} reports that outcome as a {Nonnative::StopError}.
     #
     # @return [Array<(Integer, Boolean)>]
     #   a tuple of:

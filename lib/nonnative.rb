@@ -188,7 +188,7 @@ module Nonnative
     # Use this when passing a command string directly to `spawn`.
     #
     # @param tools [Array<String>] enabled tool names (e.g. `["prof", "trace", "cover"]`)
-    # @param output [String] directory where outputs should be written
+    # @param output [String] existing writable directory where outputs should be written
     # @param exec [String] the test binary (or wrapper) to execute
     # @param cmd [String] the command argument passed to the test binary
     # @param params [Array<String>] extra parameter strings for the command
@@ -202,7 +202,7 @@ module Nonnative
     # Use this when passing argv entries directly to `spawn`.
     #
     # @param tools [Array<String>] enabled tool names (e.g. `["prof", "trace", "cover"]`)
-    # @param output [String] directory where outputs should be written
+    # @param output [String] existing writable directory where outputs should be written
     # @param exec [String] the test binary (or wrapper) to execute
     # @param cmd [String] the command argument passed to the test binary
     # @param params [Array<String>] extra parameter strings for the command
@@ -237,7 +237,7 @@ module Nonnative
     #
     # @param host [String] gRPC server host
     # @param port [Integer] gRPC server port
-    # @param service [String] gRPC health service name
+    # @param service [String, nil] gRPC health service name, or empty/nil for overall server health
     # @param timeout [Numeric] default call timeout in seconds
     # @return [Nonnative::GRPCHealth]
     def grpc_health(host:, port:, service:, timeout: 1) = Nonnative::GRPCHealth.new(host: host, port: port, service: service, timeout: timeout)
@@ -326,6 +326,8 @@ module Nonnative
 
     # Clears the memoized pool instance.
     #
+    # This does not stop runners owned by the pool. Call {Nonnative.stop} before clearing a live pool.
+    #
     # @return [void]
     def clear_pool
       @pool = nil
@@ -333,8 +335,9 @@ module Nonnative
 
     # Clears memoized configuration, logger, observability client, and pool.
     #
-    # Call this before reconfiguring Nonnative or starting a new lifecycle in the same Ruby process.
-    # `start`/`stop` are intended to manage one lifecycle for the current pool.
+    # This does not stop processes, server threads, or proxies. To reconfigure in the same Ruby
+    # process, call {Nonnative.stop}, then `clear`, configure the next system, and call
+    # {Nonnative.start}.
     #
     # @return [void]
     def clear

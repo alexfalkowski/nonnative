@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  # Performs aggregate TCP readiness/shutdown checks for all configured runner ports.
+  # Performs aggregate readiness and shutdown checks for a configured runner.
   #
   # A runner is considered ready only when every configured port is open and every configured
   # HTTP/gRPC readiness probe reports ready, and stopped only when every configured port is closed.

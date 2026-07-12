@@ -20,6 +20,7 @@ module Nonnative
   # If `tools` is `nil` or empty, all tools (`prof`, `trace`, `cover`) are enabled.
   #
   # Parameter strings are parsed into argv words using shell-style quoting.
+  # The output directory must already exist and be writable; this helper does not create it.
   #
   # @example
   #   executable = Nonnative::GoExecutable.new(%w[prof cover], './svc.test', 'reports')
@@ -31,7 +32,7 @@ module Nonnative
   class GoExecutable
     # @param tools [Array<String>, nil] tool names to enable (see class docs)
     # @param exec [String] path to the compiled Go test binary
-    # @param output [String] output directory for generated files
+    # @param output [String] existing writable output directory for generated files
     def initialize(tools, exec, output)
       @tools = tools.nil? || tools.empty? ? %w[prof trace cover] : tools
       @exec = exec

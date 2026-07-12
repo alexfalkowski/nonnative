@@ -6,10 +6,11 @@ module Nonnative
   # A pool is created when {Nonnative.start} is called and is accessible via {Nonnative.pool}.
   #
   # Lifecycle order is important:
-  # - On start: services first, then servers/processes (in parallel port-check threads)
-  # - On stop: processes/servers first, then services
+  # - On start: services, then servers, then processes; each tier completes readiness before the next
+  # - On stop: processes, then servers, then services
   #
-  # Readiness and shutdown are determined via TCP port checks ({Nonnative::Ports#open?} / {Nonnative::Ports#closed?}).
+  # Readiness uses TCP port checks plus optional process HTTP/gRPC probes and optional service TCP
+  # checks. Shutdown uses configured TCP port checks.
   #
   # @see Nonnative.start
   # @see Nonnative.stop
@@ -25,9 +26,9 @@ module Nonnative
 
     # Starts all configured runners and collects lifecycle and readiness errors.
     #
-    # Services are started first (proxy-only) and checked for opt-in readiness, then servers and processes are
-    # started and checked for readiness. Each readiness failure is described with the runner and, for a process
-    # that exited early, its termination detail.
+    # Externally managed services are handled first and checked for opt-in readiness. Servers are then
+    # started and checked for readiness, followed by processes. Each readiness failure is described
+    # with the runner and, for a process that exited early, its termination detail.
     #
     # @return [Array<String>] lifecycle and readiness-check errors collected while starting
     def start
@@ -45,7 +46,8 @@ module Nonnative
 
     # Stops all configured runners and collects lifecycle and shutdown errors.
     #
-    # Processes and servers are stopped first and checked for shutdown, then services are stopped (proxy-only).
+    # Processes and servers are stopped first and checked for shutdown, then service proxies are
+    # stopped when configured.
     #
     # @return [Array<String>] lifecycle and shutdown-check errors collected while stopping
     def stop

@@ -3,7 +3,8 @@
 module Nonnative
   # Parent error for all Nonnative errors.
   #
-  # Catch this error type if you want to handle any exception raised by this gem.
+  # Rescue this type to handle Nonnative-specific errors. Public APIs may also raise standard Ruby,
+  # dependency, filesystem, or transport exceptions that are not subclasses of this class.
   #
   # @see Nonnative::StartError
   # @see Nonnative::StopError

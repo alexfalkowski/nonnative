@@ -57,7 +57,10 @@ YAML configuration is loaded as data only: ERB is not evaluated and arbitrary Ru
 deserialized.
 
 > [!CAUTION]
-> Treat YAML configuration as plain data. ERB is not evaluated and arbitrary Ruby object tags are rejected.
+> Treat YAML configuration as plain data. ERB is not evaluated, `${VAR}` values are not expanded,
+> and arbitrary Ruby object tags are rejected. Unknown structural keys may be ignored, although YAML
+> syntax, object safety, and supported value shapes are still validated. Keep values that vary by
+> environment in programmatic Ruby configuration, where Ruby's `ENV` is available.
 
 High-level configuration fields:
 - `version`: configuration version (example: `"1.0"`).
@@ -74,7 +77,8 @@ Common runner fields:
 
 Process/server fields:
 - `ports`: client-facing ports. These are also used for readiness/shutdown port checks.
-- `timeout`: max time (seconds) for readiness/shutdown port checks. Defaults to `1.0`.
+- `timeout`: max time (seconds) for each readiness/shutdown check. For processes, the same value also
+  bounds optional HTTP/gRPC probes and graceful child exit after the stop signal. Defaults to `1.0`.
 - `wait`: small sleep (seconds) between lifecycle steps.
 - `log`: per-runner log file used by process output redirection or server implementations.
 
@@ -89,7 +93,7 @@ Service fields:
 - `readiness`: optional list of startup readiness checks. Supported kind is `tcp`, which requires
   explicit `host` and `port`.
 
-Nonnative readiness and shutdown checks are TCP port checks by default. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined. Processes can also opt into HTTP and gRPC readiness checks that run after TCP readiness succeeds. Services do not get automatic TCP readiness/shutdown checks, but can opt into TCP startup readiness for externally managed dependencies. HTTP readiness paths must be path-only values, such as `/test/readyz`; absolute URLs and scheme-relative URLs are rejected.
+Nonnative readiness and shutdown checks are TCP port checks by default. Configure process/server ports that are dedicated to the test run; if another process is already listening on the same endpoint, results are undefined. Processes can also opt into HTTP and gRPC readiness checks that run after TCP readiness succeeds. HTTP readiness sends a plain HTTP `GET` without configurable request headers and is ready only when the final response is 2xx. gRPC readiness uses the standard health `Check` over an insecure channel and is ready only for `SERVING`. Non-ready responses are retried until the process timeout elapses. Services do not get automatic TCP readiness/shutdown checks, but can opt into TCP startup readiness for externally managed dependencies. HTTP readiness paths must be path-only values, such as `/test/readyz`; absolute URLs and scheme-relative URLs are rejected.
 
 > [!WARNING]
 > TCP readiness and shutdown checks only prove that a TCP port opened or closed. HTTP and gRPC readiness are process-only. Service readiness is TCP-only and should target the dependency endpoint that must be reachable before managed servers/processes start.
@@ -108,12 +112,19 @@ Nonnative.start
 Nonnative.stop
 ```
 
-`Nonnative.start` starts services first, then servers and processes. `Nonnative.stop` stops processes and servers first, then services. If startup fails, Nonnative rolls back runners that already started and raises `Nonnative::StartError`; shutdown failures raise `Nonnative::StopError`.
+`Nonnative.start` runs ordered tiers: service lifecycle calls and optional readiness checks complete,
+then server lifecycle and readiness checks complete, then process lifecycle and readiness checks run.
+A failed service readiness check prevents later tiers; other collected startup errors trigger rollback
+after the attempted tiers finish. `Nonnative.stop` reverses the tiers: processes, servers, then
+services. Model dependencies in that direction; a managed server can satisfy a process dependency,
+but a server cannot wait on a managed process. Startup failures raise `Nonnative::StartError`, and
+shutdown failures raise `Nonnative::StopError`.
 
-> [!NOTE]
-> `Nonnative.start` / `Nonnative.stop` manage one lifecycle for the current pool.
-> Call `Nonnative.clear` before reconfiguring Nonnative or starting a new lifecycle in the same Ruby process.
-> `Nonnative.clear` clears memoized configuration, logger, observability client, and pool.
+> [!WARNING]
+> `Nonnative.clear` forgets the current pool; it does not stop live processes, server threads, or
+> proxies. To reuse the same Ruby process, call `Nonnative.stop`, then `Nonnative.clear`, configure
+> the next system, and call `Nonnative.start`. `clear` also clears the memoized configuration,
+> logger, and observability client.
 
 ### 🧩 Test framework setup
 
@@ -167,6 +178,10 @@ response = Nonnative.observability.health(
 expect(response.code).to eq(200)
 ```
 
+HTTP error statuses are returned as response objects so callers can inspect `.code` and `.body`.
+Request timeouts and broken connections raise their RestClient exceptions; observability requests are
+not retried automatically.
+
 `Nonnative.grpc_health` is a helper for the standard gRPC health checking protocol:
 
 ```ruby
@@ -179,6 +194,10 @@ health = Nonnative.grpc_health(
 
 expect(health.serving?).to eq(true)
 ```
+
+The helper always uses an insecure plaintext gRPC channel. Pass `service: ''` or `nil` to check the
+overall server. `check` returns the full `HealthCheckResponse` and propagates gRPC failures, while
+`serving?` returns `false` for any non-`SERVING` status or gRPC failure.
 
 ### 🔑 Tokens
 
@@ -241,6 +260,32 @@ The repo’s own Cucumber suite also uses taxonomy tags to classify coverage:
 
 Requiring `nonnative` is enough; the Cucumber hooks and step definitions are installed lazily once Cucumber’s Ruby DSL is ready.
 
+#### 🥒 Public Cucumber steps
+
+The shipped steps are compatibility surface for downstream suites:
+
+- `When I start the system` starts immediately. For expected failures, pair
+  `When I attempt to start the system` with `Then starting the system should raise an error`, or use
+  the equivalent stop steps.
+- `Then I should see {string} as healthy` expects the configured health endpoint to return `200` and
+  a body containing neither the supplied service name nor `service unavailable`; `unhealthy` expects
+  `503` and a body identifying the service or `service unavailable`.
+- `Then the process {string} should consume less than {string} of memory` accepts values such as
+  `25mb` for a started process.
+- The two log steps search either a configured process log or an explicit file path for the requested
+  text: `Then I should see a log entry of {string} for process {string}` and
+  `Then I should see a log entry of {string} in the file {string}`.
+- `Given I set the proxy for service {string} to {string}` accepts `close_all`, `reset_peer`, `delay`,
+  `timeout`, `invalid_data`, `bandwidth`, `limit_data`, or `reset`; the reset action step is
+  `Then I should reset the proxy for service {string}`.
+
+```cucumber
+@manual
+Scenario: startup is expected to fail
+  When I attempt to start the system
+  Then starting the system should raise an error
+```
+
 ### ⚙️ Processes
 
 A process is some sort of command that you would run locally.
@@ -248,6 +293,12 @@ Programmatic `p.command` values must be callables that return a shell string or 
 
 > [!TIP]
 > Prefer argv arrays for new process commands. Use shell strings only when you intentionally need shell parsing, expansion, or redirection.
+
+Managed processes inherit the Ruby parent's working directory and environment; loading YAML from a
+different directory does not change the child working directory. Relative command, config, log, and
+generated-output paths resolve from that inherited directory. Configured `environment` values are
+stringified and override variables with the same names while preserving the rest of the parent
+environment.
 
 Set it up programmatically:
 
@@ -337,6 +388,10 @@ Nonnative.configure do |config|
   config.load_file('configuration.yml')
 end
 ```
+
+On stop, Nonnative sends the configured signal (`INT` by default) and waits up to `timeout` for the
+child to exit. If it remains alive, Nonnative sends `KILL` and reports the stop as unsuccessful, so
+`Nonnative.stop` raises `Nonnative::StopError` even if the configured shutdown ports close.
 
 With cucumber you can also verify how much memory is used by the process:
 
@@ -465,8 +520,9 @@ module Nonnative
 end
 ```
 
-To run multiple Rack services on one managed port, pass a non-empty mount map. Each key must start
-with `/`, and the mounted application receives the remaining `PATH_INFO`:
+To run multiple Rack services on one managed port, pass a non-empty `Rack::URLMap` mount map. Keys
+can be path prefixes beginning with `/` or host-qualified URLs; the mounted application receives the
+remaining `PATH_INFO`:
 
 ```ruby
 module Nonnative
@@ -540,6 +596,10 @@ end
 ##### 🔀 HTTP Forward Proxy
 
 The system allows you to define an in-process HTTP forward proxy server for external systems, e.g. `api.github.com`. This is a server implementation, not a fault-injection service proxy.
+
+The upstream scheme is always HTTPS. The proxy forwards the request path and query for `GET`, `HEAD`,
+`POST`, `PUT`, `PATCH`, `DELETE`, and `OPTIONS`, while removing proxy credentials plus `Host` and
+`Accept-Encoding` before the upstream request.
 
 The proxy preserves the upstream status, body, and safe end-to-end response headers such as `Content-Type`, `ETag`, and application-specific metadata. It removes hop-by-hop, connection-nominated, proxy-authentication, and framing headers; `Set-Cookie`, `Location`, and `Content-Encoding` are not forwarded.
 
@@ -783,8 +843,27 @@ These proxies can simulate different situations. Available proxy kinds are:
 Custom proxy kinds can be registered through `Nonnative.proxies`:
 
 ```ruby
+class CustomProxy < Nonnative::Proxy
+  # Inherit #initialize(service), or call super from a custom initializer.
+  def start; end
+  def stop; end
+  def reset; end
+end
+
 Nonnative.proxies['custom'] = CustomProxy
+
+Nonnative.configure do |config|
+  config.service do |s|
+    s.name = 'dependency'
+    s.host = '127.0.0.1'
+    s.port = 12_345
+    s.proxy.kind = 'custom'
+  end
+end
 ```
+
+Custom proxies must accept the service configuration and implement `start`, `stop`, and `reset`;
+Nonnative invokes those methods during service lifecycle and pool reset.
 
 Only services support proxies. For `fault_injection`, keep the service `host`/`port` as the client-facing proxy endpoint and use nested `proxy.host`/`proxy.port` for the upstream target behind the proxy.
 When service readiness is configured for a proxied dependency, set the readiness `host`/`port` to the upstream dependency, not the client-facing proxy listener.
@@ -856,6 +935,10 @@ Clients connect to the service `host`/`port`, while the proxy forwards traffic t
 
 ###### 🧩 Fault Injection Services
 
+> [!WARNING]
+> Every proxy state change closes active client connections so that new connections observe the new
+> state. Apply the state before connecting, and reconnect after changing or resetting it.
+
 Set the proxy state programmatically:
 
 ```ruby
@@ -901,6 +984,11 @@ YAML `go:` configuration is for Go test binaries compiled with `go test -c`. It 
 
 > [!IMPORTANT]
 > If `tools` is omitted or empty, Nonnative enables all Go tools: `prof`, `trace`, and `cover`. Provide a subset, such as `tools: [cover]`, to limit the generated `-test.*` flags.
+
+Create the configured `output` directory before starting Nonnative; the helper does not create it and
+the Go test binary must be able to write there. Artifact names include the executable basename
+without its extension, the command, and a random four-character suffix, for example
+`reports/your_binary-sub_command-Ab12-cpu.prof`.
 
 To get this to work you will need to create a `main_test.go` file with these contents:
 

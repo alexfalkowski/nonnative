@@ -3,9 +3,9 @@
 module Nonnative
   # Runtime runner for an external dependency.
   #
-  # A service runner does not manage an OS process or Ruby thread. It exists so Nonnative can manage
-  # a proxy lifecycle (start/stop/reset) for an external service that is managed elsewhere (for example
-  # a database running in Docker).
+  # A service runner does not manage an OS process or Ruby thread. It represents a dependency managed
+  # elsewhere (for example a database running in Docker), supports optional TCP readiness, and manages
+  # an optional proxy lifecycle (start/stop/reset).
   #
   # The underlying configuration is a {Nonnative::ConfigurationService}.
   #
