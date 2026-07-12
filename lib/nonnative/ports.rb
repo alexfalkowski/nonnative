@@ -3,8 +3,8 @@
 module Nonnative
   # Performs aggregate TCP readiness/shutdown checks for all configured runner ports.
   #
-  # A runner is considered ready only when every configured port is open, and stopped only when every
-  # configured port is closed.
+  # A runner is considered ready only when every configured port is open and every configured
+  # HTTP/gRPC readiness probe reports ready, and stopped only when every configured port is closed.
   #
   # @see Nonnative::Port
   class Ports
@@ -15,7 +15,8 @@ module Nonnative
       @readiness = readiness_probes
     end
 
-    # Returns whether all configured ports become connectable before their timeouts elapse.
+    # Returns whether all configured ports become connectable and all configured HTTP/gRPC readiness
+    # probes report ready before their timeouts elapse.
     #
     # @return [Boolean]
     def open?

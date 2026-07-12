@@ -37,6 +37,8 @@ module Nonnative
   #   - `delay`: delay duration in seconds used by {#delay}
   #   - `jitter`: optional random offset (seconds) added in `-jitter..jitter` to each `delay` (a
   #     negative value uses its magnitude), so clients see variable latency instead of a flat value
+  #   - `rate`: positive throughput limit in KB/s used by {#bandwidth}; absent or non-positive
+  #     values forward at full speed
   #   - `bytes`: positive response byte limit used by {#limit_data}; absent or non-positive values
   #     use pass-through behavior
   #
