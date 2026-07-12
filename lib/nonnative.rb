@@ -265,7 +265,8 @@ module Nonnative
 
     # Starts all configured services, servers, and processes, and waits for readiness.
     #
-    # Readiness is determined by attempting to connect to each runner's configured host/ports.
+    # Readiness is determined by port checks, plus optional process HTTP/gRPC readiness and optional
+    # service TCP readiness.
     #
     # @return [void]
     # @raise [Nonnative::StartError] if one or more runners fail to start or become ready in time
