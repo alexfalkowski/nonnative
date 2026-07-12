@@ -10,7 +10,8 @@ module Nonnative
   # implementation-specific; for example {Nonnative::FaultInjectionProxy#host} and
   # {Nonnative::FaultInjectionProxy#port} return the upstream target behind the proxy.
   #
-  # Concrete proxies typically implement these public methods:
+  # Custom proxies must accept the service configuration in `initialize` and implement these public
+  # methods, which the service and pool invoke unconditionally:
   # - `start`: begin proxying (bind/listen, start threads, etc)
   # - `stop`: stop proxying and release resources
   # - `reset`: return proxy behavior to a healthy/default state

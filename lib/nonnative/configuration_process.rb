@@ -11,6 +11,8 @@ module Nonnative
   # @see Nonnative::Configuration
   # @see Nonnative::Process
   class ConfigurationProcess < ConfigurationRunner
+    # The child inherits the parent Ruby process's working directory.
+    #
     # @return [Proc] a callable that returns the command to execute
     #   as a shell string or argv array
     #   (e.g. `-> { "./bin/api" }` or `-> { ["./bin/api", "--port", "8080"] }`)
@@ -19,12 +21,15 @@ module Nonnative
     # @return [String, nil] signal name to use for stopping (defaults to `"INT"` when not set)
     attr_accessor :signal
 
-    # @return [Numeric] readiness timeout (seconds) used when waiting for ports to open/close (defaults to `1.0`)
+    # @return [Numeric] timeout (seconds) independently applied to child exit, port checks, and each
+    #   optional HTTP/gRPC readiness probe (defaults to `1.0`)
     attr_accessor :timeout
 
     # @return [String] log file path to append process stdout/stderr to
     attr_accessor :log
 
+    # Values are stringified and override matching variables in the inherited parent environment.
+    #
     # @return [Hash, nil] environment variables to pass to the spawned process
     attr_accessor :environment
 

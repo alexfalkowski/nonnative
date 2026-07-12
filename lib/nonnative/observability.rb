@@ -13,7 +13,9 @@ module Nonnative
   # - `/<name>/metrics`
   #
   # Requests are performed using {Nonnative::HTTPClient}, so callers may pass RestClient options
-  # such as `headers`, `open_timeout`, and `read_timeout`.
+  # such as `headers`, `open_timeout`, and `read_timeout`. HTTP error statuses are returned as response
+  # objects; timeouts and broken connections raise their RestClient exceptions. Requests are not
+  # retried automatically.
   #
   # @example
   #   Nonnative.configure do |config|
