@@ -54,6 +54,14 @@ Feature: Service proxies
     Then I should receive "test" from the service
     And the proxy for service "service_1" should use host "127.0.0.1" and port 30000
 
+  Scenario: A pass-through service proxy delivers the response after a client half-closes
+    Given I configure the system programmatically with services
+    And I start the system
+    When I connect to the service
+    And I send "test" to the service and close the write side
+    And I receive data from the service
+    Then I should receive "test" from the service
+
   Scenario: Missing proxy upstreams close service connections
     Given I configure the system programmatically with services and missing upstreams
     And I start the system

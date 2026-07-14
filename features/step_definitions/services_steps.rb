@@ -165,6 +165,11 @@ When('I send {string} to the service') do |message|
   @service.write(message)
 end
 
+When('I send {string} to the service and close the write side') do |message|
+  @service.write(message)
+  @service.close_write
+end
+
 When('I stop the service runner {string}') do |name|
   Nonnative.pool.service_by_name(name).stop
 end
