@@ -37,6 +37,10 @@ module Nonnative
         socket.puts(message)
       end
 
+      def close_write
+        socket.close_write
+      end
+
       private
 
       attr_reader :host, :port
