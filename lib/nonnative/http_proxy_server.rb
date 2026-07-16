@@ -2,8 +2,9 @@
 
 # Sinatra-based HTTP forward proxy server used as an in-process Nonnative server.
 #
-# The proxy receives inbound HTTP requests and forwards them to an upstream host over HTTPS, returning
-# the upstream response status, body, and safe end-to-end response headers. Hop-by-hop,
+# The proxy receives inbound HTTP requests and forwards them to an upstream host, defaulting to HTTPS
+# on the scheme's default port but configurable to HTTP and/or a non-default port. It returns the
+# upstream response status, body, and safe end-to-end response headers. Hop-by-hop,
 # connection-nominated, proxy-authentication, framing, and deferred response headers are not forwarded.
 #
 # This file defines two classes:
@@ -69,10 +70,12 @@ module Nonnative
     # Builds the upstream URL for the given request.
     #
     # @param request [Sinatra::Request] the incoming request
-    # @param settings [Sinatra::Base] Sinatra settings, expected to include `host`
-    # @return [String] HTTPS URL for the upstream request
+    # @param settings [Sinatra::Base] Sinatra settings, expected to include `host`, `scheme`, and `port`
+    # @return [String] upstream URL
     def build_url(request, settings)
-      URI::HTTPS.build(host: settings.host, path: request.path_info, query: request.query_string).to_s
+      uri_class = settings.scheme == 'http' ? URI::HTTP : URI::HTTPS
+
+      uri_class.build(host: settings.host, port: settings.port, path: request.path_info, query: request.query_string).to_s
     end
 
     # Executes the upstream request and returns the response.
@@ -193,11 +196,15 @@ module Nonnative
   #
   # @see Nonnative::HTTPServer
   class HTTPProxyServer < Nonnative::HTTPServer
-    # @param host [String] upstream host to proxy to (HTTPS)
+    # @param host [String] upstream host to proxy to
     # @param service [Nonnative::ConfigurationServer] server configuration
-    def initialize(host, service)
+    # @param scheme [String] upstream scheme, `"http"` or `"https"`
+    # @param port [Integer, nil] upstream port; `nil` uses the scheme's default port
+    def initialize(host, service, scheme: 'https', port: nil)
       http_service = Class.new(Nonnative::HTTPProxy) do
         set :host, host
+        set :scheme, scheme
+        set :port, port
       end
 
       super(http_service.new, service)
