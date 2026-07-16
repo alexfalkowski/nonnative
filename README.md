@@ -276,8 +276,8 @@ The shipped steps are compatibility surface for downstream suites:
   text: `Then I should see a log entry of {string} for process {string}` and
   `Then I should see a log entry of {string} in the file {string}`.
 - `Given I set the proxy for service {string} to {string}` accepts `close_all`, `reset_peer`, `delay`,
-  `timeout`, `invalid_data`, `bandwidth`, `limit_data`, or `reset`; the reset action step is
-  `Then I should reset the proxy for service {string}`.
+  `timeout`, `invalid_data`, `bandwidth`, `limit_data`, `slicer`, `flaky`, or `reset`; the reset action
+  step is `Then I should reset the proxy for service {string}`.
 
 ```cucumber
 @manual
@@ -932,6 +932,8 @@ Clients connect to the service `host`/`port`, while the proxy forwards traffic t
 - `invalid_data` - Forwards client requests unchanged, then corrupts upstream responses before they reach the client.
 - `bandwidth` - Throttles forwarded throughput to `options.rate` kilobytes per second (1 KB = 1024 bytes) by sleeping in proportion to the bytes read, in both directions, so clients see a slow-but-alive dependency. When `rate` is absent or not positive, traffic forwards at full speed.
 - `limit_data` - Forwards client requests unchanged, then sends the first `options.bytes` bytes of the upstream byte stream on each connection and gracefully closes the connection. When `bytes` is absent or not positive, traffic forwards at full speed.
+- `slicer` - Forwards client requests unchanged, then writes each response to the client in `options.slice_size`-byte pieces, optionally separated by `options.slice_delay` seconds, so a client must perform multiple reads to reassemble the message. When `slice_size` is absent or not positive, traffic forwards at full speed.
+- `flaky` - Fails a fraction of new connections (closed immediately, like `close_all`) controlled by `options.probability` (0.0-1.0), forwarding the rest normally, so a client's retry/reconnect logic sees both failures and successes while this state stays active. When `probability` is absent or not positive, traffic forwards at full speed.
 
 ###### 🧩 Fault Injection Services
 

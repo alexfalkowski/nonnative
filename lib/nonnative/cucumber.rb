@@ -61,6 +61,8 @@ module Nonnative
         'invalid_data' => :invalid_data,
         'bandwidth' => :bandwidth,
         'limit_data' => :limit_data,
+        'slicer' => :slicer,
+        'flaky' => :flaky,
         'reset' => :reset
       }.freeze
 

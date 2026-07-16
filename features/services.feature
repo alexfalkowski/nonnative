@@ -173,6 +173,44 @@ Feature: Service proxies
     And I receive data from the service
     Then I should receive an invalid service response that is not ""
 
+  @reset
+  Scenario: A sliced service proxy fragments the response
+    Given I configure the system programmatically with services with a response slicer
+    And I start the system
+    And I set the proxy for service 'service_1' to 'slicer'
+    When I connect to the service
+    And I send "test" to the service and receive it in fragments
+    Then I should receive the payload in more than one fragment
+    And the reassembled fragments should equal the payload
+
+  @reset
+  Scenario: A non-positive slice size preserves pass-through
+    Given I configure the system programmatically with services with a zero slice size
+    And I start the system
+    And I set the proxy for service 'service_1' to 'slicer'
+    When I connect to the service
+    And I send "test" to the service
+    And I receive data from the service
+    Then I should receive "test" from the service
+
+  @reset
+  Scenario: A flaky service proxy fails only some connections
+    Given I configure the system programmatically with services with a flaky proxy
+    And I start the system
+    And I set the proxy for service 'service_1' to 'flaky'
+    When I connect to the service 30 times and send "test"
+    Then I should see both successful and failed connections
+
+  @reset
+  Scenario: A non-positive probability preserves pass-through
+    Given I configure the system programmatically with services with a zero flaky probability
+    And I start the system
+    And I set the proxy for service 'service_1' to 'flaky'
+    When I connect to the service
+    And I send "test" to the service
+    And I receive data from the service
+    Then I should receive "test" from the service
+
   Scenario: Looking up a missing service proxy fails
     Given I configure the system programmatically with services
     And I start the system

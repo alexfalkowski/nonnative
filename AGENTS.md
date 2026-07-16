@@ -148,6 +148,22 @@ of dependencies.
   top. Do not flag the absence of a `not_serving?` / `status:` helper or a
   streaming `Watch` wrapper as a feature gap unless the task is explicitly about
   expanding the gRPC health assertion surface.
+- Token signing keys are intentionally supplied only as a filesystem path
+  (`private_key:`), which `Nonnative::Ed25519Key` and `Nonnative::SshToken` read
+  with `File.read`. Nonnative deliberately does not accept in-memory PEM/OpenSSH
+  key material (for example a `private_key_pem:` argument or an
+  `Ed25519Key.from_pem`): signing keys are expected to be provisioned as files
+  for security, and a caller that holds key bytes can write them to a file
+  before signing (as the Cucumber support does). Do not flag the absence of
+  in-memory key material as a feature gap unless the task is explicitly about
+  changing how token signing keys are supplied.
+- `Nonnative::Observability` intentionally uses the fixed
+  `/<name>/{healthz,livez,readyz,metrics}` endpoint layout, following the loose
+  go-service health-endpoint convention that nonnative primarily tests against.
+  Systems that do not follow it can call the public `Nonnative::HTTPClient`
+  directly. Do not flag the absence of configurable observability endpoint paths
+  as a feature gap unless the task is explicitly about changing the
+  observability client's endpoint model.
 
 ## Runtime Model
 

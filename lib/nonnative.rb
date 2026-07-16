@@ -117,6 +117,8 @@ require 'nonnative/timeout_socket_pair'
 require 'nonnative/invalid_data_socket_pair'
 require 'nonnative/bandwidth_socket_pair'
 require 'nonnative/limit_data_socket_pair'
+require 'nonnative/slicer_socket_pair'
+require 'nonnative/flaky_socket_pair'
 require 'nonnative/socket_pair_factory'
 require 'nonnative/go_executable'
 require 'nonnative/cucumber'
@@ -349,10 +351,11 @@ module Nonnative
 
     # Resets proxies for all currently started runners.
     #
+    # No-op when called before {Nonnative.start}, since no pool exists yet.
+    #
     # @return [void]
-    # @raise [NoMethodError] if called before {Nonnative.start} (because {Nonnative.pool} is nil)
     def reset
-      Nonnative.pool.reset
+      Nonnative.pool&.reset
     end
 
     private

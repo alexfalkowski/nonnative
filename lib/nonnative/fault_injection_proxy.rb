@@ -16,6 +16,8 @@ module Nonnative
   # - {#invalid_data}: forward requests unchanged and mutate upstream responses before they reach clients
   # - {#bandwidth}: throttle forwarded throughput to a configured rate (KB/s)
   # - {#limit_data}: forward a configured number of response bytes, then gracefully close
+  # - {#slicer}: forward responses to the client in small writes to force multi-`recv` reassembly
+  # - {#flaky}: fail a configurable fraction of new connections, forwarding the rest normally
   # - {#reset}: return to healthy pass-through behavior
   #
   # State changes terminate any active connections so new connections observe the new behavior.
@@ -41,6 +43,11 @@ module Nonnative
   #     values forward at full speed
   #   - `bytes`: positive response byte limit used by {#limit_data}; absent or non-positive values
   #     use pass-through behavior
+  #   - `slice_size`: positive response slice size (bytes) used by {#slicer}; absent or non-positive
+  #     values use pass-through behavior
+  #   - `slice_delay`: optional delay (seconds) between slices used by {#slicer}
+  #   - `probability`: connection failure fraction (0.0-1.0) used by {#flaky}; absent or non-positive
+  #     values use pass-through behavior
   #
   # @see Nonnative::Proxy
   # @see Nonnative::SocketPairFactory
@@ -91,6 +98,10 @@ module Nonnative
       server&.close
 
       listener_thread = thread
+      # Closing the server is meant to wake the blocked `accept`, but a concurrently blocked
+      # `accept` is not reliably interrupted by `close` on every platform. Kill the listener so
+      # `stop` cannot hang joining an accept loop that never woke (a no-op once it has exited).
+      listener_thread&.kill
       listener_thread&.join
 
       @tcp_server = nil
@@ -164,6 +175,31 @@ module Nonnative
     # @return [void]
     def limit_data
       apply_state :limit_data
+    end
+
+    # Fragments upstream responses into small writes before forwarding to the client.
+    #
+    # Client requests are forwarded unchanged. Each response is split into
+    # `service.proxy.options[:slice_size]`-byte writes, optionally separated by
+    # `service.proxy.options[:slice_delay]` seconds, so a client's `recv` returns a strict prefix of
+    # the response rather than the whole message. When `slice_size` is absent or not positive, the
+    # connection forwards at full speed without slicing.
+    #
+    # @return [void]
+    def slicer
+      apply_state :slicer
+    end
+
+    # Fails a configurable fraction of new connections while forwarding the rest normally.
+    #
+    # The fraction is controlled by `service.proxy.options[:probability]` (0.0-1.0); absent or
+    # non-positive values behave like pass-through, and `1.0` fails every connection. Because each
+    # connection decides independently, clients that retry/reconnect can observe both failures and
+    # successes while this state stays active.
+    #
+    # @return [void]
+    def flaky
+      apply_state :flaky
     end
 
     # Resets the proxy back to healthy pass-through behavior.

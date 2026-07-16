@@ -64,6 +64,58 @@ Given('I configure the system programmatically with services with a zero respons
   end
 end
 
+Given('I configure the system programmatically with services with a response slicer') do
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1,
+               options: { slice_size: 1, slice_delay: 0.02 } }
+    )
+  end
+end
+
+Given('I configure the system programmatically with services with a zero slice size') do
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1,
+               options: { slice_size: 0 } }
+    )
+  end
+end
+
+Given('I configure the system programmatically with services with a flaky proxy') do
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1,
+               options: { probability: 0.5 } }
+    )
+  end
+end
+
+Given('I configure the system programmatically with services with a zero flaky probability') do
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1,
+               options: { probability: 0 } }
+    )
+  end
+end
+
 Given('I configure the system programmatically with services without proxies') do
   configure_with_defaults do |config|
     add_service(config, name: 'service_1', host: '127.0.0.1', port: 30_000)
@@ -190,6 +242,12 @@ When('I receive data from the service') do
   @service_response = @service.receive
 end
 
+When('I send {string} to the service and receive it in fragments') do |message|
+  @payload = message
+  @service.write(@payload)
+  @fragments = @service.receive_fragments
+end
+
 When('I send {string} to the service and receive the response') do |message|
   started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
   @service.write(message)
@@ -209,6 +267,11 @@ When('I receive data from the service with a {float} second timeout') do |durati
   @service_response = Timeout.timeout(duration) { @service.receive }
 rescue Timeout::Error => e
   @service_response = e
+end
+
+When('I connect to the service {int} times and send {string}') do |count, message|
+  service = configured_service('service_1')
+  @service_outcomes = service_round_trip_outcomes(service, message, count)
 end
 
 When('I try to find the proxy for service {string}') do |name|
@@ -238,6 +301,19 @@ end
 
 Then('I should receive the first {int} bytes of the payload') do |size|
   expect(@service_response).to eq(@payload.byteslice(0, size))
+end
+
+Then('I should receive the payload in more than one fragment') do
+  expect(@fragments.length).to be > 1
+end
+
+Then('the reassembled fragments should equal the payload') do
+  expect(@fragments.join).to eq("#{@payload}\n")
+end
+
+Then('I should see both successful and failed connections') do
+  expect(@service_outcomes).to include(:success)
+  expect(@service_outcomes).to include(:failure)
 end
 
 Then('the transfer should take at least {float} seconds') do |minimum|

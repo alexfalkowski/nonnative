@@ -4,6 +4,22 @@ module Nonnative
   module Features
     module Context
       module ServiceConnections
+        def service_round_trip_outcomes(service, message, count)
+          Array.new(count) { service_round_trip_outcome(service, message) }
+        end
+
+        def service_round_trip_outcome(service, message)
+          socket = TCPSocket.open(service.host, service.port)
+          socket.puts(message)
+          response = socket.gets&.chomp
+
+          response == message ? :success : :failure
+        rescue SystemCallError, IOError
+          :failure
+        ensure
+          close_service_connection(socket) if socket
+        end
+
         def stop_service_runner_while_clients_connect(runner, service)
           connections = open_service_connections(service, 20)
           mutex = Mutex.new
