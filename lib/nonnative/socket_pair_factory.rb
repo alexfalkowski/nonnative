@@ -15,6 +15,8 @@ module Nonnative
   # - `:invalid_data` -> {Nonnative::InvalidDataSocketPair}
   # - `:bandwidth` -> {Nonnative::BandwidthSocketPair}
   # - `:limit_data` -> {Nonnative::LimitDataSocketPair}
+  # - `:slicer` -> {Nonnative::SlicerSocketPair}
+  # - `:flaky` -> {Nonnative::FlakySocketPair}
   #
   # @see Nonnative::FaultInjectionProxy
   # @see Nonnative::SocketPair
@@ -25,6 +27,8 @@ module Nonnative
   # @see Nonnative::InvalidDataSocketPair
   # @see Nonnative::BandwidthSocketPair
   # @see Nonnative::LimitDataSocketPair
+  # @see Nonnative::SlicerSocketPair
+  # @see Nonnative::FlakySocketPair
   class SocketPairFactory
     PAIR_BY_STATE = {
       close_all: CloseAllSocketPair,
@@ -33,7 +37,9 @@ module Nonnative
       timeout: TimeoutSocketPair,
       invalid_data: InvalidDataSocketPair,
       bandwidth: BandwidthSocketPair,
-      limit_data: LimitDataSocketPair
+      limit_data: LimitDataSocketPair,
+      slicer: SlicerSocketPair,
+      flaky: FlakySocketPair
     }.freeze
     private_constant :PAIR_BY_STATE
 
@@ -41,7 +47,7 @@ module Nonnative
       # Creates a socket-pair instance for the given proxy state.
       #
       # @param kind [Symbol] proxy state (e.g. `:none`, `:close_all`, `:reset_peer`, `:delay`, `:timeout`,
-      #   `:invalid_data`, `:bandwidth`, `:limit_data`)
+      #   `:invalid_data`, `:bandwidth`, `:limit_data`, `:slicer`, `:flaky`)
       # @param proxy [Nonnative::ConfigurationProxy] proxy configuration (host/port/options)
       # @return [Nonnative::SocketPair] a socket-pair implementation instance
       def create(kind, proxy)
