@@ -64,6 +64,11 @@ Feature: Lifecycle
     When I start a pool with a failing unnamed service
     Then the lifecycle errors should include "Start failed for Nonnative::Features::FailingService: StandardError - boom on service start"
 
+  Scenario: Service start failures stop later lifecycle tiers
+    When I start a pool with a failing service and recording runners
+    Then the lifecycle errors should include "Start failed for runner 'service_1': StandardError - boom on service start"
+    And the lifecycle order should be empty
+
   Scenario: Pool collects service stop lifecycle errors for unnamed services
     When I stop a pool with a failing unnamed service
     Then the lifecycle errors should include "Stop failed for Nonnative::Features::FailingService: StandardError - boom on service stop"
@@ -92,7 +97,7 @@ Feature: Lifecycle
     When I connect to the service
     And I send "ping" to the service
     And I stop the service runner "service_1"
-    And I receive data from the service
+    And I receive data from the service with a 0.1 second timeout
     Then I should receive a connection error from the service
 
   Scenario: Requiring nonnative outside Cucumber succeeds
@@ -106,3 +111,16 @@ Feature: Lifecycle
     And the subprocess output should be:
       | started |
       | stopped |
+
+  Scenario Outline: Zero and nil timeouts skip timed work
+    When I perform a nonnative timeout with <duration>
+    Then the nonnative timeout should return false
+
+    Examples:
+      | duration |
+      | zero     |
+      | nil      |
+
+  Scenario: Negative timeouts remain invalid
+    When I perform a nonnative timeout with negative
+    Then the nonnative timeout should raise an argument error

@@ -52,6 +52,8 @@ module Nonnative
   # @see Nonnative::Proxy
   # @see Nonnative::SocketPairFactory
   class FaultInjectionProxy < Nonnative::Proxy
+    STOP_DRAIN_TIMEOUT = 1
+
     class Connection
       attr_accessor :pair, :thread
       attr_reader :socket
@@ -73,6 +75,7 @@ module Nonnative
       @logger = Logger.new(service.proxy.log)
       @mutex = Mutex.new
       @state = :none
+      @stopping = false
 
       super
     end
@@ -84,6 +87,7 @@ module Nonnative
     #
     # @return [void]
     def start
+      mutex.synchronize { @stopping = false }
       @tcp_server = ::TCPServer.new(service.host, service.port)
       @thread = Thread.new { perform_start }
 
@@ -95,6 +99,9 @@ module Nonnative
     # @return [void]
     def stop
       server = tcp_server
+      mark_stopping
+      close_connections
+      close_queued_connections(server)
       server&.close
 
       listener_thread = thread
@@ -106,8 +113,6 @@ module Nonnative
 
       @tcp_server = nil
       @thread = nil
-
-      close_connections
 
       Nonnative.logger.info "stopped with host '#{service.host}' and port '#{service.port}' for proxy 'fault_injection'"
     end
@@ -225,13 +230,16 @@ module Nonnative
 
     private
 
-    attr_reader :tcp_server, :thread, :connections, :mutex, :state, :logger
+    attr_reader :tcp_server, :thread, :connections, :mutex, :state, :logger, :stopping
 
     def perform_start
       loop do
         local_socket = tcp_server.accept
         id = local_socket.object_id
-        register_connection(id, local_socket)
+        unless register_connection(id, local_socket)
+          local_socket.close
+          next
+        end
         connection_thread = Thread.start(local_socket) do |accepted_socket|
           accept_connection id, accepted_socket
         end
@@ -275,6 +283,19 @@ module Nonnative
       end
     end
 
+    def close_queued_connections(server)
+      return unless server
+
+      # This connection is queued after every client that connected before shutdown began.
+      # When the listener accepts and closes it, those earlier clients have been closed as well.
+      barrier = TCPSocket.new(service.host, service.port)
+      barrier.wait_readable(STOP_DRAIN_TIMEOUT)
+    rescue IOError, SystemCallError
+      nil
+    ensure
+      barrier&.close
+    end
+
     def apply_state(state)
       Nonnative.logger.info "applying state '#{state}' for proxy 'fault_injection'"
 
@@ -293,7 +314,16 @@ module Nonnative
     end
 
     def register_connection(id, socket)
-      mutex.synchronize { connections[id] = Connection.new(socket) }
+      mutex.synchronize do
+        return false if stopping
+
+        connections[id] = Connection.new(socket)
+        true
+      end
+    end
+
+    def mark_stopping
+      mutex.synchronize { @stopping = true }
     end
 
     def attach_connection_thread(id, thread)

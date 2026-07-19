@@ -37,7 +37,7 @@ module Nonnative
       errors.concat(service_lifecycle(services, :start, :start))
       service_readiness_errors = check_service_readiness(services)
       errors.concat(service_readiness_errors)
-      return errors if service_readiness_errors.any?
+      return errors if errors.any?
 
       [servers, processes].each { |runners| errors.concat(run_lifecycle_checks(runners, :start, :open?, :start)) }
 

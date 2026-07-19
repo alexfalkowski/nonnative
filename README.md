@@ -79,6 +79,7 @@ Process/server fields:
 - `ports`: client-facing ports. These are also used for readiness/shutdown port checks.
 - `timeout`: max time (seconds) for each readiness/shutdown check. For processes, the same value also
   bounds optional HTTP/gRPC probes and graceful child exit after the stop signal. Defaults to `1.0`.
+  A value of `0` fails immediately; setting it to `nil` programmatically does the same.
 - `wait`: small sleep (seconds) between lifecycle steps.
 - `log`: per-runner log file used by process output redirection or server implementations.
 
@@ -89,7 +90,8 @@ Process-only fields:
 
 Service fields:
 - `port`: client-facing service port.
-- `timeout`: max time (seconds) for opt-in service readiness checks. Defaults to `1.0`.
+- `timeout`: max time (seconds) for opt-in service readiness checks. Defaults to `1.0`. A value of
+  `0` fails immediately; setting it to `nil` programmatically does the same.
 - `readiness`: optional list of startup readiness checks. Supported kind is `tcp`, which requires
   explicit `host` and `port`.
 
@@ -114,8 +116,8 @@ Nonnative.stop
 
 `Nonnative.start` runs ordered tiers: service lifecycle calls and optional readiness checks complete,
 then server lifecycle and readiness checks complete, then process lifecycle and readiness checks run.
-A failed service readiness check prevents later tiers; other collected startup errors trigger rollback
-after the attempted tiers finish. `Nonnative.stop` reverses the tiers: processes, servers, then
+A failed service lifecycle call or readiness check prevents later tiers; other collected startup errors
+trigger rollback after the attempted tiers finish. `Nonnative.stop` reverses the tiers: processes, servers, then
 services. Model dependencies in that direction; a managed server can satisfy a process dependency,
 but a server cannot wait on a managed process. Startup failures raise `Nonnative::StartError`, and
 shutdown failures raise `Nonnative::StopError`.

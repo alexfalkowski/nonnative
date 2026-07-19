@@ -55,6 +55,15 @@ When('I start a pool with a failing unnamed service') do
   ).start
 end
 
+When('I start a pool with a failing service and recording runners') do
+  @lifecycle_events = []
+  @lifecycle_errors = build_pool(
+    services: [Nonnative::Features::FailingService.new(name: 'service_1', start_error: 'boom on service start')],
+    servers: [[Nonnative::Features::RecordingRunner.new(name: 'server_1', events: @lifecycle_events), Nonnative::Features::PassingPort.new]],
+    processes: [[Nonnative::Features::RecordingRunner.new(name: 'process_1', events: @lifecycle_events), Nonnative::Features::PassingPort.new]]
+  ).start
+end
+
 When('I stop a pool with a failing unnamed service') do
   @lifecycle_errors = build_pool(
     services: [Nonnative::Features::FailingService.new(stop_error: 'boom on service stop')]
@@ -90,6 +99,13 @@ When('I check whether a reaped process still exists') do
 
   process.instance_variable_set(:@pid, pid)
   @process_exists = process.send(:process_exists?)
+end
+
+When('I perform a nonnative timeout with {word}') do |duration|
+  time = { 'nil' => nil, 'zero' => 0, 'negative' => -1 }.fetch(duration)
+  @timeout_result = Nonnative::Timeout.new(time).perform { :performed }
+rescue StandardError => e
+  @timeout_error = e
 end
 
 When('I clear after memoizing logger and observability') do
@@ -152,6 +168,18 @@ end
 
 Then('the lifecycle errors should be empty') do
   expect(@lifecycle_errors).to be_empty
+end
+
+Then('the lifecycle order should be empty') do
+  expect(@lifecycle_events).to be_empty
+end
+
+Then('the nonnative timeout should return false') do
+  expect(@timeout_result).to eq(false)
+end
+
+Then('the nonnative timeout should raise an argument error') do
+  expect(@timeout_error).to be_a(ArgumentError)
 end
 
 Then('the lifecycle order should be:') do |table|
