@@ -37,7 +37,7 @@ module Nonnative
     def delay_duration
       duration = proxy.options[:delay] || 2
       jitter = proxy.options[:jitter]&.abs
-      return duration unless jitter
+      return [duration, 0].max unless jitter
 
       [duration + rand(-jitter..jitter), 0].max
     end
