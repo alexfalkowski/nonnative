@@ -11,9 +11,9 @@ formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::Cobertu
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.command_name(ENV.fetch('COVERAGE_NAME', 'Features'))
 SimpleCov.start do
-  add_filter '/features/'
-  add_filter '/test/'
-  add_filter 'lib/nonnative/cucumber.rb'
+  skip '/features/'
+  skip '/test/'
+  skip 'lib/nonnative/cucumber.rb'
   coverage_dir 'test/reports'
 end
 
