@@ -74,8 +74,9 @@ module Nonnative
     # @return [String] upstream URL
     def build_url(request, settings)
       uri_class = settings.scheme == 'http' ? URI::HTTP : URI::HTTPS
+      query = request.query_string
 
-      uri_class.build(host: settings.host, port: settings.port, path: request.path_info, query: request.query_string).to_s
+      uri_class.build(host: settings.host, port: settings.port, path: request.path_info, query: query.empty? ? nil : query).to_s
     end
 
     # Executes the upstream request and returns the response.
