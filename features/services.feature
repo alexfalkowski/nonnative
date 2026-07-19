@@ -115,6 +115,16 @@ Feature: Service proxies
     And the round trip should take between 0.2 and 1.5 seconds
 
   @reset
+  Scenario: A negative delay preserves pass-through
+    Given I configure the system programmatically with services with a negative delay
+    And I start the system
+    And I set the proxy for service 'service_1' to 'delay'
+    When I connect to the service
+    And I send "test" to the service
+    And I receive data from the service
+    Then I should receive "test" from the service
+
+  @reset
   Scenario: A bandwidth-limited service proxy throttles transfer
     Given I configure the system programmatically with services with a bandwidth limit
     And I start the system

@@ -25,6 +25,18 @@ Given('I configure the system programmatically with services with jitter') do
   end
 end
 
+Given('I configure the system programmatically with services with a negative delay') do
+  configure_with_defaults do |config|
+    add_service(
+      config,
+      name: 'service_1',
+      host: '127.0.0.1',
+      port: 20_006,
+      proxy: { kind: 'fault_injection', host: '127.0.0.1', port: 30_000, log: 'test/reports/proxy_service_1.log', wait: 0.1, options: { delay: -1 } }
+    )
+  end
+end
+
 Given('I configure the system programmatically with services with a bandwidth limit') do
   configure_with_defaults do |config|
     add_service(
