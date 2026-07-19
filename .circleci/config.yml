@@ -14,7 +14,7 @@ commands:
 executors:
   ruby:
     docker:
-      - image: alexfalkowski/ruby:3.23
+      - image: alexfalkowski/ruby:3.24
   release:
     docker:
       - image: alexfalkowski/release:8.25
