@@ -66,6 +66,13 @@ Given('I configure the system programmatically with a local HTTP proxy server') 
   end
 end
 
+Given('I configure the system programmatically with an unreachable HTTP proxy server') do
+  configure_with_defaults(url: 'http://localhost:4570') do |config|
+    add_server(config, name: 'unreachable_http_proxy_server', klass: Nonnative::Features::UnreachableHTTPProxyServer, timeout: 1,
+                       host: '127.0.0.1', ports: [4570], log: 'test/reports/unreachable_http_proxy_server.log')
+  end
+end
+
 When('I send a message with the tcp client to the servers') do
   @responses = %w[tcp_server_1 tcp_server_2].map { |name| tcp_client_for_server(name).request('') }
 end
@@ -155,6 +162,18 @@ When('I send a {string} request with proxy credentials to the local HTTP proxy s
   @response = http_client_for_server('local_http_proxy_server').inspect_request_with_proxy_credentials(verb.downcase)
 end
 
+When('I send hop-by-hop request headers to the local HTTP proxy server') do
+  @response = http_client_for_server('local_http_proxy_server').inspect_request_with_hop_by_hop_headers
+end
+
+When('I send a raw UTF-8 path to the local HTTP proxy server') do
+  @raw_response = http_client_for_server('local_http_proxy_server').raw_path('/café')
+end
+
+When('I send a raw bracket path to the local HTTP proxy server') do
+  @raw_response = http_client_for_server('local_http_proxy_server').raw_path('/a[b]')
+end
+
 When('I request response metadata through the local HTTP proxy server') do
   @response = http_client_for_server('local_http_proxy_server').response_metadata
 end
@@ -165,6 +184,12 @@ end
 
 When('I send a HEAD request to the local HTTP proxy server') do
   @response = http_client_for_server('local_http_proxy_server').inspect_head
+end
+
+When('I send a request to the unreachable HTTP proxy server') do
+  @response = RestClient::Request.execute(method: :get, url: 'http://localhost:4570/hello', open_timeout: 1, read_timeout: 1)
+rescue RestClient::ExceptionWithResponse => e
+  @response = e.response
 end
 
 When('I send a HEAD message with the HTTP client to the server') do
@@ -235,6 +260,23 @@ Then('I should receive request details without proxy credentials from the local 
   expect(body['proxy_authorization']).to be_nil
 end
 
+Then('the local HTTP proxy server should not forward hop-by-hop request headers') do
+  body = JSON.parse(@response.body)
+
+  expect(@response.code).to eq(200)
+  expect(body.values_at('connection', 'connection_scoped', 'keep_alive', 'te', 'trailer', 'transfer_encoding', 'upgrade')).to all(be_nil)
+end
+
+Then('the local HTTP proxy server should forward the raw UTF-8 path') do
+  expect(@raw_response).to start_with('HTTP/1.1 200')
+  expect(@raw_response).to include('Café'.b)
+end
+
+Then('the local HTTP proxy server should forward the raw bracket path') do
+  expect(@raw_response).to start_with('HTTP/1.1 200')
+  expect(@raw_response).to include('brackets')
+end
+
 Then('I should receive preserved response metadata from the local HTTP proxy server') do
   expect(@error).to be_nil
   expect(@response.code).to eq(201)
@@ -245,6 +287,11 @@ Then('I should receive preserved response metadata from the local HTTP proxy ser
   expect(@response.headers[:www_authenticate]).to eq('Bearer realm="response-test"')
   expect(@response.headers[:proxy_authenticate]).to be_nil
   expect(@response.headers[:x_upstream_only]).to be_nil
+end
+
+Then('I should receive a clean bad gateway response') do
+  expect(@response.code).to eq(502)
+  expect(@response.body).not_to include('Errno::ECONNREFUSED')
 end
 
 Then('I should find the server runner {string}') do |name|

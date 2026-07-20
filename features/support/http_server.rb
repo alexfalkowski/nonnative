@@ -40,14 +40,35 @@ module Nonnative
 
       helpers do
         def inspect_request
+          request_details.merge(request_headers)
+        end
+
+        def request_details
           {
             method: request.request_method,
             body: request.body.read,
             content_type: request.media_type,
-            content_length: request.content_length,
+            content_length: request.content_length
+          }
+        end
+
+        def request_headers
+          {
             authorization: request.env['HTTP_AUTHORIZATION'],
             proxy_authorization: request.env['HTTP_PROXY_AUTHORIZATION'],
             user_agent: request.env['HTTP_USER_AGENT']
+          }.merge(hop_by_hop_request_headers)
+        end
+
+        def hop_by_hop_request_headers
+          {
+            connection: request.env['HTTP_CONNECTION'],
+            connection_scoped: request.env['HTTP_X_CONNECTION_SCOPED'],
+            keep_alive: request.env['HTTP_KEEP_ALIVE'],
+            te: request.env['HTTP_TE'],
+            trailer: request.env['HTTP_TRAILER'],
+            transfer_encoding: request.env['HTTP_TRANSFER_ENCODING'],
+            upgrade: request.env['HTTP_UPGRADE']
           }
         end
 
@@ -92,6 +113,14 @@ module Nonnative
 
       get '/response-metadata' do
         preserved_metadata_response
+      end
+
+      get '/café' do
+        'Café'.to_json
+      end
+
+      get '/a[b]' do
+        'brackets'.to_json
       end
 
       options '/response-metadata' do

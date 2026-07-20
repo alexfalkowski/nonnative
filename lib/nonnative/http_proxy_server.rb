@@ -44,12 +44,34 @@ module Nonnative
     ].freeze
 
     NON_FORWARDABLE_REQUEST_HEADERS = %w[
-      Host
-      Accept-Encoding
-      Version
-      Proxy-Authenticate
-      Proxy-Authorization
+      host
+      accept-encoding
+      version
+      proxy-authenticate
+      proxy-authorization
+      proxy-connection
+      connection
+      keep-alive
+      te
+      trailer
+      transfer-encoding
+      upgrade
     ].freeze
+
+    GATEWAY_TIMEOUT_ERRORS = [
+      RestClient::Exceptions::Timeout
+    ].freeze
+
+    GATEWAY_CONNECTION_ERRORS = [
+      RestClient::ServerBrokeConnection,
+      Errno::ECONNREFUSED,
+      Errno::EHOSTUNREACH,
+      SocketError
+    ].freeze
+
+    # Match malformed percent escapes and bytes outside RFC 3986's path-safe set. Valid `%HH`
+    # escapes remain intact; each match is percent-encoded before building the upstream URI.
+    PATH_ESCAPE_PATTERN = %r{%(?![\da-fA-F]{2})|[^A-Za-z0-9\-._~!$&'()*+,;=:@/%]}
 
     # Extracts request headers from the Rack environment and normalizes them to standard HTTP names.
     #
@@ -64,7 +86,8 @@ module Nonnative
         result[normalized_request_header_name(header)] = value
       end
 
-      headers.except(*NON_FORWARDABLE_REQUEST_HEADERS)
+      connection_headers = request_connection_headers(headers)
+      headers.reject { |header, _| non_forwardable_request_header?(header, connection_headers) }
     end
 
     # Builds the upstream URL for the given request.
@@ -75,8 +98,9 @@ module Nonnative
     def build_url(request, settings)
       uri_class = settings.scheme == 'http' ? URI::HTTP : URI::HTTPS
       query = request.query_string
+      path = escape_path(request.path_info)
 
-      uri_class.build(host: settings.host, port: settings.port, path: request.path_info, query: query.empty? ? nil : query).to_s
+      uri_class.build(host: settings.host, port: settings.port, path:, query: query.empty? ? nil : query).to_s
     end
 
     # Executes the upstream request and returns the response.
@@ -86,13 +110,20 @@ module Nonnative
     # @param headers [Hash] request headers
     # @param payload [String, nil] request payload
     # @return [RestClient::Response] response for error statuses, otherwise RestClient return value
+    # @raise [Sinatra::Halt] with a gateway status when the upstream is unavailable or times out
     def api_response(method:, url:, headers:, payload: nil)
       options = { method:, url:, headers: }
       options[:payload] = payload unless payload.nil?
 
       RestClient::Request.execute(options)
+    rescue *GATEWAY_TIMEOUT_ERRORS
+      halt 504
+    rescue *GATEWAY_CONNECTION_ERRORS
+      halt 502
     rescue RestClient::Exception => e
-      e.response
+      return e.response if e.response
+
+      halt 502
     end
 
     # Extracts the request payload for verbs that can carry a body.
@@ -147,6 +178,20 @@ module Nonnative
 
     def normalized_request_header_name(header)
       header.delete_prefix('HTTP_').split('_').map(&:capitalize).join('-')
+    end
+
+    def escape_path(path)
+      URI::DEFAULT_PARSER.escape(path, PATH_ESCAPE_PATTERN)
+    end
+
+    def request_connection_headers(headers)
+      headers.fetch('Connection', '').split(',').map { |header| header.strip.downcase }
+    end
+
+    def non_forwardable_request_header?(header, connection_headers)
+      normalized_header = header.downcase
+
+      NON_FORWARDABLE_REQUEST_HEADERS.include?(normalized_header) || connection_headers.include?(normalized_header)
     end
 
     # Registered before `get` so it takes precedence over Sinatra's GET-generated HEAD route,

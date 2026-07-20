@@ -602,10 +602,12 @@ The system allows you to define an in-process HTTP forward proxy server for exte
 The upstream scheme defaults to HTTPS on the scheme's default port; pass `scheme:`/`port:` to
 `Nonnative::HTTPProxyServer.new` to target an `http://` upstream or a non-default port. The proxy
 forwards the request path and query for `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, and
-`OPTIONS`, while removing proxy credentials plus `Host` and `Accept-Encoding` before the upstream
-request.
+`OPTIONS`, while removing proxy credentials, `Host`, `Accept-Encoding`, hop-by-hop headers, and
+headers nominated by `Connection` before the upstream request.
 
 The proxy preserves the upstream status, body, and safe end-to-end response headers such as `Content-Type`, `ETag`, and application-specific metadata. It removes hop-by-hop, connection-nominated, proxy-authentication, and framing headers; `Set-Cookie`, `Location`, and `Content-Encoding` are not forwarded.
+
+When the upstream is unavailable, disconnects unexpectedly, or times out, the proxy returns a clean gateway response (`502` or `504`) instead of exposing an internal exception page.
 
 Define your server:
 

@@ -122,6 +122,37 @@ module Nonnative
         end
       end
 
+      def inspect_request_with_hop_by_hop_headers
+        with_retry(1, 1) do
+          post(
+            'inspect',
+            'Hello World!',
+            {
+              headers: {
+                connection: 'X-Connection-Scoped',
+                x_connection_scoped: 'not-for-upstream',
+                keep_alive: 'timeout=5',
+                te: 'trailers',
+                trailer: 'X-Trailer',
+                transfer_encoding: 'chunked',
+                upgrade: 'websocket',
+                content_type: :json
+              },
+              read_timeout: 1,
+              open_timeout: 1
+            }
+          )
+        end
+      end
+
+      def raw_path(path)
+        socket = TCPSocket.open('127.0.0.1', URI(host).port)
+        socket.write("GET #{path} HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n")
+        socket.read
+      ensure
+        socket&.close
+      end
+
       def not_found
         with_retry(1, 1) do
           get('notfound', { headers: { content_type: :json, accept: :json }, read_timeout: 1, open_timeout: 1 })
