@@ -11,6 +11,7 @@ module Nonnative
             server.name = definition[:name]
             server.klass = resolve_klass(definition[:klass])
             server.timeout = definition[:timeout]
+            server.wait = definition[:wait] if definition.key?(:wait)
             server.host = definition[:host] if definition[:host]
             server.ports = definition[:ports]
             server.log = definition[:log]

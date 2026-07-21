@@ -27,6 +27,34 @@ Feature: Lifecycle
     When I attempt to start the system
     Then starting the system should raise an error containing "Rollback failed with StandardError: boom on rollback"
 
+  Scenario: Rollback releases resources acquired during server construction
+    Given I configure the system with a constructed server before a failing server
+    When I attempt to start the system
+    Then starting the system should raise an error containing "HTTP server requires at least one service mount"
+    And starting the system should not raise an error containing "Cannot stop before starting"
+    And the port "12430" should be reusable
+
+  Scenario: Server stop waits for owned-thread cleanup within the timeout
+    Given I configure the system with server cleanup and a timeout of 0.5 seconds
+    And I start the system
+    When I attempt to stop the system
+    Then stopping the system should not raise an error
+    And the server cleanup should be complete
+
+  Scenario: Server stop reports owned-thread cleanup beyond the timeout
+    Given I configure the system with server cleanup and a timeout of 0.05 seconds
+    And I start the system
+    When I attempt to stop the system
+    Then stopping the system should raise an error containing "server thread did not exit in time"
+
+  Scenario: Server start recovers after a stop that exceeded the timeout
+    Given I configure the system with a restartable server and a timeout of 0.05 seconds
+    And I start the system
+    When I attempt to stop the system
+    Then stopping the system should raise an error containing "server thread did not exit in time"
+    When I start the system
+    Then the port "12435" should be open
+
   Scenario: Process rollback timeouts are included in start failures
     Given I configure the system with a process that does not exit during rollback
     When I attempt to start the system

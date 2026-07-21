@@ -46,8 +46,8 @@ module Nonnative
 
     # Stops all configured runners and collects lifecycle and shutdown errors.
     #
-    # Processes and servers are stopped first and checked for shutdown, then service proxies are
-    # stopped when configured.
+    # Processes and servers are stopped first and checked for shutdown, including bounded server
+    # thread cleanup, then service proxies are stopped when configured.
     #
     # @return [Array<String>] lifecycle and shutdown-check errors collected while stopping
     def stop
@@ -240,7 +240,7 @@ module Nonnative
       id, stopped = Array(values).then { |v| [v.first, v.fetch(1, true)] }
       errors = []
       errors << "Stopped #{runner.name} with id #{id}, though did not respond in time for #{port.description}" unless ready
-      errors << "Stopped #{runner.name} with id #{id}, though the process did not exit in time" unless stopped
+      errors << "Stopped #{runner.name} with id #{id}, though the #{exit_subject(runner)} did not exit in time" unless stopped
       errors
     end
 
@@ -248,7 +248,7 @@ module Nonnative
       id, stopped = Array(values).then { |v| [v.first, v.fetch(1, true)] }
       errors = []
       errors << "Rollback failed for #{runner.name} with id #{id}, because it did not stop in time for #{port.description}" unless ready
-      errors << "Rollback failed for #{runner.name} with id #{id}, because the process did not exit in time" unless stopped
+      errors << "Rollback failed for #{runner.name} with id #{id}, because the #{exit_subject(runner)} did not exit in time" unless stopped
       errors
     end
 
@@ -263,6 +263,10 @@ module Nonnative
 
     def service_readiness_error(service, checks)
       "Started #{runner_name(service)}, though did not respond in time for readiness: #{checks.map(&:endpoint).join(', ')}"
+    end
+
+    def exit_subject(runner)
+      runner.is_a?(Nonnative::Server) ? 'server thread' : 'process'
     end
 
     def runner_name(type)

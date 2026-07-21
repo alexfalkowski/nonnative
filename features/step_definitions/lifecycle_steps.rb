@@ -25,6 +25,68 @@ Given('I configure a pool that fails to start and raises on rollback') do
   )
 end
 
+Given('I configure the system with a constructed server before a failing server') do
+  configure_with_defaults do |config|
+    add_server(
+      config,
+      name: 'constructed_server',
+      host: '127.0.0.1',
+      klass: Nonnative::Features::TCPServer,
+      timeout: 1,
+      ports: [12_430],
+      log: 'test/reports/12_430.log'
+    )
+    add_server(
+      config,
+      name: 'constructed_grpc_server',
+      host: '127.0.0.1',
+      klass: Nonnative::Features::GRPCServer,
+      timeout: 1,
+      ports: [12_431],
+      log: 'test/reports/12_431.log'
+    )
+    add_server(
+      config,
+      name: 'failing_server',
+      host: '127.0.0.1',
+      klass: Nonnative::Features::EmptyHTTPServer,
+      timeout: 1,
+      ports: [12_432],
+      log: 'test/reports/12_432.log'
+    )
+  end
+end
+
+Given('I configure the system with server cleanup and a timeout of {float} seconds') do |timeout|
+  configure_with_defaults do |config|
+    add_server(
+      config,
+      name: 'cleanup_server',
+      host: '127.0.0.1',
+      klass: Nonnative::Features::CleanupServer,
+      timeout:,
+      wait: 0,
+      ports: [12_434],
+      log: 'test/reports/12_434.log'
+    )
+  end
+end
+
+Given('I configure the system with a restartable server and a timeout of {float} seconds') do |timeout|
+  configure_with_defaults do |config|
+    add_server(
+      config,
+      name: 'restartable_server',
+      host: '127.0.0.1',
+      klass: Nonnative::Features::RestartableServer,
+      timeout:,
+      wait: 0,
+      ports: [12_435],
+      log: 'test/reports/12_435.log'
+    )
+  end
+end
+
 Given('I configure the system with a process that does not exit during rollback') do
   @lingering_processes = ['rollback_process']
 
@@ -148,6 +210,11 @@ Then('starting the system should raise an error containing:') do |table|
   table.raw.flatten.each { |message| expect(@start_error.message).to include(message) }
 end
 
+Then('starting the system should not raise an error containing {string}') do |message|
+  expect(@start_error).to be_a(Nonnative::StartError)
+  expect(@start_error.message).not_to include(message)
+end
+
 Then('stopping the system should raise an error containing {string}') do |message|
   expect(@stop_error).to be_a(Nonnative::StopError)
   expect(@stop_error.message).to include(message)
@@ -195,6 +262,19 @@ Then('the process {string} should no longer exist') do |name|
   pid = process.instance_variable_get(:@pid)
 
   wait_for { process_alive?(pid) }.to eq(false)
+end
+
+Then('the port {string} should be reusable') do |port|
+  server = TCPServer.new('127.0.0.1', port.to_i)
+  server.close
+end
+
+Then('the port {string} should be open') do |port|
+  wait_for { port_closed?(port.to_i) }.to eq(false)
+end
+
+Then('the server cleanup should be complete') do
+  expect(Nonnative.pool.server_by_name('cleanup_server').cleanup_complete?).to eq(true)
 end
 
 Then('the logger should be recreated for the new configuration') do
