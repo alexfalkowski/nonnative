@@ -52,6 +52,8 @@ module Nonnative
   # @see Nonnative::Proxy
   # @see Nonnative::SocketPairFactory
   class FaultInjectionProxy < Nonnative::Proxy
+    # Used both to flush the accept-queue barrier and as the aggregate deadline for draining active
+    # worker threads during stop.
     STOP_DRAIN_TIMEOUT = 1
 
     class Connection
@@ -62,10 +64,9 @@ module Nonnative
         @socket = socket
       end
 
-      def close
+      def close_sockets
         pair&.close
         socket.close unless socket.closed?
-        thread&.terminate
       end
     end
 
@@ -88,6 +89,7 @@ module Nonnative
     # @return [void]
     def start
       mutex.synchronize { @stopping = false }
+      logger
       @tcp_server = ::TCPServer.new(service.host, service.port)
       @thread = Thread.new { perform_start }
 
@@ -100,7 +102,7 @@ module Nonnative
     def stop
       server = tcp_server
       mark_stopping
-      close_connections
+      drain_workers(close_connections)
       close_queued_connections(server)
       server&.close
 
@@ -113,6 +115,7 @@ module Nonnative
 
       @tcp_server = nil
       @thread = nil
+      close_logger
 
       Nonnative.logger.info "stopped with host '#{service.host}' and port '#{service.port}' for proxy 'fault_injection'"
     end
@@ -230,7 +233,7 @@ module Nonnative
 
     private
 
-    attr_reader :tcp_server, :thread, :connections, :mutex, :state, :logger, :stopping
+    attr_reader :tcp_server, :thread, :connections, :mutex, :state, :stopping
 
     def perform_start
       loop do
@@ -240,10 +243,9 @@ module Nonnative
           local_socket.close
           next
         end
-        connection_thread = Thread.start(local_socket) do |accepted_socket|
-          accept_connection id, accepted_socket
+        Thread.start(local_socket) do |accepted_socket|
+          accept_connection(id, accepted_socket) if register_connection_thread(id)
         end
-        attach_connection_thread(id, connection_thread)
       end
     rescue IOError, Errno::EBADF
       nil
@@ -281,7 +283,28 @@ module Nonnative
       active_connections.each do |id, connection|
         close_connection(id, connection)
       end
+
+      active_connections.filter_map { |_id, connection| connection.thread }
     end
+
+    def drain_workers(workers)
+      deadline = monotonic_now + STOP_DRAIN_TIMEOUT
+      workers.each do |worker|
+        worker.join(remaining_time(deadline))
+        terminate_worker(worker)
+      end
+    end
+
+    def terminate_worker(worker)
+      return unless worker.alive?
+
+      worker.kill
+      worker.join
+    end
+
+    def remaining_time(deadline) = [deadline - monotonic_now, 0].max
+
+    def monotonic_now = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC)
 
     def close_queued_connections(server)
       return unless server
@@ -309,9 +332,7 @@ module Nonnative
       wait
     end
 
-    def read_state
-      mutex.synchronize { state }
-    end
+    def read_state = mutex.synchronize { state }
 
     def register_connection(id, socket)
       mutex.synchronize do
@@ -322,26 +343,34 @@ module Nonnative
       end
     end
 
-    def mark_stopping
-      mutex.synchronize { @stopping = true }
+    def mark_stopping = mutex.synchronize { @stopping = true }
+
+    def register_connection_thread(id)
+      mutex.synchronize do
+        connection = connections[id]
+        return false unless connection && !stopping
+
+        connection.thread = Thread.current
+        true
+      end
     end
 
-    def attach_connection_thread(id, thread)
-      mutex.synchronize { connections[id]&.thread = thread }
-    end
+    def attach_connection_pair(id, pair) = mutex.synchronize { connections[id]&.pair = pair }
 
-    def attach_connection_pair(id, pair)
-      mutex.synchronize { connections[id]&.pair = pair }
-    end
-
-    def delete_connection(id)
-      mutex.synchronize { connections.delete(id) }
-    end
+    def delete_connection(id) = mutex.synchronize { connections.delete(id) }
 
     def close_connection(id, connection)
       Nonnative.logger.info "closing connection for '#{id}' for proxy 'fault_injection'"
 
-      connection.close
+      connection.close_sockets
     end
+
+    def close_logger
+      @logger&.close
+    ensure
+      @logger = nil
+    end
+
+    def logger = (@logger ||= Logger.new(service.proxy.log))
   end
 end

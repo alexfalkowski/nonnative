@@ -94,6 +94,18 @@ Feature: Service proxies
     When I stop the service runner "service_1" while clients connect
     Then stopping the service runner should succeed
 
+  Scenario: Stopped service proxies release log descriptors and restart
+    Given I configure the system programmatically with services
+    And I start the system
+    When I stop the retained service runner "service_1"
+    Then stopping the retained service runner should release its proxy log descriptor
+    When I restart the retained service runner
+    And I connect to the service
+    And I send "test" to the service and close the write side
+    And I receive data from the service
+    Then I should receive "test" from the service
+    And the restarted service proxy should log the handled connection
+
   @reset
   Scenario: A delayed service proxy still allows responses
     Given I configure the system programmatically with services

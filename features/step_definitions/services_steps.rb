@@ -238,6 +238,14 @@ When('I stop the service runner {string}') do |name|
   Nonnative.pool.service_by_name(name).stop
 end
 
+When('I stop the retained service runner {string}') do |name|
+  @retained_service_runner = Nonnative.pool.service_by_name(name)
+  @running_proxy_descriptor_count = open_file_descriptor_count
+  @retained_service_runner.stop
+  @retained_proxy_log = configured_service(name).proxy.log
+  File.truncate(@retained_proxy_log, 0)
+end
+
 When('I stop the service runner {string} while clients connect') do |name|
   service = configured_service(name)
   runner = Nonnative.pool.service_by_name(name)
@@ -350,6 +358,14 @@ Then('stopping the service runner should succeed') do
   expect(@stop_error).to be_nil
 end
 
+Then('stopping the retained service runner should release its proxy log descriptor') do
+  expect(open_file_descriptor_count).to eq(@running_proxy_descriptor_count - 2)
+end
+
+When('I restart the retained service runner') do
+  @retained_service_runner.start
+end
+
 Then('the service readiness process side effect should not happen') do
   expect(File.exist?(@service_readiness_process_output)).to eq(false)
 end
@@ -363,4 +379,10 @@ end
 
 Then('I should have a successful connection') do
   expect(@service).not_to be_closed
+end
+
+Then('the restarted service proxy should log the handled connection') do
+  lines = Nonnative.log_lines(@retained_proxy_log, ->(line) { line.include?('handled connection') })
+
+  expect(lines).not_to be_empty
 end
