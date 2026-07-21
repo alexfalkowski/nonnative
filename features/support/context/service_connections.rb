@@ -69,6 +69,10 @@ module Nonnative
         rescue IOError
           nil
         end
+
+        def open_file_descriptor_count
+          Dir.children('/dev/fd').length
+        end
       end
     end
   end
