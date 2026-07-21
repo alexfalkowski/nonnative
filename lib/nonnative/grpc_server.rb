@@ -45,11 +45,14 @@ module Nonnative
       server.run
     end
 
-    # Stops the gRPC server.
+    # Stops the gRPC server after it has started.
+    #
+    # Construction rollback can call this hook before `GRPC::RpcServer#run`; gRPC rejects `stop` in
+    # that state and has not acquired its listener yet, so there is nothing to release.
     #
     # @return [void]
     def perform_stop
-      server.stop
+      server.stop unless server.running_state == :not_started
     end
 
     # Waits until the gRPC server reports it is running, or the configured timeout elapses.

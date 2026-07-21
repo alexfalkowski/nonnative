@@ -72,9 +72,14 @@ module Nonnative
 
     # Gracefully shuts down the Puma server.
     #
+    # Signals shutdown through Puma's own control pipe (`Puma::Server#stop`) rather than calling
+    # `graceful_shutdown` directly, so the accept loop wakes up reliably; calling `graceful_shutdown`
+    # without that signal leaves the accept loop dependent on noticing a closed socket, which is not
+    # guaranteed to happen promptly on every platform.
+    #
     # @return [void]
     def perform_stop
-      server.graceful_shutdown
+      server.stop(true)
     ensure
       close_log
     end

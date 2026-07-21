@@ -78,8 +78,9 @@ Common runner fields:
 Process/server fields:
 - `ports`: client-facing ports. These are also used for readiness/shutdown port checks.
 - `timeout`: max time (seconds) for each readiness/shutdown check. For processes, the same value also
-  bounds optional HTTP/gRPC probes and graceful child exit after the stop signal. Defaults to `1.0`.
-  A value of `0` fails immediately; setting it to `nil` programmatically does the same.
+  bounds optional HTTP/gRPC probes and graceful child exit after the stop signal. For servers, it
+  also bounds worker-thread cleanup after the stop hook returns. Defaults to `1.0`. A value of `0`
+  fails immediately; setting it to `nil` programmatically does the same.
 - `wait`: small sleep (seconds) between lifecycle steps.
 - `log`: per-runner log file used by process output redirection or server implementations.
 
@@ -436,6 +437,13 @@ module Nonnative
   end
 end
 ```
+
+Rollback calls `perform_stop` for every successfully constructed server, even when a later
+constructor fails before any server thread starts. Keep `perform_stop` safe in that state and use it
+to release resources acquired during initialization. After `perform_stop` requests shutdown,
+Nonnative waits up to the server `timeout` for the owned thread to finish. A thread that exceeds the
+timeout is terminated and causes `Nonnative.stop` to raise `Nonnative::StopError`; the server can
+still be started again afterward.
 
 Set it up programmatically:
 
