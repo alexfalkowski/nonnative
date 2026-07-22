@@ -87,6 +87,12 @@ Feature: Servers
     When the health endpoint reports service unavailable
     Then I should see "test" as unhealthy
 
+  Scenario: The observability client bounds an unresponsive health check by its own read timeout
+    Given I configure the system programmatically with an unresponsive health server
+    And I start the system
+    When I request health from the unresponsive health server with a 1 second read timeout
+    Then requesting health should raise a timeout error within 1.5 seconds
+
   Scenario Outline: The <endpoint> endpoint responds successfully
     Given I configure the system programmatically with servers
     And I start the system

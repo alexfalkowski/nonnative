@@ -59,7 +59,8 @@ module Nonnative
     ].freeze
 
     GATEWAY_TIMEOUT_ERRORS = [
-      RestClient::Exceptions::Timeout
+      RestClient::Exceptions::Timeout,
+      ::Timeout::Error
     ].freeze
 
     GATEWAY_CONNECTION_ERRORS = [
@@ -112,10 +113,12 @@ module Nonnative
     # @return [RestClient::Response] response for error statuses, otherwise RestClient return value
     # @raise [Sinatra::Halt] with a gateway status when the upstream is unavailable or times out
     def api_response(method:, url:, headers:, payload: nil)
-      options = { method:, url:, headers: }
+      options = { method:, url:, headers:, open_timeout: settings.upstream_timeout, read_timeout: settings.upstream_timeout }
       options[:payload] = payload unless payload.nil?
 
-      RestClient::Request.execute(options)
+      # Net::HTTP retries idempotent verbs once on a read timeout, so bound the whole
+      # call (including any retry) by the wall clock rather than trusting read_timeout alone.
+      ::Timeout.timeout(settings.upstream_timeout) { RestClient::Request.execute(options) }
     rescue *GATEWAY_TIMEOUT_ERRORS
       halt 504
     rescue *GATEWAY_CONNECTION_ERRORS
@@ -246,11 +249,13 @@ module Nonnative
     # @param service [Nonnative::ConfigurationServer] server configuration
     # @param scheme [String] upstream scheme, `"http"` or `"https"`
     # @param port [Integer, nil] upstream port; `nil` uses the scheme's default port
-    def initialize(host, service, scheme: 'https', port: nil)
+    # @param upstream_timeout [Numeric] maximum seconds for each upstream operation (defaults to `1.0`)
+    def initialize(host, service, scheme: 'https', port: nil, upstream_timeout: ConfigurationRunner::DEFAULT_TIMEOUT)
       http_service = Class.new(Nonnative::HTTPProxy) do
         set :host, host
         set :scheme, scheme
         set :port, port
+        set :upstream_timeout, upstream_timeout
       end
 
       super(http_service.new, service)

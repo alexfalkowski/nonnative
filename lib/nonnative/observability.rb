@@ -14,8 +14,9 @@ module Nonnative
   #
   # Requests are performed using {Nonnative::HTTPClient}, so callers may pass RestClient options
   # such as `headers`, `open_timeout`, and `read_timeout`. HTTP error statuses are returned as response
-  # objects; timeouts and broken connections raise their RestClient exceptions. Requests are not
-  # retried automatically.
+  # objects; broken connections raise their RestClient exceptions, and a timeout raises either a
+  # RestClient timeout exception or `Timeout::Error` (the latter when `read_timeout` bounds a Net::HTTP
+  # retry of an idempotent verb). Requests are not retried automatically.
   #
   # @example
   #   Nonnative.configure do |config|

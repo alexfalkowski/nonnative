@@ -73,6 +73,31 @@ Given('I configure the system programmatically with an unreachable HTTP proxy se
   end
 end
 
+Given('I configure the system programmatically with an unresponsive HTTP proxy server') do
+  configure_with_defaults(url: 'http://localhost:4570') do |config|
+    add_server(config, name: 'unresponsive_http_proxy_target', klass: Nonnative::Features::UnresponsiveTCPServer, timeout: 1,
+                       host: '127.0.0.1', ports: [4571], log: 'test/reports/unresponsive_http_proxy_target.log')
+    add_server(config, name: 'unresponsive_http_proxy_server', klass: Nonnative::Features::UnresponsiveHTTPProxyServer, timeout: 1,
+                       host: '127.0.0.1', ports: [4570], log: 'test/reports/unresponsive_http_proxy_server.log')
+  end
+end
+
+Given('I configure the system programmatically with a short-timeout HTTP proxy server') do
+  configure_with_defaults(url: 'http://localhost:4570') do |config|
+    add_server(config, name: 'unresponsive_http_proxy_target', klass: Nonnative::Features::UnresponsiveTCPServer, timeout: 1,
+                       host: '127.0.0.1', ports: [4571], log: 'test/reports/unresponsive_http_proxy_target.log')
+    add_server(config, name: 'unresponsive_http_proxy_server', klass: Nonnative::Features::ShortTimeoutHTTPProxyServer, timeout: 1,
+                       host: '127.0.0.1', ports: [4570], log: 'test/reports/unresponsive_http_proxy_server.log')
+  end
+end
+
+Given('I configure the system programmatically with an unresponsive health server') do
+  configure_with_defaults(url: 'http://localhost:4572') do |config|
+    add_server(config, name: 'unresponsive_health_server', klass: Nonnative::Features::UnresponsiveTCPServer, timeout: 1,
+                       host: '127.0.0.1', ports: [4572], log: 'test/reports/unresponsive_health_server.log')
+  end
+end
+
 When('I send a message with the tcp client to the servers') do
   @responses = %w[tcp_server_1 tcp_server_2].map { |name| tcp_client_for_server(name).request('') }
 end
@@ -192,6 +217,30 @@ rescue RestClient::ExceptionWithResponse => e
   @response = e.response
 end
 
+When('I send a request to the unresponsive HTTP proxy server') do
+  @response = RestClient::Request.execute(method: :get, url: 'http://localhost:4570/hello', open_timeout: 3, read_timeout: 3)
+rescue RestClient::ExceptionWithResponse => e
+  @response = e.response
+end
+
+When('I send a request with a short client timeout to the unresponsive HTTP proxy server') do
+  @response = RestClient::Request.execute(method: :get, url: 'http://localhost:4570/hello', open_timeout: 0.5, read_timeout: 0.5)
+rescue RestClient::ExceptionWithResponse => e
+  @response = e.response
+end
+
+When('I request health from the unresponsive health server with a {float} second read timeout') do |duration|
+  started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
+  begin
+    Nonnative.observability.health(read_timeout: duration, open_timeout: duration)
+  rescue StandardError => e
+    @error = e
+  end
+
+  @elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+end
+
 When('I send a HEAD message with the HTTP client to the server') do
   @response = http_client_for_server('http_server_1').hello_head
 end
@@ -292,6 +341,15 @@ end
 Then('I should receive a clean bad gateway response') do
   expect(@response.code).to eq(502)
   expect(@response.body).not_to include('Errno::ECONNREFUSED')
+end
+
+Then('I should receive a clean gateway timeout response') do
+  expect(@response.code).to eq(504)
+end
+
+Then('requesting health should raise a timeout error within {float} seconds') do |bound|
+  expect(@error).to be_a(Timeout::Error)
+  expect(@elapsed).to be < bound
 end
 
 Then('I should find the server runner {string}') do |name|
