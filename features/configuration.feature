@@ -68,6 +68,14 @@ Feature: Configuration loading
     When I attempt to load a temporary configuration with a singular runner port
     Then loading the configuration should fail with an argument error containing "Use 'ports' instead of 'port'"
 
+  Scenario: YAML rejects a process with no command or go
+    When I attempt to load a temporary configuration with a process missing a command
+    Then loading the configuration should fail with an argument error containing "Process 'commandless_process' requires 'command' or 'go'"
+
+  Scenario: Programmatic configuration rejects a process with no command
+    When I attempt to configure a process without a command
+    Then loading the configuration should fail with an argument error containing "Process 'commandless_process' requires 'command' or 'go'"
+
   Scenario: YAML rejects plural service ports
     When I attempt to load a temporary configuration with plural service ports
     Then loading the configuration should fail with an argument error containing "Use 'port' instead of 'ports'"

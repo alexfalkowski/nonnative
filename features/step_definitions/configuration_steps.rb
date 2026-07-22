@@ -537,6 +537,32 @@ When('I attempt to load a temporary configuration with a singular runner port') 
   end
 end
 
+When('I attempt to load a temporary configuration with a process missing a command') do
+  capture_result(:@configuration_result, :@configuration_error) do
+    load_temporary_configuration(<<~YAML)
+      version: "1.0"
+      name: test
+      url: http://localhost:4567
+      log: test/reports/nonnative.log
+      processes:
+        - name: commandless_process
+          host: 127.0.0.1
+          ports:
+            - 12400
+    YAML
+  end
+end
+
+When('I attempt to configure a process without a command') do
+  capture_result(:@configuration_result, :@configuration_error) do
+    Nonnative.configure do |config|
+      config.process do |process|
+        process.name = 'commandless_process'
+      end
+    end
+  end
+end
+
 When('I attempt to load a temporary configuration with plural service ports') do
   capture_result(:@configuration_result, :@configuration_error) do
     load_temporary_configuration(<<~YAML)
