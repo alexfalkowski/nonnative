@@ -93,6 +93,8 @@ module Nonnative
       process = Nonnative::ConfigurationProcess.new
       yield process
 
+      raise ArgumentError, "Process '#{process.name}' requires 'command' or 'go'" if process.command.nil?
+
       processes << process
     end
 
@@ -157,7 +159,7 @@ module Nonnative
         tools = go.tools || []
 
         -> { Nonnative.go_argv(tools, go.output, go.executable, go.command, *params) }
-      else
+      elsif process.command
         -> { process.command }
       end
     end
