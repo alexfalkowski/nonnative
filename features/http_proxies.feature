@@ -45,6 +45,18 @@ Feature: HTTP proxies
     When I send a request to the unreachable HTTP proxy server
     Then I should receive a clean bad gateway response
 
+  Scenario: The local HTTP proxy bounds an unresponsive upstream with its default timeout
+    Given I configure the system programmatically with an unresponsive HTTP proxy server
+    And I start the system
+    When I send a request to the unresponsive HTTP proxy server
+    Then I should receive a clean gateway timeout response
+
+  Scenario: The local HTTP proxy allows an unresponsive upstream timeout to be overridden
+    Given I configure the system programmatically with a short-timeout HTTP proxy server
+    And I start the system
+    When I send a request with a short client timeout to the unresponsive HTTP proxy server
+    Then I should receive a clean gateway timeout response
+
   Scenario: The local HTTP proxy forwards a raw UTF-8 path
     Given I configure the system programmatically with a local HTTP proxy server
     And I start the system

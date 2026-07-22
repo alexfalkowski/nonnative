@@ -18,7 +18,8 @@ module Nonnative
       @host = host
       @exceptions = [
         RestClient::Exceptions::Timeout,
-        RestClient::ServerBrokeConnection
+        RestClient::ServerBrokeConnection,
+        ::Timeout::Error
       ]
     end
 
@@ -40,7 +41,7 @@ module Nonnative
     # @param opts [Hash] RestClient request options (e.g. `headers`, `read_timeout`, `open_timeout`)
     # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
     def get(pathname, opts = {})
-      with_exception do
+      with_exception(opts) do
         resource(pathname, opts).get
       end
     end
@@ -52,7 +53,7 @@ module Nonnative
     # @param opts [Hash] RestClient request options
     # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
     def post(pathname, payload, opts = {})
-      with_exception do
+      with_exception(opts) do
         resource(pathname, opts).post(payload)
       end
     end
@@ -63,7 +64,7 @@ module Nonnative
     # @param opts [Hash] RestClient request options
     # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
     def delete(pathname, opts = {})
-      with_exception do
+      with_exception(opts) do
         resource(pathname, opts).delete
       end
     end
@@ -75,7 +76,7 @@ module Nonnative
     # @param opts [Hash] RestClient request options
     # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
     def put(pathname, payload, opts = {})
-      with_exception do
+      with_exception(opts) do
         resource(pathname, opts).put(payload)
       end
     end
@@ -87,7 +88,7 @@ module Nonnative
     # @param opts [Hash] RestClient request options
     # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
     def patch(pathname, payload, opts = {})
-      with_exception do
+      with_exception(opts) do
         resource(pathname, opts).patch(payload)
       end
     end
@@ -98,7 +99,7 @@ module Nonnative
     # @param opts [Hash] RestClient request options (e.g. `headers`, `read_timeout`, `open_timeout`)
     # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
     def head(pathname, opts = {})
-      with_exception do
+      with_exception(opts) do
         resource(pathname, opts).head
       end
     end
@@ -109,7 +110,7 @@ module Nonnative
     # @param opts [Hash] RestClient request options (e.g. `headers`, `read_timeout`, `open_timeout`)
     # @return [RestClient::Response, String] response for non-2xx errors, otherwise the RestClient result
     def options(pathname, opts = {})
-      with_exception do
+      with_exception(opts) do
         RestClient::Request.execute(opts.merge(method: :options, url: request_url(pathname)))
       end
     end
@@ -131,8 +132,12 @@ module Nonnative
       URI.join(host, pathname).to_s
     end
 
-    def with_exception
-      yield
+    # Net::HTTP silently retries idempotent verbs once on a read timeout, so bound the whole call
+    # (including any retry) by the wall clock rather than trusting `:read_timeout` alone.
+    def with_exception(opts = {}, &)
+      timeout = opts[:read_timeout]
+
+      timeout ? ::Timeout.timeout(timeout, &) : yield
     rescue *exceptions => e
       raise e
     rescue RestClient::Exception => e

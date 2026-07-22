@@ -182,8 +182,9 @@ expect(response.code).to eq(200)
 ```
 
 HTTP error statuses are returned as response objects so callers can inspect `.code` and `.body`.
-Request timeouts and broken connections raise their RestClient exceptions; observability requests are
-not retried automatically.
+Broken connections raise their RestClient exceptions, and a request timeout raises either a RestClient
+timeout exception or `Timeout::Error` (the latter when `read_timeout` bounds a Net::HTTP retry of an
+idempotent verb); observability requests are not retried automatically.
 
 `Nonnative.grpc_health` is a helper for the standard gRPC health checking protocol:
 
@@ -608,8 +609,10 @@ end
 The system allows you to define an in-process HTTP forward proxy server for external systems, e.g. `api.github.com`. This is a server implementation, not a fault-injection service proxy.
 
 The upstream scheme defaults to HTTPS on the scheme's default port; pass `scheme:`/`port:` to
-`Nonnative::HTTPProxyServer.new` to target an `http://` upstream or a non-default port. The proxy
-forwards the request path and query for `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, and
+`Nonnative::HTTPProxyServer.new` to target an `http://` upstream or a non-default port. The whole
+upstream call defaults to a one-second bound, including Net::HTTP's built-in retry of an
+unresponsive idempotent request; pass `upstream_timeout:` to tune it for a slow dependency. The
+proxy forwards the request path and query for `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, and
 `OPTIONS`, while removing proxy credentials, `Host`, `Accept-Encoding`, hop-by-hop headers, and
 headers nominated by `Connection` before the upstream request.
 

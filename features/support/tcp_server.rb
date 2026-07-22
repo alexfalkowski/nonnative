@@ -71,5 +71,55 @@ module Nonnative
 
       attr_reader :socket_server
     end
+
+    class UnresponsiveTCPServer < Nonnative::Server
+      def initialize(service)
+        super
+
+        @socket_server = ::TCPServer.new(service.host, service.port)
+        @client_sockets = []
+        @sockets_mutex = Mutex.new
+      end
+
+      def perform_start
+        loop do
+          client_socket = socket_server.accept
+          add_client_socket(client_socket)
+          client_socket.read
+          remove_client_socket(client_socket)
+          client_socket.close
+        end
+      rescue IOError, Errno::EBADF
+        close_socket_server
+      end
+
+      def perform_stop
+        close_socket_server
+        close_client_sockets
+      end
+
+      private
+
+      attr_reader :socket_server, :client_sockets, :sockets_mutex
+
+      def add_client_socket(socket)
+        sockets_mutex.synchronize { client_sockets << socket }
+      end
+
+      def remove_client_socket(socket)
+        sockets_mutex.synchronize { client_sockets.delete(socket) }
+      end
+
+      def close_socket_server
+        socket_server.close unless socket_server.closed?
+      end
+
+      def close_client_sockets
+        sockets_mutex.synchronize do
+          client_sockets.each { |socket| socket.close unless socket.closed? }
+          client_sockets.clear
+        end
+      end
+    end
   end
 end
