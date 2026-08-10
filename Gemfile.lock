@@ -32,7 +32,7 @@ GEM
     benchmark-trend (0.4.0)
     bigdecimal (4.1.2)
     builder (3.3.0)
-    concurrent-ruby (1.3.7)
+    concurrent-ruby (1.3.8)
     config (5.6.1)
       deep_merge (~> 1.2, >= 1.2.1)
       ostruct
@@ -78,10 +78,10 @@ GEM
       rake (~> 13.3)
     googleapis-common-protos-types (1.23.0)
       google-protobuf (~> 4.26)
-    grpc (1.82.0-x86_64-darwin)
+    grpc (1.83.0-x86_64-darwin)
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
-    grpc (1.82.0-x86_64-linux-gnu)
+    grpc (1.83.0-x86_64-linux-gnu)
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
     http-accept (1.7.0)
@@ -115,7 +115,7 @@ GEM
       ast (~> 2.4.1)
       racc
     prism (1.9.0)
-    puma (7.2.1)
+    puma (8.0.2)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.6)
@@ -130,7 +130,7 @@ GEM
     rake (13.4.2)
     rbnacl (7.1.2)
       ffi (~> 1)
-    rbs (4.0.3)
+    rbs (4.1.3)
       logger
       prism (>= 1.6.0)
       tsort
@@ -140,7 +140,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    retriable (3.8.0)
+    retriable (4.2.0)
     rexml (3.4.4)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
@@ -197,7 +197,7 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sorbet-runtime (0.6.13341)
+    sorbet-runtime (0.6.13421)
     ssh_data (1.3.0)
     sys-uname (1.5.1)
       ffi (~> 1.1)
@@ -207,7 +207,7 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
-    zeitwerk (2.8.2)
+    zeitwerk (2.8.3)
 
 PLATFORMS
   x86_64-darwin-21
