@@ -45,5 +45,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rspec-wait', '>= 1', '< 2'
   spec.add_dependency 'ruby-paseto', '>= 0', '< 1'
   spec.add_dependency 'sinatra', '>= 4', '< 5'
-  spec.add_dependency 'ssh_data', '>= 1', '< 2'
+  spec.add_dependency 'ssh_data', '>= 1', '< 3'
 end
