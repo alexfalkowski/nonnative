@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (3.42.0)
+    nonnative (3.43.0)
       concurrent-ruby (>= 1, < 2)
       config (>= 5, < 6)
       cucumber (>= 7, < 12)
@@ -10,7 +10,7 @@ PATH
       get_process_mem (>= 1, < 2)
       grpc (>= 1, < 2)
       jwt (>= 3, < 4)
-      jwt-eddsa (>= 0, < 1)
+      jwt-eddsa (>= 0, < 2)
       puma (>= 7, < 9)
       rbnacl (>= 7, < 8)
       rest-client (>= 2, < 3)
@@ -90,7 +90,7 @@ GEM
     json (2.21.2)
     jwt (3.2.0)
       base64
-    jwt-eddsa (0.9.0)
+    jwt-eddsa (1.0.0)
       base64
       ed25519
       jwt (>= 2.9.0)
@@ -118,7 +118,7 @@ GEM
     puma (8.0.2)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (3.2.6)
+    rack (3.2.7)
     rack-protection (4.2.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
@@ -197,13 +197,13 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sorbet-runtime (0.6.13421)
+    sorbet-runtime (0.6.13427)
     ssh_data (2.0.0)
       base64 (~> 0.1)
     sys-uname (1.5.1)
       ffi (~> 1.1)
       memoist3 (~> 1.0.0)
-    tilt (2.8.0)
+    tilt (2.9.0)
     tsort (0.2.0)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)

@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'get_process_mem', '>= 1', '< 2'
   spec.add_dependency 'grpc', '>= 1', '< 2'
   spec.add_dependency 'jwt', '>= 3', '< 4'
-  spec.add_dependency 'jwt-eddsa', '>= 0', '< 1'
+  spec.add_dependency 'jwt-eddsa', '>= 0', '< 2'
   spec.add_dependency 'puma', '>= 7', '< 9'
   spec.add_dependency 'rbnacl', '>= 7', '< 8'
   spec.add_dependency 'rest-client', '>= 2', '< 3'
