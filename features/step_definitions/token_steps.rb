@@ -5,13 +5,14 @@ Given('an Ed25519 private key') do
   @private_key_path = write_key_file(@signing_material)
 end
 
-Given('an OpenSSH Ed25519 private key') do
-  @private_key_path = openssh_ed25519_key
-  @signing_material = File.read(@private_key_path)
-end
-
 When('I generate a {string} token for {string} as {string}') do |kind, aud, sub|
   generate_token(kind, aud, sub)
+end
+
+When('I try to generate a {string} token for {string} as {string}') do |kind, aud, sub|
+  generate_token(kind, aud, sub)
+rescue ArgumentError => e
+  @error = e
 end
 
 When('I generate a {string} token for the {string} {string} endpoint as {string}') do |kind, method, path, sub|

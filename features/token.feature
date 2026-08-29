@@ -20,14 +20,10 @@ Feature: Token
       | sub | user-1         |
       | kid | key-1          |
 
-  Scenario: Generate an SSH token
-    Given an OpenSSH Ed25519 private key
-    When I generate a "ssh" token for "GET /v1/things" as "user-1"
-    Then the token should be verifiable with:
-      | ver | v1             |
-      | kid | key-1          |
-      | sub | key-1          |
-      | aud | GET /v1/things |
+  Scenario: Reject an unsupported token kind
+    Given an Ed25519 private key
+    When I try to generate a "ssh" token for "GET /v1/things" as "user-1"
+    Then token generation should fail with "Unsupported token kind 'ssh'"
 
   Scenario: Generate a token for an HTTP endpoint
     Given an Ed25519 private key
@@ -62,18 +58,3 @@ Feature: Token
       | iat | 4102444800 |
       | nbf | 4102448400 |
       | exp | 4102452000 |
-
-  Scenario: Generate an SSH token with independent time claims
-    Given an OpenSSH Ed25519 private key
-    When I generate a "ssh" token with:
-      | issued_at  | 4102444800 |
-      | expires_at | 4102452000 |
-    Then the token time claims should be:
-      | iat | 4102444800 |
-      | exp | 4102452000 |
-
-  Scenario: SSH tokens reject a not-before override
-    Given an OpenSSH Ed25519 private key
-    When I try to generate a "ssh" token with:
-      | not_before | 4102448400 |
-    Then token generation should fail with "ssh tokens do not support"
