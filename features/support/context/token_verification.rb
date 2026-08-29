@@ -34,8 +34,7 @@ module Nonnative
           end
         end
 
-        # Returns the token's time claims normalised to Unix seconds, keyed by claim name. Absent
-        # claims (for example ssh has no nbf) are omitted.
+        # Returns the token's time claims normalised to Unix seconds, keyed by claim name.
         def token_time_claims(kind, token, material)
           claims, = decoded_token(kind, token, material)
 
@@ -56,18 +55,9 @@ module Nonnative
           file.path
         end
 
-        def openssh_ed25519_key
-          path = File.join(Dir.mktmpdir, 'id_ed25519')
-          args = ['ssh-keygen', '-t', 'ed25519', '-N', '', '-C', '', '-f', path]
-          raise 'ssh-keygen failed' unless system(*args, out: File::NULL, err: File::NULL)
-
-          path
-        end
-
         def time_claim_seconds(kind, value)
           case kind
           when 'paseto' then Time.iso8601(value).to_i
-          when 'ssh' then value / 1_000_000_000
           else value
           end
         end
@@ -76,7 +66,6 @@ module Nonnative
           case kind
           when 'jwt' then decoded_jwt(token, material)
           when 'paseto' then decoded_paseto(token, material)
-          when 'ssh' then decoded_ssh(token, material)
           end
         end
 
@@ -99,16 +88,6 @@ module Nonnative
           result = Paseto::V4::Public.new(pem).decode!(token, implicit_assertion: '')
 
           [result.claims, result.footer['kid']]
-        end
-
-        def decoded_ssh(token, ssh_key)
-          verify_key = Ed25519::SigningKey.new(SSHData::PrivateKey.parse_openssh(ssh_key).first.sk[0, 32]).verify_key
-          raw_claims, raw_signature = token.split('.')
-          claims = Base64.strict_decode64(raw_claims)
-          raise 'invalid ssh token signature' unless verify_key.verify(Base64.strict_decode64(raw_signature), claims)
-
-          parsed = JSON.parse(claims)
-          [parsed, parsed['kid']]
         end
       end
     end

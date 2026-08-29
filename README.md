@@ -225,7 +225,6 @@ Supported `kind` values (all Ed25519, generation only):
 
 - `jwt`: EdDSA JWT with the key id in the `kid` header. `private_key` is a PKCS#8 PEM file.
 - `paseto`: PASETO v4.public with the key id in a `{"kid":"..."}` footer. `private_key` is a PKCS#8 PEM file. Requires system **libsodium** (via `rbnacl`); it loads lazily, so `require 'nonnative'` works without libsodium until you generate a PASETO token.
-- `ssh`: go-service style `base64(claims).base64(signature)` with a raw Ed25519 signature over `v1` claims. `private_key` is an **OpenSSH-format** key. `issuer` and `sub` are ignored (the subject is the key id).
 
 The audience is endpoint-scoped; build it with the helpers:
 
@@ -240,8 +239,6 @@ By default the time claims are pinned to the current time (`iat`/`nbf` at now, `
 # a token that is not valid until an hour from now
 token.generate(aud: 'GET /v1/things', sub: 'user-1', not_before: Time.now + 3600)
 ```
-
-`ssh` tokens have no `nbf` claim, so passing `not_before` for the `ssh` kind raises `ArgumentError`.
 
 ### 🔁 Lifecycle strategies (Cucumber integration)
 
