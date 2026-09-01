@@ -39,7 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'puma', '>= 7', '< 9'
   spec.add_dependency 'rbnacl', '>= 7', '< 8'
   spec.add_dependency 'rest-client', '>= 2', '< 3'
-  spec.add_dependency 'retriable', '>= 3', '< 5'
+  spec.add_dependency 'retriable', '>= 3', '< 6'
   spec.add_dependency 'rspec-benchmark', '>= 0', '< 1'
   spec.add_dependency 'rspec-expectations', '>= 3', '< 4'
   spec.add_dependency 'rspec-wait', '>= 1', '< 2'
