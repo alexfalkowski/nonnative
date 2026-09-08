@@ -185,7 +185,7 @@ GEM
       sorbet-runtime
       zeitwerk
     ruby-progressbar (1.13.0)
-    simplecov (1.1.1)
+    simplecov (1.2.0)
     simplecov-cobertura (4.0.0)
       rexml
       simplecov (~> 1.0)
