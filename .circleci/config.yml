@@ -14,10 +14,10 @@ commands:
 executors:
   ruby:
     docker:
-      - image: alexfalkowski/ruby:4.1
+      - image: alexfalkowski/ruby:4.3
   release:
     docker:
-      - image: alexfalkowski/release:8.35
+      - image: alexfalkowski/release:8.36
   alpine:
     docker:
       - image: alpine:latest
