@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nonnative (3.45.0)
+    nonnative (3.46.0)
       concurrent-ruby (>= 1, < 2)
       config (>= 5, < 6)
       cucumber (>= 7, < 12)
@@ -9,6 +9,7 @@ PATH
       ed25519 (>= 1, < 2)
       get_process_mem (>= 1, < 2)
       grpc (>= 1, < 2)
+      json (>= 2, < 3)
       jwt (>= 3, < 4)
       jwt-eddsa (>= 0, < 2)
       puma (>= 7, < 9)
@@ -29,7 +30,7 @@ GEM
     benchmark-malloc (0.2.0)
     benchmark-perf (0.6.0)
     benchmark-trend (0.4.0)
-    bigdecimal (4.1.2)
+    bigdecimal (4.1.3)
     builder (3.3.0)
     concurrent-ruby (1.3.8)
     config (5.6.1)
@@ -62,7 +63,7 @@ GEM
     cucumber-tag-expressions (8.1.0)
     deep_merge (1.2.2)
     diff-lcs (1.6.2)
-    domain_name (0.6.20260829)
+    domain_name (0.6.20260907)
     ed25519 (1.4.0)
     ffi (1.17.4-x86_64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
@@ -87,7 +88,7 @@ GEM
     http-cookie (1.1.6)
       domain_name (~> 0.5)
     json (2.21.2)
-    jwt (3.2.0)
+    jwt (3.3.0)
       base64
     jwt-eddsa (1.0.0)
       base64
@@ -109,7 +110,7 @@ GEM
     nio4r (2.7.5)
     openssl (3.3.3)
     ostruct (0.6.3)
-    parallel (2.1.0)
+    parallel (2.2.0)
     parser (3.3.12.0)
       ast (~> 2.4.1)
       racc
@@ -161,7 +162,7 @@ GEM
     rspec-support (3.13.7)
     rspec-wait (1.0.2)
       rspec (>= 3.4)
-    rubocop (1.90.0)
+    rubocop (1.91.0)
       json (>= 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -185,7 +186,7 @@ GEM
       sorbet-runtime
       zeitwerk
     ruby-progressbar (1.13.0)
-    simplecov (1.2.0)
+    simplecov (1.3.0)
     simplecov-cobertura (4.0.0)
       rexml
       simplecov (~> 1.0)
@@ -196,7 +197,7 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sorbet-runtime (0.6.13466)
+    sorbet-runtime (0.6.13499)
     sys-uname (1.5.1)
       ffi (~> 1.1)
       memoist3 (~> 1.0.0)
