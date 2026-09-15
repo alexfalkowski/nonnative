@@ -9,7 +9,7 @@ PATH
       ed25519 (>= 1, < 2)
       get_process_mem (>= 1, < 2)
       grpc (>= 1, < 2)
-      json (>= 2, < 3)
+      json (>= 2, < 4)
       jwt (>= 3, < 4)
       jwt-eddsa (>= 0, < 2)
       puma (>= 7, < 9)
@@ -87,7 +87,7 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.1.6)
       domain_name (~> 0.5)
-    json (2.21.2)
+    json (3.0.2)
     jwt (3.3.0)
       base64
     jwt-eddsa (1.0.0)
