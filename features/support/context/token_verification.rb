@@ -20,7 +20,6 @@ module Nonnative
         end
 
         def generate_token_with(kind, **)
-          @kind = kind
           @token = Nonnative.token(kind: kind, issuer: 'iss', key: 'key-1', private_key: @private_key_path, expiration: 3600)
                             .generate(**TOKEN_DEFAULTS, **)
         end
@@ -35,12 +34,12 @@ module Nonnative
         end
 
         # Returns the token's time claims normalised to Unix seconds, keyed by claim name.
-        def token_time_claims(kind, token, material)
-          claims, = decoded_token(kind, token, material)
+        def token_time_claims(token, material)
+          claims, = decoded_token(token, material)
 
           %w[iat nbf exp].each_with_object({}) do |field, result|
             value = claims[field]
-            result[field] = time_claim_seconds(kind, value) unless value.nil?
+            result[field] = value unless value.nil?
           end
         end
 
@@ -55,19 +54,7 @@ module Nonnative
           file.path
         end
 
-        def time_claim_seconds(kind, value)
-          case kind
-          when 'paseto' then Time.iso8601(value).to_i
-          else value
-          end
-        end
-
-        def decoded_token(kind, token, material)
-          case kind
-          when 'jwt' then decoded_jwt(token, material)
-          when 'paseto' then decoded_paseto(token, material)
-          end
-        end
+        def decoded_token(token, material) = decoded_jwt(token, material)
 
         def decoded_jwt(token, pem)
           verify_key = Ed25519::SigningKey.new(OpenSSL::PKey.read(pem).raw_private_key).verify_key
@@ -77,17 +64,6 @@ module Nonnative
                                        algorithm: 'EdDSA', verify_expiration: false, verify_not_before: false)
 
           [payload, header['kid']]
-        end
-
-        def decoded_paseto(token, pem)
-          require 'rbnacl'
-          require 'paseto'
-
-          # decode! verifies the Ed25519 signature but skips ruby-paseto's stricter claim/footer
-          # validation (which would reject a non-PASERK kid that go-service accepts as plain JSON).
-          result = Paseto::V4::Public.new(pem).decode!(token, implicit_assertion: '')
-
-          [result.claims, result.footer['kid']]
         end
       end
     end
