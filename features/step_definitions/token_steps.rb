@@ -34,7 +34,7 @@ rescue ArgumentError => e
 end
 
 Then('the token should be verifiable with:') do |table|
-  claims, kid = decoded_token(@kind, @token, @signing_material)
+  claims, kid = decoded_token(@token, @signing_material)
 
   table.rows_hash.each do |field, expected|
     expect(field == 'kid' ? kid : claims[field]).to eq(expected)
@@ -42,7 +42,7 @@ Then('the token should be verifiable with:') do |table|
 end
 
 Then('the token time claims should be:') do |table|
-  claims = token_time_claims(@kind, @token, @signing_material)
+  claims = token_time_claims(@token, @signing_material)
 
   table.rows_hash.each do |field, expected|
     expect(claims[field]).to eq(Integer(expected))

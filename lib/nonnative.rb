@@ -52,7 +52,6 @@ require 'uri'
 require 'openssl'
 require 'json'
 require 'time'
-require 'singleton' # ruby-paseto depends on this stdlib, which Ruby no longer auto-loads
 
 require 'grpc'
 require 'grpc/health/v1/health_services_pb'
@@ -68,8 +67,6 @@ require 'rspec/wait'
 require 'puma'
 require 'puma/server'
 
-# jwt-eddsa (with the ed25519 gem) is pure Ruby and needs no system library, so it loads here.
-# PASETO's rbnacl needs system libsodium, so Nonnative::PasetoToken requires it lazily instead.
 require 'jwt/eddsa'
 
 require 'nonnative/version'
@@ -124,7 +121,6 @@ require 'nonnative/cucumber'
 require 'nonnative/header'
 require 'nonnative/ed25519_key'
 require 'nonnative/jwt_token'
-require 'nonnative/paseto_token'
 require 'nonnative/token'
 
 # The main namespace for the gem.
@@ -216,9 +212,9 @@ module Nonnative
     # The signing parameters are passed in directly; this is not coupled to any service's
     # configuration format. The generated token string is ready for {Nonnative::Header.auth_bearer}.
     #
-    # @param kind [String] token kind, one of `"jwt"` or `"paseto"`
+    # @param kind [String] token kind, `"jwt"`
     # @param issuer [String] the `iss` claim
-    # @param key [String] the key id (JWT `kid` header or PASETO `kid` footer)
+    # @param key [String] the key id (JWT `kid` header)
     # @param private_key [String] path to a PKCS#8 Ed25519 private key PEM file
     # @param expiration [Integer] token lifetime in seconds (drives `exp`)
     # @return [Nonnative::Token]

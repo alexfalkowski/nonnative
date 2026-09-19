@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nonnative
-  # Builds signed JWT or PASETO tokens for authenticating against services under test.
+  # Builds signed JWT tokens for authenticating against services under test.
   #
   # The consumer passes in the signing parameters they parsed from their own configuration; this class
   # is not coupled to any particular service's configuration format. The generated token string is
@@ -12,16 +12,8 @@ module Nonnative
   #                                private_key: 'config/ed25519.pem', expiration: 3600)
   #   header = Nonnative::Header.auth_bearer(token.generate(aud: 'GET /v1/things', sub: 'user-1'))
   #
-  # @example PASETO
-  #   token = Nonnative::Token.new(kind: 'paseto', issuer: 'iss', key: 'key-1',
-  #                                private_key: 'config/ed25519.pem', expiration: 3600)
-  #   token.generate(aud: Nonnative::Token.grpc_audience('/health.v1.Health/Check'), sub: 'user-1')
-  #
   # @see Nonnative::Header.auth_bearer
   class Token
-    # Supported token kinds mapped to their implementation.
-    KINDS = { 'jwt' => Nonnative::JwtToken, 'paseto' => Nonnative::PasetoToken }.freeze
-
     class << self
       # Builds the audience string for an HTTP endpoint.
       #
@@ -41,15 +33,16 @@ module Nonnative
       end
     end
 
-    # @param kind [String] token kind, one of `"jwt"` or `"paseto"`
+    # @param kind [String] token kind, `"jwt"`
     # @param issuer [String] the `iss` claim
-    # @param key [String] the key id (JWT `kid` header or PASETO `kid` footer)
+    # @param key [String] the key id (JWT `kid` header)
     # @param private_key [String] path to a PKCS#8 Ed25519 private key PEM file
     # @param expiration [Integer] token lifetime in seconds (drives `exp`)
     # @raise [ArgumentError] if the kind is not supported
     def initialize(kind:, issuer:, key:, private_key:, expiration:)
-      klass = KINDS.fetch(kind) { raise ArgumentError, "Unsupported token kind '#{kind}'" }
-      @token = klass.new(issuer: issuer, key: key, private_key: private_key, expiration: expiration)
+      raise ArgumentError, "Unsupported token kind '#{kind}'" unless kind == 'jwt'
+
+      @token = Nonnative::JwtToken.new(issuer: issuer, key: key, private_key: private_key, expiration: expiration)
     end
 
     # Generates a signed token.

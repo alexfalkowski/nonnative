@@ -221,10 +221,9 @@ headers = Nonnative::Header.auth_bearer(
 )
 ```
 
-Supported `kind` values (all Ed25519, generation only):
+The supported `kind` is Ed25519 JWT generation only:
 
 - `jwt`: EdDSA JWT with the key id in the `kid` header. `private_key` is a PKCS#8 PEM file.
-- `paseto`: PASETO v4.public with the key id in a `{"kid":"..."}` footer. `private_key` is a PKCS#8 PEM file. Requires system **libsodium** (via `rbnacl`); it loads lazily, so `require 'nonnative'` works without libsodium until you generate a PASETO token.
 
 The audience is endpoint-scoped; build it with the helpers:
 

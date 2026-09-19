@@ -4,8 +4,7 @@ module Nonnative
   # Loads an Ed25519 private key from a PEM file for signing tokens.
   #
   # Verifiers such as go-service use Ed25519 keys encoded as PKCS#8 PEM. This reads the PEM once and
-  # exposes it in the shapes the token backends need: the raw PEM for {Nonnative::PasetoToken} and the
-  # 32-byte seed for {Nonnative::JwtToken}.
+  # exposes the 32-byte seed required by {Nonnative::JwtToken}.
   #
   # @example
   #   key = Nonnative::Ed25519Key.new('config/ed25519.pem')

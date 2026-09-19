@@ -11,19 +11,10 @@ Feature: Token
       | sub | user-1         |
       | kid | key-1          |
 
-  Scenario: Generate a PASETO token
-    Given an Ed25519 private key
-    When I generate a "paseto" token for "GET /v1/things" as "user-1"
-    Then the token should be verifiable with:
-      | iss | iss            |
-      | aud | GET /v1/things |
-      | sub | user-1         |
-      | kid | key-1          |
-
   Scenario: Reject an unsupported token kind
     Given an Ed25519 private key
-    When I try to generate a "ssh" token for "GET /v1/things" as "user-1"
-    Then token generation should fail with "Unsupported token kind 'ssh'"
+    When I try to generate a "paseto" token for "GET /v1/things" as "user-1"
+    Then token generation should fail with "Unsupported token kind 'paseto'"
 
   Scenario: Generate a token for an HTTP endpoint
     Given an Ed25519 private key
@@ -40,17 +31,6 @@ Feature: Token
   Scenario: Generate a not-yet-valid JWT with independent time claims
     Given an Ed25519 private key
     When I generate a "jwt" token with:
-      | issued_at  | 4102444800 |
-      | not_before | 4102448400 |
-      | expires_at | 4102452000 |
-    Then the token time claims should be:
-      | iat | 4102444800 |
-      | nbf | 4102448400 |
-      | exp | 4102452000 |
-
-  Scenario: Generate a not-yet-valid PASETO with independent time claims
-    Given an Ed25519 private key
-    When I generate a "paseto" token with:
       | issued_at  | 4102444800 |
       | not_before | 4102448400 |
       | expires_at | 4102452000 |

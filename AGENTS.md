@@ -189,10 +189,8 @@ reverse. Readiness and shutdown checks are TCP-only via
 Token generation: `Nonnative.token(kind:, issuer:, key:, private_key:, expiration:)`
 returns a `Nonnative::Token` whose `generate(aud:, sub:)` produces a signed token for
 authenticating against services under test; it feeds `Nonnative::Header.auth_bearer`.
-Kinds are `jwt` (EdDSA, `kid` header) and `paseto` (v4.public, `kid` footer). Both
-are Ed25519 and generation-only, and take a PKCS#8 PEM key. PASETO needs system
-libsodium (via `rbnacl`), required lazily so `require 'nonnative'` works without it
-until a PASETO token is generated.
+The only supported kind is `jwt` (EdDSA, `kid` header). It is Ed25519,
+generation-only, and takes a PKCS#8 PEM key.
 `Nonnative::Token.http_audience` / `grpc_audience` build the endpoint-scoped `aud`.
 
 ## Cucumber Surface
@@ -260,7 +258,7 @@ Limitations:
 - Readiness/timeouts: `lib/nonnative/port.rb`, `lib/nonnative/timeout.rb`
 - Process lifecycle: `lib/nonnative/process.rb`
 - Go executable command/argv building: `lib/nonnative/go_executable.rb`
-- Token generation: `lib/nonnative/token.rb`, `lib/nonnative/jwt_token.rb`, `lib/nonnative/paseto_token.rb`, `lib/nonnative/ed25519_key.rb`
+- Token generation: `lib/nonnative/token.rb`, `lib/nonnative/jwt_token.rb`, `lib/nonnative/ed25519_key.rb`
 - Proxies: `lib/nonnative/fault_injection_proxy.rb`, `lib/nonnative/socket_pair_factory.rb`
 - Cucumber: `lib/nonnative/cucumber.rb`, `lib/nonnative/startup.rb`, `features/support/env.rb`
 - Config loading: `lib/nonnative/configuration.rb`, `lib/nonnative/configuration_file.rb`, `lib/nonnative/configuration_runner.rb`, `lib/nonnative/configuration_proxy.rb`
