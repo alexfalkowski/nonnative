@@ -34,7 +34,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'ed25519', '>= 1', '< 2'
   spec.add_dependency 'get_process_mem', '>= 1', '< 2'
   spec.add_dependency 'grpc', '>= 1', '< 2'
-  spec.add_dependency 'json', '>= 2', '< 3'
   spec.add_dependency 'jwt', '>= 3', '< 4'
   spec.add_dependency 'jwt-eddsa', '>= 0', '< 2'
   spec.add_dependency 'puma', '>= 7', '< 9'

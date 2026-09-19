@@ -50,7 +50,6 @@ require 'securerandom'
 require 'shellwords'
 require 'uri'
 require 'openssl'
-require 'json'
 require 'time'
 
 require 'grpc'
