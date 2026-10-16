@@ -29,8 +29,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'concurrent-ruby', '>= 1', '< 2'
   spec.add_dependency 'config', '>= 5', '< 6'
-  spec.add_dependency 'cucumber', '>= 7', '< 12'
-  spec.add_dependency 'cucumber-cucumber-expressions', '< 19'
+  spec.add_dependency 'cucumber', '>= 11', '< 13'
   spec.add_dependency 'ed25519', '>= 1', '< 2'
   spec.add_dependency 'get_process_mem', '>= 1', '< 2'
   spec.add_dependency 'grpc', '>= 1', '< 2'
@@ -38,7 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'jwt-eddsa', '>= 0', '< 2'
   spec.add_dependency 'puma', '>= 7', '< 9'
   spec.add_dependency 'rest-client', '>= 2', '< 3'
-  spec.add_dependency 'retriable', '>= 3', '< 6'
+  spec.add_dependency 'retriable', '>= 4', '< 6'
   spec.add_dependency 'rspec-benchmark', '>= 0', '< 1'
   spec.add_dependency 'rspec-expectations', '>= 3', '< 4'
   spec.add_dependency 'rspec-wait', '>= 1', '< 2'
