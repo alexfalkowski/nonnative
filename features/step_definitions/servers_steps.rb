@@ -175,8 +175,8 @@ When('I send a successful message to the HTTP proxy server') do
   @response = RestClient::Resource.new("http://localhost:#{configured_server('http_proxy_server').port}").get
 end
 
-When('I send a not found message to the HTTP proxy server') do
-  @response = http_client_for_server('http_proxy_server').hello_get
+When('I send a not found message to the local HTTP proxy server') do
+  @response = http_client_for_server('local_http_proxy_server').not_found
 end
 
 When('I send a {string} request with body {string} to the local HTTP proxy server') do |verb, body|

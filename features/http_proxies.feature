@@ -15,6 +15,12 @@ Feature: HTTP proxies
       | PATCH  |
       | DELETE |
 
+  Scenario: The local HTTP proxy preserves not found responses
+    Given I configure the system programmatically with a local HTTP proxy server
+    And I start the system
+    When I send a not found message to the local HTTP proxy server
+    Then I should receive an HTTP not found response
+
   Scenario: The local HTTP proxy does not forward proxy credentials
     Given I configure the system programmatically with a local HTTP proxy server
     And I start the system
@@ -76,13 +82,8 @@ Feature: HTTP proxies
     Then I should receive preserved response metadata from the local HTTP proxy server
 
   @config
-  Scenario Outline: The configured HTTP proxy returns a <kind> response
+  Scenario: The configured HTTP proxy returns a successful response
     Given I configure the system through configuration with servers
     And I start the system
-    When I send a <kind> message to the HTTP proxy server
-    Then I should receive a <kind> response from the HTTP proxy server
-
-    Examples:
-      | kind       |
-      | successful |
-      | not found  |
+    When I send a successful message to the HTTP proxy server
+    Then I should receive a successful response from the HTTP proxy server
