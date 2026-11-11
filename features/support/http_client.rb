@@ -155,7 +155,7 @@ module Nonnative
 
       def not_found
         with_retry(1, 1) do
-          get('notfound', { headers: { content_type: :json, accept: :json }, read_timeout: 1, open_timeout: 1 })
+          get('non-existent', { headers: { content_type: :json, accept: :json }, read_timeout: 1, open_timeout: 1 })
         end
       end
 
