@@ -64,6 +64,7 @@ GEM
     diff-lcs (1.6.2)
     domain_name (0.7.20261007)
     ed25519 (1.4.0)
+    ffi (1.17.4)
     ffi (1.17.4-aarch64-linux-gnu)
     ffi (1.17.4-arm64-darwin)
     ffi (1.17.4-x86_64-darwin)
@@ -71,6 +72,9 @@ GEM
     get_process_mem (1.0.0)
       bigdecimal (>= 2.0)
       ffi (~> 1.0)
+    google-protobuf (4.36.2)
+      bigdecimal
+      rake (~> 13.3)
     google-protobuf (4.36.2-aarch64-linux-gnu)
       bigdecimal
       rake (~> 13.3)
@@ -85,6 +89,9 @@ GEM
       rake (~> 13.3)
     googleapis-common-protos-types (1.24.0)
       google-protobuf (~> 4.26)
+    grpc (1.85.0)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
     grpc (1.85.0-aarch64-linux-gnu)
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
@@ -126,7 +133,7 @@ GEM
       ast (~> 2.4.1)
       racc
     prism (1.9.0)
-    puma (8.0.2)
+    puma (8.0.3)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.8)
