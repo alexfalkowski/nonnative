@@ -17,7 +17,7 @@ executors:
       - image: alexfalkowski/ruby:4.17
   release:
     docker:
-      - image: alexfalkowski/release:8.50
+      - image: alexfalkowski/release:8.51
   alpine:
     docker:
       - image: alpine:latest
