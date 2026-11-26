@@ -9,6 +9,12 @@ languages. It starts processes, in-process servers, and proxy-only services,
 waits on TCP readiness/shutdown, and can place fault-injection proxies in front
 of dependencies.
 
+## Accepted design
+
+Read the [accepted-design index](docs/agents/accepted-design.md) and the relevant
+area files before proposing a change or recording a finding or audit entry.
+Apply each decision within its documented scope.
+
 ## Map And Commands
 
 - Library: `lib/nonnative/**/*.rb`
@@ -23,147 +29,6 @@ of dependencies.
 - Features: `make features`
 - Benchmarks only: `make benchmarks`
 - Cleanup: `make clean-dep`, `make clean-reports`
-
-## Intentional Design Choices
-
-- The configured HTTP proxy feature intentionally uses the external
-  `www.afalkowski.com` host through `features/support/http_proxy_server.rb`.
-  Do not flag this external dependency as a code issue unless the task is
-  explicitly about making HTTP proxy fixtures fully hermetic.
-- `test/Makefile` intentionally consumes the shared Buf make fragment as-is.
-  Do not flag its inherited `breaking` target's `subdir=api` comparison as a
-  code issue unless the task is explicitly about changing test proto breaking
-  checks.
-- `nonnative` is a test-support gem used across many downstream projects.
-  Do not flag the absence of an isolated gem build/install smoke test as a
-  test gap unless the task is explicitly about release packaging or gem
-  publication validation.
-- The Cucumber `@startup` lifecycle tag is exercised by downstream projects
-  that use this gem. Do not flag missing in-repository `@startup` acceptance
-  coverage as a test gap unless the task is explicitly about changing
-  Cucumber startup hook behavior.
-- `Nonnative.go_argv` and `Nonnative.go_command` flag combinations are checked
-  by external/downstream usage. Do not flag missing in-repository exhaustive
-  `-test.*` flag or tool-filtering assertions as a test gap unless the task is
-  explicitly about changing Go command generation.
-- Generated gRPC test stubs under `test/grpc/` are updated on demand when the
-  test proto changes. Do not flag the absence of an automatic generated-stub
-  freshness check as a test gap unless the task is explicitly about changing
-  test proto generation or generated-file validation.
-- Generated gRPC test stubs may carry manual require-path adjustments after
-  generation. Do not treat `make -C test stale` as a required validation target
-  unless the task is explicitly about changing test proto generation; verify
-  the generated Ruby loads before accepting generator-only rewrites.
-- Buf linting for the test-only proto module is intentionally not part of the
-  required local validation surface. Do not flag missing root-level validation
-  for `test/buf.yaml` as a test gap unless the task is explicitly about test
-  proto linting or Buf validation.
-- The public proxy reset Cucumber steps and `@reset` hook are tested by
-  external/downstream suites. Do not flag missing in-repository direct proxy
-  reset step coverage as a test gap unless the task is explicitly about
-  changing proxy reset behavior.
-- `Nonnative.clear` configuration and pool reset behavior is covered by
-  external/downstream suites. Do not flag missing in-repository assertions for
-  configuration or pool clearing as a test gap unless the task is explicitly
-  about changing clear/reset lifecycle behavior.
-- Full repository validation is expected to run both regular features and
-  benchmark-tagged lifecycle scenarios. Do not flag rollback/timeout lifecycle
-  coverage living under `features/benchmark.feature` as a test gap unless the
-  task is explicitly about changing validation target composition.
-- Service proxy round-trip behavior is validated by downstream projects that
-  use `nonnative` against real dependencies. Do not flag the in-repository
-  service proxy success scenario's connection-only assertion as a test gap
-  unless the task is explicitly about changing service proxy forwarding.
-- `Nonnative::FaultInjectionProxy` owns its listener thread and stops it by
-  closing the owned `TCPServer`, which wakes the accept loop before joining the
-  thread. Do not flag the listener `join` as an unbounded reliability gap unless
-  the task is explicitly about proxy shutdown behavior or there is a normal-use
-  reproducer, failing CI evidence, or platform-specific hang evidence.
-- Service readiness is intentionally TCP-only for externally managed
-  dependencies. Do not flag missing HTTP/gRPC service readiness as a feature gap
-  unless the task is explicitly about changing the `Nonnative::Service`
-  readiness model. HTTP/gRPC readiness belongs to managed processes, where the
-  user explicitly models the application health endpoints.
-- Multiple managed processes remain supported, but the pool's service -> server
-  -> process startup order is the intentional dependency model: typical suites
-  manage one system process and model its dependencies as externally managed
-  services or in-process servers, which become ready first. Do not flag the
-  absence of process-to-process `depends_on`, dependency graphs, or topological
-  process startup as a feature gap unless downstream usage evidence exists or
-  the task is explicitly about changing the lifecycle model.
-- Managed-process readiness intentionally supports only TCP-port-open plus the
-  optional `http`/`grpc` health probes in `Nonnative::ConfigurationReadiness`.
-  A log-line/log-message readiness kind (`kind: 'log'`) is intentionally not
-  supported: systems tested with nonnative are typically deployed in container
-  environments where readiness is modeled through probes that are usually
-  HTTP-based, so the application already exposes an HTTP (or gRPC) health
-  endpoint the existing readiness kinds cover. Do not flag the absence of a
-  log-message readiness kind as a feature gap unless the task is explicitly
-  about changing the process readiness model.
-- Process runners intentionally inherit the parent working directory. Nonnative
-  is normally run from the test folder that owns `test/nonnative.yml`, relative
-  config paths, logs, and reports. Do not flag missing process cwd/chdir support
-  as a feature gap unless the task is explicitly about changing process working
-  directory behavior.
-- Message-specific start/stop assertions and attempted-stop success assertions
-  in `features/step_definitions/lifecycle_steps.rb` are repository-local
-  Cucumber helpers. Do not flag their absence from `lib/nonnative/cucumber.rb`
-  as a feature gap unless downstream usage evidence exists or the task is
-  explicitly about expanding public lifecycle assertion steps.
-- Liveness, readiness, and metrics endpoint assertion steps in
-  `features/step_definitions/servers_steps.rb` are repository-local Cucumber
-  helpers for testing nonnative's own framework assumptions. Do not flag their
-  absence from `lib/nonnative/cucumber.rb` as a feature gap unless downstream
-  usage evidence exists or the task is explicitly about expanding public
-  observability assertion steps.
-- `Nonnative::Configuration` intentionally exposes `process_by_name` without
-  matching `server_by_name` or `service_by_name` helpers. Do not flag missing
-  server/service configuration lookup helpers as a feature gap unless downstream
-  usage evidence exists or the task is explicitly about changing the
-  pre-start configuration lookup API.
-- `Nonnative::Observability#metrics` intentionally returns the raw Prometheus
-  exposition body. Parsing it into samples or asserting a specific metric value
-  is the caller's responsibility (use a dedicated Prometheus-parsing gem if
-  needed), matching the thin, raw-response posture of the whole observability
-  client. Do not flag the absence of a built-in Prometheus text-format parser
-  (for example `Nonnative::Metrics.parse`) as a feature gap unless the task is
-  explicitly about adding metric-value parsing to the observability client.
-- YAML configuration is intentionally loaded as pure data with no evaluation or
-  substitution: no ERB, no arbitrary object tags, and no `${VAR}` /
-  environment-variable interpolation. Values that must vary between environments
-  belong in programmatic Ruby config (`config.load_file` plus
-  `config.process`/`server`/`service`), which already has full `ENV` access. Do
-  not flag the absence of in-YAML `${VAR}` interpolation as a feature gap unless
-  the task is explicitly about adding environment-variable substitution to
-  `Nonnative::ConfigurationFile`.
-- YAML configuration intentionally does not validate unknown structural keys or
-  provide a strict configuration-lint mode. Unknown fields may be ignored while
-  syntax, safety, and supported value shapes are still validated. Do not flag
-  the absence of strict unknown-key diagnostics or config linting as a feature
-  gap unless the task is explicitly about changing YAML validation behavior.
-- `Nonnative::GRPCHealth#check` intentionally returns the full
-  `HealthCheckResponse`, so tests assert any serving status directly (for
-  example `check.status == :NOT_SERVING`), mirroring how the HTTP observability
-  client exposes the raw response code; `serving?` is a convenience boolean on
-  top. Do not flag the absence of a `not_serving?` / `status:` helper or a
-  streaming `Watch` wrapper as a feature gap unless the task is explicitly about
-  expanding the gRPC health assertion surface.
-- Token signing keys are intentionally supplied only as a filesystem path
-  (`private_key:`), which `Nonnative::Ed25519Key` reads with `File.read`.
-  Nonnative deliberately does not accept in-memory PEM key material (for
-  example a `private_key_pem:` argument or an `Ed25519Key.from_pem`): signing
-  keys are expected to be provisioned as files for security, and a caller that
-  holds key bytes can write them to a file before signing (as the Cucumber
-  support does). Do not flag the absence of in-memory key material as a feature
-  gap unless the task is explicitly about changing how token signing keys are
-  supplied.
-- `Nonnative::Observability` intentionally uses the fixed
-  `/<name>/{healthz,livez,readyz,metrics}` endpoint layout, following the loose
-  go-service health-endpoint convention that nonnative primarily tests against.
-  Systems that do not follow it can call the public `Nonnative::HTTPClient`
-  directly. Do not flag the absence of configurable observability endpoint paths
-  as a feature gap unless the task is explicitly about changing the
-  observability client's endpoint model.
 
 ## Runtime Model
 
@@ -182,9 +47,9 @@ Runners:
 - `Nonnative::Server`: in-process Ruby server thread
 - `Nonnative::Service`: proxy lifecycle for an externally managed dependency
 
-`Nonnative::Pool` starts services first, then servers/processes, and stops in
-reverse. Readiness and shutdown checks are TCP-only via
-`Nonnative::Port#open?` and `#closed?`.
+`Nonnative::Pool` handles services first, then servers, then processes, and stops
+in reverse order. See [lifecycle decisions](docs/agents/accepted-design/lifecycle.md)
+for service and process readiness.
 
 Token generation: `Nonnative.token(kind:, issuer:, key:, private_key:, expiration:)`
 returns a `Nonnative::Token` whose `generate(aud:, sub:)` produces a signed token for
